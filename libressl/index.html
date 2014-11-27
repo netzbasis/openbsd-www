@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>LibreSSL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="resource-type" content="document">
+    <meta name="description" content="the main LibreSSL page">
+    <meta name="keywords" content="LibreSSL,main">
+    <meta name="distribution" content="global">
+		<meta name="copyright" content="This document copyright 2014 by OpenBSD.">
+		<link rel="shortcut icon" HREF="/favicon.ico" TYPE="image/x-icon">
+</head>
+<body text="#000000" bgcolor="#ffffff" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="4">
+<tr>
+  <td bgcolor="#99cced" rowspan="2" valign=top>
+    <big><b>About&nbsp;LibreSSL</b></big>
+    <br>
+    &nbsp;<a href="goals.html">Project Goals</a><br>
+    &nbsp;<a href="papers.html">Papers</a><br>
+    <br>
+    <big><a href="http://ftp.openbsd.org/pub/OpenBSD/LibreSSL">Download</a></big><br>
+    <br>
+    <big><b>Getting&nbsp;Source</b></big>
+    <br>
+    &nbsp;<a href="https://github.com/libressl-portable/">GitHub</a><br>
+    &nbsp;<a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libssl">CVS on Web</a><br>
+  </td>
+  <td bgcolor="#0000cc" rowspan="2"><font size="1">&nbsp;</font>
+  </td>
+  <td bgcolor="#ffffff" valign="top"><center>
+    <img border="0" width=599 height=192 src="images/libressl.jpg"></center>
+    <p>
+    LibreSSL is a version of the TLS/crypto stack forked from
+    <a href="http://wiki.openssl.org/index.php/Code_Quality">OpenSSL</a>
+    in 2014, with goals of modernizing the codebase, improving security,
+    and applying best practice development processes.
+
+    <p>
+    Primary development occurs inside the OpenBSD source tree with the
+    usual care the project is known for.  On a regular basis the code
+    is re-packaged for portable use by other operating systems
+    (Linux, FreeBSD, Solaris, etc).
+
+    <p>
+    LibreSSL is composed of four parts:
+    <ul>
+        <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=openssl&sektion=1">openssl(1)</a>
+	utility, which provides tools for managing keys, certificates, etc.</li>
+        <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=crypto&sektion=3">libcrypto</a>: a library of cryptography fundamentals</li>
+        <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=SSL&sektion=3">libssl</a>: a TLS library, backwards-compatible with OpenSSL</li>
+        <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tls_init&sektion=3">libtls</a>: a new TLS library, designed to make it easier to write
+            foolproof applications</li>
+    </ul>
+
+    <p>
+    LibreSSL portable releases are signed with a
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=signify&sektion=1">signify(1)</a>
+    public key:
+    <a href="https://github.com/libressl-portable/portable/commit/c5c2aa37be6134f6552070ab21f49d53ebfe86e6">RWQg/nutTVqCUVUw8OhyHt9n51IC8mdQRd1b93dOyVrwtIXmMI+dtGFe</a>
+    <br>
+    Releases can be verified from within the OpenBSD operating system or
+    by using an unofficial
+    <a href="http://www.linuxquestions.org/questions/slackware-14/openbsd%27s-new-john-hancock-4175504101/">Linux port of signify.</a>
+
+    <p>
+    LibreSSL is supported financially by the
+    <a href="http://www.openbsdfoundation.org/">OpenBSD Foundation</a>
+    and the
+    <a href="http://www.openbsd.org/donations.html">OpenBSD Project</a>.
+    Please consider helping our efforts.
+    <p>
+  </td>
+</tr>
+<tr>
+<td>
+<hr>
+<small>
+<em>Copyright &copy; 2014 OpenBSD</em><br>
+</small>
+</td>
+</tr>
+</table>
+</body>
+</html>

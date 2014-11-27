@@ -1,0 +1,12 @@
+I) Naissance du Projet
+
+Fork NetBSD/OpenBSD en Octobre 1995 initie par Theo de Raadt.
+
+Projet base au Canada.
+
+Volonte de fournir un systeme Unix libre et sur.
+
+
+
+
+

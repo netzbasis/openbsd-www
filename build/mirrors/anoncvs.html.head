@@ -1,0 +1,324 @@
+<!-- DO NOT EDIT ANONCVS.HTML MANUALLY - IT IS GENERATED FROM TEMPLATES!
+     See comments in www/build/mirrors.dat for details -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>OpenBSD AnonCVS</title>
+<meta name="resource-type" content="document">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="How to get OpenBSD updates via Internet using Anonymous CVS">
+<meta name="keywords" content="openbsd,anoncvs,updates">
+<meta name="distribution" content="global">
+<meta name="copyright" content="This document copyright 1996-2014 by OpenBSD.">
+</head>
+
+<body bgcolor="#ffffff" text="#000000">
+
+<a href="index.html"><img alt="[OpenBSD]" height="30" width="141" src="images/smalltitle.gif" border="0"></a>
+<p>
+<h2><font color="#e00000">Anonymous CVS</font></h2>
+
+<hr>
+
+Anonymous CVS is a method of keeping your local copy of the OpenBSD source
+tree up to date with respect to changes made to current OpenBSD sources.
+In addition to following the bleeding edge of development, it is
+also possible to track the patches for errata of a release.
+
+<p>
+The major advantage of Anonymous CVS over other source code update
+techniques is that it works directly against a central source code
+repository or mirror.  This means that you have the full set of CVS
+commands available to control merging and updating your changes with
+other source changes and for performing diffs, change histories
+and other queries against the central repository.
+
+<p>
+The OpenBSD Project currently has four active and two historic
+source repositories:
+
+<ul>
+  <li><b>src</b> - Houses all source code for the OpenBSD Operating System.
+  <li><b>ports</b> - Houses the <a href="faq/ports/index.html">OpenBSD Ports</a>.
+  <li><b>www</b> - Houses all OpenBSD web pages. (Including this one).
+  <li><b>xenocara</b> - Houses OpenBSD's active X.org v7 source tree.
+  <li><b>X11</b> and <b>XF4</b> - Houses OpenBSD's adaptation of the
+      <a href="http://www.XFree86.org/">XFree86-3</a> and XFree86-4
+      source trees.
+      These are here just for historical purposes, most users will have
+      no reason to use this tree, it is no longer being used.
+</ul>
+
+<p>
+To summarize, the real strength of using Anonymous CVS is that it is
+a "tolerant" source code control system - it <strong>respects</strong>
+changes that you have made to your local sources and makes <strong>
+"best efforts"</strong> to update your entire source tree, rather than
+leaving you a list of arcane problems that have to be resolved before
+continuing.
+
+<h3><a name="CVS"><font color="#0000e0">What is CVS?</font></a></h3>
+
+<p>
+<a href="http://ximbiot.com/cvs/">CVS</a> is the source code control
+system used to manage the OpenBSD source tree.
+It implements a central repository for all officially released source code
+and changes, while permitting developers to maintain local copies of the
+source code with their working changes.
+
+There are two levels of source tree access:
+<ul>
+<li><b>Read-write access for developers:</b>
+Developers who need to commit changes to the source tree must have an
+account on the OpenBSD machines.
+Getting this access will be a natural result of working on the sources
+with other OpenBSD developers.
+If someone does some good work and shows they can work with the team,
+they will get an account.
+
+<li><b>Read-only access for everyone:</b>
+Anyone can access the read-only CVS repositories.
+These copies of the read-write CVS repository are mirrored often.
+</ul>
+
+<p>
+The major strength of CVS is that it has the ability to perform intelligent
+merges of changes to the central repository with changes that you make to
+your local copy.  This means that if you make a change to a module and
+perform an update, your changes are not "blown away", rather CVS makes
+best efforts to merge the changes made to the central sources with changes
+you've made to your local copy.
+
+<p>
+In the event that the changes can't be completely merged, CVS provides a
+"soft fallback", providing you with annotated changes to your
+local copy, preserving an unmodified copy of your version and continuing
+to update any other source modules you requested.
+
+<h3><a name="starting"><font color="#0000e0">Getting Started Using Anonymous 
+CVS</font></a></h3>
+
+While you can download the entire source tree from an AnonCVS server,
+you can often save a lot of time and bandwidth by "preloading" your
+source tree with the source files from either the OpenBSD CD or from an
+FTP server.
+This is particularly true if you are running
+<a href="stable.html"><i>-stable</i></a>, as relatively few files change
+between the <i>-release</i> and <i>-stable</i>.
+
+<p>
+To extract the source tree from the CD to <i>/usr/src</i> (assuming the CD is 
+mounted on /mnt):
+<pre>
+    # <b>cd /usr/src</b>
+    # <b>tar xzf /mnt/src.tar.gz</b>
+    # <b>cd /usr</b>
+    # <b>tar xzf /mnt/xenocara.tar.gz</b>
+    # <b>tar xzf /mnt/ports.tar.gz</b>
+</pre>
+
+The source files for download from the FTP servers are separated into two
+files to minimize the time required to download for those wishing to work
+with only one part of the tree.  The two files are <tt>sys.tar.gz</tt>,
+which contains the files used to create the kernel, and <tt>src.tar.gz</tt>
+which contains all the other "userland" utilities.
+In general, however, you will usually want both of them installed.
+Assuming the downloaded files, <tt>src.tar.gz</tt>,
+<tt>sys.tar.gz</tt> and <tt>xenocara.tar.gz</tt> are in <tt>/usr</tt>:
+
+<pre>
+    # <b>cd /usr/src</b>
+    # <b>tar xzf ../sys.tar.gz</b>
+    # <b>tar xzf ../src.tar.gz</b>
+    # <b>cd /usr</b>
+    # <b>tar xzf xenocara.tar.gz</b>
+    # <b>tar xzf ports.tar.gz</b>
+</pre>
+
+<p>
+Not all people will wish to unpack all the file sets, but as the system
+must be kept in sync, you will generally need to set up all trees.
+
+<p>
+You can also just use cvs(1) to "<b>checkout</b>" the source repository
+for you. This is discussed in the <a href="#using">next section</a>.
+
+<p>
+After this, <tt>/usr/src</tt> will be a nice checkout area where all
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=cvs&amp;sektion=1&amp;format=html">
+cvs(1)</a> commands will work properly.
+
+<h3><a name="using"><font color="#0000e0">Using CVS to Get and Update your 
+Source Tree</font></a></h3>
+
+<p>
+CVS was designed to be a simple way to retrieve and update your sources.
+You must first decide whether you want to track <i>-current</i> or a
+<a href="stable.html">patch branch</a>.
+The current tree has all of the up to the minute changes,
+whereas a patch branch contains a formal release plus the patches
+from the <a href="errata.html">errata</a> and lesser issues already applied.
+For more information on these "flavors" of OpenBSD, see 
+<a href="faq/faq5.html#Flavors">here</a>.
+
+<p>Once you have decided which tree to follow, you must choose which Anonymous
+CVS server you are going to use.  A list of these servers is
+<a href="#CVSROOT">below</a>.
+
+<p>
+Once you have chosen which <a href="#CVSROOT">Anonymous CVS Server</a> you will
+use, you can start using cvs. For those of you
+who have CDs you can start with the CVS checkout that is on the CD by using
+the method <a href="#starting">above</a> to get the sources onto your system.
+If you don't have a CD handy, use the method below to checkout the sources.
+
+<p>
+<ul><li>First, start out by `get'-ing an initial tree:
+
+<p> (If you are following <i>current</i>):
+<pre>
+	# <strong>cd /usr</strong>
+	# <strong>cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -P src</strong>
+</pre>
+
+<p> (If you are following the patch branch for 5.6):
+<pre>
+	# <strong>cd /usr</strong>
+	# <strong>cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -rOPENBSD_5_6 -P src</strong>
+</pre>
+<!-- DO NOT EDIT ANONCVS.HTML MANUALLY - IT IS GENERATED FROM TEMPLATES! -->
+
+Anonymous CVS uses passwordless SSH as a transport.
+If this is the first time you have connected to an anoncvs server,
+you will be asked to confirm the SSH fingerprint to ensure that you
+are connecting to the expected server:
+
+<pre>
+	$ <strong>cvs -d anoncvs@anoncvs.spacehopper.org:/cvs get src  
+	The authenticity of host 'anoncvs.spacehopper.org (2001:470:1f09:9a9::b5d)' can't be established.
+	ED25519 key fingerprint is 65:ff:bc:e5:c0:a3:e2:17:fa:da:83:ce:de:29:fd:8b.
+	Are you sure you want to continue connecting (yes/no)?</strong>
+</pre>
+
+In most cases, the list below includes the fingerprints for the server,
+so you can compare it against the displayed fingerprint as additional
+verification that you are connecting to the correct server.
+Confirm this, and the fingerprint will then be saved as usual.
+
+<pre>
+	<strong>Are you sure you want to continue connecting (yes/no)? yes
+	Warning: Permanently added 'anoncvs.spacehopper.org' (ED25519) to the list of known hosts.</strong>
+	...
+</pre>
+
+<li> Anytime afterwards, to `update' this tree:
+<p> (If you are following <i>current</i>):
+<pre>
+	# <strong>cd /usr/src</strong>
+	# <strong>cvs -q up -Pd</strong>
+</pre>
+
+<p> (If you are following the patch branch for 5.6):
+<pre>
+	# <strong>cd /usr/src</strong>
+	# <strong>cvs -q up -rOPENBSD_5_6 -Pd</strong>
+</pre>
+
+Every time you ran this it would synchronize your /usr/src tree.
+It would not destroy any of your local changes, rather it would attempt
+to merge changes in.
+
+<p>
+<li> NOTE:
+If you are updating a source tree that you initially fetched
+from a different server, or from a CD, you <strong>must</strong>
+add the <em>-d [cvsroot]</em> option to cvs.
+<pre>
+	# <strong>cd /usr/src</strong>
+	# <strong>cvs -d anoncvs@anoncvs.ca.openbsd.org:/cvs -q up -Pd</strong>
+</pre>
+</ul>
+
+<p>
+To <a name="ports">use</a> <a href="faq/ports/index.html">ports</a>,
+it is similar to src:
+<ul><li>
+<p> (If you are following <i>current</i>):
+<pre>
+	# <strong>cd /usr</strong>
+	# <strong>cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -P ports</strong>
+</pre>
+<p> (If you are following the patch branch for 5.6):
+<pre>
+	# <strong>cd /usr</strong>
+	# <strong>cvs -qd anoncvs@anoncvs.ca.openbsd.org:/cvs get -rOPENBSD_5_6 -P ports</strong>
+</pre>
+<li> Anytime afterwards, to `update' this tree:
+<p> (If you are following <i>current</i>):
+<pre>
+	# <strong>cd /usr/ports</strong>
+	# <strong>cvs -q up -Pd</strong>
+</pre>
+<p> (If you are following the patch branch for 5.6):
+<pre>
+	# <strong>cd /usr/ports</strong>
+	# <strong>cvs -q up -rOPENBSD_5_6 -Pd</strong>
+</pre>
+</ul>
+
+In the above example, <i>-q</i> is optional, only intended to minimize
+cvs's output.
+For those who like to see screenfulls of output, it can be omitted.
+
+<p>
+To make a diff of a locally patched module (here <i>cd.c</i>) to include with
+a bug report:
+<pre>
+	# <strong>cd /usr</strong>
+	# <strong>cvs diff -u src/sys/scsi/cd.c &gt; /tmp/patch</strong>
+</pre>
+
+<p>
+The <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=cvs&amp;sektion=1&amp;format=html">
+cvs(1) man page</a>
+(included with the CVS sources) has much more
+information about how CVS can be used.
+
+<p>
+<strong>Warning:</strong>
+When using cvs you should take care that your current directory is either
+the root of the tree you are referencing or in a separate place such as /tmp.
+Some commands such as "get" can create an arbitrary sub-tree in the current
+directory, and a subsequent update will recursively flesh out this sub-tree.
+
+<p>
+The anoncvs service gives fledgling developers a chance to learn CVS
+operation and get thoroughly involved in the development process
+before getting "commit" access -- as a result of showing useful
+skills and high quality results they will naturally later be given
+developer access.
+As well, people providing patches can create their "diff"s relative
+to the CVS tree, which will ease integration.
+
+<h3><a name="EXAMPLE"><font color="#0000e0">Example usages for cvs(1)</font>
+</a></h3>
+
+<p>
+A sample use of an anoncvs server would be:
+<pre>
+$ <strong>cd /tmp</strong>
+$ <strong>cvs -d anoncvs@anoncvs.ca.openbsd.org:/cvs get src/sys/arch/sparc</strong>
+    [copies the files from the repository to your machine]
+$ <strong>cd src/sys/arch/sparc</strong>
+$ <strong>cvs log locore.s</strong>
+    [shows the commit log for the chosen file]
+$ <strong>cvs diff -bc -r1.1 -r1.5 locore.s</strong>
+    [shows the changes between revisions 1.1 and rev 1.5]
+</pre>
+
+<h3><a name="CVSROOT"><font color="#0000e0">Available Anonymous CVS Servers
+</font></a></h3>
+
+<p>
+<ul>

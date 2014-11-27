@@ -1,0 +1,22 @@
+IV) La securite - Securite proactive
+
+Audit du code : fichier par fichier !
+
+Reduction du nombre de binaires SUID
+
+Cryptographie embarquee :
+Generateur de nombre aleatoires ("PRNG") utilisant :
+/dev/urandom
+des "sels"
+les numeros d'inodes
+...
+
+Plusieurs algorithmes de chiffrement : Blowfish, 3DES...
+Plusieurs mecanismes de hashage : MD5, SHA-1...
+hifn(4)
+
+
+
+
+Consultez crypto(9).
+

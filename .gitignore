@@ -1,0 +1,6 @@
+*.orig
+*.patch
+*.diff
+*.err.log
+CVS
+CVSROOT

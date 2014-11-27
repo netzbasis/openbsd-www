@@ -1,0 +1,22 @@
+II) Caracteristiques
+
+Projet transparent.
+
+Respect des normes POSIX.
+
+Predominance de la securite.
+
+Independance du projet :
+Vente de tshirts, CDs, posters.
+Donations.
+
+Modele de developpement ouvert, sources accessibles pour tous :
+CDROM (src.tar.gz, sys.tar.gz)
+CVS
+FTP
+
+
+
+Mailing-lists : http://www.openbsd.org/fr/mail.html
+FAQ : http://www.openbsd.org/faq/fr/
+

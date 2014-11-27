@@ -1,0 +1,14 @@
+IV) La securite - IPsec
+
+support natif stable
+integration recente de NAT-T
+
+isakmp(8)
+ipsecctl
+sasyncd : gestion des associations de securite ("SA")
+
+benchmark (NET4501 + carte wifi + vpn1401) :
+text clair : 1.88 Mbits/sec
+IPsec, avec le sysctl kern.usercrypto=0 : 218 Kbits/sec
+IPsec, avec le sysctl kern.usercrypto=1 : 1.01 Mbits/sec
+
