@@ -1,8 +1,0 @@
-
-
-
-
-A Secure BGP Implementation
-
-Henning Brauer <henning@openbsd.org>
-

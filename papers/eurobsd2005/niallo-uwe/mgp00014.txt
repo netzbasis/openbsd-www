@@ -1,4 +1,0 @@
-
-Hardware details - block diagram: PXA270
-
-

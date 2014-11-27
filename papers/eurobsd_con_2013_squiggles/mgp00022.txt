@@ -1,4 +1,0 @@
-Welcome to pkgng
-So you guys finally have a modern package system ?
-
-That's so cute.

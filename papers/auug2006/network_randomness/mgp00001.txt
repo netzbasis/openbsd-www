@@ -1,7 +1,0 @@
-
-Network Randomness in OpenBSD
-
-
-Ryan McBride <mcbride@openbsd.org>
-
-

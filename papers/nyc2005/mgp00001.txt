@@ -1,8 +1,0 @@
-
-
-
-
-OpenBSD/hppa
-
-Michael Shalayeff <mickey@openbsd.org>
-

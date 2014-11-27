@@ -1,8 +1,0 @@
-Weird shit, good shitz
-
-files move between packages
-dependency inversions happen
-tied updates should be handled
-packages will get renamed, or disappear
-version numbers should be handled
-

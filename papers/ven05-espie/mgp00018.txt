@@ -1,8 +1,0 @@
-
-Package tools, the other BSDs
-
-New tools written over the existing stuff
-More complicated
-Slower
-Still failing all the time...
-

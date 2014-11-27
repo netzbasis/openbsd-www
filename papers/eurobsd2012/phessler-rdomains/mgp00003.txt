@@ -1,7 +1,0 @@
-
-vrf-lite vs full vrf
-
-
-vrf-lite
-
-vrf

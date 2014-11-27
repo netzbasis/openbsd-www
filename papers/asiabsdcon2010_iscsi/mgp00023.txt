@@ -1,3 +1,0 @@
-iscsid - read operation
-
-

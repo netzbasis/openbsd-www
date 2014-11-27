@@ -1,9 +1,0 @@
-
-OpenSSH: remote Portforwarding
-
-
-
-
-
-
-ssh -R8080:localhost:80 hostB

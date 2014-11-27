@@ -1,7 +1,0 @@
-
-Out of memory...
-
-Often we can wait for new memory.
-
-But not in interrupts!
-

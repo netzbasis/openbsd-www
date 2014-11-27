@@ -1,9 +1,0 @@
-
-OpenBSD
-
-
-
-Saâd Kadhi <saad@openbsd.org> 
-Marc Espie <espie@openbsd.org>
-The OpenBSD Project
-

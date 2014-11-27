@@ -1,7 +1,0 @@
-
-Adoption: FreeBSD
-
-
-from wiki.freebsd.org/201309DevSummit
-
-

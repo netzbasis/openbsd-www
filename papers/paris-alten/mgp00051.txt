@@ -1,7 +1,0 @@
-Préhistoire
-
-Signatures non officielles
-(mtier et autres)
-X509... donc openssl
-mécanisme fonctionnel depuis 3 ans
-

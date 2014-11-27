@@ -1,9 +1,0 @@
-
-
-Driver Architecture and Implementation in OpenBSD
-
-
-
-
-
-Jonathan Gray <jsg@openbsd.org>

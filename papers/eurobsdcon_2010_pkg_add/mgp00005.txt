@@ -1,5 +1,0 @@
-Bonus goals
-
-Be compatible with existing stuff
-Text /var/db/pkg is nice
-

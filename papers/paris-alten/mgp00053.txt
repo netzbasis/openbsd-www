@@ -1,8 +1,0 @@
-Détail de processus
-
-build de package
-signature "ailleurs"
-décompress, sign, recompress
-
-Split-gzip
-10x plus rapide

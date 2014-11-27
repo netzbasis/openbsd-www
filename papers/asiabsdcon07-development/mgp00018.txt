@@ -1,7 +1,0 @@
-
-Concerns
-
-Other languages and tools
-Portability
-Closed-source tools
-

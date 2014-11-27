@@ -1,7 +1,0 @@
-
-Securing IPsec with keynote(5) and pf(4)
-
-Security is serious business
-
-
-

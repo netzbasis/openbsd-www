@@ -1,6 +1,0 @@
-Note
-
-Les transparents seront sur
-http://www.openbsd.org/papers/
-
-

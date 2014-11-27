@@ -1,6 +1,0 @@
-
-Introduction to pf
-
-Ryan McBride <mcbride@openbsd.org>
-
-

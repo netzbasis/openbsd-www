@@ -1,6 +1,0 @@
-
-The OpenBSD Release Calendar
-
-
-
-

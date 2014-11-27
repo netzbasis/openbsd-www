@@ -1,5 +1,0 @@
-
-pkg_add -r (continued)
-
-(run an example).
-

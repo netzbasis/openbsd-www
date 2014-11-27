@@ -1,8 +1,0 @@
-Firewall Redundancy
-Components
-
-pfsync
-State synchronisation
-CARP
-Address failover
-

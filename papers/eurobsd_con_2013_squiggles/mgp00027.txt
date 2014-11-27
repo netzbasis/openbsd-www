@@ -1,5 +1,0 @@
-Tip of the iceberg
-
-For instance, manual installations
-complete rewrite of the pkg_delete algorithm
-

@@ -1,8 +1,0 @@
-
-kernel subsystem main engine
-
-
-
-
-.... and later re-initialization (periodic in time & volume)
-

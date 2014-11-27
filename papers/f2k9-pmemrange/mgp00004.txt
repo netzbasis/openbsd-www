@@ -1,8 +1,0 @@
-
-Kernel and userland
-- don't care where the memory is
-
-MMU translates
-
-uvm_pagealloc()
-

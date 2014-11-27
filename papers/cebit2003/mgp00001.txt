@@ -1,9 +1,0 @@
-
-
-
-
-OpenSSH und OpenBSD
-
-Markus Friedl <markus@openbsd.org>
-Henning Brauer <henning@openbsd.org>
-

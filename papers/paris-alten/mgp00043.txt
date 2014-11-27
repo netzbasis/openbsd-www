@@ -1,7 +1,0 @@
-Evolution, pas révolution
-
-Une release tous les six mois
-Fonctionnalité pas finie ? pas grave !
-
-Système utilisé: pas de cross-compile.
-

@@ -1,9 +1,0 @@
-
-OpenBSD: Kryptograhie
-
-
-IPsec
-in OpenBSD seit 1996
-erstes Betriebssystem mit integriertem IPsec
-Referenzimplementierung bei VPNC.org
-

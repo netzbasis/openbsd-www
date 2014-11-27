@@ -1,9 +1,0 @@
-
-Time Is Not A Secret!
-Network Randomness in OpenBSD
-
-
-
-Ryan McBride <mcbride@openbsd.org>
-
-

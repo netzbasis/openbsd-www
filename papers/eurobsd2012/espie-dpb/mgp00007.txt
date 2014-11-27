@@ -1,5 +1,0 @@
-Exception: 
-
-amd64: 8 cores x 2 machines
-
-

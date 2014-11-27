@@ -1,7 +1,0 @@
-
-
-OpenBSD Update
-
-
-
-Jonathan Gray <jsg@openbsd.org>

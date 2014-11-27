@@ -1,8 +1,0 @@
-
-Support OpenBSD!
-
-
-OpenBSD requires continuous community support.
-
-Developers are peoples too -- Beer donations are welcome!
-

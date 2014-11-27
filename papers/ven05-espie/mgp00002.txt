@@ -1,7 +1,0 @@
-
-Quick history of ports
-
-comes from FreeBSD originally
-Got bigger and bigger.
-and bigger and bigger...
-

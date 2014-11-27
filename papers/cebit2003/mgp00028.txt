@@ -1,6 +1,0 @@
-
-OpenSSH: Verbreitung
-
-
-
-(scanssh, Mitte 2002)

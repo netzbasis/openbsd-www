@@ -1,8 +1,0 @@
-
-kernel subsystem main engine
-
-
-
-re-initialization triggered from userland (as root) because of
-new data being supplied
-

@@ -1,9 +1,0 @@
-
-OpenSSH: dynamic Portforwarding
-
-
-
-
-
-
-ssh -D8010 hostB

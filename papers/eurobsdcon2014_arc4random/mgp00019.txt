@@ -1,5 +1,0 @@
-
-Kernel initialization from boot
-
-
-

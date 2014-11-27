@@ -1,9 +1,0 @@
-
-Simplify
-
-Use simple generic targets
-
-For instance, search facilities
-make key=screen describe
-make key=kdelibs show=LIB_DEPENDS
-make key=samba install

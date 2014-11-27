@@ -1,5 +1,0 @@
-Note
-
-The actual slides will be available from
-http://www.openbsd.org/papers/
-

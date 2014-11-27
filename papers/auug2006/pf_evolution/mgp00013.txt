@@ -1,5 +1,0 @@
-Failover
-CARP and pfsync
-
-
-

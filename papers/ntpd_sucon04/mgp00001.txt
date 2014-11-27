@@ -1,8 +1,0 @@
-
-
-
-
-OpenNTPD
-
-Henning Brauer <henning@openbsd.org>
-

@@ -1,6 +1,0 @@
-Comment devenir dev OpenBSD
-
-Facile: suffit d'écrire du code
-Tout le monde peut soumettre des patchs
-Commit bit: c'est plus simple!
-

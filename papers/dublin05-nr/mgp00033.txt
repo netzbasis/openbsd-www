@@ -1,8 +1,0 @@
-PF Randomness
-Persistence
-
-Use a random mapping once, but keep for multiple connections
-'sticky-address'
-Use a hash mapping
-'src-hash'
-

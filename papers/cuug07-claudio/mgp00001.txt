@@ -1,8 +1,0 @@
-
-
-
-OpenBSD network stack
-Exploring the OpenBSD network stack
-Claudio Jeker <claudio@openbsd.org>
-Internet Business Solutions AG
-

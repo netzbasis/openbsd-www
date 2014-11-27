@@ -1,3 +1,0 @@
-iscsid(8) - write operation
-
-
