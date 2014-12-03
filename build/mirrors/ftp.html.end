@@ -1,0 +1,123 @@
+</table>
+
+<hr>
+<h3><font color="#0000e0"><a name=afs>AFS</a></font></h3>
+This is a list of currently known AFS servers:<p>
+
+<ul>
+<li><a href="file:/afs/su.se/services/ftp/pub/OpenBSD">
+        /afs/su.se/services/ftp/pub/OpenBSD</a>
+        <br>
+        Located at the University of Stockholm, Sweden.<br>
+        CellServDB entries for su.se:
+<pre>
+>su.se             # Stockholm University
+130.237.162.81          #afsdb1.su.se
+130.237.162.82          #afsdb2.su.se
+130.237.162.230         #afsdb3.su.se
+</pre>
+</ul>
+<p>
+
+<hr>
+<h3><font color="#0000e0"><a name=layout>Structural Layout:</a></font></h3>
+
+<p>
+The file structure of each server is roughly:
+</p>
+<p>
+<ul>
+<li><strong>/pub/OpenBSD/</strong><br>
+	Absolute path for HTTP and FTP mirrors where the OpenBSD FTP
+	collection <strong>must</strong> be available. This location
+	can be a link, if necessary.
+	<p>
+<li><strong>/pub/OpenBSD/5.6/</strong><br>
+	Where you find our most recent release.
+  <ul>
+  <li><strong>alpha/</strong>
+  <li><strong>amd64/</strong>
+  <li><strong>armish/</strong>
+  <li><strong>aviion/</strong>
+  <li><strong>hppa/</strong>
+  <li><strong>i386/</strong>
+  <li><strong>landisk/</strong>
+  <li><strong>loongson/</strong>
+  <li><strong>luna88k/</strong>
+  <li><strong>macppc/</strong>
+  <li><strong>octeon/</strong>
+  <li><strong>packages/</strong><br>
+	Binary packages (pre-compiled ports) to install on your -stable
+	system.
+  <li><strong>sgi/</strong>
+  <li><strong>socppc/</strong>
+  <li><strong>sparc/</strong>
+  <li><strong>sparc64/</strong>
+  <li><strong>tools/</strong><br>
+	Tools for other operating systems (Windows, Linux and the like)
+	to create boot floppies, change partition sizes and other things.
+  <li><strong>vax/</strong>
+  <li><strong>zaurus/</strong>
+  <li><strong>src.tar.gz<br></strong>
+	Userland sources, which you would place in /usr/src.
+	(This does not include kernel sources)
+  <li><strong>sys.tar.gz<br></strong>
+	The Kernel sources, which you would place in /usr/src/sys.
+  <li><strong>ports.tar.gz<br></strong>
+	The ports sources, which you would place in /usr/ports.
+  <li><strong>xenocara.tar.gz<br></strong>
+	The X Window System (X11) sources.
+  </ul>
+<p>
+<li><strong>/pub/OpenBSD/snapshots/</strong><br>
+	For our major architectures, we frequently build releases
+	and binary packages from our development code.
+	This is where we place those test releases.
+<p>
+<li><strong>/pub/OpenBSD/src/</strong><br>
+	This is a cvs checkout of our daily source tree for those
+	who want to access individual files. Normally we recommend
+	the use of <a href="anoncvs.html">AnonCVS</a> instead of mirroring
+	this location. Thus, all ftp mirrors don't mirror this location.
+<p>
+<li><strong>/pub/OpenBSD/doc/</strong><br>
+	The OpenBSD <a href="faq/index.html">FAQ</a> in PDF and plain
+	text, as well as other OpenBSD-related documentation.
+<p>
+<li><strong>/pub/OpenBSD/tools/</strong><br>
+	Various other little bits.
+<li><strong>/pub/OpenBSD/5.5/</strong><br>
+	Layout is similar to the 5.6 release described above.. for the nostalgic.
+<li><strong>/pub/OpenBSD/5.4/</strong><br>
+	Layout is similar to the 5.5 release described above.. for the nostalgic.
+</ul>
+
+<p>
+To be listed on this page we require mirrors to be fast, up-to-date,
+capable, and well-connected to networks in the region in which they serve.
+Our policy requires mirrors to carry at least the last two releases in
+binary form (currently 5.5 and 5.6), snapshots, as well as the other
+associated directories (including OpenSSH/, OpenNTPD/, OpenBGPD/,
+patches/ and tools/), and keep them current; snapshots should not be
+older than a week.
+Note that in the above, "release" means <b>all files</b> under the specific
+directory (e.g. 5.6/).
+This includes all architecture subdirectories and the complete packages
+subdirectory, with packages for all application architectures.
+As of 5.6, the minimum space required is approximately 600GB.
+Depending on the disk space available, mirrors may provide more contents,
+such as older releases, current source tree, etc.
+<p>
+Operators of mirrors who are interested in having their site added to
+the list on this page should contact <a
+href="mailto:mirrors-discuss@openbsd.org">mirrors-discuss@openbsd.org</a>
+with further details about their site, including network connectivity,
+geographic location, and general information.
+We will suggest a suitable second-level mirror to sync from;
+<b>do not</b> mirror from ftp.openbsd.org.
+<p>
+Mirror operators should subscribe to the low-volume
+<a href="mail.html#Mirrors">mirrors-announce</a> mailing list.
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+III) Specificites du systeme
+
+Arbre des ports (dans OpenBSD 3.7) :
+3000 ports.
+2800 packages pre-compiles.
+
+Architectures :
+16 portages pleinement supportees : amd64, i386, sparc64, vax...
+2 efforts de portage : hppa64, romp.
+5 portages interrompus.
+
+
+
+
+
+
+
+
+
+Mailing-lists : http://www.openbsd.org/fr/plat.html
+

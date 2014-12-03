@@ -1,0 +1,18 @@
+IV) La securite - Sécurite proactive
+
+Separation des privileges :
+syslogd(8)
+sshd(8)
+...
+
+Logiciels chrootes par defaut :
+httpd(8)
+named(8)
+...
+
+Utilisation de random :
+/dev/random (PRNG materiel)
+/dev/srandom
+
+La libc est dotee de arc4random(3).
+

@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>OpenBSD: Hardware Wanted</title>
+<meta name="resource-type" content="document">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="the main OpenBSD page">
+<meta name="keywords" content="openbsd,main">
+<meta name="distribution" content="global">
+<meta name="copyright" content="This document copyright 1996-2014 by OpenBSD.">
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#23238E">
+
+<a href="index.html"><img alt="[OpenBSD]" height="30" width="141" src="images/smalltitle.gif" border="0"></a>
+<p>
+<h2><font color="#e00000">Hardware wanted</font></h2>
+<hr>
+
+The following list outlines hardware that the OpenBSD project could use.
+There are a number of reasons why developers need hardware, and it is important
+to first of all realize these reasons:
+<ul>
+<li>To support a specific device, normally one which is more rare or new.
+<li>To be part of their development environment.
+<li>Some types of machines may be different in some way
+    (i.e. big-endian or unsigned-char) and ensure that developers
+    write code more carefully.
+<li>That said, space or power may be at a premium for some people.
+</ul>
+<p>
+
+If you do not own these devices, but want to help us, we recommend you
+search on <a href="http://www.ebay.com">eBay</a> for the devices.  If
+you do the bidding and then get the device shipped to us, it really
+helps us.  It is better if developers develop, and skip the bidding process,
+since any time saved can be spent on improving OpenBSD instead.<p>
+
+If it is clear which specific developer should be contacted, please do
+so directly.  Otherwise contact <a href="mailto:deraadt@openbsd.org">Theo de Raadt</a>
+who will pass on the message to whichever developers are in need.<p>
+
+Please be very clear as to where you are located!!  For larger items this
+can be very important.
+
+<hr>
+
+<h3><font color="#e00000">Specific developers to contact for various reasons</font></h3>
+<ul>
+<li>miod@openbsd.org and martin@openbsd.org for "older hardware" in Europe.
+<li>deraadt@openbsd.org for any general offers or questions.
+</ul>
+If you do not get a response from these developers, please consider
+contacting another developer.
+<p>
+
+<h3><font color="#e00000">General device requirements.</font></h3>
+We try to spread these types of devices around our development community.
+<ul>
+<li><em>Narrow SCSI</em> disk drives of 2GB or more, 3.5" size.
+    (Narrow SCSI means 50pin).<br>
+    Many developers are running out of these drives, which are needed
+    to continue supporting older hardware.<br>
+<li>Laptops.  These die often enough that our developers need about 2-3
+    replacements a year.
+<li>Apple Mac powerpc equipment.
+<li>HP J6750 machines (J6700 is the second best choice).
+<li>Faster &amp; smaller sparc64 machines, for instance 1U rack mount
+    machines.  It is important to spread sparc64 around the development
+    community, since it is the most strict platform for detecting non-portable
+    or buggy code.
+<li>Any amd64 or faster i386 hardware which comes available.
+<li>We generally do not need older and "very common" ISA/PCI equipment, since
+    our developers will generally have gotten their hands on these in the
+    past.
+</ul>
+<p>
+
+<h3><font color="#e00000">10Gb Ethernet Support</font></h3>
+David Gwynne (in Australia), Mike Belopuhov (in Germany), and Claudio Jeker (in
+Switzerland) are working on support for 10 Gigabit Ethernet devices. These
+developers would like the following hardware to help development:
+<ul>
+  <li>10GbaseSR SFP+ modules for use in 10Gb network cards
+  <li>Switches with 10Gb modules for hacking
+  <li>Direct Attach (SFP+) and CX4 cabling
+  <li>optical cabling with LC connectors (for 10GbaseSR and 10GbaseLR)
+  <li>Broadcom, Emulex (ServerEngines) and QLogic 10Gb NICs for driver
+      development
+</ul>
+Contact dlg@openbsd.org, mikeb@openbsd.org, and claudio@openbsd.org.
+</p>
+
+<h3><font color="#e00000">Specific platform requests by our developers</font></h3>
+<ul>
+<!--
+	Please (un)comment the relevant platform for your request.
+-->
+
+<!-- <li><i>alpha:</i> -->
+<!-- <li><i>amd64:</i> -->
+<!-- <li><i>armish:</i> -->
+<li><i>aviion:</i>
+<ul>
+<li>A working 400, 4000 or 4300 motherboard, preferrably with two processors.
+    Contact miod@openbsd.org.
+</ul>
+<!-- <li><i>armv7:</i> -->
+<!-- <li><i>hp300:</i> -->
+<!-- <li><i>hppa:</i> -->
+<li><i>hppa64:</i>
+<ul>
+<li>HP J6700/J6750 2U machines.  Note these are fairly cheap on Ebay
+    at the moment.
+    Contact deraadt@openbsd.org.
+</ul>
+<li><i>i386:</i>
+<ul>
+<li>A <a href="http://www.commell.com.tw/Product/SBC/LE-565.HTM">Commmell LE-565</a>
+    motherboard is needed in Australia.
+    Contact djm@openbsd.org.
+<li>Four Dell R610 (or similar) 2.5" SAS drive sleds.
+    Contact deraadt@openbsd.org.
+<li>Two DRAC (remote access cards) for Dell 1750 servers.
+    Contact espie@openbsd.org.
+</ul>
+<!-- <li><i>landisk:</i> -->
+<li><i>loongson:</i>
+<ul>
+<li>A Lemote Fuloong mini PC is needed in France for ports testing.
+    Contact pea@openbsd.org.
+<li>A loongson system with HDD is needed in Spain for ports testing. Only
+    shipments from EU.
+    Contact juanfra@openbsd.org.
+</ul>
+<!-- <li><i>luna88k:</i> -->
+<!-- <li><i>mac68k:</i> -->
+<li><i>macppc:</i>
+<ul>
+<li>A G4 Mac mini or a PowerMac G5 is needed in France for ports testing and development.
+    Contact benoit@openbsd.org
+<li>A fast Mac mini G4 for GNAT (Ada) support on powerpc is needed in
+    Germany. They go for about EUR 55 on fleabay. Contact tobiasu@openbsd.org
+</ul>
+<!-- <li><i>mvme68k:</i> -->
+<!-- <li><i>mvme88k:</i> -->
+<li><i>octeon:</i>
+<ul>
+<li>Any unsupported OCTEON hardware, such as
+  the D-Link <a href="http://www.dlink.com/uk/en/business-solutions/security/services-routers/dsr-500n-wireless-n-unified-services-router">DSR-500(N)</a>,
+  <a href="http://www.dlink.com/uk/en/business-solutions/security/services-routers/dsr-1000n-wireless-n-dual-band-unified-service-router">DSR-1000(N)</a>
+  or Lanner <a href="http://www.lannerinc.com/network_processor_platforms/MR-320">MR-320</a>,
+  <a href="http://www.lannerinc.com/network_processor_platforms/MR-330">MR-330</a>,
+  <a href="http://www.lannerinc.com/network_processor_platforms/MR-730">MR-730</a>,
+  or Portwell <a href="http://www.portwell.com/products/detail.asp?CUSTCHAR1=KILIN-6005">KILIN-6005</a>.
+  are needed for testing and development in Gorinchem, The Netherlands.
+  Contact jasper@openbsd.org.
+</ul>
+<!-- <li><i>palm:</i> -->
+<!-- <li><i>sgi:</i> -->
+<li><i>socppc:</i>
+<ul>
+<li>A <a href="http://www.thecus.com/products_over.php?cid=12&pid=24&set_language=english">Thecus N1200</a>
+    is needed in Australia.
+    Contact djm@openbsd.org.
+</ul>
+<!-- <li><i>solbourne:</i> -->
+<li><i>sparc:</i>
+<ul>
+<li>A removable hard drive for SPARCbook (Tadpole S3GX), preferably 2GB or bigger,
+    needed in Paris, France.
+    Contact ajacoutot@openbsd.org.
+</ul>
+<li><i>sparc64:</i>
+<ul>
+<li>Disk drive caddies for the T5120/5220/5140/5240-series machines
+    (with disks in them, or empty).
+    Contact deraadt@openbsd.org.
+</ul>
+<li><i>vax:</i>
+<ul>
+<li>A DWCTX-BX TURBOchannel adapter for VAXstation 4000/60 and VAXstation 4000/{90,96}
+    is needed in France.
+    Contact miod@openbsd.org.
+</ul>
+<!-- <li><i>zaurus:</i> --> 
+<!-- <li><i>Miscellaneous:</i> -->
+</ul>
+</p>
+
+<h3><font color="#e00000">Specific cards needed by our developers</font></h3>
+<ul>
+<li>An Intel IOP348 based SAS controller (such as the Supermicro AOC-USAS-S4i)
+    to help in <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sli&amp;sektion=4">sli(4)</a>
+    development. Needed in Brisbane, Australia.
+    Contact dlg@openbsd.org.
+<li>A LSISAS2008 based SAS controller to help in <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mpii&amp;sektion=4">mpii(4)</a> development.
+    Needed in Brisbane, Australia.
+    Contact dlg@openbsd.org.
+<li>A Sun Flash Accelerator F20 PCIe card.
+    Needed in Brisbane, Australia.
+    Contact dlg@openbsd.org.
+<li>A PCIe to SD/MMC Card reader controller such as the JMicron JMB38X family.
+    Needed in Brisbane, Australia.
+    Contact dlg@openbsd.org.
+<li>QLogic ISP10160 SCSI adapter needed in Assen, the Netherlands.
+    Contact kettenis@openbsd.org.
+<li>Some kind of Magma 1 (or 3) slot Expresscard-&gt;PCIe expansion system, for
+    improving our PCI drivers.
+    Contact deraadt@openbsd.org.
+<li>CardBus serial adapter to unify PCI/CardBus serial code.
+    Needed in Melbourne, Australia.  Contact jsg@openbsd.org.
+<li>Any VIA Rhine (VT610x) 10/100 PCI ethernet cards.
+    Contact dtucker@openbsd.org.
+<li>An ATI/AMD Radeon fanless PCI-Express card is needed in Spain. Only models
+    HD4000 or greater and fully supported by OpenBSD.
+    Contact juanfra@openbsd.org.
+</ul>
+</p>
+
+<h3><font color="#e00000">Specific devices and equipment needed by our developers</font></h3>
+<ul>
+<li>Any device (monitor or projector) able to output a 1728x2304 image,
+    sync on green, with either a 13W3 or an HD15 connector needed in France.
+    Contact miod@openbsd.org, short-term loan acceptable.
+<li>TI TUSB3140 serial USB adapter in Calgary.
+    Contact deraadt@openbsd.org.
+<li>Sun StorEdge MultiPack-FC desktop array needed in Assen, The Netherlands.
+    Contact kettenis@openbsd.org.
+<li>A variety pack of shortish (SPF connectors on at least one end) fibers
+    wanted in Calgary.
+    Contact deraadt@openbsd.org.
+<li>Interesting bit of <a href="http://www.openpandora.org/">
+    portable ARM hardware</a> wanted in Oslo, Norway.
+    Contact blambert@openbsd.org
+<li>Any kind of DCC (Digital Command Control) capable controller, used to
+    control digital model railroads. Actually needed to test misc/srcpd
+    with real hardware. Parts needed in Brandenburg, Germany.
+    Contact sebastia@openbsd.org
+<li>A USB drive that supports "USB Attached SCSI" wanted in San Francisco, CA, USA.
+    Contact matthew@openbsd.org.
+<li>Laptops or other devices containing card readers of the Realtek RTS card
+    reader product family, which are not yet supported by the rtsx(4) driver,
+    are welcome in Berlin, Germany.
+    The PCI vendor ID of these card readers is 0x10ec. Known PCI product IDs
+    of unsupported card readers are 0x5289, 0x5227, 0x5249, and 0x5287.
+    Short-term loan acceptable.  Contact stsp@openbsd.org.
+<li>Laptops or other devices containing Elantech touchpads with hardware
+    versions 1, 2, and 4 are wanted in Berlin, Germany. Short-term loan
+    acceptable. Contact stsp@openbsd.org.
+<li>A fast and small laptop to replace my aging thinkpad x40 (x220 or x230
+    would be perfect) to work on ASR, smtpd and more.
+    Money to help buy one would be great too.
+    Contact eric@openbsd.org
+<li>A rack mountable UltraSPARC T1, T2 or T2+ machine or a Sun Fire T1000
+    motherboard.  Contact otto@openbsd.org
+<li>Any USB SuperSpeed (3.0) device using isochronous transfers, generally
+    webcams or cameras, needed in Aachen, Germany.
+    Contact mpi@openbsd.org.
+<li>Alix APU boards are needed for wifi hacking in Berlin, Germany.
+    Contact stsp@openbsd.org
+</ul>
+<p>
+
+<hr>
+<h2><font color="#e00000">Software wanted</font></h2>
+<ul>
+<li>Licenses for recent Maple for Linux, or Mathematica, or similar
+    software. I no longer use these for regular work, but I would be willing
+    to try and make sure it can be installed seamlessly through the ports
+    tree.
+    Contact espie@openbsd.org.
+</ul>
+<p>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC  "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>OpenBSD/mvme68k</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="resource-type" content="document">
+<meta name="description" content="the OpenBSD/mvme68k page">
+<meta name="keywords" content="openbsd,mvme68k">
+<meta name="distribution" content="global">
+<meta name="copyright" content="This document copyright 1996-2014 by OpenBSD.">
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#23238e">
+<a href="index.html"><img alt="[OpenBSD]" height="30" width="141" src="images/smalltitle.gif" border="0"></a>
+<p>
+<h2><font color="#e00000">OpenBSD/mvme68k</font></h2>
+
+<hr>
+
+<p>
+OpenBSD/mvme68k runs on a large subset of Motorola's 680x0-based VME
+motherboard family.
+
+<p>
+<strong>The OpenBSD/mvme68k port has been discontinued after the 5.5 release.</strong>
+</p>
+
+<a name="toc"></a>
+<h3><font color="#0000e0"><i>Table of contents</i></font></h3>
+<p>
+<ul>
+  <li><a href="#history">History of the port</a>
+  <li><a href="#status">Current status</a>
+  <li><a href="#hardware">Supported hardware</a>
+  <li><a href="#install">Getting and installing OpenBSD/mvme68k</a>
+  <li><a href="#details">Hardware details</a>
+</ul>
+
+<hr>
+<a name="history"></a>
+<h3><font color="#0000e0"><strong>History:</strong></font></h3>
+
+<p>
+This port was primarily done by Theo de Raadt in 1995 as a contract to
+Willowglen Singapore.  An earlier port to the MVME147 by Chuck Cranor
+based on Paul Mackerras' old DA30 code (and using hardware donated by
+Jonathan Levine at Theo's request) provided a solid development
+platform.
+
+<p>
+Bizarrely, Dale Rahn, working for Motorola back then, also independently
+wrote a port to the MVME147.  For most kernel parts, both their ports were
+analyzed but more code was written from scratch by Theo, or based on the
+hp300 code.
+
+<p>
+Dale helped significantly during the porting to the 68040
+models and wrote most of the code specific to the MVME167 model.
+Later, Steve Murphree continued work and made the MVME177 work, as well as
+adding support for more VME devices.
+
+<p>
+Support for the less commonly encountered MVME165 and MVME141 models was
+introduced in OpenBSD 4.6.
+
+<hr>
+<a name="status"></a>
+<h3><font color="#0000e0"><strong>Current status:</strong></font></h3>
+
+<p>
+Currently, all the boards listed in the
+<a href="#hardware">supported hardware</a> section below boot
+multi-user, and support enough of the on-board devices to be generally
+usable.
+
+<p>
+As none of the mvme68k boards have graphics devices, and none of the Motorola
+VME frame buffers are currently supported, there are no X Window System servers
+available.
+However, a complete set of X clients and utilities is available,
+allowing OpenBSD/mvme68k machines to behave as X11 font servers, or run
+X clients on remote display.
+
+<hr>
+<a name="hardware"></a>
+<h3><font color="#0000e0"><strong>Supported hardware:</strong></font></h3>
+
+<p>
+<h4>Supported processor boards</h4>
+
+<p>
+<ul>
+<li><strong>MVME141</strong> (68030)<br>
+Both VME and VSB memory boards are supported, such as MVME224 boards.
+All the on-board devices are supported, except for the VSB controller.
+<li><strong>MVME147</strong> (68030)<br>
+All the on-board devices are supported, except for the parallel port.
+<li><strong>MVME162</strong> (68040)<br>
+Almost all the on-board devices are supported, with the following exceptions:
+<ul>
+<li>VME bus support is untested
+<li>Parity and ECC error reporting is not supported (but memory works just fine!)
+<li>Flash driver not working
+<li>IP module driver untested
+</ul>
+<li><strong>MVME165</strong> (68040)<br>
+All the on-board devices are supported, except for the VSB controller.
+<li><strong>MVME167</strong> (68040)<br>
+All the on-board devices are supported, except for the parallel port.
+<li><strong>MVME172</strong> (68060)<br>
+Works as well as the MVME162.
+<li><strong>MVME177</strong> (68060)<br>
+Works as well as the MVME167.
+</ul>
+
+<p>
+Faithful clones of these boards, or other Motorola models may work as well
+(MVME166, for example).
+
+<p>
+<h4>Supported extension boards</h4>
+
+<p>
+<ul>
+  <li><strong>MVME327A</strong> SCSI and floppy Controller
+(<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=vsbic&amp;manpath=OpenBSD+5.5&amp;sektion=4&amp;arch=mvme68k">vsbic</a>),
+currently limited to the SCSI interface
+  <li><strong>MVME328</strong> High Performance SCSI Controller
+(<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=vs&amp;manpath=OpenBSD+5.5&amp;sektion=4&amp;arch=mvme68k">vs</a>)
+  <li><strong>MVME376</strong> Ethernet Communications Controller
+(<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=le&amp;manpath=OpenBSD+5.5&amp;sektion=4&amp;arch=mvme68k">le</a>)
+</ul>
+
+<hr>
+<a name="install"></a>
+<h3><font color="#0000e0">
+<strong>Getting and installing OpenBSD/mvme68k:</strong>
+</font></h3>
+
+<p>
+The last supported OpenBSD/mvme68k release is
+<a href="55.html">OpenBSD 5.5</a>.
+Here are the
+<a href="http://ftp.OpenBSD.org/pub/OpenBSD/5.5/mvme68k/INSTALL.mvme68k">
+OpenBSD/mvme68k 5.5 installation instructions
+</a>.
+
+<hr>
+<a name="details"></a>
+<h3><font color="#0000e0"><strong>Hardware details:</strong></font></h3>
+
+<p>
+As VME hardware is quite uncommon in the average retail place,
+this section is here to satisfy the well-founded curiosity about the mvme68k
+hardware.
+
+<p>
+This picture is a MVME162 processor board, with the on-board ethernet and SCSI
+controller options, one IndustryPack module, and a memory extension.<br>
+<img src="images/mvme162.gif" width="637" height="468" alt="MVME162 picture">
+
+</body>
+</html>

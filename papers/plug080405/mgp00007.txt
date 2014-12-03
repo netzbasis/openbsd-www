@@ -1,0 +1,23 @@
+IV) La securite - Securite proactive
+
+Authentification :
+crypto
+krb5
+passwd
+radius
+S/Key
+...
+
+S/Key implemente des fonctionnalites de mots de passe uniques (OTP)
+
+Kerberos V, implementation Heimdal :
+kdc(8)
+kadmind(8)
+...
+
+
+
+
+
+Consultez login.conf(5), info heimdal.
+
