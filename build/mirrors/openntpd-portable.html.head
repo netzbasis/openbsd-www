@@ -45,6 +45,7 @@ At the time of writing, OpenNTPD portable is known to build and work on:
 	<li>OpenBSD (5.6)
 	<li>Linux (Ubuntu 12.04, 14.04)
 	<li>FreeBSD (9.x, 10.x)
+	<li>NetBSD (6.1.5)
 	<li>Solaris (10.x, 11.x)
 	<li>Mac OS X (10.9)
 </ul>
@@ -60,8 +61,7 @@ OpenNTPD 3.9p1 and earlier also supported these operating systems, but they are
 not supported with the latest version yet.
 
 <ul>
-	<li>NetBSD (untested)
-	<li>HP-UX  (missing SO_TIMESTAMP)
+	<li>HP-UX  (work in progress)
 	<li>QNX4   (untested)
 	<li>IRIX   (untested, missing arc4random/getentropy)
 	<li>AIX    (untested, missing arc4random/getentropy)
