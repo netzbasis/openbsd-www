@@ -111,6 +111,26 @@ to 5.7.
     </ul>
 <p>
 
+<li>Installer improvements:
+    <ul>
+    <li>The <tt>etc</tt> and <tt>xetc</tt> sets are now part of <tt>base</tt> and
+      <tt>xbase</tt> and are not distributed separately anymore. They are extracted
+      from <tt>base</tt> and <tt>xbase</tt> during installation.
+    <li>The installer now supports
+      <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/trunk.4?query=trunk&sec=4">trunk(4)</a>
+      interfaces during upgrades.
+    <li>The discovery of the responsefile location for unattended installation and
+      upgrade has been extended to be more flexible.
+      <ul>
+      <li>Ask for the location if dhcp discovery fails for location or mode.
+      <li>Provide a default url if the 'next-server' dhcp option is found.
+      <li>Use <tt>/auto_install.conf</tt> or <tt>/auto_upgrade.conf</tt> if present.
+      <li>Automatically start installer in unattended mode if either one of these
+        files is present when the system boots.
+      </ul>
+    </ul>
+<p>
+
 <li>Routing daemons and other userland network improvements:
     <ul>
     <li>...
@@ -306,9 +326,9 @@ to 5.7.
 <li>Some highlights:
     <ul>
     <li>GNOME 3.14.2			<li>KDE 3.5.10
-    <li>KDE 4.14.3
-    <li>Xfce 4.10			<li>MariaDB 10.0.16
-    <li>PostgreSQL 9.4.1		<li>Postfix 2.11.4
+    <li>KDE 4.14.3			<li>Xfce 4.10
+    <li>MariaDB 10.0.16			<li>PostgreSQL 9.4.1
+    <li>Postfix 2.11.4			<li>Sendmail 8.15.1
     <li>OpenLDAP 2.3.43 and 2.4.40	<li>Mozilla Firefox 35.0.1
     <li>Mozilla Thunderbird 31.4.0	<li>GHC 7.8.4
     <li>LibreOffice 4.3.5.2		<li>Emacs 21.4 and 24.4
@@ -731,7 +751,7 @@ like:
 server.]
 <p>
 Note that most ports are available as packages through FTP. Updated
-packages for the 5.7 release will be made available if problems arise.
+ports for the 5.7 release will be made available if problems arise.
 <p>
 If you're interested in seeing a port added, would like to help out, or just
 would like to know more, the mailing list
