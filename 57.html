@@ -17,7 +17,7 @@
 <p>
 
 <a href="images/XXX.jpg">
-<img align="left" width="227" height="343" hspace="24" src="images/XXX.jpg"></a>
+<img align="left" width="227" height="343" hspace="24" vspace="10" src="images/XXX.jpg"></a>
 <h2><font color="#0000e0">OpenBSD 5.7</font></h2>
 <p>
 Released May 1, 2015<br>
@@ -39,9 +39,11 @@ Copyright 1997-2015, Theo de Raadt.<br>
     5.6 and 5.7 releases.
 <p>
 <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=signify&amp;sektion=1">signify(1)</a> pubkeys for this release:<br>
-base: RWSvUZXnw9gUb70PdeSNnpSmodCyIPJEGN1wWr+6Time1eP7KiWJ5eAM<br>
-fw:   RWSuRBL44FVkb2QuvtlwOJmzS9UJtbKZd7GEYcol8HPXu4On/Ct1LoZr<br>
-pkg:  RWTJ1iHLn/zcvJJSbxJIEU9ChlfAlU16XoLLxmxciliOFWfTLyOv0vQs<br>
+<pre>
+base: RWSvUZXnw9gUb70PdeSNnpSmodCyIPJEGN1wWr+6Time1eP7KiWJ5eAM
+fw:   RWSuRBL44FVkb2QuvtlwOJmzS9UJtbKZd7GEYcol8HPXu4On/Ct1LoZr
+pkg:  RWTJ1iHLn/zcvJJSbxJIEU9ChlfAlU16XoLLxmxciliOFWfTLyOv0vQs
+</pre>
 </ul>
 <br clear=all>
 All applicable copyrights and credits can be found in the applicable
@@ -73,7 +75,7 @@ to 5.7.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/rtsx.4?query=rtsx&sec=4">rtsx(4)</a> driver now supports RTS5227 and RTL8411B card readers.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/bge.4?query=bge&sec=4">bge(4)</a> driver now supports jumbo frames on various BCM57xx chipsets.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ciss.4?query=ciss&sec=4">ciss(4)</a> driver now supports HP Gen9 Smart Array/Smart HBA devices.
-    <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/mpi.4?query=mpi&sec=4">mpi(4)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/mpii.4?query=mpii&sec=4">mpii(4)</a> drivers now have mpsafe interrupt handlers running without the big lock.
+    <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/mpi.4?query=mpi&sec=4">mpi(4)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/mfi.4">mfi(4)</a> drivers now have mpsafe interrupt handlers running without the big lock.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ppb.4?query=ppb&sec=4">ppb(4)</a> driver now supports PCI bridges that support subtractive decoding (fixes PCMCIA behind the ATI SB400 PCI bridge), and devices with 64-bit BARs behind PCI-PCI bridges as seen on SPARC T5-2 systems.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pucdata.4?query=pucdata&sec=4">pucdata(4)</a> driver now supports Winchiphead CH382 devices.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/sdmmc.4?query=sdmmc&sec=4">sdmmc(4)</a> driver now supports eMMC storage devices larger than 2GB.
@@ -151,6 +153,11 @@ to 5.7.
 
 <li>Assorted improvements:
     <ul>
+    <li>Cleanup <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=event&amp;sektion=3">libevent(3)</a>,
+	the compatibility layer for other operating systems has been removed.
+	The API is still compatible with upstream libevent 1.4.15-stable.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=openssl&amp;sektion=1">openssl(1)</a>
+	s_client got a -proxy parameter for connecting over a HTTP proxy.
     <li>...
     </ul>
 <p>
@@ -294,6 +301,22 @@ to 5.7.
     </ul>
 
 <p>
+<li>Syslogd:
+    <ul>
+    <li>OpenBSD <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=syslogd&amp;sektion=8">syslogd(8)</a>
+	is based on libevent now.
+    <li>Sending and receiving UDP messages works with both IPv4 and IPv6.
+    <li>Syslog messages can also be sent over TCP or TLS.
+	The syntax to specify the loghost is documented in
+	<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=syslog.conf&amp;sektion=5">syslog.conf(5)</a>.
+    <li>Sending over TCP and TLS is reliable.
+	If a connection terminates, syslogd tries to reconnect.
+	When the message buffer in memory gets full, the number of dropped
+	messages is counted and logged.
+    <li>With TLS the x509 certificate of the syslog server is verified.
+    <li>The maximum message size has been increased according to newer RFC.
+    </ul>
+<p>
 <li>Ports and packages:
     <ul>
     <li>Over X,XXX ports.
@@ -372,14 +395,14 @@ to 5.7.
 <p>
 Following this are the instructions which you would have on a piece of
 paper if you had purchased a CDROM set instead of doing an alternate
-form of install.  The instructions for doing an FTP (or other style
+form of install.  The instructions for doing an HTTP (or other style
 of) install are very similar; the CDROM instructions are left intact
 so that you can see how much easier it would have been if you had
 purchased a CDROM instead.
 <p>
 
 <hr>
-Please refer to the following files on the three CDROMs or FTP mirror for
+Please refer to the following files on the three CDROMs or mirror site for
 extensive details on how to install OpenBSD 5.7 on your machine:
 <p>
 <ul>
@@ -497,7 +520,7 @@ read INSTALL.amd64.
 <p>
 <h3><font color="#e00000">OpenBSD/macppc:</font></h3>
 <ul>
-Burn the image from the FTP site to a CDROM, and power on your machine
+Burn the image from a mirror site to a CDROM, and power on your machine
 while holding down the <i>C</i> key until the display turns on and
 shows <i>OpenBSD/macppc boot</i>.
 
@@ -672,9 +695,20 @@ openbsd57_arm.ipk package.  Reboot, then run it.  Read INSTALL.zaurus
 for a few important details.
 </ul>
 
+<a name="upgrade"></a>
+<hr>
 <p>
-<h3><font color="#e00000">Notes about the source code:</font></h3>
-<ul>
+<h3><font color="#0000e0">How to upgrade</font></h3>
+<p>
+If you already have an OpenBSD 5.6 system, and do not want to reinstall,
+upgrade instructions and advice can be found in the
+<a href="faq/upgrade57.html">Upgrade Guide</a>.
+
+<a name="sourcecode"></a>
+<hr>
+<p>
+<h3><font color="#0000e0">Notes about the source code</font></h3>
+<p>
 src.tar.gz contains a source archive starting at /usr/src.  This file
 contains everything you need except for the kernel sources, which are
 in a separate archive.  To extract:
@@ -702,16 +736,6 @@ Using these files
 results in a much faster initial CVS update than you could expect from
 a fresh checkout of the full OpenBSD source tree.
 <p>
-</ul>
-
-<a name="upgrade"></a>
-<hr>
-<p>
-<h3><font color="#0000e0">How to upgrade</font></h3>
-<p>
-If you already have an OpenBSD 5.6 system, and do not want to reinstall,
-upgrade instructions and advice can be found in the
-<a href="faq/upgrade57.html">Upgrade Guide</a>.
 
 <a name="ports"></a>
 <hr>
@@ -725,8 +749,7 @@ A ports tree archive is also provided.  To extract:
 # <strong>tar xvfz /tmp/ports.tar.gz</strong>
 </pre></ul>
 <p>
-The <i>ports/</i> subdirectory is a checkout of the OpenBSD ports tree.  Go
-read the <a href="faq/ports/index.html">ports</a> page
+Go read the <a href="faq/ports/index.html">ports</a> page
 if you know nothing about ports
 at this point.  This text is not a manual of how to use ports.
 Rather, it is a set of notes meant to kickstart the user on the
@@ -750,7 +773,7 @@ with a command like:
 [Of course, you must replace the server name here with a nearby anoncvs
 server.]
 <p>
-Note that most ports are available as packages through FTP. Updated
+Note that most ports are available as packages on our mirrors. Updated
 ports for the 5.7 release will be made available if problems arise.
 <p>
 If you're interested in seeing a port added, would like to help out, or just
