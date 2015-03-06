@@ -133,6 +133,9 @@ to 5.7.
       </ul>
       <li>Ignore hostname.if.* files when upgrading.
       <li>Configure all physical interfaces before any dynamic interface types (e.g. trunks, vlans) when upgrading.
+    <li>
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now zeros out GPT signatures found when writing out an MBR that has been re-initialzed and has no EFI or EFISYS partition.
+    <li>Fixed manipulation of 'ro' and 'rw' fstab options to avoid damage to other options that happen to contain 'ro' or 'rw'.
     </ul>
 <p>
 
@@ -176,11 +179,16 @@ to 5.7.
     <li>switch last workq API uses to
     <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=taskq_create&amp;sektion=9">taskq</a> API and remove all traces of workq.
     <li>Use
-    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=services&amp;sektion=5">services(5)</a> names in the default pf rules in force during startup. 
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=services&amp;sektion=5">services(5)</a> names in the default pf rules in force during startup.
     <li>
-    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=what&amp;sektion=1">what(1)</a> now displays correct &#36;OpenBSD&#36; expansions. 
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=what&amp;sektion=1">what(1)</a> now displays correct &#36;OpenBSD&#36; expansions.
     <li>
-    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now zeros out GPT signatures found when writing out an MBR that has been re-initialzed and lacks any EFI or EFISYS partition. 
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd&amp;sektion=8">dhcpd(8)</a> now removes addresses from its pf table a single time when they expire, rather than at every timeout after the expiry.
+    <li>
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd&amp;sektion=8">dhcpd(8)</a> now ensures that the pf table process exits when the main process does.
+    <li>
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd&amp;sektion=8">dhcpd(8)</a> has more informative log entries for DHCPACKs issued in response to DHCPINFORM messages.
+    <li>Added POSIX types blkcnt_t (int64) and blksize_t (int32), and used them for st_blocks (formerly int64_t) and st_blksize (formerly u_int32_t) in struct stat.
     <li>...
     </ul>
 <p>
@@ -212,7 +220,7 @@ to 5.7.
         be different.
       <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ssh&amp;sektion=1">ssh(1)</a>,
         <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sshd&amp;sektion=8">sshd(8)</a>:
-        Experiemental host key rotation support.  Add a protocol extension
+        Experimental host key rotation support.  Add a protocol extension
         for a server to inform a client of all its available host keys after
         authentication has completed.  The client may record the keys in
         <tt>known_hosts</tt>, allowing it to upgrade to better host key
@@ -321,9 +329,41 @@ to 5.7.
     <li>...
     </ul>
 <p>
-<li>mandoc 1.13.2:
+<li>mandoc 1.13.3:
     <ul>
-    <li>...
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=man&sektion=1">man(1)</a>,
+      <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=apropos&sektion=1">apropos(1)</a>, and
+      <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mandoc&sektion=1">mandoc(1)</a>
+      now have a unified user interface, all with the same options,
+      and are in fact all implemented by the same binary program.
+    <li>For <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=man&sektion=1">man(1)</a>,
+      this implies new options -l and -IKOTW,
+      and it now finds manual pages by the names in their NAME sections
+      even if they lack matching file names.
+    <li>For <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=apropos&sektion=1">apropos(1)</a>,
+      this implies new options -acfhklw and -IKOTW.
+    <li>For <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mandoc&sektion=1">mandoc(1)</a>,
+      this implies new options -acfhkl.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mandoc&sektion=1">mandoc(1)</a>
+      now automatically detects and transparently accepts input encoded
+      in utf-8 and iso-8859-1, and provides a new option -K to explicitly
+      specify the input encoding.
+    <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mandoc&sektion=1">mandoc(1)</a>
+      default output mode now is -Tlocale rather than -Tascii.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=eqn&sektion=7">eqn(7)</a>
+      now supports in-line equations,
+      and terminal rendering of equations is considerably improved.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mandoc&sektion=1">mandoc(1)</a> -Thtml
+      now generates polyglot HTML5 and renders
+      <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=eqn&sektion=7">eqn(7)</a>
+      using MathML.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mandoc&sektion=1">mandoc(1)</a>
+      can no longer fail with fatal errors, no matter how broken the input
+      file may be, and the -Wfatal message level no longer has any effect.
+      A new diagnostic level -Wunsupp is provided.  Besides, many
+      diagnostic messages are now more specific.
+    <li>Many crashes were fixed that Jonathan Gray found with the
+      American Fuzzy Lop (afl).
     </ul>
 
 <p>
