@@ -79,6 +79,7 @@ to 5.7.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ppb.4?query=ppb&sec=4">ppb(4)</a> driver now supports PCI bridges that support subtractive decoding (fixes PCMCIA behind the ATI SB400 PCI bridge), and devices with 64-bit BARs behind PCI-PCI bridges as seen on SPARC T5-2 systems.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pucdata.4?query=pucdata&sec=4">pucdata(4)</a> driver now supports Winchiphead CH382 devices.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/sdmmc.4?query=sdmmc&sec=4">sdmmc(4)</a> driver now supports eMMC storage devices larger than 2GB.
+    <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/sdhc.4?query=sdhc&sec=4">sdhc(4)</a> driver can properly resume on Ricoh controllers.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/sdhc.4?query=sdhc&sec=4">sdhc(4)</a> driver now supports Ricoh R5U822 and R5U823 card readers.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/mfii.4?query=mfii&sec=4">mfii(4)</a> driver now supports the Megaraid 3008 (Fury) and 3108 (Invader) cards.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/myx.4?query=myx&sec=4">myx(4)</a> driver runs less code under big lock.
@@ -111,10 +112,15 @@ to 5.7.
 <li>Generic network stack improvements:
     <ul>
     <li>The routing table is now used for most of the address lookups operations superseding the RB-tree and IPv4 address list.
-    <li>The SipHash algorithm is now used for PCB hashing, trunk(4) loadbalancing, pf(4) and bridge(4).
-    <li>Traffic destinated to link-local IPv6 addresses can now be seen with tcpdump(8).
+    <li>The SipHash algorithm is now used for PCB hashing,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/trunk.4?query=trunk&sec=4">trunk(4)</a> loadbalancing,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pf.4?query=pf&sec=4">pf(4)</a> and
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/bridge.4?query=bridge&sec=4">bridge(4)</a>.
+    <li>Traffic destinated to link-local IPv6 addresses can now be seen with
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/tcpdump.8?query=tcpdump&sec=8">tcpdump(8)</a>.
     <li> ...
     </ul>
+<p>
 
 <li>Installer improvements:
     <ul>
@@ -137,8 +143,9 @@ to 5.7.
       <li>Ignore hostname.if.* files when upgrading.
       <li>Configure all physical interfaces before any dynamic interface types (e.g. trunks, vlans) when upgrading.
     <li>
-    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now zeros out GPT signatures found when writing out an MBR that has been re-initialzed and has no EFI or EFISYS partition.
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now zeros out GPT signatures found when writing out an MBR that has been re-initialized and has no EFI or EFISYS partition.
     <li>Fixed manipulation of 'ro' and 'rw' fstab options to avoid damage to other options that happen to contain 'ro' or 'rw'.
+    <li>The ramdisk binary (one binary contains all the commands) is now compiled without optimization and security features.  The benefit is a substantial savings in space, allowing more features in the future.
     </ul>
 <p>
 
@@ -150,17 +157,33 @@ to 5.7.
     </ul>
 <p>
 
-<li>OpenSMTPD 5.4.4:
-    <ul>
-    <li>...
-    </ul>
-<p>
-
 <li>Security improvements:
     <ul>
-    <li>Stricter enforcement of W^X in the kernel address space.
+    <li>Stricter enforcement of W^X in the kernel address space, especially on architectures with the right featureset (amd64, in particular has seen substantial improvements).
     <li>Support for loadable kernel modules has been removed.
     <li>procfs has been removed.
+    <li>Comprehensive audit of the tree to use the <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=reallocarray&amp;sektion=3">reallocarray(3)</a> idiom throughout.
+    <li>Many conversions from <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=select&amp;sektion=2">select(2)</a> to <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=poll&amp;sektion=2">poll(2)</a>.
+    <li>/var/tmp is now a symbolic link to /tmp, as a first step towards reducing the "fill it up" attack surface against the /var partition.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=memcpy&amp;sektion=3">memcpy(3)</a> with overlapping arguments now aborts a program (with a syslog report), allowing these problems to be found.  Overlapping copies should use <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=memmove&amp;sektion=3">memmove(3)</a>.  Sometime after 5.7 release, having learned more about the situation and repairing instances that are discovered by users during release use, we will go back to the optimized version.
+    <li>Change
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=rand&amp;sektion=3">rand(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=random&amp;sektion=3">random(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=drand48&amp;sektion=3">drand48(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=lrand48&amp;sektion=3">lrand48(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mrand48&amp;sektion=3">mrand48(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=srand48&amp;sektion=3">srand48(3)</a>
+    to return non-deterministic strong random values by default, sourced from
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=arc4random&amp;sektion=3">arc4random(3)</a>.
+    New functions
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=srand_deterministic&amp;sektion=3">srand_deterministic(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=srandom_deterministic&amp;sektion=3">srandom_deterministic(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=seed48_deterministic&amp;sektion=3">seed48_deterministic(3)</a>,
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=lcong48_deterministic&amp;sektion=3">lcong48_deterministic(3)</a>,
+    are added for cases where determinism must be requested.
+    <li>At resume (or unhibernate) time, use a variety of methods to reseed the random number generator.  This also works on VM's which wake up (if a wakeup event is seen).
+    <li>All architectures have been transitioned so to static PIE, meaning the statically linked binaries in /bin and /sbin now have randomly located text segments.
+    <li>Allow larger .openbsd.randomdata ELF segments.
     <li>...
     </ul>
 <p>
@@ -175,11 +198,6 @@ to 5.7.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=openssl&amp;sektion=1">openssl(1)</a>
 	s_client got a -proxy parameter for connecting over a HTTP proxy.
     <li>Ground work laid for improved SMP scalability.
-    <li>Improved standards compliance in system header files.
-    <li>Improved portability in many userland components by reducing reliance
-	on historic BSD header files.
-    <li>memcpy now strictly enforces the no overlapping buffers rule.
-    <li>Eliminate many duplicate header file inclusions.
     <li>gzsig has been removed.
     <li>switch last workq API uses to
     <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=taskq_create&amp;sektion=9">taskq</a> API and remove all traces of workq.
@@ -215,6 +233,46 @@ to 5.7.
     <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a>.
     <li>Private number conversion functions in
     <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> eliminated in favour of standard library functions.
+    <li>Further signal race cleanups in 
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ftp&amp;sektion=1">ftp(1)</a>.
+    <li>BIND has been retired, encouraging use of
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=nsd&amp;sektion=8">nsd(8)</a> and
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=unbound&amp;sektion=8">unbound(8)</a>.
+    <li>Significant namespace cleanup in the /usr/include files, especially related to &lt;sys/param.h&gt; and &lt;limits.h&gt;.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=softraid&amp;sektion=4">softraid(4)</a> RAID1 and CRYPTO volumes are now bootable on the sparc64 platform.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=relayd&amp;sektion=8">relayd(8)</a> now uses &quot;TLS&quot; rather than &quot;SSL&quot; terminology to reflect the deprecation of the latter. 
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=relayd&amp;sektion=8">relayd(8)</a> now supports the random and source-hash modes with redirections.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=relayd&amp;sektion=8">relayd(8)</a> now supports the <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/share/snmp/OPENBSD-RELAYD-MIB.txt?rev=1.1">OPENBSD-RELAYD-MIB</a> via agentx with <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=snmpd&amp;sektion=8">snmpd(8)</a>.
+    <li>Added interfaces for setting the close-on-exec flag and/or non-blocking mode on new file descriptors: <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pipe2&amp;sektion=2">pipe2(2)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dup3&amp;sektion=2">dup3(2)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=accept4&amp;sektion=2">accept4(2)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mkostemp&amp;sektion=3">mkostemp(3)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mkostemps&amp;sektion=3">mkostemps(3)</a>, the <tt>SOCK_CLOEXEC</tt> and <tt>SOCK_NONBLOCK</tt> flags for <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=socket&amp;sektion=2">socket(2)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=socketpair&amp;sektion=2">socketpair(2)</a>, and the <tt>MSG_CMSG_CLOEXEC</tt> flag for <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=recvmsg&amp;sektion=2">recvmsg(2)</a>.  In addition, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=posix_spawn_file_actions_adddup2&amp;sektion=3">posix_spawn_file_actions_adddup2(3)</a> now always clears the close-on-exec flag.
+    <li>Added interfaces for setting the close-on-exec flag on new FILE handles and for requesting exclusive creation via the the 'o' and 'x' mode letters for <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fopen&amp;sektion=3">fopen(3)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdopen&amp;sektion=3">fdopen(3)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=freopen&amp;sektion=3">freopen(3)</a>, and <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=popen&amp;sektion=3">popen(3)</a>.
+    <li>Many library functions and programs changed to use the above for safety or simplicity.
+    <li>Added <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=chflagsat&amp;sektion=2">chflagsat(2)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sockatmark&amp;sektion=3">sockatmark(3)</a>, and <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=stravis&amp;sektion=3">stravis(3)</a>.
+    <li>Merged performance and safety fixes for <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fts&amp;sektion=3">fts(3)</a> from FreeBSD.
+    <li>Merged fixes for file descriptor leaks in various <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=rpc&amp;sektion=3">rpc(3)</a> functions from NetBSD.
+    <li>Added <tt>kern.global_ptrace</tt> <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sysctl&amp;sektion=1">sysctl(1)</a> to disable by default the ability to <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ptrace&amp;sektion=2">ptrace(2)</a> processes that aren't your descendent.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=kdump&amp;sektion=1">kdump(1)</a> now always displays both the numeric and the textual forms for users, groups, timestamps, and sysctl ids, eliminating the <tt>-r</tt> option.  It also auto-selects between decimal and hex format for arguments, renders more types of flags, and is more robust when parsing corrupt ktrace files.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=chmod&amp;sektion=1">chmod(1)</a>/<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=chgrp&amp;sektion=1">chgrp(1)</a>/<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=chown&amp;sektion=8">chown(8)</a> now comply with POSIX's requirements when they encounter symlinks when the <tt>-R</tt> option is used, and are safe from race conditions when doing so.
+    <li>...
+    </ul>
+<p>
+
+<li>OpenBSD <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=httpd&amp;sektion=8">httpd(8)</a>:
+    <ul>
+    <li>SSLv2/3 is not supported anymore; renamed all occurrences of &quot;SSL&quot; to &quot;TLS&quot;.
+    <li>Various TLS improvements with better support for ECDHE/DHE forward secrecy.
+    <li>Improved support for virtual hosts by supporting name- and IP- based aliases.
+    <li>Added support for basic authentication by checking against files created with <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=htpasswd&amp;sektion=1">htpasswd(1)</a>.
+    <li>Added support for custom error codes, blocking and dropping of connections.
+    <li>Added support for redirections and macros in specified target URLs.
+    <li>Added the &quot;root strip&quot; option to sanitize PATH_INFO for some CGI scripts.
+    <li>Added an option to specify an alternative log directory instead of /var/www/logs.
+    <li>Various FastCGI improvements; httpd(8) is now compatible with many well-known web applications.
+    <li>Various other fixes and improvements.
+    </ul>
+<p>
+
+<li>OpenSMTPD 5.4.4:
+    <ul>
     <li>...
     </ul>
 <p>
@@ -351,7 +409,11 @@ to 5.7.
 <li>LibreSSL
     <ul>
     <li>Fix a Bleichenbacher style timing oracle with bad PKCS padding.
-    <li>Move openssl(1) from /usr/sbin/openssl to /usr/bin/openssl
+    <li>Reluctantly add server-side support for TLS_FALLBACK_SCSV.
+    <li>Import BoringSSL's crypto bytestring and crypto bytebuilder APIs.
+    <li>Jettison DTLS over SCTP.
+    <li>Fix memory leaks.
+    <li>Move <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/openssl.1??query=openssl&sec=1">openssl(1)</a> from /usr/sbin/openssl to /usr/bin/openssl
     <li>...
     </ul>
 <p>
@@ -396,7 +458,9 @@ to 5.7.
 <li>Syslogd:
     <ul>
     <li>OpenBSD <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=syslogd&amp;sektion=8">syslogd(8)</a>
-	is based on libevent now.
+	is based on
+	<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=event&amp;sektion=3">libevent</a>
+	now.
     <li>Sending and receiving UDP messages works with both IPv4 and IPv6.
     <li>Syslog messages can also be sent over TCP or TLS.
 	The syntax to specify the loghost is documented in
@@ -559,7 +623,11 @@ Boot from the CD to begin the install - you may need to adjust
 your BIOS options first.
 
 <p>
-If you can't boot from a CD or a floppy disk,
+If your machine can boot from USB, you can write <i>install57.fs</i> or
+<i>miniroot57.fs</i> to a USB stick and boot from it.
+
+<p>
+If you can't boot from a CD, floppy disk, or USB,
 you can install across the network using PXE as described in
 the included INSTALL.i386 document.
 
@@ -577,7 +645,11 @@ Boot from the CD to begin the install - you may need to adjust
 your BIOS options first.
 
 <p>
-If you can't boot from a CD or a floppy disk,
+If your machine can boot from USB, you can write <i>install57.fs</i> or
+<i>miniroot57.fs</i> to a USB stick and boot from it.
+
+<p>
+If you can't boot from a CD, floppy disk, or USB,
 you can install across the network using PXE as described in the included
 INSTALL.amd64 document.
 
