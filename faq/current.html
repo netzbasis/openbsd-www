@@ -58,6 +58,8 @@
 <li><a href="#20150125">2015/01/25 - [ports] wordpress 4.1</a>
 <li><a href="#20150206">2015/02/06 - [ports] MariaDB 10.0.16</a>
 <li><a href="#20150221">2015/02/21 - Mesa changed back to 10.2</a>
+<!-- 5.8 -->
+<li><a href="#20150404">2015/04/04 - [ports] rc script name changes</a>
 </ul>
 
 <hr>
@@ -96,7 +98,7 @@ If you didn't customize the versions in <tt>/etc/X11/app-defaults</tt>, they
 should be removed to avoid future issues when one file changes:
 <pre>
 	cd /etc/X11/app-defaults
-	rm Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color 
+	rm Beforelight Bitmap Bitmap-color Bitmap-nocase Chooser Clock-color
 	rm Editres Editres-color KOI8RXTerm SshAskpass UXTerm Viewres
 	rm Viewres-color XCalc XCalc-color XClipboard XClock
 	rm XClock-color XConsole XFontSel XLoad XLock XLogo
@@ -202,7 +204,7 @@ be deleted:
 	rm -rf /usr/libdata/perl5/site_perl/`uname -p`-openbsd/libmilter
 	rm -rf /usr/libexec/sendmail
 	rm -rf /usr/share/sendmail  # preserve mc files first if needed
-	
+
 	rm -f /etc/rc.d/sendmail
 	rm -f /usr/lib/{libmilter.a,libmilter.so.3.0,libmilter_p.a}
 	rm -f /usr/libexec/smrsh
@@ -449,7 +451,7 @@ Major update to 9.4.0. A dump/restore is required.
 <h3 id="20150121">2015/01/21 - carp(4) setups now require a "carpdev" argument</h3>
 carp(4) interfaces no longer look for a compatible parent interface with
 the same subnet if no "carpdev" argument has been specified with ifconfig(8)
-or in the corresponding /etc/hostname.carp* file.  Such setups are now 
+or in the corresponding /etc/hostname.carp* file.  Such setups are now
 treated as invalid and should be updated.
 
 <h3 id="20150125">2015/01/25 - [ports] wordpress 4.1</h3>
@@ -486,9 +488,23 @@ due to various issues.  The following include files should be removed.
 	rm -f /usr/X11R6/include/EGL/eglextchromium.h
 </pre>
 
+<h3 id="20150404">2015/04/04 - [ports] rc script name changes</h3>
+The rc scripts for some ports have changed their name to better match
+the original upstream names and/or binary name:
+<ul>
+  <li><tt>dbus_daemon</tt> &#8594; <tt>messagebus</tt></li>
+  <li><tt>puppetmasterd</tt> &#8594; <tt>puppetmaster</tt></li>
+  <li><tt>puppetd</tt> &#8594; <tt>puppet</tt></li>
+</ul>
+
+Modify <tt>/etc/rc.conf.local</tt> accordingly:
+<pre>
+	perl -pi -e 's/dbus_daemon/messagebus/;' -e 's/puppetmasterd/puppetmaster/;' -e 's/puppetd/puppet/;' /etc/rc.conf.local
+</pre>
+
 <p>
 <hr>
-<small>$OpenBSD: current.html,v 1.593 2015/02/25 16:49:06 sthen Exp $</small>
+<small>$OpenBSD: current.html,v 1.595 2015/04/04 09:29:08 jasper Exp $</small>
 
 </body>
 </html>
