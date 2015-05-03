@@ -87,7 +87,8 @@ consult the <a href="./faq/faq10.html#Patches">OpenBSD FAQ</a>.
 <font color="#009000"><strong>001: INSTALL ISSUE: May 1, 2015</strong></font>
 &nbsp; <i>sparc64</i><br>
 The "miniroot" install method is broken (related to the addition of
-softraid support).  This method is used by the official CD 3, so it fails as well.
+softraid support).  This method is used by the official CD 3 as
+well, so it fails to boot on sparc64 machines.
 <br>
 No patch is available for obvious reasons, so use a different install method.
 <p>
@@ -131,9 +132,44 @@ Fix a logic error in smtpd handling of SNI.
 This could allow a remote user to crash the server or provoke a disconnect of other sessions.
 <br>
 <a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.7/common/004_smtpd.patch.sig">
-  A source code patch exists which remedies this problem.</a>
+A source code patch exists which remedies this problem.</a>
 <p>
   
+<li id="005_httpd">
+<font color="#009000"><strong>005: RELIABILITY FIX: April 30, 2015</strong></font>
+&nbsp; <i>All architectures</i><br>
+A remote user can crash httpd by forcing the daemon to log to a file
+before the logging system was initialized.
+<br>
+<a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.7/common/005_httpd.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="006_elf">
+<font color="#009000"><strong>006: SECURITY FIX: April 30, 2015</strong></font>
+&nbsp; <i>All architectures</i><br>
+Malformed binaries could trigger kernel panics or view kernel memory.
+<br>
+<a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.7/common/006_elf.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="007_tar">
+<font color="#009000"><strong>007: SECURITY FIX: April 30, 2015</strong></font>
+&nbsp; <i>All architectures</i><br>
+Multiple issues in tar/pax/cpio:
+<ul>
+<li>extracting a malicious archive could create files outside of
+the current directory without using pre-existing symlinks to 'escape',
+and could change the timestamps and modes on preexisting files
+<li>tar without -P would permit extraction of paths with ".." components
+<li>there was a buffer overflow in the handling of pax extension headers
+</ul>
+<br>
+<a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.7/common/007_tar.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
 </ul>
 
 <hr>
