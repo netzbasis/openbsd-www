@@ -358,8 +358,37 @@ and could change the timestamps and modes on preexisting files
 <li>tar without -P would permit extraction of paths with ".." components
 <li>there was a buffer overflow in the handling of pax extension headers
 </ul>
-<br>
 <a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.6/common/024_tar.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="025_smtpd">
+<font color="#009000"><strong>025: RELIABILITY FIX: June 11, 2015</strong></font>
+&nbsp; <i>All architectures</i><br>
+Fix multiple reliability issues in smtpd:
+<ul>
+<li>a local user can cause smtpd to fail by writing an invalid imsg to control socket.
+<li>a local user can prevent smtpd from serving new requests by exhausting descriptors.
+</ul>
+<a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.6/common/025_smtpd.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="026_openssl">
+<font color="#009000"><strong>026: SECURITY FIX: June 11, 2015</strong></font>
+&nbsp; <i>All architectures</i><br>
+Fix several defects from OpenSSL:
+<ul>
+<li>CVE-2015-1788 - Malformed ECParameters causes infinite loop
+<li>CVE-2015-1789 - Exploitable out-of-bounds read in X509_cmp_time
+<li>CVE-2015-1792 - CMS verify infinite loop with unknown hash function
+</ul>
+Note that CMS was already disabled in LibreSSL.
+Several other issues did not apply or were already fixed and one is under review.<br>
+For more information, see the
+<a href="https://www.openssl.org/news/secadv_20150611.txt">OpenSSL advisory</a>.
+<br>
+<a href="http://ftp.openbsd.org/pub/OpenBSD/patches/5.6/common/026_openssl.patch.sig">
 A source code patch exists which remedies this problem.</a>
 <p>
 
