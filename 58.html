@@ -14,15 +14,15 @@
 <img alt="[OpenBSD]" height="30" width="141" hspace="24" src="images/smalltitle.gif" border="0"></a>
 <p>
 
-<a href="images/XXX.jpg">
-<img align="left" width="227" height="343" hspace="24" vspace="10" src="images/XXX.jpg"></a>
+<a href="images/fishhearts.jpg">
+<img align="left" width="227" height="343" hspace="24" vspace="10" src="images/fishhearts.jpg"></a>
 <h2><font color="#0000e0">OpenBSD 5.8</font></h2>
 <p>
 To be released Oct 18, 2015<br>
 Copyright 1997-2015, Theo de Raadt.<br>
 <font color="#e00000">ISBN 978-0-9881561-6-6</font>
 <br>
-<a href="lyrics.html#58">5.8 Songs: "XXX", "XXX", "XXX", "XXX", "XXX"</a>
+5.8 Songs: <a href="lyrics.html#58c">"So much better"</a>
 <p>
 
 <ul>
@@ -77,6 +77,8 @@ to 5.8.
     <li>Avoid assigning low address to PCI BARs, fixing various issues on machines whose BIOSes neglect to claim low memory.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wscons(4)&amp;sec=4">wscons(4)</a> works with even more odd trackpads.
     <li>Added <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pvbus(4)&amp;sec=4">pvbus(4)</a> paravirtual device tree root on virtual machines that are running on hypervisors.
+    <li>New octdwctwo(4) driver for USB support on OpenBSD/octeon.
+    <li>New amdcf(4) driver for embedded flash on OpenBSD/octeon.
     <li>...
     </ul>
 <p>
@@ -131,6 +133,8 @@ to 5.8.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ospfd&amp;sektion=8">ospfd(8)</a> now correctly handles <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=carp&amp;sektion=4">carp(4)</a> interfaces in "backup" mode at startup.
     <li>Log messages in <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=bgpd&amp;sektion=8">bgpd(8)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ospfd&amp;sektion=8">ospfd(8)</a> have been made more specific.
     <li>The default Diffie-Hellman group for VPNs configured by <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ipsec.conf&amp;sektion=5">ipsec.conf(5)</a> has been changed to modp3072.
+    <li>New <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=radiusd&amp;sektion=8">radiusd(8)</a>,
+      Remote Authentication Dial In User Service (RADIUS) daemon.
     <li>...
     </ul>
 <p>
