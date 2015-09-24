@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.430 2015/07/19 19:36:14 sthen Exp $
+# $OpenBSD: mirrors.dat,v 1.432 2015/09/23 10:54:30 sthen Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
