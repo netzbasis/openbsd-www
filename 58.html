@@ -80,7 +80,6 @@ to 5.8.
     <li>New octdwctwo(4) driver for USB support on OpenBSD/octeon.
     <li>New <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=amdcf&amp;sec=4">amdcf(4)</a> driver for embedded flash on OpenBSD/octeon.
     <li>Support for RTL8188EU devices was added to the <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=urtwn&amp;sec=4">urtwn(4)</a> driver.
-    <li>...
     </ul>
 <p>
 
@@ -88,7 +87,6 @@ to 5.8.
     <ul>
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-5.7/man4/lmc.4?query=lmc&amp;sec=4">lmc(4)</a> driver for Lan Media Corporation SSI/T1/DS1/HSSI/DS3 devices has been removed.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-5.7/man4/san.4?query=san&amp;sec=4">san(4)</a> driver for Sangoma Technologies AFT T1/E1 devices has been removed.
-    <li>...
     </ul>
 <p>
 
@@ -96,8 +94,7 @@ to 5.8.
     <ul>
     <li>MTU of <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=vlan&amp;sektion=4">vlan(4)</a> devices can now be set independently from the parent interface's MTU.
     <li>The same network range can now be assigned to multiple interfaces, using interface priorities to choose between them.
-    <li>New <!-- experimental? --> MPLS pseudowire driver <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mpw&amp;sektion=4">mpw(4)</a>.
-    <li>...
+    <li>New MPLS pseudowire driver <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mpw&amp;sektion=4">mpw(4)</a>.
     </ul>
 <p>
 
@@ -136,7 +133,6 @@ to 5.8.
     <li>The default Diffie-Hellman group for VPNs configured by <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ipsec.conf&amp;sektion=5">ipsec.conf(5)</a> has been changed to modp3072.
     <li>New <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=radiusd&amp;sektion=8">radiusd(8)</a>,
       Remote Authentication Dial In User Service (RADIUS) daemon.
-    <li>...
     </ul>
 <p>
 
@@ -184,6 +180,7 @@ to 5.8.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd&amp;sektion=8">dhcpd(8)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> now accept hostnames beginning with a digit.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> no longer rejects leases with addresses overlapping existing subnets on other interfaces. Kernel routing logic now just works.
     <li>Improvements to realloc decrease system calls and increase efficiency.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=smtpd&amp;sektion=8">smtpd(8)</a> reliability and bug fixes.
     <li>... <!-- talk about reaper -->
     </ul>
 <p>
@@ -211,12 +208,6 @@ to 5.8.
       <li>Allowing to specify characters like "?" in the Location URI.
       <li>Various other bug fixes and improvements.
       </ul>
-    </ul>
-<p>
-
-<li>OpenSMTPD X.X.X
-    <ul>
-    <li>...
     </ul>
 <p>
 
@@ -503,34 +494,30 @@ ktion=5">syslog.conf(5)</a>
     </ul>
 <p>
 <li>Ports and packages:
-    <ul>
-    <li>Over X,XXX ports.
-    </ul>
-<p>
-<li>Many pre-built packages for each architecture:
+    <dl>
+    <dt>Many pre-built packages for each architecture:
     <table border=0 cellspacing=0 cellpadding=2 width="95%">
     <tr>
     <td valign="top" width="25%">
     <ul>
       <li>alpha:      7093
       <li>amd64:      8866
-      <li>arm:        XXXX
-    </ul></td><td valign=top width="25%"><ul>
       <li>hppa:       5813
+    </ul></td><td valign=top width="25%"><ul>
       <li>i386:       8839
       <li>mips64:     4267
-    </ul></td><td valign=top width="25%"><ul>
       <li>mips64el:   5922
-      <li>powerpc:    8114
-      <li>sh:         XXXX
     </ul></td><td valign=top width="25%"><ul>
+      <li>powerpc:    8114
+      <li>sh:         XXX
       <li>sparc64:    7851
+    </ul></td><td valign=top width="25%"><ul>
       <li>sparc:      3655
       <li>vax:        1959
     </ul></td></tr></table>
-<p>
+    <p>
 
-<li>Some highlights:
+    <dt>Some highlights:
     <table border=0 cellspacing=0 cellpadding=2 width="95%">
     <tr>
     <td valign="top" width="33%"><ul>
