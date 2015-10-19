@@ -18,11 +18,12 @@
 <img align="left" width="227" height="343" hspace="24" vspace="10" src="images/fishhearts.jpg"></a>
 <h2><font color="#0000e0">OpenBSD 5.8</font></h2>
 <p>
-To be released Oct 18, 2015<br>
+Released Oct 18, 2015<br>
 Copyright 1997-2015, Theo de Raadt.<br>
 <font color="#e00000">ISBN 978-0-9881561-6-6</font>
 <br>
-5.8 Songs: <a href="lyrics.html#58b">"Fanza"</a>,
+5.8 Songs: <a href="lyrics.html#58a">"20 years ago today"</a>,
+    <a href="lyrics.html#58b">"Fanza"</a>,
     <a href="lyrics.html#58c">"So much better"</a>,
     <a href="lyrics.html#58d">"A Year in the Life"</a>
 <ul>
@@ -49,6 +50,9 @@ file sources found in the files src.tar.gz, sys.tar.gz,
 xenocara.tar.gz, or in the files fetched via ports.tar.gz.  The
 distribution files used to build packages from the ports.tar.gz file
 are not included on the CDROM because of lack of space.
+<br>
+NOTE:  The src.tar.gz file on the CD is incorrect; see
+	<a href="errata58.html#006_src">5.8 errata 006</a>.</b>
 <p>
 
 <a name="new"></a>
@@ -274,7 +278,7 @@ to 5.8.
         <tt>PermitRootLogin</tt> option has changed from "yes" to
         "prohibit-password" (but the OpenBSD installer defaults to "no").
       <li><b>NOTE:  'PermitRootLogin prohibit-password' is subtly broken
-	in the OpenBSD 5.8 / OpenSSH 7.0; see
+	in the OpenBSD 5.8 / OpenSSH 7.0. See
 	<a href="errata58.html#001_sshd">5.8 errata 001</a>.</b>
       </ul>
     <li>New/changed features:
@@ -460,8 +464,10 @@ to 5.8.
         these empty.
       <li><b>NOTE:  LibreSSL 2.2.2 in OpenBSD 5.8 incorrectly handles
 	ClientHello messages that do not include TLS extensions, resulting
-	in such handshakes being aborted. see
+	in such handshakes being aborted. See
 	<a href="errata58.html#002_sslhello">5.8 errata 002</a>.</b>
+      <li><b>NOTE:  An issue (likely denial of service) was found in LibreSSL;
+        See <a href="errata58.html#007_obj2txt">5.8 errata 007</a>.</b>
       </ul>
     <li>Code improvements:
       <ul>
