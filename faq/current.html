@@ -43,6 +43,7 @@
 <li><a href="#20151203a">2015/12/03 - vmmctl(8) and vmm.conf(8) renamed</a>
 <li><a href="#20151205">2015/12/05 - netstart(8) options "multicast_host" and
 	"multicast_router" merged</a>
+<li><a href="#20151207">2015/12/07 - smtpd makemap(8) merged into smtpctl(8)</a>
 </ul>
 
 <hr>
@@ -166,7 +167,7 @@ In ntpd.conf(5), the rtable option was removed from the "server" and
 launching ntpd with
 
 <pre>
-# route -T X exec /usr/sbin/ntpd
+	# route -T X exec /usr/sbin/ntpd
 </pre>
 
 <h3 id="20151024">2015/10/24 - [ports] node module ports removed</h3>
@@ -248,12 +249,18 @@ Options "multicast_host" and "multicast_router" have been merged into a
 single "multicast" option.  In order to enable multicast routing the
 following line should be added in rc.conf.local(8).
 <pre>
-multicast=YES
+	multicast=YES
+</pre>
+
+<h3 id="20151207">2015/12/07 - smtpd makemap(8) merged into smtpctl(8)</h3>
+makemap(8) is now merged into smtpctl(8) and can be removed:
+<pre>
+	rm -f /usr/libexec/smtpd/makemap
 </pre>
 
 <p>
 <hr>
-<small>$OpenBSD: current.html,v 1.637 2015/12/05 18:43:56 mpi Exp $</small>
+<small>$OpenBSD: current.html,v 1.639 2015/12/07 16:17:56 sunil Exp $</small>
 
 </body>
 </html>
