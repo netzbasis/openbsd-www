@@ -18,7 +18,7 @@
 <img align="left" width="227" height="343" hspace="24" vspace="10" src="images/XXX.jpg"></a>
 <h2><font color="#0000e0">OpenBSD 5.9</font></h2>
 <p>
-Released May 1, 2016<br>
+To be released May 1, 2016<br>
 Copyright 1997-2016, Theo de Raadt.<br>
 <font color="#e00000">ISBN 978-0-9881561-7-3</font>
 <br>
@@ -75,6 +75,7 @@ to 5.9.
 
 <li>Generic network stack improvements:
     <ul>
+    <li>Remove support for obsolete IPv6 socket options
     <li>...
     </ul>
 <p>
@@ -94,11 +95,19 @@ to 5.9.
 <li>Security improvements:
     <ul>
     <li>...
+    <li>Support for looking up hosts via YP has been removed from libc.
+  The 'yp' lookup method in
+  <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=resolv.conf&sektion=5">resolv.conf</a>
+  is no longer available.
+    <li>Support for the HOSTALIASES environment variable has been removed from libc.
     </ul>
 <p>
 
 <li>Assorted improvements:
     <ul>
+    <li>doas is a little friendlier to use
+    <li>Updated flex
+    <li>Updated and improved less
     <li>...
     </ul>
 <p>
@@ -123,12 +132,6 @@ to 5.9.
       </ul>
     <li>Potentially-incompatible changes:
       <ul>
-	<li>Support for looking up hosts via YP has been removed from libc.
-	  The 'yp' lookup method in
-	  <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=resolv.conf&sektion=5">resolv.conf</a>
-	  is no longer available.
-	<li>Support for the HOSTALIASES environment variable has been
-	  removed from libc.
       <li>...
       </ul>
     <li>New/changed features:
