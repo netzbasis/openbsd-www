@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.443 2016/01/24 18:58:08 krw Exp $
+# $OpenBSD: mirrors.dat,v 1.445 2016/02/01 22:01:14 sthen Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -11,6 +11,7 @@
 # - commit whichever files have content changes; one or all of these sets:
 #   {,openbgpd/,openntpd/,openssh/}ftp.html open{ntpd,ssh}/portable.html ftplist
 #   anoncvs.html cvsync.html
+#   /usr/src/etc/examples/pkg.conf
 #
 # to generate host key fingerprints:
 # 
@@ -512,6 +513,17 @@ UH	http://ftp.cc.uoc.gr/mirrors/OpenBSD/
 FF	anga.funkfeuer.at
 FE	24
 
+##	Start of Hong Kong
+
+0
+GC	Hong Kong
+GZ	hk
+ME	peter@membrey.hk
+MN	Peter Membrey
+UH	http://openbsd.hk/pub/OpenBSD/
+FE	24
+FF	openbsd.cs.toronto.edu
+
 ##	Start of Hungary
 
 0
@@ -665,13 +677,13 @@ ME	mirror@bit.nl
 GC	The Netherlands
 GT	Amsterdam
 GZ	nl
-UF	ftp://mirrors.rentabiliweb.com/pub/OpenBSD/
-UH	http://mirrors.rentabiliweb.com/pub/OpenBSD/
-UR	rsync://mirrors.rentabiliweb.com/OpenBSD/
+UF	ftp://mirrors.dalenys.com/pub/OpenBSD/
+UH	http://mirrors.dalenys.com/pub/OpenBSD/
+UR	rsync://mirrors.dalenys.com/OpenBSD/
 FE	2
 FF	ftp.eu.openbsd.org
 MN	Julien Dhaille
-ME	julien.dhaille@rentabiliweb.com
+ME	julien.dhaille@dalenys.com
 
 ##	Start of Phillipines
 
@@ -768,16 +780,16 @@ SR	MD5:5b:98:6c:06:a4:1f:83:da:03:aa:ef:e4:f5:f0:99:76
 
 ##	Start of Spain
 
-0
-GC	Spain
-GZ	es
-GT	Oviedo
-ME	borja@codigo23.net
-MN	Francisco de Borja Lopez Rio
-UF	ftp://mirror.codigo23.net/pub/OpenBSD/
-UH	http://mirror.codigo23.net/pub/OpenBSD/
-FF	ftp2.eu.openbsd.org
-FE	24
+#0
+#GC	Spain
+#GZ	es
+#GT	Oviedo
+#ME	borja@codigo23.net
+#MN	Francisco de Borja Lopez Rio
+#UF	ftp://mirror.codigo23.net/pub/OpenBSD/
+#UH	http://mirror.codigo23.net/pub/OpenBSD/
+#FF	ftp2.eu.openbsd.org
+#FE	24
 
 ##	Start of Sweden
 
