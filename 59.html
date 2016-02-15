@@ -69,6 +69,7 @@ to 5.9.
 
 <li>Removed hardware support:
     <ul>
+    <li>ST-506 disks are no longer supported.
     <li>...
     </ul>
 <p>
@@ -82,12 +83,26 @@ to 5.9.
 
 <li>Installer improvements:
     <ul>
+    <li>Inappropriate user choices from a list of options are more reliably rejected.
+    <li>Installing to a disk partitioned with a GPT is now supported (amd64 only).
+    <li>When initializing a GPT the required EFI System partition is automatically created.
+    <li>When installing to a GPT disk <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=installboot&amp;sektion=8">installboot(8)</a> now formats the EFI System partition, creates the appropriate directory structure and copies the required UEFI boot files into place.
     <li>...
     </ul>
 <p>
 
 <li>Routing daemons and other userland network improvements:
     <ul>
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> now supports multiple domain names provided via DHCP option 15 (Domain Name).
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> now supports search domains provided via DHCP option 119 (Domain Search).
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> no longer continually checks for a change to the routing domain of the interface it controls. It now relies on the appropriate routing socket messages.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> now issues DHCP DECLINE responses to lease offers found to be inadequate, and restarts the DISCOVER/RENEW process rather than waiting indefinitely for a better lease to appear.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> no longer exits if a desired route cannot be added. It now just reports the fact.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> now takes a much more careful approach to received packets to ensure only received data is used to process the packet. Packets with incorrect length information or lacking appropriate header information are now dropped.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> again disables pending timeouts if the interface link is lost, preventing endless retries at obtaining a lease.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhclient&amp;sektion=8">dhclient(8)</a> was pledged.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd&amp;sektion=8">dhcpd(8)</a> again properly utilizes default-lease-time, max-lease-time and bootp-lease-time options.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd&amp;sektion=8">dhcpd(8)</a> was pledged.
     <li>...
     </ul>
 <p>
@@ -108,6 +123,22 @@ to 5.9.
     <li>doas is a little friendlier to use
     <li>Updated flex
     <li>Updated and improved less
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8?query=pdisk">pdisk(8)</a> was largely rewritten and pledged.
+    <li>Renaming files in the root directory of a MSDOS filesystem was fixed.
+    <li>Many obsolete <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/disktab.5?query=disktab">disktab(5)</a> attributes and entries were removed.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/softraid.4?query=softraid">softraid(4)</a> volumes now correctly look for the disklabel in the first OpenBSD disk partition, not the last.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/softraid.4?query=softraid">softraid(4)</a> volumes can now be partitioned with a GPT.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=9">fdisk(8)</a> now creates a default GPT as well as the protective MBR when the '-g' flag is used.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now has a '-b' flag that specifies the size of the EFI System partition to create.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now has a '-v' flag that causes a verbose display of both MBR and GPT information.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> now provides full interactive GPT editing.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk&amp;sektion=8">fdisk(8)</a> was pledged.
+    <li>Disks with sector sizes other than 512 bytes can now be partitioned with a GPT.
+    <li>The GPT kernel option was removed and GPT support is part of all GENERIC and GENERIC derived kernels.
+    <li>Many improvements were made to the GPT kernel support to ensure safe and reliable operation of GPT and MBR processing.
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=disklabel&amp;sec=8">disklabel(8)</a> no longer supports boot code installation, with the -B and -b flags being removed. The associated fields in the disklabel were also removed. These functions are now all performed by
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=installboot&amp;sektion=8">installboot(8)</a>.
+
     <li>...
     </ul>
 <p>
