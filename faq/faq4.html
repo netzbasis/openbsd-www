@@ -1,6 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+
+<!-- If you make edits to any FAQ documents, please start each sentence
+     on a new line, and try to keep the general formatting consistent
+     with the rest of the pages -->
+
 <title>4 - OpenBSD Installation Guide</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="description"        content= "OpenBSD FAQ 4 - Installation Guide">
@@ -8,8 +13,6 @@
                                           by OpenBSD.">
 <link rel="canonical" href="http://www.openbsd.org/faq/faq4.html">
 </head>
-
-<!-- Passes validator.w3.org.  Please keep it this way -->
 
 <body bgcolor= "#ffffff" text= "#000000">
 
@@ -31,7 +34,8 @@
 <li><a href= "#Overview"       >4.1 - Overview of the OpenBSD installation
                                 procedure</a>
 <li><a href= "#Checklist"      >4.2 - Pre-installation checklist</a>
-<li><a href="#MkInsMedia"      >4.3 - Creating bootable OpenBSD install media
+<li><a href="#MkInsMedia"      >4.3 - Creating bootable OpenBSD install
+                                media</a>
     <ul>
     <li><a href="#MkCD-ROM"    >4.3.1 - Creating a boot CD</a>
     <li><a href="#MkFlop"      >4.3.2 - Creating floppies</a>
@@ -202,8 +206,8 @@ or your own local web server holding the file sets.
 In many cases, you can install file sets from another partition
 on a local hard disk.
 For example, on <a href="../i386.html">i386</a>,
-you can install from a FAT partition or a CD-ROM formatted in
-ISO9660, Rock Ridge or Joliet format.
+you can install from a FAT partition or a CD-ROM formatted in ISO 9660,
+Rock Ridge or Joliet format.
 In some cases, you will have to manually mount the file system before using it.
 
 <li><b>NFS:</b>
@@ -278,12 +282,12 @@ The <a href="../i386.html">i386</a> platform has five separate
 installation disk images to choose from:
 
 <ul>
-<li><b><tt>cdXX.iso</tt></b> is an ISO9660 image that can be used to
+<li><b><tt>cdXX.iso</tt></b> is an ISO 9660 image that can be used to
   create a bootable CD with most popular CD-ROM creation software
   on most platforms.
   This image has the widest selection of drivers, and is usually
   the recommended choice if your hardware can boot from a CD-ROM.
-<li><b><tt>installXX.iso</tt></b> is an ISO9660 image, containing
+<li><b><tt>installXX.iso</tt></b> is an ISO 9660 image, containing
   all the standard install files.
   This file can be used to create a CD that can do a stand-alone
   OpenBSD install.
@@ -310,7 +314,7 @@ installation disk images to choose from:
   CD for booting SPARC systems with a CD-ROM.
 <li><b><tt>minirootXX.fs</tt></b> can be written to a swap partition
   and booted.
-<li><b><tt>installXX.iso</tt></b> is an ISO9660 image, containing
+<li><b><tt>installXX.iso</tt></b> is an ISO 9660 image, containing
   all the standard install files.
   This file can be used to create a CD that can do a stand-alone
   OpenBSD install.
@@ -636,7 +640,6 @@ manually.
 See the more detailed discussion
 <a href="#MoreNetwork" id="backMoreNetwork">below</a>.
 
-<p id="backMoreNetwork">
 If you have any IPv6 configuration to do or there are other interfaces
 to configure (or you don't like how you configured the previous one),
 you can do that now, but in our case, we are done:
@@ -2968,7 +2971,7 @@ include the complete system
 However, often when you need to do this, it is because the system is
 working improperly or won't install so you may not have disk, network,
 or other resources you need to get the dmesg to the appropriate
-<a href="../mail.html">mail list</a>.
+<a href="../mail.html">mailing list</a>.
 There are other ways, however:
 
 <ul>
