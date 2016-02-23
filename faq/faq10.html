@@ -1,10 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+
+<!-- If you make edits to any FAQ documents, please start each sentence
+     on a new line, and try to keep the general formatting consistent
+     with the rest of the pages -->
+
 <title>10 - System Management</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name= "description"   content= "OpenBSD FAQ 10 - System Management">
-<meta name= "copyright"     content= "This document copyright 1998-2015 by OpenBSD.">
+<meta name= "copyright"     content= "This document copyright 1998-2016
+                                      by OpenBSD.">
 <link rel="canonical" href="http://www.openbsd.org/faq/faq10.html">
 </head>
 
@@ -29,35 +35,35 @@
 <li><a href="#DupFS"            >10.2 - How do I duplicate a filesystem?</a>
 <li><a href="#rc"               >10.3 - How do I start daemons with the
                                  system?</a>
-<li><a href="#doas"             >10.4 - Introducing doas(1) -- or -- what
+<li><a href="#doas"             >10.4 - Introducing doas(1) - or - what
                                  happened to sudo?</a>
-<li><a href="#vipw"             >10.8 - I made changes to /etc/passwd with an
+<li><a href="#vipw"             >10.5 - I made changes to /etc/passwd with an
                                  editor, but the changes didn't seem to take
                                  place. Why?</a>
-<li><a href="#AddDelUser"       >10.9 - How do I add or delete a user?</a>
-<li><a href="#FTPOnly"          >10.10 - How do I create an ftp-only
+<li><a href="#AddDelUser"       >10.6 - How do I add or delete a user?</a>
+<li><a href="#FTPOnly"          >10.7 - How do I create an ftp-only
                                  account?</a>
-<li><a href="#Quotas"           >10.11 - Setting up user disk quotas</a>
-<li><a href="#AnonFTP"          >10.13 - Setting up an Anonymous FTP server</a>
-<li><a href="#ftpchroot"        >10.14 - Confining users to their home
+<li><a href="#Quotas"           >10.8 - Setting up user disk quotas</a>
+<li><a href="#AnonFTP"          >10.9 - Setting up an Anonymous FTP server</a>
+<li><a href="#ftpchroot"        >10.10 - Confining users to their home
                                  directories in ftpd(8)</a>
-<li><a href="#Patches"          >10.15 - Applying patches in OpenBSD</a>
-<li><a href="#rootshell"        >10.17 - Can I change the root shell?</a>
-<li><a href="#ksh"              >10.18 - What else can I do with ksh?</a>
-<li><a href="#Dir"              >10.19 - Directory services</a>
+<li><a href="#Patches"          >10.11 - Applying patches in OpenBSD</a>
+<li><a href="#rootshell"        >10.12 - Can I change the root shell?</a>
+<li><a href="#ksh"              >10.13 - What else can I do with ksh?</a>
+<li><a href="#Dir"              >10.14 - Directory services</a>
 <ul>
-  <li><a href="#Dir.available"  >10.19.1 - Which directory services are
+  <li><a href="#Dir.available"  >10.14.1 - Which directory services are
                                  available?</a>
-  <li><a href="#YP_secure"      >10.19.2 - YP security
+  <li><a href="#YP_secure"      >10.14.2 - YP security
                                  considerations</a>
-  <li><a href="#YP_server"      >10.19.3 - Setting up a YP server</a>
-  <li><a href="#YP_client"      >10.19.4 - Setting up a YP client</a>
+  <li><a href="#YP_server"      >10.14.3 - Setting up a YP server</a>
+  <li><a href="#YP_client"      >10.14.4 - Setting up a YP client</a>
 </ul>
-<li><a href="#locales"          >10.20 - Character sets and localization</a>
+<li><a href="#locales"          >10.15 - Character sets and localization</a>
 <ul>
-  <li><a href="#charset"        >10.20.1 - Configuring the active character
+  <li><a href="#charset"        >10.15.1 - Configuring the active character
                                  set</a>
-  <li><a href="#nls"            >10.20.2 - Changing the language used in
+  <li><a href="#nls"            >10.15.2 - Changing the language used in
                                  application messages</a>
 </ul>
 </ul>
@@ -328,7 +334,7 @@ and adding the daemon name to the <tt>pkg_scripts</tt> variable in
 Anything you want done before the system shuts down should be added to this
 file.
 
-<h2 id="doas">10.4 - Introducing doas(1) -- or -- What happened to sudo?</h2>
+<h2 id="doas">10.4 - Introducing doas(1) - or - What happened to sudo?</h2>
 
 <h3>10.4.1 - What is doas(1)?</h3>
 
@@ -464,7 +470,7 @@ Now, anyone who is in the wheel group can become "admin" with just one entry
 of their password, and then admin can run the commands they wish without a
 password until they drop back to their normal user.
 
-<h2 id="vipw">10.8 - I edited /etc/passwd, but the changes didn't seem to take
+<h2 id="vipw">10.5 - I edited /etc/passwd, but the changes didn't seem to take
 place. Why?</h2>
 
 If you edit <tt>/etc/passwd</tt> directly, your changes will be lost.
@@ -505,7 +511,7 @@ vipw also takes care of locking these files, so that if anyone else
 attempts to change them at the same time, they will be denied access.
 
 
-<h2 id="AddDelUser">10.9 - How do I add or delete a user?</h2>
+<h2 id="AddDelUser">10.6 - How do I add or delete a user?</h2>
 
 OpenBSD provides two commands for easily adding users to the system:
 
@@ -743,7 +749,7 @@ home directory to be deleted as well.
 Alternatively, you can specify <tt>-p</tt> rather than <tt>-r</tt> and this will
 lock the user's account, but not remove any information.
 
-<h2 id="FTPOnly">10.10 - How do I create an ftp-only account
+<h2 id="FTPOnly">10.7 - How do I create an ftp-only account
 (not anonymous FTP!)?</h2>
 
 There are a few ways to do this, but a very common way to do such is to add
@@ -753,7 +759,7 @@ able log in interactively, but will be able to use ftp capabilities.
 You may also want to restrict access by
 <a href="#ftpchroot">confining users to their home directory in ftpd</a>.
 
-<h2 id="Quotas">10.11 - Setting up Quotas</h2>
+<h2 id="Quotas">10.8 - Setting up user disk quotas</h2>
 
 Quotas are used to limit user's space that they have available to them on your
 disk drives.
@@ -854,7 +860,7 @@ To turn them off, use
 # <b>quotaoff -a</b>
 </pre></blockquote>
 
-<h2 id="AnonFTP">10.13 - Setting up an Anonymous FTP server</h2>
+<h2 id="AnonFTP">10.9 - Setting up an Anonymous FTP server</h2>
 
 Anonymous FTP allows users without accounts to access files on your computer
 via the File Transfer Protocol.
@@ -1016,7 +1022,7 @@ Anonymous connections are then disabled.
     It will be shown once a user enters that directory.
 </ul>
 
-<h2 id="ftpchroot">10.14 - Confining users to their home directories in
+<h2 id="ftpchroot">10.10 - Confining users to their home directories in
 ftpd(8)</h2>
 
 By default, when logging in via ftp, users can change to any directory on the
@@ -1043,7 +1049,7 @@ Additionally, you can add a username to the file <tt>/etc/ftpchroot</tt>
 to chroot those usernames.
 A user only needs to be listed in one of these locations.
 
-<h2 id="Patches">10.15 - Applying patches in OpenBSD</h2>
+<h2 id="Patches">10.11 - Applying patches in OpenBSD</h2>
 
 Even with OpenBSD, bugs happen.
 Some bugs may lead to reliability issues, i.e., something may cause the system
@@ -1068,7 +1074,7 @@ systems (which is often NOT all systems, depending on their purpose).
 There are three ways to update your system with patched code:
 
 <ul>
-  <li><b>Upgrade your system to<a href="current.html"><i>-current</i></a>.</b>
+  <li><b>Upgrade your system to <a href="current.html"><i>-current</i></a>.</b>
     As all fixes are applied to the <i>-current</i> code base, updating your
     system to the latest snapshot is a very good way to apply fixed code.
     However, running <i>-current</i> is not for everyone.
@@ -1235,7 +1241,7 @@ later patch is dependent upon an earlier one.
 Be aware of this if you elect to "pick and choose" which patches you apply.
 If in doubt, apply them all in order.
 
-<h2 id="rootshell">10.17 - Can I change the root shell?</h2>
+<h2 id="rootshell">10.12 - Can I change the root shell?</h2>
 
 It is sometimes said that one should never change the root shell, though there
 is no reason not to in OpenBSD.
@@ -1259,7 +1265,7 @@ and
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ksh">ksh(1)</a>)
 are all statically linked, and thus usable in single user mode.
 
-<h2 id="ksh">10.18 - What else can I do with <i>ksh</i>?</h2>
+<h2 id="ksh">10.13 - What else can I do with <i>ksh</i>?</h2>
 
 In OpenBSD,
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ksh">ksh(1)</a> is
@@ -1331,12 +1337,12 @@ $ <b>export PS1="\n\u@\H\n\w \\$ "</b>
 
 to give an overly verbose but somewhat useful prompt.
 
-<h2 id="Dir">10.19 - Directory services</h2>
+<h2 id="Dir">10.14 - Directory services</h2>
 
 OpenBSD can be used for both servers and clients of databases containing
 user credentials, group information and other network-related data.
 
-<h3 id="Dir.available">10.19.1 - Which directory services are available?</h3>
+<h3 id="Dir.available">10.14.1 - Which directory services are available?</h3>
 
 Of course, you could use various directory services on OpenBSD.
 But YP is the only one that can be accessed directly using standard
@@ -1378,7 +1384,7 @@ files among a group of machines using tools like
 <tt>rsync</tt> (available from ports) constitutes an easy and robust alternative
 to a full-blown directory service.
 
-<h3 id="YP_secure">10.19.2 - YP security considerations</h3>
+<h3 id="YP_secure">10.14.2 - YP security considerations</h3>
 
 For compatibility reasons, all security features built into the OpenBSD
 implementation of YP are switched <i>off</i> by default.
@@ -1398,7 +1404,7 @@ carrying YP traffic can bind your YP domain and retrieve its data.
 In some cases, passing YP traffic through SSL or IPSec tunnels might be
 an option.
 
-<h3 id="YP_server">10.19.3 - Setting up a YP server</h3>
+<h3 id="YP_server">10.14.3 - Setting up a YP server</h3>
 
 <ol>
   <li>
@@ -1606,7 +1612,7 @@ an option.
     it from scratch.
 </ol>
 
-<h3 id="YP_client">10.19.4 - Setting up a YP client</h3>
+<h3 id="YP_client">10.14.4 - Setting up a YP client</h3>
 
 Setting up a YP client involves two distinct parts.
 First, you must get the YP client daemon running,
@@ -1707,18 +1713,18 @@ The most common use cases include:
     <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=group">group(5)</a>.
 </ul>
 
-<h2 id="locales">10.20 - Character sets and localization</h2>
+<h2 id="locales">10.15 - Character sets and localization</h2>
 
 OpenBSD uses the ASCII character set by default.
-It also supports the Latin (ISO-8859-*), KOI-8, and Unicode (UTF-8) character
-sets.
+It also supports the Unicode (UTF-8) character set.
 
-<h3 id="charset">10.20.1 - Configuring the active character set</h3>
+<h3 id="charset">10.15.1 - Configuring the active character set</h3>
 
-To use one of the extended character sets, the <tt>LC_CTYPE</tt> environment
-variable must be set to the name of a supported locale.
-<tt>LC_CTYPE</tt> will only affect the character set available to applications.
-It will not change the language used for application messages.
+To use the UTF-8 character set, the <tt>LC_CTYPE</tt> environment variable
+must be set to the name of a supported locale.
+Note that <tt>LC_CTYPE</tt> will only affect the character set available
+to applications; it will not change the language used for application
+messages.
 
 <p>
 The list of supported locales can be obtained by running the command:
@@ -1731,44 +1737,39 @@ The <tt>LC_CTYPE</tt> environment variable can be set in one of the
 following ways:
 
 <ul>
-  <li>
-    If logging in via
-    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=xdm">xdm(1)</a>,
-    add a line such as
+<li>
+If logging in via
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=xdm">xdm(1)</a>,
+add a line such as
 
-    <blockquote><pre>
-    $ <b>export LC_CTYPE="en_US.UTF-8"</b>
-    </pre></blockquote>
+<blockquote><pre>
+export LC_CTYPE="en_US.UTF-8"
+</pre></blockquote>
 
-    to <tt>~/.xsession</tt> before starting the window manager (see the section
-    on <a href="faq11.html#CustomizingX">customizing X</a> for details).
-    This example enables the Unicode (UTF-8) character set and will also cause
-    applications such as
-    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=xterm">xterm(1)</a>
-    to enable UTF-8 mode by default.
+to your <tt>~/.xsession</tt> before starting the window manager.
+See the section on <a href="faq11.html#CustomizingX">customizing X</a>
+for more details.
+This enables the UTF-8 character set and will also cause applications such
+as <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=xterm">xterm(1)</a>
+to enable UTF-8 mode by default.
 
-  <li>
-    If logging in via the text console add a line such as
+<p>
+<li>
+If logging in via the text console, add a line such as
 
-    <blockquote><pre>
-    $ <b>export LC_CTYPE="en_US.ISO8859-1"</b>
-    </pre></blockquote>
+<blockquote><pre>
+export LC_CTYPE="en_US.UTF-8"
+</pre></blockquote>
 
-    to <tt>~/.profile</tt>.
-    Note that the text console supports ASCII and ISO8859-1 only.
-    It does not support UTF-8.
+to your <tt>~/.profile</tt>.
+Note that the text console's UTF-8 support is a work in progress, and some
+non-ASCII characters may not display properly.
+
 </ul>
 
 <p>
-Few utilities in the base system support UTF-8 at this time.
-Most will use ASCII in the UTF-8 locale.
-However, many programs from the ports collection do support UTF-8.
-
-<p>
-UTF-8 can also be used with specific applications only by starting
-those applications in
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=uxterm">uxterm(1)</a>.
-This works even if the login session uses a non-UTF-8 locale.
+A growing number of utilities in the base system support UTF-8.
+Those that don't will use ASCII in the UTF-8 locale.
 
 <p>
 When logging into remote systems with
@@ -1776,7 +1777,7 @@ When logging into remote systems with
 the <tt>LC_CTYPE</tt> environment variable is not propagated and will need
 to be manually set to the same value used by the local terminal.
 
-<h3 id="nls">10.20.2 - Changing the language used in application messages</h3>
+<h3 id="nls">10.15.2 - Changing the language used in application messages</h3>
 
 The language used for application messages can be changed by setting the
 <tt>LC_MESSAGES</tt> environment variable to the name of a supported locale.

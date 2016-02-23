@@ -51,40 +51,40 @@
 <li><a href="#MountImage"      >14.11 - Mounting disk images in OpenBSD</a>
 <li><a href="#pciideErr"       >14.12 - Help! I'm getting errors with IDE
                                 DMA!</a>
-<li><a href="#NegSpace"        >14.14 - Why does <tt>df(1)</tt> tell me
+<li><a href="#NegSpace"        >14.13 - Why does <tt>df(1)</tt> tell me
                                 I have over 100% of my disk used?</a>
-<li><a href="#OhBugger"        >14.15 - Recovering partitions after deleting
+<li><a href="#OhBugger"        >14.14 - Recovering partitions after deleting
                                 the disklabel</a>
-<li><a href="#foreignfs"       >14.16 - Can I access data on filesystems other
+<li><a href="#foreignfs"       >14.15 - Can I access data on filesystems other
                                 than FFS?</a>
 <ul>
-  <li><a href="#foreignfsafter">14.16.1 - The partitions are not in my
+  <li><a href="#foreignfsafter">14.15.1 - The partitions are not in my
                                 disklabel! What should I do?</a>
 </ul>
-<li><a href="#flashmem"        >14.17 - Can I use a flash memory device with
+<li><a href="#flashmem"        >14.16 - Can I use a flash memory device with
                                 OpenBSD?</a>
   <ul>
-  <li><a href="#flashmemUSB"   >14.17.1 - Flash memory as a portable storage
+  <li><a href="#flashmemUSB"   >14.16.1 - Flash memory as a portable storage
                                 device</a>
-  <li><a href="#flashmemBoot"  >14.17.2 - Flash memory as bootable storage</a>
-  <li><a href="#flashmemLive"  >14.17.3 - How can I make a "live" bootable
+  <li><a href="#flashmemBoot"  >14.16.2 - Flash memory as bootable storage</a>
+  <li><a href="#flashmemLive"  >14.16.3 - How can I make a "live" bootable
                                 USB device?</a>
   </ul>
-<li><a href="#DiskOpt"         >14.18 - Optimizing disk performance</a>
+<li><a href="#DiskOpt"         >14.17 - Optimizing disk performance</a>
   <ul>
-  <li><a href="#Optsoftu"      >14.18.1 - Soft updates</a>
-  <li><a href="#Optmaxvnodes"  >14.18.2 - Size of the namei(9) cache</a>
+  <li><a href="#Optsoftu"      >14.17.1 - Soft updates</a>
+  <li><a href="#Optmaxvnodes"  >14.17.2 - Size of the namei(9) cache</a>
   </ul>
-<li><a href="#Async"           >14.19 - Why aren't we using async mounts?</a>
-<li><a href="#altroot"         >14.20 - Duplicating your root partition:
+<li><a href="#Async"           >14.18 - Why aren't we using async mounts?</a>
+<li><a href="#altroot"         >14.19 - Duplicating your root partition:
                                 altroot</a>
-<li><a href="#softraid"        >14.21 - How do I use softraid?</a>
+<li><a href="#softraid"        >14.20 - How do I use softraid?</a>
   <ul>
-  <li><a href="#softraidDI"    >14.21.1 - Installing to a mirror</a>
-  <li><a href="#softraidFDE"   >14.21.2 - Full disk encryption</a>
-  <li><a href="#softraidCrypto">14.21.3 - Encrypting external disks</a>
-  <li><a href="#softraidDR"    >14.21.4 - Disaster recovery</a>
-  <li><a href="#softraidNotes" >14.21.5 - Softraid notes</a>
+  <li><a href="#softraidDI"    >14.20.1 - Installing to a mirror</a>
+  <li><a href="#softraidFDE"   >14.20.2 - Full disk encryption</a>
+  <li><a href="#softraidCrypto">14.20.3 - Encrypting external disks</a>
+  <li><a href="#softraidDR"    >14.20.4 - Disaster recovery</a>
+  <li><a href="#softraidNotes" >14.20.5 - Softraid notes</a>
   </ul>
 </ul>
 <hr>
@@ -103,97 +103,91 @@ OpenBSD handles mass storage with two drivers on most platforms,
 depending upon the normal command set that kind of device supports:
 
 <ul>
-<li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wd">wd(4)</a>:
-IDE disks (and devices that look like IDE disks, for example, SATA, MFM
-or ESDI disks, or a flash device with an appropriate adapter) attached to a
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wdc">wdc(4)</a>
-or
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pciide">pciide(4)</a>
-interface.
-<li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sd">sd(4)</a>:
-Devices that utilize SCSI commands, such as SCSI disks attached to a
-SCSI adapter, USB disks, SATA disks attached to an
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ahci">ahci(4)</a>
-interface, and disk arrays attached to a RAID controller.
+  <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wd">wd(4)</a>:
+    IDE-like disks: IDE, SATA, MFM or ESDI disks, or a flash device
+    with an appropriate adapter, attached to a
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wdc">wdc(4)</a>
+    or
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pciide">pciide(4)</a>
+    interface.
+  <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sd">sd(4)</a>:
+    SCSI-like disks:
+    Devices that utilize SCSI commands, USB disks, SATA disks attached to an
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ahci">ahci(4)</a>
+    interface, and disk arrays attached to a RAID controller.
 </ul>
 
 The first drive of a particular type identified by OpenBSD will be
-drive '0', the second will be '1', etc.
-So, the first IDE-like disk will be wd0, the third SCSI-like disk will
-be sd2.
+drive <tt>0</tt>, the second will be <tt>1</tt>, etc.
+So, the first IDE-like disk will be <tt>wd0</tt>, the third SCSI-like disk will
+be <tt>sd2</tt>.
 If you have two SCSI-like drives and three IDE-like drives on a system,
-you would have sd0, sd1, wd0, wd1, and wd2 on that machine.
+you would have <tt>sd0</tt>, <tt>sd1</tt>, <tt>wd0</tt>, <tt>wd1</tt> and
+<tt>wd2</tt> on that machine.
 The order is based on the order they are found during hardware discovery
 at boot.
 There are a few key points to keep in mind:
+
 <ul>
-<li>Drives may not be numbered in the same order as your boot ROM
-attempts to boot them (i.e., your system may attempt to boot what OpenBSD
-identifies as wd2 or sd1).
-Sometimes you may be able to change this, sometimes not.
-<li>Removing or adding a disk may impact the identity of other drives on
-the system.
+  <li>
+    Drives may not be numbered in the same order as your boot ROM
+    attempts to boot them (i.e., your system may attempt to boot what OpenBSD
+    identifies as <tt>wd2</tt> or <tt>sd1</tt>).
+    Sometimes you may be able to change this, sometimes not.
+  <li>Removing or adding a disk may impact the identity of other drives on
+    the system.
 </ul>
 
 <h3>Partitioning</h3>
 
 Due to historical reasons, the term "partition" is regularly used for
-two different things in OpenBSD and this leads to some confusion.
+two different things in OpenBSD:
 
-<p>
-The two types of "partitions" are:
 <ul>
-  <li> "disklabel partitions" created with
-  <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=disklabel">
-  disklabel(8)</a>
-  (often called "filesystem partitions").
-  <li> "fdisk partitions" created with
-  <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk">fdisk(8)</a>
-  (often called "partition table partitions" or
-  "Master Boot Record (MBR) partitions").
+  <li>
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=disklabel">
+    disklabel(8)</a> partitions, often called filesystem partitions.
+  <li>
+    <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk">fdisk(8)</a>
+    partitions, often called Master Boot Record (MBR) partitions.
 </ul>
 
-<p>
 All OpenBSD platforms use disklabel(8) as the primary way to manage
-OpenBSD filesystem partitions, but only some platforms also require
-using fdisk(8) to manage Partition Table partitions.
-On the platforms that use fdisk partitions, one fdisk partition is used
-to hold all of the OpenBSD file systems, this partition is then sliced
-up into disklabel partitions.
-These disklabel partitions are labeled "a" through "p".
-A few of these are "special":
+OpenBSD filesystem partitions.
+Some platforms also require using fdisk(8) to manage MBR partitions.
+On the platforms that use them, one fdisk partition is used
+to hold all of the OpenBSD file systems.
+This partition is then sliced up into 16 disklabel partitions,
+labeled <tt>a</tt> through <tt>p</tt>.
+A few of these are special:
+
 <ul>
-  <li><b>a</b> -- On the boot disk, the 'a' partition is your root partition.
-  <li><b>b</b> -- On the boot disk, the 'b' partition is automatically used
-  as a swap partition.
-  <li><b>c</b> -- On all disks, the 'c' partition is the entire disk,
-  from the first sector to the last.
-  (Hint: if you wish to totally clear a drive, you write zeros to the
-  'c' partition of the drive.
-  More commonly, the 'c' partition is used by utilities like 'fdisk' to
-  install boot loaders, partition tables, etc.)
+  <li><tt>a</tt>:
+    On the boot disk, the <tt>a</tt> partition is your root partition.
+  <li><tt>b</tt>:
+    On the boot disk, the <tt>b</tt> partition is automatically used
+    as a swap partition.
+  <li><tt>c</tt>:
+    On all disks, the <tt>c</tt> partition is the entire disk, from the
+    first sector to the last.
 </ul>
 
 <h3>Partition identification</h3>
 
-An OpenBSD filesystem is identified by the disk it is on, plus the file
-system partition on that disk.
-So, file systems may be identified by identifiers like "sd0a" (the "a"
-partition of the first "sd" device), "wd2h" (the "h" partition of the
-third "wd" device), or "sd1c" (the entire second sd device).
+An OpenBSD filesystem is identified by the disk it is on, plus the
+disklabel partition on that disk.
+So, file systems may be identified by identifiers like <tt>sd0a</tt>
+(the <tt>a</tt> partition of the first <tt>sd</tt> device),
+<tt>wd2h</tt> (the <tt>h</tt> partition of the third <tt>wd</tt> device),
+or <tt>sd1c</tt> (the entire second sd device).
 The device files would be <tt>/dev/sd0a</tt> for the block device,
-<tt>/dev/rsd0a</tt> would be the device file for the "raw" (character)
+<tt>/dev/rsd0a</tt> would be the device file for the raw (character)
 device.
 
 <p>
-Some utilities will let you use the "shortcut" name of a partition
-(i.e., "sd0d") or a drive (i.e., "wd1") instead of the actual device
-name (<tt>/dev/sd0d</tt> or <tt>/dev/wd1c</tt>, respectively).
-
-<p>
-Note again that if you put data on <tt>wd2d</tt>, then later remove
-<tt>wd1</tt> from the system and reboot, your data is now on
-<tt>wd1d</tt>, as your old <tt>wd2</tt> is now <tt>wd1</tt>.
+If you put data on <tt>wd2d</tt>, then later remove <tt>wd1</tt>
+from the system and reboot, your data is now on <tt>wd1d</tt>, as your old
+<tt>wd2</tt> is now <tt>wd1</tt>.
 However, a drive's identification won't change after boot, so if
 a USB drive is unplugged or fails, it won't change the identification
 of other drives until reboot.
@@ -204,30 +198,15 @@ Disks can also be identified by Disklabel Unique Identifiers (DUIDs), a
 16 hex digit number, managed by the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=diskmap">diskmap(4)</a>
 device.
-This number is generated automatically as a random number when a
-disklabel is first created, though defaults to all zeros on an existing
-(pre OpenBSD 4.8) labels.
-disklabel(8) can be used to change the UID if desired.
-These UIDs are "persistent" -- if you identify your disks this way,
-drive <tt>f18e359c8fa2522b</tt> will always be
-<tt>f18e359c8fa2522b</tt>, no matter what order or how it is attached.
+This number is a random number generated when a disklabel is first created.
+These UIDs are persistent -- if you identify your disks this way,
+drive <tt>f18e359c8fa2522b</tt> will always be <tt>f18e359c8fa2522b</tt>,
+no matter what order or how it is attached.
 You can specify partitions on the disk by appending a period and the
-partition letter, for example, <tt>f18e359c8fa2522b.d</tt> is the 'd'
-partition of the disk <tt>f18e359c8fa2522b</tt> and will ALWAYS refer
+partition letter, for example, <tt>f18e359c8fa2522b.d</tt> is the <tt>d</tt>
+partition of the disk <tt>f18e359c8fa2522b</tt> and will always refer
 to the same chunk of storage, no matter what order the device is attached
 to the system, or what kind of interface it is attached to.
-
-<p>
-These UIDs can be used to identify the disks almost anywhere a partition
-or device would be specified, for example in <tt>/etc/fstab</tt> (which
-uses them by default in new installs) or in command lines.
-Of course, disks and partitions may also be identified in the
-traditional way, by device, unit number and partition (i.e., /dev/sd1f),
-and this can be done interchangeably.
-
-<p>
-It is worth noting that the DUID is a property of the disklabel, though
-as OpenBSD only supports one disklabel per disk, this is mostly academic.
 
 <h2 id="fdisk">14.2 - Using fdisk(8)</h2>
 
@@ -1791,7 +1770,7 @@ This can be done by using <a href="faq5.html#BootConfig">UKC</a> or
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wd">wd(4)</a>
 device.
 
-<h2 id="NegSpace">14.14 - Why does <tt>df(1)</tt> tell me I have over 100% of
+<h2 id="NegSpace">14.13 - Why does <tt>df(1)</tt> tell me I have over 100% of
 my disk used?</h2>
 
 People are sometimes surprised to find they have <i>negative</i>
@@ -1814,7 +1793,7 @@ If the 5% value is not appropriate for you, you can change it with the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tunefs">tunefs(8)</a>
 command.
 
-<h2 id="OhBugger">14.15 - Recovering partitions after deleting the
+<h2 id="OhBugger">14.14 - Recovering partitions after deleting the
 disklabel</h2>
 
 If you have a damaged partition table, there are various things
@@ -1864,7 +1843,7 @@ unreadable, you will be able to
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mount">mount(8)</a>
 it until the next reboot.
 
-<h2 id="foreignfs">14.16 - Can I access data on filesystems other than FFS?</h2>
+<h2 id="foreignfs">14.15 - Can I access data on filesystems other than FFS?</h2>
 <!-- This article written by Steven Mestdagh,
 steven@openbsd.org, and released under the BSD license -->
 
@@ -2015,7 +1994,7 @@ fsck.
 Generally, those are things you want to have handled by the native
 operating system associated with the filesystem.
 
-<h3 id="foreignfsafter">14.16.1 - The partitions are not in my disklabel!
+<h3 id="foreignfsafter">14.15.1 - The partitions are not in my disklabel!
 What should I do?</h3>
 
 If you install foreign filesystems on your system (often the result of
@@ -2090,9 +2069,9 @@ your partitions as described above.
 <p>
 You can follow a very similar procedure to add new partitions.
 
-<h2 id="flashmem">14.17 - Can I use a flash memory device with OpenBSD?</h2>
+<h2 id="flashmem">14.16 - Can I use a flash memory device with OpenBSD?</h2>
 
-<h3 id="flashmemUSB">14.17.1 - Flash memory as a portable storage device</h3>
+<h3 id="flashmemUSB">14.16.1 - Flash memory as a portable storage device</h3>
 <!-- This article written by Steven Mestdagh,
 steven@openbsd.org, and released under the BSD license -->
 
@@ -2227,7 +2206,8 @@ scsibus2 detached
 umass0 detached
 </pre></blockquote>
 
-<h3 id="flashmemBoot">14.17.2 - Flash memory as bootable storage</h3>
+<h3 id="flashmemBoot">14.16.2 - Flash memory as bootable storage</h3>
+
 <!-- This article written by Nick Holland
 nick@openbsd.org, and released under the BSD license -->
 
@@ -2347,7 +2327,7 @@ Some notes:
     which could be played when they booted from the OpenBSD partition.
 </ul>
 
-<h3 id="flashmemLive">14.17.3 - How do I create a bootable "live" USB
+<h3 id="flashmemLive">14.16.3 - How do I create a bootable "live" USB
 device?</h3>
 
 It is very easy to create a bootable USB flash (or other!) drive that
@@ -2430,7 +2410,7 @@ your results:
     to encrypt a data partition.
 </ul>
 
-<h2 id="DiskOpt">14.18 - Optimizing disk performance</h2>
+<h2 id="DiskOpt">14.17 - Optimizing disk performance</h2>
 
 Disk performance is a significant factor in the overall speed of your computer.
 It becomes increasingly important when your computer is hosting a
@@ -2445,7 +2425,7 @@ OpenBSD has a few options to increase the speed of your disk operations.
   <li><a href="#Optmaxvnodes">Size of the namei(9) cache</a>
 </ul>
 
-<h3 id="Optsoftu">14.18.1 - Soft updates</h3>
+<h3 id="Optsoftu">14.17.1 - Soft updates</h3>
 
 An important tool that can be used to speed up your system is soft updates.
 One of the slowest operations in the traditional BSD file system is
@@ -2458,7 +2438,7 @@ complete, although not always up to date.
 You can read more about soft updates in the
 <a href="#SoftUpdates">soft updates FAQ</a> entry.
 
-<h3 id="Optmaxvnodes">14.18.2 - Size of the namei(9) cache</h3>
+<h3 id="Optmaxvnodes">14.17.2 - Size of the namei(9) cache</h3>
 
 The name-to-inode translation (a.k.a.
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=namei">namei(9)</a>)
@@ -2482,7 +2462,7 @@ After the value has been determined, you can set it at system startup time with
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sysctl.conf">
 sysctl.conf(5)</a>.
 
-<h2 id="Async">14.19 - Why aren't we using async mounts?</h2>
+<h2 id="Async">14.18 - Why aren't we using async mounts?</h2>
 
 Question: "I simply do "mount -u -o async /" which makes one package I use
 (which insists on touching a few hundred things from time to time) usable.
@@ -2525,23 +2505,27 @@ For this reason,
 partitions are mounted asynchronously, as they will get wiped and recreated
 on a reboot anyway.
 
-<h2 id="altroot">14.20 - Duplicating your root partition: altroot</h2>
+<h2 id="altroot">14.19 - Duplicating your root partition: altroot</h2>
 
-OpenBSD provides an "altroot" facility in the
+OpenBSD provides an <tt>/altroot</tt> facility in the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=daily">daily(8)</a>
 scripts.
-If the environment variable <tt>ROOTBACKUP=1</tt> is set
-in either <tt>/etc/daily.local</tt> or root's
+If the environment variable <tt>ROOTBACKUP=1</tt> is set in either
+<tt>/etc/daily.local</tt> or root's
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=crontab">crontab(5)</a>,
-and a partition is specified in <tt>/etc/fstab</tt> as mounting
-to <tt>/altroot</tt> with the mount options of "xx", every night
-the entire contents of the root partition will be duplicated to the
+and a partition is specified in
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fstab">fstab(5)</a>
+as mounting to <tt>/altroot</tt> with the mount options of <tt>xx</tt>, every
+night the entire contents of the root partition will be duplicated to the
 <tt>/altroot</tt> partition.
-Assuming we want to back up our root partition to wd1a, we add the
-following to <tt>/etc/fstab</tt>
+
+<p>
+Assuming you want to back up yur root partition to the partition specified
+by the <a href="faq14.html#DUID">DUID</a> <tt>bfb4775bb8397569.a</tt>,
+add the following to <tt>/etc/fstab</tt>
 
 <blockquote><pre>
-/dev/wd1a /altroot ffs xx 0 0
+bfb4775bb8397569.a /altroot ffs xx 0 0
 </pre></blockquote>
 
 and set the appropriate environment variable in <tt>/etc/daily.local</tt>:
@@ -2550,40 +2534,17 @@ and set the appropriate environment variable in <tt>/etc/daily.local</tt>:
 # <b>echo ROOTBACKUP=1 >>/etc/daily.local</b>
 </pre></blockquote>
 
-As the altroot process will capture your <tt>/etc</tt> directory, this
+As the <tt>/altroot</tt> process will capture your <tt>/etc</tt> directory, this
 will make sure any configuration changes there are updated daily.
-
-<p>
-This is a "disk image" copy done with dd(8), not a file-by-file copy, so
-your <tt>/altroot</tt> partition should be exactly the same size as your
-root partition or larger.
-Also, excessively large root partitions should be avoided so the process
-does not take too long.
-
-<p>
-For full redundancy, the rest of the partitions should be duplicated as
-well, using <a href="#softraid">softraid</a> disk, dump(8)/restore(8),
-rsync, etc.
-It can be done manually, or part of a regular schedule, such as the
-<tt>weekly.local</tt>, <tt>daily.local</tt>, or <tt>monthly.local</tt>
-scripts.
-
-<p>
-Generally, you will want your "altroot" partition to be on a different
+This is a "disk image" copy done with
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dd">dd(1)</a>
+not a file-by-file copy, so your <tt>/altroot</tt> partition should be at least
+the same size as your root partition.
+Generally, you will want your <tt>/altroot</tt> partition to be on a different
 disk that has been configured to be fully bootable should the primary
 disk fail.
-It is possible to have an "altroot" on the same disk as your boot drive,
-but the benefit of this is limited.
 
-<p>
-Note that we did not specify the altroot device by DUID, but by device
-name.
-We probably want to be pushing from the boot device to the secondary
-device, which can end up changing if the drive order is changed.
-For this reason, you may want to specify the root and altroot in
-<tt>/etc/fstab</tt> as a device name, not a DUID.
-
-<h2 id="softraid">14.21 - How do I use softraid?</h2>
+<h2 id="softraid">14.20 - How do I use softraid?</h2>
 
 The
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=softraid">softraid(4)</a>
@@ -2646,7 +2607,7 @@ This virtual disk is treated as any other disk, first partitioned with
     added complication.
 </ul>
 
-<h3 id="softraidDI">14.21.1 - Installing to a mirror</h3>
+<h3 id="softraidDI">14.20.1 - Installing to a mirror</h3>
 
 The tools to assemble your softraid system are in the basic OpenBSD
 install (for adding softraid devices after install), but they are
@@ -2796,7 +2757,7 @@ To check on the status of your mirror, issue the following command:
 
 A nightly cron job to check the status might also be a good idea.
 
-<h3 id="softraidFDE">14.21.2 - Full disk encryption</h3>
+<h3 id="softraidFDE">14.20.2 - Full disk encryption</h3>
 
 Much like RAID, full disk encryption in OpenBSD is handled by the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=softraid">softraid(4)</a>
@@ -2887,7 +2848,7 @@ Which disk is the root disk? ('?' for details) [wd0] <b>sd0</b>
 You will be prompted for the passphrase on startup, but all other operations
 should be handled transparently.
 
-<h3 id="softraidCrypto">14.21.3 - Encrypting external disks</h3>
+<h3 id="softraidCrypto">14.20.3 - Encrypting external disks</h3>
 
 As we just illustrated, cryptographic softraid(4) volumes are set up rather
 simply.
@@ -2955,7 +2916,7 @@ tool.
 If you lose your passphrase, your data on your softraid crypto volume
 will be unusable.
 
-<h3 id="softraidDR">14.21.4 - Disaster recovery</h3>
+<h3 id="softraidDR">14.20.4 - Disaster recovery</h3>
 
 This is the section you want to skip over, but don't.
 This is the reason for RAID -- if disks never failed, you wouldn't add
@@ -3052,7 +3013,7 @@ However, the boot disk in the machine has to be bootable, and if you
 just made changes in the root partition before doing this, you probably
 want to be sure you didn't boot from your altroot partition by mistake.
 
-<h3 id="softraidNotes">14.21.5 - Softraid notes</h3>
+<h3 id="softraidNotes">14.20.5 - Softraid notes</h3>
 
 <h4>Complications when other sd(4) disks exist</h4>
 
@@ -3063,9 +3024,7 @@ or removing devices -- or if a device fails), the identifier of the
 softraid disk will change.
 For this reason, it's important to use <a href="faq14.html#DUID">DUIDs</a>
 (Disklabel Unique Identifiers) rather than drive names in your
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fstab">fstab(5)</a>
-file.
-You may not want to specify the root device by DUID.
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fstab">fstab(5)</a> file.
 
 <h4>Three disk RAID1?</h4>
 
