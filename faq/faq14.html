@@ -32,59 +32,52 @@
 <li><a href="#intro"           >14.1 - Disks and partitions</a>
 <li><a href="#fdisk"           >14.2 - Using OpenBSD's fdisk(8)</a>
 <li><a href="#disklabel"       >14.3 - Using OpenBSD's disklabel(8)</a>
-<li><a href="#NewDisk"         >14.4 - Adding extra disks in OpenBSD</a>
-<li><a href="#Swap"            >14.5 - How is swap handled?</a>
-  <ul>
-  <li><a href="#SwapAbout"     >14.5.1 - About swap</a>
-  <li><a href="#SwapPartition" >14.5.2 - Swapping to a partition</a>
-  <li><a href="#SwapFile"      >14.5.3 - Swapping to a file</a>
-  </ul>
-<li><a href="#SoftUpdates"     >14.6 - Soft updates</a>
-<li><a href="#Boot386"         >14.7 - How do OpenBSD/i386 and OpenBSD/amd64
+<li><a href="#SoftUpdates"     >14.4 - Soft updates</a>
+<li><a href="#Boot386"         >14.5 - How do OpenBSD/i386 and OpenBSD/amd64
                                 boot?</a>
-<li><a href="#LargeDrive"      >14.8 - What are the issues regarding large
+<li><a href="#LargeDrive"      >14.6 - What are the issues regarding large
                                 drives with OpenBSD?</a>
-<li><a href="#InstBoot"        >14.9 - Installing bootblocks (most, but not
+<li><a href="#InstBoot"        >14.7 - Installing bootblocks (most, but not
                                 all platforms)</a>
-<li><a href="#Backup"          >14.10 - Preparing for disaster: backing up
+<li><a href="#Backup"          >14.8 - Preparing for disaster: backing up
                                 and restoring from tape</a>
-<li><a href="#MountImage"      >14.11 - Mounting disk images in OpenBSD</a>
-<li><a href="#pciideErr"       >14.12 - Help! I'm getting errors with IDE
+<li><a href="#MountImage"      >14.9 - Mounting disk images in OpenBSD</a>
+<li><a href="#pciideErr"       >14.10 - Help! I'm getting errors with IDE
                                 DMA!</a>
-<li><a href="#NegSpace"        >14.13 - Why does <tt>df(1)</tt> tell me
+<li><a href="#NegSpace"        >14.11 - Why does <tt>df(1)</tt> tell me
                                 I have over 100% of my disk used?</a>
-<li><a href="#OhBugger"        >14.14 - Recovering partitions after deleting
+<li><a href="#OhBugger"        >14.12 - Recovering partitions after deleting
                                 the disklabel</a>
-<li><a href="#foreignfs"       >14.15 - Can I access data on filesystems other
+<li><a href="#foreignfs"       >14.13 - Can I access data on filesystems other
                                 than FFS?</a>
 <ul>
-  <li><a href="#foreignfsafter">14.15.1 - The partitions are not in my
+  <li><a href="#foreignfsafter">14.13.1 - The partitions are not in my
                                 disklabel! What should I do?</a>
 </ul>
-<li><a href="#flashmem"        >14.16 - Can I use a flash memory device with
+<li><a href="#flashmem"        >14.14 - Can I use a flash memory device with
                                 OpenBSD?</a>
   <ul>
-  <li><a href="#flashmemUSB"   >14.16.1 - Flash memory as a portable storage
+  <li><a href="#flashmemUSB"   >14.14.1 - Flash memory as a portable storage
                                 device</a>
-  <li><a href="#flashmemBoot"  >14.16.2 - Flash memory as bootable storage</a>
-  <li><a href="#flashmemLive"  >14.16.3 - How can I make a "live" bootable
+  <li><a href="#flashmemBoot"  >14.14.2 - Flash memory as bootable storage</a>
+  <li><a href="#flashmemLive"  >14.14.3 - How can I make a "live" bootable
                                 USB device?</a>
   </ul>
-<li><a href="#DiskOpt"         >14.17 - Optimizing disk performance</a>
+<li><a href="#DiskOpt"         >14.15 - Optimizing disk performance</a>
   <ul>
-  <li><a href="#Optsoftu"      >14.17.1 - Soft updates</a>
-  <li><a href="#Optmaxvnodes"  >14.17.2 - Size of the namei(9) cache</a>
+  <li><a href="#Optsoftu"      >14.15.1 - Soft updates</a>
+  <li><a href="#Optmaxvnodes"  >14.15.2 - Size of the namei(9) cache</a>
   </ul>
-<li><a href="#Async"           >14.18 - Why aren't we using async mounts?</a>
-<li><a href="#altroot"         >14.19 - Duplicating your root partition:
+<li><a href="#Async"           >14.16 - Why aren't we using async mounts?</a>
+<li><a href="#altroot"         >14.17 - Duplicating your root partition:
                                 altroot</a>
-<li><a href="#softraid"        >14.20 - How do I use softraid?</a>
+<li><a href="#softraid"        >14.18 - How do I use softraid?</a>
   <ul>
-  <li><a href="#softraidDI"    >14.20.1 - Installing to a mirror</a>
-  <li><a href="#softraidFDE"   >14.20.2 - Full disk encryption</a>
-  <li><a href="#softraidCrypto">14.20.3 - Encrypting external disks</a>
-  <li><a href="#softraidDR"    >14.20.4 - Disaster recovery</a>
-  <li><a href="#softraidNotes" >14.20.5 - Softraid notes</a>
+  <li><a href="#softraidDI"    >14.18.1 - Installing to a mirror</a>
+  <li><a href="#softraidFDE"   >14.18.2 - Full disk encryption</a>
+  <li><a href="#softraidCrypto">14.18.3 - Encrypting external disks</a>
+  <li><a href="#softraidDR"    >14.18.4 - Disaster recovery</a>
+  <li><a href="#softraidNotes" >14.18.5 - Softraid notes</a>
   </ul>
 </ul>
 <hr>
@@ -179,7 +172,7 @@ disklabel partition on that disk.
 So, file systems may be identified by identifiers like <tt>sd0a</tt>
 (the <tt>a</tt> partition of the first <tt>sd</tt> device),
 <tt>wd2h</tt> (the <tt>h</tt> partition of the third <tt>wd</tt> device),
-or <tt>sd1c</tt> (the entire second sd device).
+or <tt>sd1c</tt> (the entire second <tt>sd</tt> device).
 The device files would be <tt>/dev/sd0a</tt> for the block device,
 <tt>/dev/rsd0a</tt> would be the device file for the raw (character)
 device.
@@ -218,15 +211,8 @@ man page.
 fdisk(8) is used on some platforms (i386, amd64, macppc, zaurus and
 armish) to create a partition recognized by the system boot ROM, into
 which the OpenBSD disklabel partitions can be placed.
-Other platforms do not need or use fdisk(8).
-fdisk(8) can also be used for manipulations of the Master Boot Record (MBR),
-which can impact all operating systems on a computer.
 Unlike the fdisk-like programs on some other operating systems,
-OpenBSD's fdisk assumes you know what you want to do, and for the most
-part, it will let you do what you need to do, making it a powerful tool
-to have on hand.
-It will also let you do things you shouldn't or didn't intend to do, so
-it must be used with care.
+OpenBSD's fdisk(8) assumes you know what you want to do.
 
 <p>
 Normally, only one OpenBSD fdisk partition will be placed on a disk.
@@ -237,7 +223,7 @@ into OpenBSD filesystem partitions.
 To just view your partition table using fdisk, use:
 
 <blockquote><pre>
-# <b>fdisk sd0</b><br>
+# <b>fdisk sd0</b>
 </pre></blockquote>
 
 Which will give an output similar to this:
@@ -255,90 +241,18 @@ Offset: 0       Signature: 0xAA55
 </pre></blockquote>
 
 In this example, we are viewing the fdisk output of the first SCSI-like drive.
-We can see the OpenBSD partition (id A6) and its size.
-The * tells us that the OpenBSD partition is the bootable partition.
+We can see the OpenBSD partition (id <tt>A6</tt>) and its size.
+The <tt>*</tt> tells us that the OpenBSD partition is the bootable partition.
 
 <p>
 In the previous example, we just viewed our information.
-What if we want to edit our partition table?
-Well, to do so we must use the <tt>-e</tt> flag.
-This will bring up a console to interact with fdisk.
+In order to edit the partition table use the <tt>-e</tt> flag:
 
 <blockquote><pre>
-# <b>fdisk -e wd0</b>
+# <b>fdisk -e sd0</b>
 Enter 'help' for information
-fdisk: 1&gt; <b>help</b>
-        help            Command help list
-        manual          Show entire OpenBSD man page for fdisk
-        reinit          Re-initialize loaded MBR (to defaults)
-        setpid          Set the identifier of a given table entry
-        disk            Edit current drive stats
-        edit            Edit given table entry
-        flag            Flag given table entry as bootable
-        update          Update machine code in loaded MBR
-        select          Select extended partition table entry MBR
-        swap            Swap two partition entries
-        print           Print loaded MBR partition table
-        write           Write loaded MBR to disk
-        exit            Exit edit of current MBR, without saving changes
-        quit            Quit edit of current MBR, saving current changes
-        abort           Abort program without saving current changes
-fdisk: 1&gt;
+fdisk: 1>
 </pre></blockquote>
-
-Here is an overview of the commands you can use when you choose the
-<b>-e</b> flag.
-
-<ul>
-  <li><b>help</b>
-    Display a list of commands that fdisk understands in the interactive edit
-    mode.
-  <li><b>reinit</b>
-    Initialize the currently selected, in-memory copy of the boot block.
-    This is a handy way to quickly slap a "full-disk" OpenBSD partition in
-    place, update the boot code, and in general, make the system ready for
-    OpenBSD (and nothing but OpenBSD).
-  <li><b>disk</b>
-    Display the current drive geometry that fdisk is using.
-    You are given a chance to edit it if you wish.
-  <li><b>setpid</b>
-    Change the partition identifier of the given partition table entry.
-    This command is particularly useful for reassigning an existing partition
-    to OpenBSD.
-  <li><b>edit</b>
-    Edit a given table entry in the memory copy of the current boot block.
-    You may edit either in CHS geometry mode, or in sector offsets and sizes.
-  <li><b>flag</b>
-    Make the given partition table entry bootable.
-    Only one entry can be marked bootable.
-    If you wish to boot from an extended partition, you will need to mark the
-    partition table entry for the extended partition as bootable.
-  <li><b>update</b>
-    Update the machine code in the memory copy of the currently selected boot
-    block.
-  <li><b>select</b>
-    Select and load into memory the boot block pointed to by the extended
-    partition table entry in the current boot block.
-  <li><b>swap</b>
-    Swaps two MBR entries, so you can re-order the MBR.
-  <li><b>print</b>
-    Print the currently selected in-memory copy of the boot block and its
-    MBR table to the terminal.
-  <li><b>write</b>
-    Write the in-memory copy of the boot block to disk.
-    You will be asked to confirm this operation.
-  <li><b>exit</b>
-    Exit the current level of fdisk, either returning to the previously
-    selected in-memory copy of a boot block, or exiting the program if there
-    is none.
-  <li><b>quit</b>
-    Exit the current level of fdisk, either returning to the previously
-    selected in-memory copy of a boot block, or exiting the program if there
-    is none.
-    Unlike exit it does write the modified block out.
-  <li><b>abort</b>
-    Quit program without saving current changes.
-</ul>
 
 <h3>fdisk tricks and tips</h3>
 
@@ -346,24 +260,17 @@ Here is an overview of the commands you can use when you choose the
   <li>
     fdisk(8) offers the ability to specify partitions both in raw sectors
     and in Cylinder/Head/Sector formats.
-    Both options are given for a reason -- some tasks are easier accomplished
-    one way, others the other way.
-    Don't lock yourself into only using one option.
   <li>
     A totally blank disk will need to have the master boot record's boot code
     written to the disk before it can boot.
-    You can use the "reinit" or "update" options to do this.
-    If you fail to do this, you can write a valid partition table with fdisk,
-    but not have a bootable disk.
-    You may wish to update the existing boot code anyway if you are uncertain
-    of its origin.
+    You can use the <tt>reinit</tt> or <tt>update</tt> commands to do this.
   <li>
     If your system has a "maintenance" or "diagnostic" partition, it is
-    recommended that you leave it in place or install it BEFORE installing
-    OpenBSD.
+    recommended that you leave it in place or install it <b>before</b>
+    installing OpenBSD.
   <li>
-    For historical reasons, "q" saves changes and exits the program, and "x"
-    exits without saving.
+    For historical reasons, <tt>q</tt> saves changes and exits the program,
+    and <tt>x</tt> exits without saving.
     This is the opposite of what many people are now used to in other
     environments.
     fdisk(8) does not warn before saving the changes, so use with care.
@@ -386,7 +293,7 @@ For <a href="../i386.html">i386</a>,
 <a href="../macppc.html">macppc</a>,
 <a href="../zaurus.html">zaurus</a>,
 and <a href="../armish.html">armish</a>,
-disk setup is done in two stages.
+disk setup is done in two stages:
 First, the OpenBSD slice of the hard disk is defined using fdisk(8),
 then that slice is subdivided into OpenBSD partitions using
 disklabel(8).
@@ -394,15 +301,10 @@ disklabel(8).
 <p>
 All OpenBSD platforms, however, use disklabel(8) as the primary way to
 manage OpenBSD partitions.
-Platforms that also use fdisk(8) place all the disklabel(8) partitions
-in a single fdisk partition.
-
-<p>
 Labels hold certain information about your disk, like your drive
 geometry and information about the filesystems on the disk.
-The disklabel is then used by the bootstrap program to
-access the drive and to know where filesystems are contained on the
-drive.
+The disklabel is then used by the bootstrap program to access the drive and
+to know where filesystems are contained on the drive.
 You can read more in-depth information about disklabel in the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=disklabel&amp;sec=5">
 disklabel(5)</a>
@@ -411,174 +313,56 @@ man page.
 <p>
 On some platforms, disklabel helps overcome architecture limitations on
 disk partitioning.
-For example, on i386, you can have four primary partitions, but with
+For example, on i386, you can have four primary partitions.
+With
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=disklabel">
-disklabel(8),</a>
-you use one of these 'primary' partitions to store all of your
-OpenBSD partitions (for example, 'swap', '/', '/usr', '/var', etc.),
-and you still have 3 more partitions available for other OSs.
+disklabel(8)</a>,
+you use one of these primary partitions to store all of your OpenBSD partitions,
+and you will still have 3 more partitions available for other OSs.
 
 <h3 id="disklabel.2">disklabel(8) during OpenBSD's install</h3>
 
-One of the major parts of OpenBSD's install is your initial creation of
-labels.
-During the install you use disklabel(8) to create your separate
-partitions.
-As part of the install process, you can define your mount points from
-within disklabel(8), but you can change these later in the install or
-post-install, as well.
+By default, the installer will allocate disklabels automatically.
+For an example of setting up a custom disklabel(8) during install, see the
+<a href="faq4.html#Moredisklabel">custom disklabel layout</a> part of the
+<a href="faq4.html">installation guide</a>.
 
-<p>
-There is not one "right" way to label a disk, but there are many wrong
-ways.
-Before attempting to label your disk, see
-<a href="faq4.html#Partitioning">this discussion</a> on partitioning and
-partition sizing.
-
-<p>
-For an example of using disklabel(8) during install, see the
-<a href="faq4.html#Moredisklabel">Custom disklabel layout</a> part of the
-<a href="faq4.html">Installation Guide</a>.
-
-<h3 id="disklabel.3">Using disklabel(8) after install</h3>
-
-After install, one of the most common reasons to use disklabel(8) is to
-look at how your disk is laid out.
-The following command will show you the current disklabel, without
-modifying it:
-
-<blockquote><pre>
-# <b>disklabel wd0</b> &lt;-- <i>Or whatever disk device you'd like to view</i>
-type: ESDI
-disk: ESDI/IDE disk
-label: SAMSUNG HD154UI
-duid: d920a43a5a56ad5f
-flags:
-bytes/sector: 512
-sectors/track: 63
-tracks/cylinder: 16
-sectors/cylinder: 1008
-cylinders: 2907021
-total sectors: 2930277168
-boundstart: 64
-boundend: 2930272065
-drivedata: 0
-
-16 partitions:
-#                size           offset  fstype [fsize bsize  cpg]
-  a:          1024064               64  4.2BSD   2048 16384    1 # /
-  b:          4195296          1024128    swap
-  c:       2930277168                0  unused
-  d:          4195296          5219424  4.2BSD   2048 16384    1 # /usr
-  e:          4195296          9414720  4.2BSD   2048 16384    1 # /tmp
-  f:         20972448         13610016  4.2BSD   2048 16384    1 # /var
-  h:          2097632         34582464  4.2BSD   2048 16384    1 # /home
-</pre></blockquote>
-
-Note how this disk has only part of its disk space allocated at this
-time.
-
-Disklabel offers two different modes for editing the disklabel, a
-built-in command-driven editor (this is how you installed OpenBSD
-originally), and a full editor, such as
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=vi">vi(1)</a>.
-You may find the command-driven editor "easier", as it guides you through all
-the steps and provides help upon request, but the full-screen editor has
-definite use, too.
-
-<p>
-Let's add a partition to the above system.
-
-<blockquote>
-<b>WARNING:</b>
-Any time you are fiddling with your disklabel, you are putting all the data
-on your disk at risk.
-Make sure your data is backed up before editing an existing disklabel!
-</blockquote>
-
-We will use the built-in command-driven editor, which is invoked using
-the "-E" option to disklabel(8).
-
-<blockquote><pre>
-# <b>disklabel -E wd0</b>
-...
-> <b>a k</b>
-offset: [36680096]
-size: [2893591969] 1T
-Rounding to cylinder: 2147483536
-FS type: [4.2BSD]
-> <b>p m</b>
-OpenBSD area: 64-2930272065; size: 1430796.9M; free: 364310.8M
-#                size           offset  fstype [fsize bsize  cpg]
-  a:           500.0M               64  4.2BSD   2048 16384    1 # /
-  b:          2048.5M          1024128    swap
-  c:       1430799.4M                0  unused
-  d:          2048.5M          5219424  4.2BSD   2048 16384    1 # /usr
-  e:          2048.5M          9414720  4.2BSD   2048 16384    1 # /tmp
-  f:         10240.5M         13610016  4.2BSD   2048 16384    1 # /var
-  h:          1024.2M         34582464  4.2BSD   2048 16384    1 # /home
-  k:       1048575.9M         36680192  4.2BSD   8192 65536    1
-> <b>q</b>
-Write new label?: [y]
-</pre></blockquote>
-
-In this case, disklabel(8) was kind enough to calculate a good starting
-offset for the partition.
-In many cases, it will be able to do this, but if you have "holes" in
-the disklabel (i.e., you deleted a partition, or you just like making
-your life miserable) you may need to sit down with a paper and pencil
-to calculate the proper offset.
-Note that while disklabel(8) does some sanity checking, it is very
-possible to do things very wrong here.
-Be careful, understand the meaning of the numbers you are entering.
-
-<p>
-On most OpenBSD platforms, there are sixteen disklabel partitions
-available, labeled "a" through "p".
-(some "specialty" systems may have only eight).
-Every disklabel should have a 'c' partition, with an "fstype" of
-"unused" that covers the entire physical drive.
-If your disklabel is not like this, it must be fixed, the "D" option
-(below) can help.
-Never try to use the "c" partition for anything other than accessing the
-raw sectors of the disk, do not attempt to create a file system on "c".
-On the boot device, "a" is reserved for the root partition, and "b" is
-the swap partition, but only the boot device makes these distinctions.
-Other devices may use all fifteen partitions other than "c" for file
-systems.
-
-<h3>Disklabel tricks and tips</h3>
+<h3>Disklabel basics</h3>
 
 <ul>
   <li><b>Get help:</b>
-    In the command-driven mode, hitting "?" will produce a list of
+    In the command-driven mode, hitting <tt>?</tt> will produce a list of
     available commands.
-    "M" will show the man page for disklabel(8).
+    <tt>M</tt> will show the man page for disklabel(8).
+  <li><b>Auto-partitioning:</b>
+    New users are encouraged to use the <tt>A</tt> command to auto-create a
+    recommended disklabel.
+    You can then edit or alter the auto-created label as you need.
   <li><b>Reset to default:</b>
     In some cases, you may wish to completely restart from scratch and
     delete all existing disklabel information.
     The "D" command will reset the label back to default, as if there had
     never been a disklabel on the drive.
-  <li><b>Duplicating a disklabel:</b>
-    In some cases, you may wish to duplicate the partitioning from one disk
-    to another, but not precisely (for example, you wish to have the same
-    partitions, but on different sizes of drives).
-    Use the '-e' (full-screen editor) mode of disklabel(8) to capture the
-    partitions of the "model" drive, paste it into the new drive, remove the
-    model's 'c' partition, save, and you have copied the disk layout to the
-    other drive without altering its basic parameters.
-  <li>(sparc/sparc64) <b>Don't put swap at the very beginning of your disk.</b>
-    While Solaris often puts swap at the very beginning of a disk, OpenBSD
-    requires the boot partition to be at the beginning of the disk.
+  <li><b><tt>q</tt> vs. <tt>x</tt>:</b>
+    For historical reasons, while in the command-driven editor mode, <tt>q</tt>
+    saves changes and exits the program, and "x" exits without saving.
+    This is the opposite of what many people are now used to in other
+    environments.
+    disklabel(8) does warn before saving the changes, though it will <tt>x</tt>
+    quickly and quietly.
+</ul>
+
+<h3>Miscellaneous disklabel tidbits</h3>
+
+<ul>
   <li>(fdisk platforms) <b>Leave first track free:</b>
     On platforms using fdisk(8), you should leave the first logical track
     unused, both in disklabel(8) and in fdisk(8).
-    On "modern" computers (i.e., almost everything that will run OpenBSD),
-    the exact amount doesn't really matter, though for performance reasons
-    on the newest disks, having partitions aligned at 4k boundaries is good
-    for performance.
-    For this reason, OpenBSD now defaults to starting the first partition at
-    block 64 instead of 63.
+    For this reason, OpenBSD defaults to starting the first partition at
+    block 64.
+  <li>(sparc/sparc64) <b>Don't put swap at the very beginning of your disk.</b>
+    While Solaris often puts swap at the very beginning of a disk, OpenBSD
+    requires the boot partition to be at the beginning of the disk.
   <li><b>Devices without a disklabel:</b>
     If a device does not currently have an OpenBSD disklabel on it but has
     another file system (for example, a disk with a pre-existing FAT32 file
@@ -590,294 +374,9 @@ systems.
     You must do this yourself if you wish OpenBSD to be able to access this
     file system.
     More on this <a href="faq14.html#foreignfsafter">below</a>.
-  <li><b>"q" vs. "x":</b>
-    For historical reasons, while in the command-driven editor mode, "q"
-    saves changes and exits the program, and "x" exits without saving.
-    This is the opposite of what many people are now used to in other
-    environments.
-    disklabel(8) does warn before saving the changes, though it will "x"
-    quickly and quietly.
-  <li><b>Auto-partitioning:</b>
-    New users are encouraged to use the 'A' command to auto-create a
-    recommended disklabel.
-    You can then edit or alter the auto-created label as you need.
 </ul>
 
-<h2 id="NewDisk">14.4 - Adding extra disks in OpenBSD</h2>
-<!-- XXX whoa. this section needs rework -->
-
-Once you get your disk installed <b>PROPERLY</b> you need to use
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fdisk">fdisk(8)</a>
-(<i>amd64/i386 only</i>) and
-<a href= "http://www.openbsd.org/cgi-bin/man.cgi?query=disklabel">
-disklabel(8)</a>
-to set up your disk in OpenBSD.
-
-<p>
-amd64/i386 folks should start with fdisk.
-Other architectures can ignore this.
-In the example below, we're adding a third SCSI-like drive to the system.
-
-<blockquote><pre>
-# <b>fdisk -i sd2</b>
-</pre></blockquote>
-
-This will initialize the disk's "real" partition table for exclusive use
-by OpenBSD.
-Next you need to create a disklabel for it.
-This may seem confusing at first.
-
-<blockquote><pre>
-# <b>disklabel -e sd2</b>
-
-<i>(screen goes blank, your $EDITOR comes up)</i>
-type: SCSI
-<i>...bla...</i>
-sectors/track: 63
-total sectors: 6185088
-<i>...bla...</i>
-16 partitions:
-#        size   offset    fstype   [fsize bsize   cpg]
-  c:  6185088        0    unused        0     0         # (Cyl.    0 - 6135)
-  d:  1405080       63    4.2BSD     1024  8192    16   # (Cyl.    0*- 1393*)
-  e:  4779945  1405143    4.2BSD     1024  8192    16   # (Cyl. 1393*- 6135)
-</pre></blockquote>
-
-First, ignore the 'c' partition, it's always there and is for programs
-like disklabel to function!
-Fstype for OpenBSD is 4.2BSD.
-Total sectors is the total size of the disk.
-Say this is a 3GB disk.
-Three gigabytes in disk manufacturer terms is 3000MB.
-So divide 6185088/3000 (use
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=bc">bc(1)</a>).
-You get 2061.
-So, to make up partition sizes for a, d, e, f, g, ...
-just multiply X*2061 to get X megabytes of space on that partition.
-The offset for your first new partition should be the same as the
-"sectors/track" reported earlier in disklabel's output.
-For us it is 63.
-The offset for each partition afterwards should be a combination of
-the size of each partition and the offset of each partition (except the
-'c' partition, since it has no play into this equation.)
-
-<p>
-Or, if you just want one partition on the disk, say you will use the
-whole thing for web storage or a home directory or something, just take
-the total size of the disk and subtract the sectors per track from it.
-6185088-63 = 6185025.
-Your partition is
-
-<blockquote><pre>
-    d:  6185025       63    4.2BSD     1024  8192    16
-</pre></blockquote>
-
-<b>If all this seems needlessly complex, you can just use disklabel -E
-to get the same partitioning mode that you got on your install disk!</b>
-There, you can just use "96M" to specify "96 megabytes", or 96G for 96
-gigs.
-
-<p>
-That was a lot.
-But you are not finished.
-Finally, you need to create the filesystem on that disk using
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=newfs">newfs(8)</a>.
-
-<blockquote><pre>
-# <b>newfs sd2d </b>
-</pre></blockquote>
-
-Or whatever your disk was named as per OpenBSD's disk numbering scheme.
-(Look at the output from
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dmesg">dmesg(8)</a>
-to see what your disk was named by OpenBSD.)
-
-<p>
-Now figure out where you are going to mount this new partition you just created.
-Say you want to put it on <tt>/u</tt>.
-First, make the directory <tt>/u</tt>, then mount it.
-
-<blockquote><pre>
-# <b>mkdir /u</b>
-# <b>mount /dev/sd2d /u</b>
-</pre></blockquote>
-
-Finally, add it to
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fstab">fstab(5)</a>.
-
-<blockquote><pre>
-/dev/sd2d /u ffs rw 1 1
-</pre></blockquote>
-
-What if you need to migrate an existing directory like <tt>/usr/local</tt>?
-You should mount the new drive on <tt>/mnt</tt> and copy <tt>/usr/local</tt>
-to the <tt>/mnt</tt> directory.
-Example:
-
-<blockquote><pre>
-# <b>cd /usr/local && pax -rw -p e . /mnt</b>
-</pre></blockquote>
-
-Edit the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=fstab">fstab(5)</a>
-file to show that the <tt>/usr/local</tt> partition is now <tt>/dev/sd2d</tt>,
-your freshly formatted partition.
-Example:
-
-<blockquote><pre>
-/dev/sd2d /usr/local ffs rw 1 1
-</pre></blockquote>
-
-Reboot into single user mode with <tt>boot -s</tt>, move the existing
-<tt>/usr/local</tt> to <tt>/usr/local-backup</tt> (or delete it if you feel
-lucky) and create an empty directory /usr/local.
-Then reboot the system, and voila, the files are there!
-
-<h2 id="Swap">14.5 - How is swap handled?</h2>
-
-<h3 id="SwapAbout">14.5.1 - About swap</h3>
-
-Historically, all kinds of rules have been tossed about to guide
-administrators on how much swap to configure on their machines.
-The problem, of course, is there are few "normal" applications.
-
-<p>
-One non-obvious use for swap is to be a place the kernel can dump a copy
-of what is in core in the event of a system panic for later analysis.
-For this to work, you must have a swap partition (not a swap file) at
-least as large as your RAM.
-By default, the system will save a copy of this dump to
-<tt>/var/crash</tt> on reboot, so if you wish to be able to do this
-automatically, you will need sufficient <i>free</i> space on
-<tt>/var</tt>.
-However, you can also bring the system up single-user, and use
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=savecore">savecore(8)</a>
-to dump it elsewhere.
-
-<p>
-Many types of systems may be appropriately configured with no swap
-at all.
-For example, firewalls should not swap in normal operation.
-Machines with flash storage generally should not swap.
-If your firewall is flash based, you may benefit (slightly) by
-not allocating a swap partition, though in most other cases,
-a swap partition won't actually hurt anything; most disks have
-more than enough space to allocate a little to swap.
-
-<p>
-There are all kinds of tips about optimizing swap (where on the disk,
-separate disks, etc.), but if you find yourself in a situation where
-optimizing swap is an issue, you probably need more RAM.
-In general, the best optimization for swap is to not need it.
-
-<p>
-In OpenBSD, swap is managed with the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=swapctl">swapctl(8)</a>
-program, which adds, removes, lists and prioritizes swap devices and
-files.
-
-<h3 id="SwapPartition">14.5.2 - Swapping to a partition</h3>
-
-On OpenBSD, the 'b' partition of the boot drive is used by default and
-automatically for swap.
-No configuration is needed for this to take place.
-If you do not wish to use swap on the boot disk, do not define a
-"b" partition.
-If you wish to use swap on other partitions or on other disks, you
-need to define these partitions in <tt>/etc/fstab</tt> with lines
-something like:
-
-<blockquote><pre>
-/dev/sd3b none swap sw 0 0
-/dev/sd3d none swap sw 0 0
-</pre></blockquote>
-
-<h3 id="SwapFile">14.5.3 - Swapping to a file</h3>
-
-(Note: if you are looking to swap to a file because you are getting
-&quot;virtual memory exhausted&quot; errors, you should try raising
-the per-process limits first with
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=csh">csh(1)</a>'s unlimit,
-or
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sh">sh(1)</a>'s ulimit.)
-
-<p>
-Sometimes, your initial guess about how much swap you need proves to
-be wrong, and you have to add additional swap space, occasionally in
-a hurry (as in, "Geez, at the rate it is burning swap, we'll be wedged
-in five minutes").
-If you find yourself in this position, adding swap space as a file on
-an existing file system can be a quick fix.
-
-<p>
-The file must not reside on a filesystem which has soft updates enabled
-(they are disabled by default).
-To start out, you can see how much swap you currently have and how much you
-are using with the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=swapctl">swapctl(8)</a>
-utility.
-You can do this by using the command:
-
-<blockquote><pre>
-$ <b>swapctl -l</b>
-Device      512-blocks     Used    Avail Capacity  Priority
-swap_device      65520        8    65512     0%    0
-</pre></blockquote>
-
-This shows the devices currently being used for swapping and their
-current statistics.
-In the example above, there is only one device named swap_device.
-This is the predefined area on disk that is used for swapping.
-It shows up as partition b when viewing disklabels.
-As you can also see in the example above, that device isn't getting much
-use at the moment, but for the purposes of this document, we will act as
-if an extra 32M is needed.
-
-<p>
-The first step to setting up a file as a swap device is to create the file.
-It's best to do this with the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dd">dd(1)</a>
-utility.
-Here is an example of creating the file <i>/var/swap</i> that is 32M in size.
-
-<blockquote><pre>
-# <b>dd if=/dev/zero of=/var/swap bs=1k count=32768</b>
-32768+0 records in
-32768+0 records out
-33554432 bytes transferred in 20 secs (1677721 bytes/sec)
-</pre></blockquote>
-
-Once this has been done, we can turn on swapping to that device.
-Use the following command to turn on swapping to this device
-
-<blockquote><pre>
-# <b>chmod 600 /var/swap</b>
-# <b>swapctl -a /var/swap</b>
-</pre></blockquote>
-
-Now we need to check to see if it has been correctly added to the list
-of our swap devices.
-
-<blockquote><pre>
-$ <b>swapctl -l</b>
-Device      512-blocks     Used    Avail Capacity  Priority
-swap_device      65520        8    65512     0%    0
-/var/swap        65536        0    65536     0%    0
-Total           131056        8   131048     0%
-</pre></blockquote>
-
-Now that the file is setup and swapping is being done, you need to add a
-line to your <i>/etc/fstab</i> file so that this file is configured on
-the next boot time also.
-If this line is not added, you won't have this swap device configured.
-
-<blockquote><pre>
-$ <b>cat /etc/fstab</b>
-/dev/wd0a / ffs rw 1 1
-/var/swap /var/swap swap sw 0 0
-</pre></blockquote>
-
-<h2 id="SoftUpdates">14.6 - Soft updates</h2>
+<h2 id="SoftUpdates">14.4 - Soft updates</h2>
 
 Soft updates are based on an idea proposed by
 <a href="http://www.ece.cmu.edu/~ganger/papers/CSE-TR-254-95/">Greg Ganger
@@ -908,7 +407,7 @@ These architectures support only a very limited amount of kernel memory and
 cannot use this feature.
 However, sun4m machines are fine.
 
-<a name="BootAmd64"></a><h2 id="Boot386">14.7 - How do OpenBSD/i386 and
+<a name="BootAmd64"></a><h2 id="Boot386">14.5 - How do OpenBSD/i386 and
 OpenBSD/amd64 boot?</h2>
 
 The boot process for OpenBSD/i386 and OpenBSD/amd64 is not trivial, and
@@ -1153,10 +652,10 @@ For more information on the i386 boot process, see:
   <li>
     Hale Landis's <a href=
     "https://web.archive.org/web/20080707020112/http://www.ata-atapi.com/hiw.html">
-    How it Wkrks Documents</a>.
+    How it Works Documents</a>.
 </ul>
 
-<h2 id="LargeDrive">14.8 - What are the issues regarding large drives with
+<h2 id="LargeDrive">14.6 - What are the issues regarding large drives with
 OpenBSD?</h2>
 
 OpenBSD supports both FFS and FFS2 file systems, also known as UFS and UFS2.
@@ -1176,7 +675,7 @@ course.
 
 <h3>Partition size and location limitations</h3>
 
-Unfortunately, the full ability of the OS isn't available until AFTER
+Unfortunately, the full ability of the OS isn't available until <b>after</b>
 the OS has been loaded into memory.
 The boot process has to utilize (and is thus limited by) the system's boot ROM.
 
@@ -1313,7 +812,7 @@ limitation of only understanding fdisk partitions, so your 'a'
 partition should be entirely within the fdisk-managed part of the disk,
 in addition to any BIOS limitations.
 
-<h2 id="InstBoot">14.9 - Installing bootblocks
+<h2 id="InstBoot">14.7 - Installing bootblocks
 (most, but not all platforms)</h2>
 
 OpenBSD has a very robust boot loader that is quite indifferent to drive
@@ -1348,7 +847,7 @@ installboot(8) copies over a new second stage boot loader to <tt>/boot</tt>
 and installs the first stage boot loader to look for it in the right
 place.
 
-<h2 id="Backup">14.10 - Preparing for disaster: backing up and restoring
+<h2 id="Backup">14.8 - Preparing for disaster: backing up and restoring
 from tape</h2>
 
 <h3>Introduction:</h3>
@@ -1699,7 +1198,7 @@ restore your data are as follows:
     was in as of your most recent back up tape and ready to use again.
 </ul>
 
-<h2 id="MountImage">14.11 - Mounting disk images in OpenBSD</h2>
+<h2 id="MountImage">14.9 - Mounting disk images in OpenBSD</h2>
 
 To mount a disk image (ISO images, disk images created with dd, etc.) in
 OpenBSD you must configure a
@@ -1730,7 +1229,7 @@ For more information, refer to the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=vnconfig">vnconfig(8)</a>
 man page.
 
-<h2 id="pciideErr">14.12 - Help! I'm getting errors with IDE DMA!</h2>
+<h2 id="pciideErr">14.10 - Help! I'm getting errors with IDE DMA!</h2>
 
 DMA IDE transfers, supported by
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pciide">pciide(4)</a>
@@ -1770,7 +1269,7 @@ This can be done by using <a href="faq5.html#BootConfig">UKC</a> or
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=wd">wd(4)</a>
 device.
 
-<h2 id="NegSpace">14.13 - Why does <tt>df(1)</tt> tell me I have over 100% of
+<h2 id="NegSpace">14.11 - Why does <tt>df(1)</tt> tell me I have over 100% of
 my disk used?</h2>
 
 People are sometimes surprised to find they have <i>negative</i>
@@ -1793,7 +1292,7 @@ If the 5% value is not appropriate for you, you can change it with the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tunefs">tunefs(8)</a>
 command.
 
-<h2 id="OhBugger">14.14 - Recovering partitions after deleting the
+<h2 id="OhBugger">14.12 - Recovering partitions after deleting the
 disklabel</h2>
 
 If you have a damaged partition table, there are various things
@@ -1843,7 +1342,7 @@ unreadable, you will be able to
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mount">mount(8)</a>
 it until the next reboot.
 
-<h2 id="foreignfs">14.15 - Can I access data on filesystems other than FFS?</h2>
+<h2 id="foreignfs">14.13 - Can I access data on filesystems other than FFS?</h2>
 <!-- This article written by Steven Mestdagh,
 steven@openbsd.org, and released under the BSD license -->
 
@@ -1994,7 +1493,7 @@ fsck.
 Generally, those are things you want to have handled by the native
 operating system associated with the filesystem.
 
-<h3 id="foreignfsafter">14.15.1 - The partitions are not in my disklabel!
+<h3 id="foreignfsafter">14.13.1 - The partitions are not in my disklabel!
 What should I do?</h3>
 
 If you install foreign filesystems on your system (often the result of
@@ -2069,9 +1568,9 @@ your partitions as described above.
 <p>
 You can follow a very similar procedure to add new partitions.
 
-<h2 id="flashmem">14.16 - Can I use a flash memory device with OpenBSD?</h2>
+<h2 id="flashmem">14.14 - Can I use a flash memory device with OpenBSD?</h2>
 
-<h3 id="flashmemUSB">14.16.1 - Flash memory as a portable storage device</h3>
+<h3 id="flashmemUSB">14.14.1 - Flash memory as a portable storage device</h3>
 <!-- This article written by Steven Mestdagh,
 steven@openbsd.org, and released under the BSD license -->
 
@@ -2206,7 +1705,7 @@ scsibus2 detached
 umass0 detached
 </pre></blockquote>
 
-<h3 id="flashmemBoot">14.16.2 - Flash memory as bootable storage</h3>
+<h3 id="flashmemBoot">14.14.2 - Flash memory as bootable storage</h3>
 
 <!-- This article written by Nick Holland
 nick@openbsd.org, and released under the BSD license -->
@@ -2327,7 +1826,7 @@ Some notes:
     which could be played when they booted from the OpenBSD partition.
 </ul>
 
-<h3 id="flashmemLive">14.16.3 - How do I create a bootable "live" USB
+<h3 id="flashmemLive">14.14.3 - How do I create a bootable "live" USB
 device?</h3>
 
 It is very easy to create a bootable USB flash (or other!) drive that
@@ -2348,9 +1847,9 @@ Some reasons you may want to do this:
   <li>Install machines that lack any other form of boot media.
   <li>Collect <a href="faq4.html#SendDmesg">dmesg</a> outputs from your
     friends' computers!
-    (As OpenBSD's dmesg is useful for identifying hardware, this can be a
-    good way to prep for the install of OTHER OSs on a machine -- make sure
-    you have all the needed drivers before starting).
+    As OpenBSD's dmesg is useful for identifying hardware, this can be a
+    good way to prep for the install of <b>other</b> OSs on a machine -- make
+    sure you have all the needed drivers before starting.
 </ul>
 
 Creating such a "live OpenBSD drive" is simple.
@@ -2410,7 +1909,7 @@ your results:
     to encrypt a data partition.
 </ul>
 
-<h2 id="DiskOpt">14.17 - Optimizing disk performance</h2>
+<h2 id="DiskOpt">14.15 - Optimizing disk performance</h2>
 
 Disk performance is a significant factor in the overall speed of your computer.
 It becomes increasingly important when your computer is hosting a
@@ -2425,7 +1924,7 @@ OpenBSD has a few options to increase the speed of your disk operations.
   <li><a href="#Optmaxvnodes">Size of the namei(9) cache</a>
 </ul>
 
-<h3 id="Optsoftu">14.17.1 - Soft updates</h3>
+<h3 id="Optsoftu">14.15.1 - Soft updates</h3>
 
 An important tool that can be used to speed up your system is soft updates.
 One of the slowest operations in the traditional BSD file system is
@@ -2438,7 +1937,7 @@ complete, although not always up to date.
 You can read more about soft updates in the
 <a href="#SoftUpdates">soft updates FAQ</a> entry.
 
-<h3 id="Optmaxvnodes">14.17.2 - Size of the namei(9) cache</h3>
+<h3 id="Optmaxvnodes">14.15.2 - Size of the namei(9) cache</h3>
 
 The name-to-inode translation (a.k.a.
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=namei">namei(9)</a>)
@@ -2462,7 +1961,7 @@ After the value has been determined, you can set it at system startup time with
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sysctl.conf">
 sysctl.conf(5)</a>.
 
-<h2 id="Async">14.18 - Why aren't we using async mounts?</h2>
+<h2 id="Async">14.16 - Why aren't we using async mounts?</h2>
 
 Question: "I simply do "mount -u -o async /" which makes one package I use
 (which insists on touching a few hundred things from time to time) usable.
@@ -2505,7 +2004,7 @@ For this reason,
 partitions are mounted asynchronously, as they will get wiped and recreated
 on a reboot anyway.
 
-<h2 id="altroot">14.19 - Duplicating your root partition: altroot</h2>
+<h2 id="altroot">14.17 - Duplicating your root partition: altroot</h2>
 
 OpenBSD provides an <tt>/altroot</tt> facility in the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=daily">daily(8)</a>
@@ -2544,7 +2043,7 @@ Generally, you will want your <tt>/altroot</tt> partition to be on a different
 disk that has been configured to be fully bootable should the primary
 disk fail.
 
-<h2 id="softraid">14.20 - How do I use softraid?</h2>
+<h2 id="softraid">14.18 - How do I use softraid?</h2>
 
 The
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=softraid">softraid(4)</a>
@@ -2575,7 +2074,7 @@ This virtual disk is treated as any other disk, first partitioned with
   <li>
     Before going into production, you must understand how you use your
     RAID solution to recover from failures.
-    The time to do this is BEFORE your system has had a failure event.
+    The time to do this is <b>before</b> your system has had a failure event.
     Poorly implemented RAID will often cause more down time than it will
     prevent.
     This is even more true if it has caused you to become complacent on your
@@ -2607,7 +2106,7 @@ This virtual disk is treated as any other disk, first partitioned with
     added complication.
 </ul>
 
-<h3 id="softraidDI">14.20.1 - Installing to a mirror</h3>
+<h3 id="softraidDI">14.18.1 - Installing to a mirror</h3>
 
 The tools to assemble your softraid system are in the basic OpenBSD
 install (for adding softraid devices after install), but they are
@@ -2757,7 +2256,7 @@ To check on the status of your mirror, issue the following command:
 
 A nightly cron job to check the status might also be a good idea.
 
-<h3 id="softraidFDE">14.20.2 - Full disk encryption</h3>
+<h3 id="softraidFDE">14.18.2 - Full disk encryption</h3>
 
 Much like RAID, full disk encryption in OpenBSD is handled by the
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=softraid">softraid(4)</a>
@@ -2848,7 +2347,7 @@ Which disk is the root disk? ('?' for details) [wd0] <b>sd0</b>
 You will be prompted for the passphrase on startup, but all other operations
 should be handled transparently.
 
-<h3 id="softraidCrypto">14.20.3 - Encrypting external disks</h3>
+<h3 id="softraidCrypto">14.18.3 - Encrypting external disks</h3>
 
 As we just illustrated, cryptographic softraid(4) volumes are set up rather
 simply.
@@ -2916,7 +2415,7 @@ tool.
 If you lose your passphrase, your data on your softraid crypto volume
 will be unusable.
 
-<h3 id="softraidDR">14.20.4 - Disaster recovery</h3>
+<h3 id="softraidDR">14.18.4 - Disaster recovery</h3>
 
 This is the section you want to skip over, but don't.
 This is the reason for RAID -- if disks never failed, you wouldn't add
@@ -2942,7 +2441,7 @@ The steps needed for system recovery can be performed in
 <a href="faq4.html#bsd.rd">install kernel (bsd.rd)</a>.
 
 <p>
-If you plan on practicing softraid recovery (and we HIGHLY suggest you
+If you plan on practicing softraid recovery (and we <b>highly</b> suggest you
 do so!), you may find it helpful to zero a drive you remove from the
 array before you attempt to return it to the array.
 Not only does this more accurately simulate replacing the drive with a
@@ -3013,7 +2512,7 @@ However, the boot disk in the machine has to be bootable, and if you
 just made changes in the root partition before doing this, you probably
 want to be sure you didn't boot from your altroot partition by mistake.
 
-<h3 id="softraidNotes">14.20.5 - Softraid notes</h3>
+<h3 id="softraidNotes">14.18.5 - Softraid notes</h3>
 
 <h4>Complications when other sd(4) disks exist</h4>
 
