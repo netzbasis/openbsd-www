@@ -67,89 +67,8 @@ PERFORMANCE OF THIS DOCUMENTATION
 
 <h2 id="confaudio">13.1 - How do I configure my audio device?</h2>
 
-The devices in OpenBSD that are related to audio are: <tt>/dev/audio</tt>,
-<tt>/dev/sound</tt>, <tt>/dev/audioctl</tt> and <tt>/dev/mixer</tt>.
-For a good overview of the audio driver layer, please read the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=audio">audio(4)</a>
-man page.
-
-<p>
 All supported audio drivers are already included in the GENERIC kernel, so
 there is no need for extra configuration or installation of drivers.
-To find out about options for your specific sound chip, you must find out
-which sound chip you have.
-Supported chips may be found on the hardware compatibility page for your
-<a href="../plat.html">platform</a>.
-When you already have OpenBSD running, look for a sound driver in the output
-of the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dmesg">dmesg(8)</a>
-command, and read its man page to find more specific information like options
-and other details about the driver.
-An example of an audio chip in a dmesg output is:
-
-<blockquote><pre>
-auich0 at pci0 dev 31 function 5 "Intel 82801BA AC97" rev 0x04: irq 10, ICH2 AC97
-ac97: codec id 0x41445360 (Analog Devices AD1885)
-ac97: codec features headphone, Analog Devices Phat Stereo
-audio0 at auich0
-</pre></blockquote>
-
-OpenBSD provides two tools for monitoring and configuring audio devices.
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=audioctl">audioctl(1)</a>
-is used for the audio processing parameters, such as encoding, sample rate
-and number of channels, while
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mixerctl">mixerctl(1)</a>
-is used for the mixing parameters such as channel source, gain level and mute.
-
-<p>
-The following command uses
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=audioctl">audioctl(1)</a>
-to display the default processing parameters of an audio device:
-
-<blockquote><pre>
-$ <b>audioctl -f /dev/audio</b>
-</pre></blockquote>
-
-Note that <tt>-f /dev/audio</tt> was used explicitly.
-Opening <tt>/dev/audio</tt> causes the audio device to reset to the default
-parameters, which is what we wanted to see.
-
-<p>
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=audioctl">audioctl(1)</a>
-is also quite useful for exploring the capabilities of an audio device.
-For example, to see if the device supports some common sample rates, you
-could simply try setting the playback rate:
-
-<blockquote><pre>
-$ <b>audioctl play.rate=48000</b>
-play.rate: -> 48000
-$ <b>audioctl play.rate=44100</b>
-play.rate: -> 44100
-$ <b>audioctl play.rate=22050</b>
-audioctl: set failed: Invalid argument
-$ <b>audioctl play.rate=8000</b>
-audioctl: set failed: Invalid argument
-</pre></blockquote>
-
-This device supports 48000 and 44100 Hz playback rates, but not 22050 or 8000.
-Note that if a sample rate is not supported, there is not always an error
-message, but the returned sample rate is not the one that was desired.
-
-<blockquote><pre>
-$ <b>audioctl play.rate=48000</b>
-play.rate: -> 48000
-$ <b>audioctl play.rate=44100</b>
-play.rate: -> 48000
-$ <b>audioctl play.rate=22050</b>
-play.rate: -> 48000
-$ <b>audioctl play.rate=8000</b>
-play.rate: -> 48000
-</pre></blockquote>
-
-This device supports 48000 Hz playback only.
-
-<p>
-Audio hardware is usually capable of at least some minimal mixing.
 Running
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=mixerctl">mixerctl(1)</a>
 with no arguments will list the device's mixer controls and current settings.
@@ -169,17 +88,13 @@ There are a few controls that are common to many devices:
 
 <ul>
 <li><tt>outputs.master</tt> controls the playback output level
-<li><tt>inputs.dac</tt> controls the level from the DAC (digital to
-analog converter), used when playing an audio file
 <li><tt>record.source</tt> controls what inputs are mixed into the
 ADC (analog to digital converter), used when recording
-<li><tt>record.volume</tt> or <tt>record.record</tt> controls the input
+<li><tt>record.volume</tt> controls the input
 level of the ADC
 </ul>
 
 The controls of an audio device may be labeled differently.
-For instance, there might not be an <tt>outputs.master</tt> as above,
-but there is an <tt>outputs.outputs</tt> which does the same thing.
 Usually the controls have a meaningful label, but sometimes one must simply
 try different settings to see what effect each control has.
 
@@ -202,7 +117,7 @@ outputs.master: 255,255 -> 207,207
 </pre></blockquote>
 
 Notice how the value becomes 207.
-The reason for this is that this audio device has an AC'97 codec, which uses
+The reason for this is that this audio device uses
 only 5 bits for volume control, leading to only 32 possible values.
 Other hardware could have different resolution.
 
@@ -228,163 +143,22 @@ outputs.headphones.mute=off
 
 <h2 id="playaudio">13.2 - Playing different kinds of audio</h2>
 
-<h3>Digitized audio</h3>
-
-<h4>Lossless audio formats (AU, PCM, WAV, FLAC, TTA)</h4>
-
-Some of the lossless audio formats may be played without the need for third
-party software, provided they contain the uncompressed digital samples in
-chunks of bytes.
-These formats include Sun audio (AU), raw PCM files (without headers), and
-RIFF WAV.
-
 <p>
 OpenBSD comes with
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=aucat">aucat(1)</a>,
-a program for recording and playing uncompressed audio.
+a program for recording and playing WAV, AIFF and AU files.
 The following example will play a WAV file.
 
 <blockquote><pre>
 $ <b>aucat -i filename.wav</b>
 </pre></blockquote>
 
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=aucat">aucat(1)</a>
-supports both headerless and WAV audio files with the <tt>-i</tt> option.
-aucat also plays Sun audio files where the audio data is encoded
-as 8 kHz monaural mulaw, which is the most common encoding for this
-type of audio file.
-
 <p>
-It is also possible to play uncompressed audio data by passing it
-directly to the audio device.
-To do this, you need to know its main parameters: encoding
-type, number of channels, sample rate, bits per sample.
-If you don't know this, you might find out with the
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=file">file(1)</a>
-utility:
+Other audio formats are handled by audio ports.
 
-<blockquote><pre>
-$ <b>file music.au</b>
-music.au:  Sun/NeXT audio data: 16-bit linear PCM, stereo, 44100 Hz
-$ <b>file music.wav</b>
-music.wav: Microsoft RIFF, WAVE audio data, 16 bit, stereo 44100 Hz
-</pre></blockquote>
-
-The only remaining things to know about these example files is that they
-use little-endian byte ordering and signed linear quantization.
-You could figure this out by reading the header with
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=hexdump">hexdump(1)</a>.
-If you are using a headerless (raw) file, there is no way to know the
-parameters beforehand.
-Set the following parameters accordingly using
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=audioctl">audioctl(1)</a>.
-
-<blockquote><pre>
-play.encoding=slinear_le
-play.rate=44100
-play.channels=2
-play.precision=16
-</pre></blockquote>
-
-Next, pass the audio file to the sound device:
-
-<blockquote><pre>
-$ <b>cat music.au > /dev/sound</b>
-</pre></blockquote>
-
-If you applied the correct settings, you should be hearing what you expected.
-
-<p>
-Note: Always use <tt>/dev/sound</tt>, not <tt>/dev/audio</tt>, if you want
-the settings you applied with audioctl to stay in place.
-
-<p>
-There are, of course, other utilities you can use to play these files.
-
-<p>
-Apart from the above, there are audio formats which use lossless data
-compression.
-Examples are the Free Lossless Audio Codec (FLAC) and TTA.
-The FLAC implementation has been ported to OpenBSD and may be found under
-<tt>audio/flac</tt> in packages and ports.
-
-<h4>Audio formats using lossy compression (Ogg Vorbis, MP3, WMA, AAC)</h4>
-
-Lossy compression methods are often used for audio or other media files.
-The idea is that an amount of data is thrown away during compression, but
-in such a way that the compressed result is still very usable and has a
-"good enough" quality to be played.
-The advantage is that these techniques enable much higher compression ratios,
-resulting in reduced file sizes and bandwidth requirements.
-
-<p>
-A good example is the free, open and unpatented
-<a href="http://www.vorbis.com/">Ogg Vorbis</a> format.
-To play Ogg Vorbis files, you can use the ogg123 utility, which is bundled
-in the <tt>audio/vorbis-tools</tt> package.
-
-<blockquote><pre>
-$ <b>ogg123 music.ogg</b>
-
-Audio Device:   Sun audio driver output
-
-Playing: music.ogg
-Ogg Vorbis stream: 2 channel, 44100 Hz
-Time: 00:02.95 [02:21.45] of 02:24.40  (133.1 kbps)  Output Buffer  87.5%
-</pre></blockquote>
-
-Of course, Ogg Vorbis plugins exist for many other audio software.
-
-<p>
-Another example is the very popular MPEG-1 Audio Layer 3 (MP3) encoding,
-which has, however, its share of licensing and patent issues.
-Many tools can play MP3 files; just have a look through the <tt>audio</tt>
-section of the packages and ports system and pick one you like.
-
-<p>
-How about the proprietary Windows Media Audio (WMA) format?
-Files of this type can be played using <tt>x11/mplayer</tt> which uses the
-<a href="http://ffmpeg.sourceforge.net">FFmpeg</a> framework.
-
-<p>
 A good starting point to learn more about different audio file formats is
 this Wikipedia article:
 <a href="http://en.wikipedia.org/wiki/Audio_file_format">Audio file formats</a>.
-
-<h3>Synthesized sound</h3>
-
-<h4>MIDI</h4>
-
-The Musical Instrument Digital Interface (MIDI) protocol, is handled
-by <a href="#midi">MIDI devices</a>.
-If you don't have a MIDI synthesizer, but you wish to play a standard
-MIDI file (SMF), you can use software to render MIDI data, generating
-audio files.
-By default, the <tt>audio/timidity</tt> port renders MIDI files and play
-them on the audio device:
-
-<blockquote><pre>
-$ <b>timidity file.mid</b>
-</pre></blockquote>
-
-<h4>MOD</h4>
-
-A Soundtracker module is a binary format that mixes audio samples
-with sequencing orders, making it possible to play rather long pieces
-of digital music with reasonably good quality.
-
-<p>
-The easiest way to play your favorite MOD files on OpenBSD is probably to
-use a player from packages and ports that supports it.
-
-<p>
-You will also find a number of so-called "trackers" in the <tt>audio</tt>
-section of the packages and ports collection, e.g. tracker, soundtracker.
-With these trackers you can not only play but also generate your own modules.
-Note, however, that not every tracker format is supported by the tools in
-the ports tree.
-You are always welcome to <a href="ports/index.html">submit a port</a>
-of your favorite tracker software.
 
 <h2 id="playCD">13.3 - How can I play audio CDs in OpenBSD?</h2>
 
@@ -446,7 +220,6 @@ Just have a look in the <tt>audio</tt> section.
 
 <h2 id="recordaudio">13.4 - Can I use OpenBSD to record audio samples?</h2>
 
-Yes, most devices support recording.
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=aucat">aucat(1)</a>
 comes with OpenBSD and can be used for recording.
 
@@ -494,41 +267,6 @@ However, pre-amplifying can also be quite loud on other systems.
 <h2 id="audioserver">13.5 - How do I set up an audio server?</h2>
 
 <!-- This section Copyright (c) 2009 Alexandre Ratchov -->
-
-<h3>What's the sndiod(8) audio server?</h3>
-
-The
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sndiod">sndiod(8)</a>
-daemon is an intermediate layer between audio or MIDI programs and the hardware.
-It performs the necessary audio processing to allow any program to work on
-any supported hardware.
-It exposes at least one sub-device that any number of audio programs can
-connect to and use as if it were audio hardware.
-During playback, sndiod receives audio data concurrently from all programs,
-mixes it and sends the result to the hardware device.
-Similarly, during recording it duplicates audio data recorded from the
-device and sends it to all programs.
-
-<p>
-By default, it accepts connections from programs running on the same
-system only.
-It initializes only when programs are using its services, thus consuming
-a negligible amount of system resources.
-Systems with no audio hardware can use sndiod(8) to keep hot-pluggable
-devices usable by default at virtually no cost.
-
-<h3>Do I need an audio server?</h3>
-
-If applications you use are compatible with your hardware and you don't plan
-to run multiple applications concurrently, then you don't strictly need an
-audio server.
-sndiod(8) is started by default at boot time.
-There is no more reason to disable sndiod(8) on a system with no audio
-hardware than there is to disable getty(8) on a headless system.
-
-<p>
-Note that sndiod can be bypassed by using <b>rsnd/0</b> as audio device
-instead of the default one.
 
 <h3>What latency do I need?</h3>
 
@@ -638,49 +376,6 @@ See <a href="#confaudio">section 13.1</a> for configuring the mixer.
 Please unmute <b>all</b> inputs and outputs before reporting a problem.
 
 <p>
-If sound is distorted, it could be that your sound card only supports
-a single or limited set of sample rates or encodings.
-See <a href="#confaudio">section 13.1</a> for examples of determining what
-parameters your audio device supports.
-
-<p>
-If your device only supports unusual encodings or only one or a few
-sample rates and applications you use do not perform the necessary
-format conversions, consider using an audio server.
-See <a href="#audioserver">section 13.5</a>.
-
-<p>
-If you are still experiencing trouble, here are some things to consider:
-
-<ul>
-<li>Some old ISA cards have particular quirks:
-  <ul>
-  <li>Some need to be configured with a different I/O address and IRQ value
-  to avoid conflicts with other hardware.
-  You can easily try different combinations using the
-  <a href="faq5.html#BootConfig">User Kernel Configuration (UKC)</a>.
-  <li>It is possible that a less than optimal driver attaches to the sound
-  device, and that you can get better results using another driver.
-  This is not the easiest thing to spot, but take a closer look at your
-  <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dmesg">dmesg(8)</a>
-  output, and find the lines where audio drivers attach.
-  If you see more than one sound driver attaching (or trying to), test
-  them one at a time by disabling some and leaving one enabled using the
-  <a href="faq5.html#BootConfig">User Kernel Configuration (UKC)</a>.
-  </ul>
-
-<li>Find information about your sound device.
-Use the documentation, or use an internet search engine to find its
-specifications.
-For
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ac97">ac97(4)</a>
-and
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=azalia">azalia(4)</a>
-devices, look for documentation for both the controller and the codec.
-They may actually help you find the source of the problem.
-</ul>
-
-<p>
 If you believe your device should be working, but for whatever reason isn't,
 then it's time for a little debugging.
 The following steps can determine if data is being processed by the DAC.
@@ -688,17 +383,14 @@ The following steps can determine if data is being processed by the DAC.
 <blockquote><pre>
 $ <b>cat > /dev/audio < /dev/zero &amp; </b>
 [1] 9926
-$ <b>audioctl play.{seek,samples,errors}</b>
-play.seek=48000
-play.samples=3312000
+$ <b>audioctl play.{bytes,errors}</b>
+play.bytes=3312000
 play.errors=0
-$ <b>audioctl play.{seek,samples,errors}</b>
-play.seek=57600
-play.samples=7065600
+$ <b>audioctl play.{bytes,errors}</b>
+play.bytes=7065600
 play.errors=0
-$ <b>audioctl play.{seek,samples,errors}</b>
-play.seek=48000
-play.samples=9379200
+$ <b>audioctl play.{bytes,errors}</b>
+play.bytes=9379200
 play.errors=0
 $ <b>kill %1</b>
 $ <b>fg %1</b>
