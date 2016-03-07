@@ -91,7 +91,7 @@ to 5.9.
     <li>The <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=oce">oce(4)</a>
         driver now processes received packets without the kernel lock held.
     <li>RTL8168H/RTL8111H support has been added to
-        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=re&amp;sektion=4">re(4)</a>.
+        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=re&amp;sec=4">re(4)</a>.
     <li>Initial IEEE 802.11n support in the
         <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=iwm">iwm(4)</a>
         and <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=iwn">iwn(4)</a>
@@ -149,12 +149,13 @@ to 5.9.
 <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pledge">pledge(2)</a>
     support integrated:
     <ul>
-    <li>tame(2) system call renamed to pledge(2).
-    <li>Many behaviours/semantics extended and refined.
-    <li>453 out of 707 base system binaries adapted to use pledge.
-    <li>14 ports adapted to use pledge (some decompression tools, mutt,
-	some pdf tools, chromium/iridium, and the i3 window manager).
-    <li>Several bugs exposed by pledge(2) have been corrected, for example in
+    <li>The tame(2) system call was renamed to pledge(2).
+        Behavior and semantics were extended and refined.
+    <li>453 out of 707 base system binaries were adapted to use pledge.
+    <li>14 ports now use pledge(2): some decompression tools, mutt,
+        some pdf tools, chromium/iridium, and the i3 window manager.
+    <li>Various bugs exposed by pledge(2) were corrected.
+        For example in
         <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/bgpd/bgpd.c?rev=1.181&amp;content-type=text/x-cvsweb-markup">
             bgpd(8)</a>,
         <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/sbin/iked/config.c?rev=1.40&amp;content-type=text/x-cvsweb-markup">
@@ -165,37 +166,65 @@ to 5.9.
             ntpd(8)</a>,
         and <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/syslogd/syslogd.c?rev=1.200&amp;content-type=text/x-cvsweb-markup">
             syslogd(8)</a>.
-    <li>Several misguided "features" have been removed, such as
-        <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libc/asr/asr.c?rev=1.50&amp;content-type=text/x-cvsweb-markup">
-            support for HOSTALIASES from the resolver</a>,
-        <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libc/asr/asr.c?rev=1.49&amp;content-type=text/x-cvsweb-markup">
-            support for "lookup yp" in /etc/resolv.conf</a>,
-        <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/gnu/usr.bin/binutils-2.17/binutils/rename.c?rev=1.2&amp;content-type=text/x-cvsweb-markup">
-            setuid-preserving code in binutils tools</a> or
-        <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/patch/ed.c?rev=1.1&amp;content-type=text/x-cvsweb-markup">
-            ed-style diffs via proc/exec in patch(1)</a>.
-    <li>A somewhat intensive audit of userland program so that they could be
-        properly annotated with pledge(2) was done, resulting in some design
-        changes such as in
-        <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/rdate/rdate.c?rev=1.33&amp;content-type=text/x-cvsweb-markup">
-            rdate(1)</a>,
-        <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/sndiod/sndiod.c?rev=1.18&amp;content-type=text/x-cvsweb-markup">
-            sndiod(8)</a>
-        or the introduction of <tt>SOCK_DNS</tt>
-        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=socket">
-            socket(2)</a>
-        flag that makes an <tt>SS_DNS</tt> tagged socket conceptually different
-        from a plain socket.
-    <li>It also has been used to constrain programs to a more limited POSIX
-        subset, such as some
+    <li>Several misfeatures were removed, such as:
+        <ul>
+            <li><a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libc/asr/asr.c?rev=1.50&amp;content-type=text/x-cvsweb-markup">
+                    support for HOSTALIASES</a>
+                in the
+                <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=asr_run">
+                    resolver</a>.
+            <li><a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libc/asr/asr.c?rev=1.49&amp;content-type=text/x-cvsweb-markup">
+                    support for <tt>lookup yp</tt></a>
+                in
+                <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=resolv.conf">
+                    resolv.conf(5)</a>.
+            <li><a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/gnu/usr.bin/binutils-2.17/binutils/rename.c?rev=1.2&amp;content-type=text/x-cvsweb-markup">
+                    setuid-preserving code</a>
+                in tools from binutils.
+            <li>handling of
+                <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/patch/ed.c?rev=1.1&amp;content-type=text/x-cvsweb-markup">
+                    ed-style diffs</a> via proc/exec in
+                <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=patch">
+                    patch(1)</a>.
+        </ul>
+    <li>Userland programs were audited so that they could be properly annotated
+        with pledge(2).
+        This resulted in design changes such as
+        <ul>
+            <li>
+                addition of
+                <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/rdate/rdate.c?rev=1.33&amp;content-type=text/x-cvsweb-markup">
+                    privilege separation</a> to
+                <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=rdate">
+                    rdate(8)</a>,
+            <li>
+                addition of
+                <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/sndiod/sndiod.c?rev=1.18&amp;content-type=text/x-cvsweb-markup">
+                    privilege separation</a> to
+                <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=sndiod">
+                    sndiod(8)</a>,
+            <li>or the introduction of the <tt>SOCK_DNS</tt>
+                <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=socket">
+                    socket(2)</a>
+                flag that makes an <tt>SS_DNS</tt> tagged socket conceptually different
+                from a plain socket.
+        </ul>
+    <li>pledge(2) is also used to constrain programs that handle untrusted data
+        to a very limited subset of POSIX.
+        For example,
+        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=strings">
+            strings(1)</a>
+        or
+        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=objdump">
+            objdump(1)</a>
+        from the
         <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/gnu/usr.bin/binutils-2.17/binutils/objdump.c?rev=1.2&amp;content-type=text/x-cvsweb-markup">
             binutils</a>
-        tools that handle untrusted data
-        (<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=strings">strings(1)</a>,
-        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=objdump">objdump(1)</a>, ...),
-        or the RSA-privsep process in
+        or the
         <a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.sbin/smtpd/ca.c?rev=1.15&amp;content-type=text/x-cvsweb-markup">
-            smtpd(1)</a>.
+            RSA-privsep process</a> in
+        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=smtpd">
+            smtpd(8)</a>.
     </ul>
 <p>
 
@@ -225,7 +254,7 @@ to 5.9.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=pflow">pflow(4)</a>
         now supports IPv6 for transport.
     <li>Several interoperability issues in
-        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=iked">iked(4)</a>
+        <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=iked">iked(8)</a>
         have been fixed, including EAP auth with OS X El Capitan.
     <li>...
     </ul>
@@ -279,7 +308,7 @@ to 5.9.
         bootp-lease-time options.
     <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=dhcpd">dhcpd(8)</a>
         was pledged.
-    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tcpdump">tcpdump(1)</a>
+    <li><a href="http://www.openbsd.org/cgi-bin/man.cgi?query=tcpdump">tcpdump(8)</a>
         now displays more information about IEEE 802.11 frames when run with
         the -y IEEE802_11_RADIO and -v options.
     <li>...
@@ -1127,21 +1156,21 @@ src.tar.gz contains a source archive starting at /usr/src.  This file
 contains everything you need except for the kernel sources, which are
 in a separate archive.  To extract:
 <p>
-<ul><pre>
-# <strong>mkdir -p /usr/src</strong>
-# <strong>cd /usr/src</strong>
-# <strong>tar xvfz /tmp/src.tar.gz</strong>
-</pre></ul>
+<blockquote><pre>
+# <b>mkdir -p /usr/src</b>
+# <b>cd /usr/src</b>
+# <b>tar xvfz /tmp/src.tar.gz</b>
+</pre></blockquote>
 <p>
 sys.tar.gz contains a source archive starting at /usr/src/sys.
 This file contains all the kernel sources you need to rebuild kernels.
 To extract:
 <p>
-<ul><pre>
-# <strong>mkdir -p /usr/src/sys</strong>
-# <strong>cd /usr/src</strong>
-# <strong>tar xvfz /tmp/sys.tar.gz</strong>
-</pre></ul>
+<blockquote><pre>
+# <b>mkdir -p /usr/src/sys</b>
+# <b>cd /usr/src</b>
+# <b>tar xvfz /tmp/sys.tar.gz</b>
+</pre></blockquote>
 <p>
 Both of these trees are a regular CVS checkout.  Using these trees it
 is possible to get a head-start on using the anoncvs servers as
@@ -1158,10 +1187,10 @@ a fresh checkout of the full OpenBSD source tree.
 <p>
 A ports tree archive is also provided.  To extract:
 <p>
-<ul><pre>
-# <strong>cd /usr</strong>
-# <strong>tar xvfz /tmp/ports.tar.gz</strong>
-</pre></ul>
+<blockquote><pre>
+# <b>cd /usr</b>
+# <b>tar xvfz /tmp/ports.tar.gz</b>
+</pre></blockquote>
 <p>
 Go read the <a href="faq/ports/index.html">ports</a> page
 if you know nothing about ports
@@ -1170,7 +1199,7 @@ Rather, it is a set of notes meant to kickstart the user on the
 OpenBSD ports system.
 <p>
 The <i>ports/</i> directory represents a CVS (see the manpage for
-<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=cvs&amp;sektion=1&amp;arch=i386">
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=cvs">
 cvs(1)</a> if
 you aren't familiar with CVS) checkout of our ports.  As with our complete
 source tree, our ports tree is available via
@@ -1179,10 +1208,10 @@ So, in order to keep up to date with the <i>-stable</i> branch, you must make
 the <i>ports/</i> tree available on a read-write medium and update the tree
 with a command like:
 <p>
-<ul><pre>
-# <strong>cd /usr/ports</strong>
-# <strong>cvs -d anoncvs@server.openbsd.org:/cvs update -Pd -rOPENBSD_5_9</strong>
-</pre></ul>
+<blockquote><pre>
+# <b>cd /usr/ports</b>
+# <b>cvs -d anoncvs@server.openbsd.org:/cvs update -Pd -rOPENBSD_5_9</b>
+</pre></blockquote>
 <p>
 [Of course, you must replace the server name here with a nearby anoncvs
 server.]
