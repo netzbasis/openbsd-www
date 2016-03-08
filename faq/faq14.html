@@ -143,9 +143,14 @@ So, file systems may be identified by identifiers like <tt>sd0a</tt>
 (the <tt>a</tt> partition of the first <tt>sd</tt> device),
 <tt>wd2h</tt> (the <tt>h</tt> partition of the third <tt>wd</tt> device),
 or <tt>sd1c</tt> (the entire second <tt>sd</tt> device).
-The device files would be <tt>/dev/sd0a</tt> for the block device,
-<tt>/dev/rsd0a</tt> would be the device file for the raw (character)
-device.
+The corresponding device files would be <tt>/dev/sd0a</tt> for the block device,
+<tt>/dev/rsd0a</tt> for the raw (character) device.
+Remembering whether a rarely used command needs a block or a character device
+is difficult.
+Therefore, many commands make use of the
+<a href="http://www.openbsd.org/cgi-bin/man.cgi?query=opendev">opendev(3)</a>
+function, which automatically expands <tt>sd0</tt> to <tt>/dev/rsd0c</tt> or
+<tt>wd0a</tt> to <tt>/dev/wd0a</tt>, as appropriate.
 
 <p>
 If you put data on <tt>wd2d</tt>, then later remove <tt>wd1</tt>
@@ -482,7 +487,7 @@ night the entire contents of the root partition will be duplicated to the
 <tt>/altroot</tt> partition.
 
 <p>
-Assuming you want to back up yur root partition to the partition specified
+Assuming you want to back up your root partition to the partition specified
 by the <a href="faq14.html#DUID">DUID</a> <tt>bfb4775bb8397569.a</tt>,
 add the following to <tt>/etc/fstab</tt>
 
@@ -564,7 +569,7 @@ or more than 100% of a filesystem in use, as shown by
 When a filesystem is created with
 <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=newfs">newfs(8)</a>,
 some of the available space is held in reserve from normal users.
-This provides a margin of error when you accidently fill the disk, and
+This provides a margin of error when you accidentally fill the disk, and
 helps keep disk fragmentation to a minimum.
 Default for this is 5% of the disk capacity, so if the root user has
 been carelessly filling the disk, you may see up to 105% of the
@@ -729,7 +734,7 @@ Next, create the mirror with the
 command.
 
 <blockquote><pre>
-# <b>bioctl -c 1 -l /dev/wd0a,/dev/wd1a softraid0</b>
+# <b>bioctl -c 1 -l wd0a,wd1a softraid0</b>
 </pre></blockquote>
 
 Note that if you are creating multiple RAID devices, either on one disk
@@ -753,7 +758,7 @@ sd0: 10244MB, 512 bytes/sec, 20980362 sec total
 
 This shows that we now have a new SCSI bus and a new disk, <tt>sd0</tt>.
 This volume will be automatically detected and assembled from this point
-onwards when the system boots.
+onward when the system boots.
 
 <p>
 Because the new device probably has a lot of garbage where you expect
@@ -844,11 +849,11 @@ No label changes.
 </pre></blockquote>
 
 We'll use the entire the disk, but note that the encrypted device can be
-split up into multiple mountpoints as if it were a regular hard drive.
+split up into multiple mount points as if it were a regular hard drive.
 Now it's time to build the encrypted device on our "a" partition.
 
 <blockquote><pre>
-# <b>bioctl -c C -l /dev/wd0a softraid0</b>
+# <b>bioctl -c C -l wd0a softraid0</b>
 New passphrase:
 Re-type passphrase:
 sd0 at scsibus2 targ 1 lun 0: &lt;OPENBSD, SR CRYPTO, 005&gt; SCSI2 0/direct fixed
@@ -894,7 +899,7 @@ An outline of the steps is as follows:
   <li>Create the desired RAID-type partition with disklabel(8)
   <li>Encrypt the drive (note that the initial creation of the container and
     attaching the container are done with the same bioctl(8) command)
-  <li>Zero the first megabyte of the new psuedo-partition
+  <li>Zero the first megabyte of the new pseudo-partition
   <li>Create a filesystem on the pseudo-device with
   <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=newfs">newfs(8)</a>
   <li>Unlock and
@@ -911,13 +916,13 @@ the USB drive.
 # <b>dd if=/dev/random of=/dev/rsd0c bs=1m</b>
 # <b>fdisk -iy sd0</b>
 # <b>disklabel -E sd0</b> (create an "a" partition, see above for more info)
-# <b>bioctl -c C -l /dev/sd0a softraid0</b>
+# <b>bioctl -c C -l sd0a softraid0</b>
 New passphrase:
 Re-type passphrase:
 softraid0: CRYPTO volume attached as sd1
 # <b>dd if=/dev/zero of=/dev/rsd1c bs=1m count=1</b>
 # <b>disklabel -E sd1</b> (create an "i" partition, see above for more info)
-# <b>newfs /dev/sd1i</b>
+# <b>newfs sd1i</b>
 # <b>mkdir -p /mnt/secretstuff</b>
 # <b>mount /dev/sd0i /mnt/secretstuff</b>
 # <b>mv planstotakeovertheworld.txt /mnt/secretstuff/</b>

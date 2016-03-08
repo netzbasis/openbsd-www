@@ -76,6 +76,279 @@ For changes in other releases, click below:<br>
 <p>
 
 <ul>
+<!-- 2016-02-26 -->
+<li>When doing a lookup in the routing table, account for the fact that L2 entries are always in the first table of a routing domain. This fixes a regression introduced during 5.7 and 5.8.
+<!-- 2016-02-24 -->
+<li>Fix ECMP routing by passing the correct destination address to the hash routine.
+<li>On hppa, hppa64, macppc and sgi, restore validity checks for the disklabels read from disk. This fixes a problem when reading CDROM disklabels.
+<!-- 2016-02-23 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/pkg_add.1">pkg_add(1)</a>, sanitize the environment thru a whitelist. Only pass what is relevant for <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ftp.1">ftp(1)</a> and similar programs.
+<!-- 2016-02-22 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, fix display of pdisk partition sizes.
+<li>In the installer, fix macppc installs to HFS-partitioned disks.
+<li>Ensure the IP header is aligned correctly in the copies of multicast/broadcast packets received by a physical interface with <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/carp.4">carp(4)</a> interfaces on it.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, fix a spurious error message when an incorrect passphrase is entered for keys.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/patch.1">patch(1)</a>, properly handle ed-files which fully replace input file content.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/smtpd.8">smtpd(8)</a>, avoid overriding the user-provided address family for a listener.
+<!-- 2016-02-21 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/eigrpd.8">eigrpd(8)</a>:
+<ul>
+<li>Filter RTM_GET messages which are not from us.
+<li>Make eigrpd(8) work against newer IOS routers.
+<li>Add scope id only for unicast IPv6 packets.
+<li>Skip redistributed routes when updating the FIB.
+</ul>
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/tcpdump.8">tcpdump(8)</a>, show details of beacon country elements in verbose mode only.
+<!-- 2016-02-20 -->
+<li>On i386, fix a boot issue on non-ACPI i386 machines that need X permissions on the BIOS region in the ISA hole.
+<li>On alpha, re-enable OpenGL.
+<li>On alpha, avoid an ICE generated when building mesa with -O2.
+<!-- 2016-02-19 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/azalia.4">azalia(4)</a>, enable snooping on Intel C610.
+<li>In random subsystem, avoid a undefined behaviour when using right shift operation.
+<!-- 2016-02-18 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/em.4">em(4)</a>, add support for the Intel I219 network chip.
+<li>On arm, disable the stack protector when building libstdc++.
+<!-- 2016-02-17 -->
+<li>In ssh, unbreak SSHv1.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/syslogd.8">syslogd(8)</a>, prevent an integer overflow in syslogd when parsing the priority.
+<li>In /etc/ssl/cert.pem, add a few root certificates from Mozilla's cert store.
+<!-- 2016-02-16 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/sshd.8">sshd(8)</a>, make sandboxed privilege separation the default.
+<!-- 2016-02-15 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tar.1">tar(1)</a>, ignore trailing slashes and skip over duplicate slashes in chk_path() to avoid infinite loop when creating intermediate directories.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, add a "Close session" log entry (at loglevel=verbose) to correspond to the existing "Starting session" one.
+<!-- 2016-02-14 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tar.1">tar(1)</a>, fix archiving a 101-character absolute path in ustar format.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/httpd.8">httpd(8)</a>, fix a double free in the patterns code.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/softraid.4">softraid(4)</a>, avoid using uninitialized variables in two corner cases.
+<!-- 2016-02-13 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/smtpd.8">smtpd(8)</a>, add the "listen on socket" <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/smtpd.conf.5">smtpd.conf(5)</a> rule.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwm.4">iwm(4)</a>, initialize net80211 callback pointers at attach time. This fixes a crash.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/makemap.8">makemap(8)</a>, remove support for "dbm".
+<!-- 2016-02-12 -->
+<li>Remove the "GenuineIntel" check from x86 mdrandom(). This enables the use of RDRAND and TSC fallback on CPUs from other vendors, notably AMD.
+<!-- 2016-02-11 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, avoid fatal error for PKCS11 tokens that present empty key IDs (bz#1773).
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>, don't pass QoS "no data" frames to the A-MPDU reordering logic. This avoids major confusion.
+<!-- 2016-02-10 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ipmi.4">ipmi(4)</a>, check the sensor name length more carefully. This avoids a panic on the Dell R210 II.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/sftp.1">sftp(1)</a>, fix a regression where existing destination directories would incorrectly terminate recursive uploads (bz#2528).
+<!-- 2016-02-09 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/wsconsctl.8">wsconsctl(8)</a>, hidms and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/uts.4">uts(4)</a>, permit negative x and y coordinates in mouse.scale.
+<li>On hppa64, make __cpu_simple_lock provide serialisation of the critical section. This makes atomic sequences actually atomic.
+<li>In 5.8, fix a bug in <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/vlan.4">vlan(4)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/carp.4">carp(4)</a> refcounting. This will cause a panic when root does an "ifconfig destroy" of a the parent interface. (5.7 and -current are not affected.)
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>, log frames which fall outside the BlockAack window in <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/dmesg.8">dmesg(8)</a> if the interface debug flag is set.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/pkg_add.1">pkg_add(1)</a>, drop privileges prior to running <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ftp.1">ftp(1)</a>.
+<!-- 2016-02-08 -->
+<li>On hppa, make __cpu_simple_lock provide serialisation of the critical section. This makes atomic sequences actually atomic.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, turn off more old crypto: hmac-md5, ripemd, truncated HMACs, RC4 and blowfish.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, do not attempt to percent-expand an already-canonicalised addresses. This avoids unnecessary failures when attempting to connect to scoped IPv6 addresses.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/hexdump.1">hexdump(1)</a>, fix a bug that caused nothing to be skipped when skipping exactly the number of bytes present in a regular file was requested.
+<li>In 5.8, fix a kernel crash when root creates, changes or destroys <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/carp.4">carp(4)</a> interfaces multiple times with <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ifconfig.8">ifconfig(8)</a>. (5.7 and -current are not affected.)
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, make application of rekey limits more accurate (related to bz#2521).
+<!-- 2016-02-07 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>:
+<ul>
+<li>Work around buggy APs which occasionally emit sequence numbers much higher than the current 11n BlockAck window.
+<li>Stop requiring a BlockAck session timeout. Just use it if the AP is asking for it.
+</ul>
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwn.4">iwn(4)</a>, fix off-by-one in a loop termination condition.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/dhcpd.8">dhcpd(8)</a>, avoid a use-after-free when parsing address ranges from a config.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/vmd.8">vmd(8)</a>, avoid a double free in an error path.
+<!-- 2016-02-06 -->
+<li>Update to xkeyboard-config 2.17.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pchtemp.4">pchtemp(4)</a>, add support for the Intel 9 Series.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/radeondrm.4">radeondrm(4)</a>, enable the code that reads the BIOS from the ACPI VFCT table on platforms with ACPI.
+<!-- 2016-02-05 -->
+<li>Fix <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwn.4">iwn(4)</a> CCMP replay detection so it does not drop out-of-order A-MPDU subframes. This helps 11n mode with WPA.
+<li>In the msdosfs code, guard against integer overflow when checking whether writing to a file stays within the maximum file size.
+<li>Make <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/write.1">write(1)</a> explicitly ASCII only. This prevents sending of potentially harmful bytes to terminals that do not support UTF-8.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwm.4">iwm(4)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwn.4">iwn(4)</a>, set max A-MPDU length to 64k instead of 4k and tell the firmware about A-MPDU spacing.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>, store ADDBA request and response parameters in the block ack record. Now it is possible keep track of the ACK policy and echo it back to the AP. This fixes Apple Airport APs.
+<li>On mips64, re-enable OpenGL.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ssh.1">ssh(1)</a>, fix a problem where the mux master would sporadically fail to notice that the client had exited.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tmux.1">tmux(1)</a>, do not wrap cursor at start or end of history.
+<li>Use <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man2/pledge.2">pledge(2)</a> in <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/talk.1">talk(1)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/talkd.8">talkd(8)</a>.
+<!-- 2016-02-04 -->
+<li>On amd64 and i386, add /dev/ipmi0.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ipmi.4">ipmi(4)</a>, implement FreeBSD-compatible IOCTL to access BMC.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwn.4">iwn(4)</a>:
+<ul>
+<li>Restore the CCMP key to firmware after HT protection setting updates. This unbreaks WPA in 11n mode.
+<li>Pass 802.11 control frames in monitor mode.
+</ul>
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>, restore the BlockAck session timer.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/smtpd.8">smtpd(8)</a>, when deleting a message, remove associated envelopes from the cache.
+<li>In the ext2fs and ufs code, prevent a signed overflow.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/tcpdump.8">tcpdump(8)</a>, fix an infinite loop when printing a country element in a management frame in case we hit channel Tx power limits that cannot be pretty-printed.
+<li>In efiboot, work around peculiarities of (buggy) UEFI implementations: always call SetMode(), but don't report an error if the current mode is the same as the desired mode.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/radeondrm.4">radeondrm(4)</a>, prevent a panic when the ROM size is 0.
+<!-- 2016-02-03 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/sd.4">sd(4)</a>, avoid a possible use-after-free.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/pkg_add.1">pkg_add(1)</a>, update the font cache after removing packages with @fontdir markers.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/tcpdump.8">tcpdump(8)</a>, show 802.11 control frames.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/dhclient.8">dhclient(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/dhcpd.8">dhcpd(8)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/dhcrelay.8">dhcrelay(8)</a>, be very careful accepting packets via <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/bpf.4">bpf(4)</a>.
+<li>Enable <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/amd64/hostctl.8">hostctl(8)</a> on amd64 and i386.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tail.1">tail(1)</a>, fix off-by-one in argument parsing.
+<li>Prevent <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/amd64/efifb.4">efifb(4/amd64)</a> from attaching if we are the console.
+<!-- 2016-02-02 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/smtpd.8">smtpd(8)</a>, fixe a mismatch between DSN's subject line and its content.
+<li>On amd64 and i386, correct signal delivery on systems where the AVX leaf is disabled.
+<li>On amd64 RAMDISK_CD, enable <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pvbus.4">pvbus(4)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xen.4">xen(4)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xspd.4">xspd(4)</a>.
+<li>In libxcb, make sure the socket send buffer is at least 64KB. This should speed up applications that send images to the X server, like Firefox.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xen.4">xen(4)</a> and xenstore(4), make a few reliability improvements in the power management interface.
+<li>Stop setting the process title in <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/bgpd.8">bgpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/dvmrpd.8">dvmrpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/eigrpd.8">eigrpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/hostapd.8">hostapd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/httpd.8">httpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ldpd.8">ldpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/npppd.8">npppd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ntpd.8">ntpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ospf6d.8">ospf6d(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ospfd.8">ospfd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/relayd.8">relayd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ripd.8">ripd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/snmpd.8">snmpd(8)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/smtpd.8">smtpd(8)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/vmd.8">vmd(8)</a>. This makes it possible to manage multiple copies of a daemon using the normal infrastructure by symlinking rc.d scripts to a new name.
+<li>Use <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man2/pledge.2">pledge(2)</a> in <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>.
+<li>Implement "<a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ldapctl.8">ldapctl</a> -r datadir".
+<!-- 2016-02-01 -->
+<li>On armv7, add A20 support to sxirtc.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/armv7/sxitimer.4">sxitimer(4/armv7)</a>, remove A20 support; agtimer is now used instead.
+<li>Move to -release mode.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ldapd.8">ldapd(8)</a>, add -r to specify an alternative directory to store/read the database.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>, stop requiring a BlockAck session timeout, but still honour the timeout if the AP requests it.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/tcpdump.8">tcpdump(8)</a>, show 802.11 QoS frames properly.
+<!-- 2016-01-31 -->
+<li>On armv7, fix the encoding of AP bits for large page second-level short-descriptors.
+<li>Revamp /etc/ssl/cert.pem certificate information formatting and sort certificates in a more useful way.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, set lblock_start and lblocks to 0 in free space entries like Apple does.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tmux.1">tmux(1)</a>:
+<ul>
+<li>Fix new-session with -t after command flags changes.
+<li>Support negative trim values in formats to trim from the end.
+<li>Add RGB escape sequences for capture-pane -e.
+</ul>
+<!-- 2016-01-30 -->
+<li>On armv7:
+<ul>
+<li>Allow the kernel to boot from a u-boot without the OLD_SUNXI_KERNEL_COMPAT option.
+<li>Use ARM Generic Timer (agtimer) instead of <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/armv7/sxitimer.4">sxitimer(4/armv7)</a> on Allwinner sun7i/A20.
+</ul>
+<li>Hook OPENBSD-RELAYD-MIB into OPENBSD-SNMPD-CONF.
+<li>Sync libedit with NetBSD.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/pkg_add.1">pkg_add(1)</a>, extend URL abbreviation support from <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/pkg.conf.5">pkg.conf(5)</a> so that every URL can be abbreviated.
+<!-- 2016-01-29 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ping.8">ping(8)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ping6.8">ping6(8)</a>, fix a regression in -E.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xen.4">xen(4)</a>, add support for the "control/shutdown" power management facility. At the moment only "poweroff" and "reboot" actions are supported.
+<li>In xenstore(4), add support for XS_WATCH, a XenStore notification facility.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>:
+<ul>
+<li>Tweak printing of partitions: always show the pblock and lblock info in the "p" and "P" commands, respectively.
+<li>Warn of partitions extending past the end of the media.
+<li>Support only base 10 for partition IDs.
+</ul>
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/aucat.1">aucat(1)</a>, fix unsupported parameters not being detected if compiled in 24-bit mode and sndiod is not running.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, improve conformance to OS X's behaviour.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tmux.1">tmux(1)</a>, add support for RGB colour.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/audioctl.1">audioctl(1)</a>, display play and record parameters that are not independent as a single variable.
+<!-- 2016-01-28 -->
+<li>Install the <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/relayd.8">relayd(8)</a> SNMP MIB.
+<li>In ssh, allow RekeyLimits in excess of 4G up to 2**63 bits (part of bz#2521).
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ftp.1">ftp(1)</a>, fix a crash when a server sends a non-standard newline.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/daily.8">daily(8)</a>, run "rcctl ls faulty".
+<!-- 2016-01-27 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, make "r" (reorder, a.k.a. swap) command work with any two existing partitions. Do not allow partition 1 to be moved.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/pkg.conf.5">pkg.conf(5)</a>, allow installpath to be set to a bare hostname which implies "http://hostname/pub/OpenBSD/[snapshots-or-version]/packages/[arch]".
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>:
+<ul>
+<li>Check block 0 signature, physical block size and physical block count when reading partition map.
+<li>Check for unmapped physical blocks and overlapping partitions when reading partition map.
+<li>Remove "v" command.
+</ul>
+<li>Add <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/amd64/hostctl.8">hostctl(8)</a>, a tool to access key-value stores on the host, currently for hypervisor information stores on <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pvbus.4">pvbus(4)</a>. It is not enabled yet.
+<li>On amd64 and i386, add /dev/pvbus0.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pvbus.4">pvbus(4)</a>, add a key-value interface that allows to get or set values in the underlying information store of the host from the OpenBSD-VM's userspace.
+<li>In libpthread, replace the malloc spinlock with a mutex. This makes ports like Firefox significantly more usable.
+<!-- 2016-01-26 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/mg.1">mg(1)</a>, ensure the backup file has the same mtime as the original file.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a>, rewrite tx path to use flat transmit ring without fragment chains. This gives a transmit performance improvement and taxes grant table references much less than before.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xen.4">xen(4)</a>, do not take a grant table entry mutex in xen_grant_table_{enter,remove} since it is unnecessary. This provides a performance improvement as well.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man3/malloc.3">malloc(3)</a>, fix a possible crash when dumping malloc stats.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xen.4">xen(4)</a>, ensure use of locked atomic operations even on the SP kernel.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man3/fputwc.3">fputwc(3)</a>, when encoding fails set the error indicator as required by POSIX and as done by FreeBSD, SunOS 10/11 and glibc.
+<!-- 2016-01-25 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/vr.4">vr(4)</a>, fix an mbuf leak on encapsulation failure.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tail.1">tail(1)</a>, fix a crash.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/pf.4">pf(4)</a>, fix a pf_state_key leak.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee8022.9">ieee80211(9)</a>, honour ERP protection on 2 GHz channels in 11n mode.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/amd64/vmm.4">vmm(4/amd64)</a>, zero the buffer to be copied out to userland to avoid information leak.
+<li>In 5.8, fix a kernel crash when root creates, changes or destroys <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/vlan.4">vlan(4)</a> interfaces multiple times with <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ifconfig.8">ifconfig(8)</a>. (5.7 and -current are not affected.)
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee8022.9">ieee80211(9)</a>, <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwm.4">iwm(4)</a> and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/iwn.4">iwn(4)</a>, keep track of HT protection settings in beacons and have 11n-capable drivers update hardware configuration accordingly.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a>, revert the minimum number of rx ring slots back to 32.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/vmx.4">vmx(4)</a>, do not send the mbuf to <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/bpf.4">bpf(4)</a> after passing it to the hardware. This could have resulted in a page fault.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/snmpd.8">snmpd(8)</a>, avoid a potential double free.
+<!-- 2016-01-24 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/etherip.4">etherip(4)</a>, do not return an uninitialised value for the SIOCGLIFPHYRTABLE case.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ypldap.8">ypldap(8)</a>:
+<ul>
+<li>Implement the "master" request.
+<li>Set argument encode / result decode call backs for "maplist".
+<li>Set argument encode / result decode callbacks for "all".
+</ul>
+<!-- 2016-01-23 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ld.so.1">ld.so(1)</a>, make a nodelete object lock down the entire load group, not just the specific object.
+<li>Update to Mesa 11.0.9.
+<li>On arm and armv7, switch to SVC mode when machines with virtualisation extensions boot into a HYP processor mode that has different memory management and register behaviour among other things. This prevents an early crash.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, avoid double prompt after creating default map on startup.
+<!-- 2016-01-22 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/dwiic.4">dwiic(4)</a>, avoid reading uninitialised memory when expected value types are not present.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a>, set up interface features based on capabilities provided by the backend.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a>, set minimum number of slots on the receive ring to 18 as most versions of Xen require at least this number of slots.
+<li>Always check destination MAC address of received unicast packets, not only when in promiscuous mode. This is necessary for NICs like <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/virtio.4">virtio(4)</a>.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/vxlan.4">vxlan(4)</a>, drop packets whose VNI flag is not set and VNI is not zero.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/etherip.4">etherip(4)</a>, support tunnel VRF.
+<!-- 2016-01-21 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>:
+<ul>
+<li>Remove "expert" mode and the -d flag. Instead make all commands available all the time.
+<li>Change the "P" command: it now shows map data structures.
+<li>Stop accepting uppercase aliases for commands documented as lower case.
+<li>Eliminate the 'written' field and just use the 'changed' field to mediate when it is appropriate to ask whether changes should be discarded.
+<li>Repair creation of initial partition table on a blank disk.
+</ul>
+<li>In ieee80211 stack, fix the timeout value sent in ADDBA request and response frames.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/socppc/socpcic.4">socpcic(4/socppc)</a>, avoid use of an uninitialised variable.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/ieee80211.9">ieee80211(9)</a>, fix the timeout value sent in ADDBA request and response frames.
+<!-- 2016-01-20 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, do not silently open a disk read-only when read/write access was requested.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/calendar.1">calendar(1)</a>, add a calendar for New Zealand.
+<li>On sparc64, check for disks deeper than 4 levels down in the Open Firmware device tree. This makes <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/softraid.4">softraid(4)</a> boot possible on more sparc64 machines.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a>, do not bump output errors when when tx ring is full.
+<!-- 2016-01-19 -->
+<li>Add hidmt(4) (a HID-layer driver for multitouch touchpads that conform to the "Windows Precision Touchpad" standard) and <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/imt.4">imt(4)</a> (an i2c-HID driver that sits between <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ihidev.4">ihidev(4)</a> and hidmt(4)).
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ihidev.4">ihidev(4)</a>, add the ability to set and get reports and establish interrupt before probing for devices to handle each report ID.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man6/morse.6">morse(6)</a>, use the &lt;AC&gt; prosign as "@". Support decoding only of other prosigns, including &lt;SK&gt; as we were previously using for "@".
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/unbound.8">unbound(8)</a>, suppress "cannot assign requested address" log messages unless verbosity is high.
+<li>On sparc, fix a race causing <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man9/hardclock.9">hardclock(9)</a> to be sometimes invoked between the end of cpu_configure() and initclocks().
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xnf.4">xnf(4)</a>:
+<ul>
+<li>Fix a few issues in the transmit path.
+<li>Mask interrupts on boot, masking/unmasking is handled by stop/init.
+</ul>
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, remove the "expert" mode "d"/"D" command.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/mg.1">mg(1)</a> cscope, skip empty entries in $PATH instead of erroneously interpreting them as ".".
+<!-- 2016-01-18 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, remove the "debugging" mode command to examine the Apple_Patches partition contents.
+<li>Add UTF-8 support to <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/colrm.1">colrm(1)</a>.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/xen.4">xen(4)</a>, provide a Xen v3 API compatible fallback for event channel hypercalls.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ls.1">ls(1)</a>, fix a regression (and POSIX violation) introduced with UTF-8 support.
+<li>In xenstore(4), fixup a hang while performing a read operation on XenStore.
+<li>Add UTF-8 support to <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/ul.1">ul(1)</a>.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/sndiod.8">sndiod(8)</a>:
+<ul>
+<li>Load pki keys before daemonising. Passphrase-protected keys require access to stdin.
+<li>Allow time differences between two clock_gettime() calls to be up to 60s without logging a warning.
+</ul>
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man6/morse.6">morse(6)</a>, use distinct codes for left and right parentheses.
+<!-- 2016-01-17 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/dwiic.4">dwiic(4)</a>, fix an off-by-one that could result in read operations not reading the last byte.
+<li>On the amd64 RAMDISK_CD, enable <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man4/ikbd.4">ikbd(4)</a>.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/ldapd.8">ldapd(8)</a>, properly remove unix sockets upon exit of the parent process.
+<!-- 2016-01-16 -->
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/mandoc.1">mandoc(1)</a>, unbreak reading from stdin.
+<li>In <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/macppc/pdisk.8">pdisk(8/macppc)</a>, remove support for 1024- and 2048-byte sector devices.
+<li>On octeon, attach secondary CPUs by coremask. This fixes a crash that happened if the MP kernel was booted with coremask=1.
+<li>On octeon, panic if booting the kernel without CPU 0.
 <!-- 2016-01-15 -->
 <li>Fix two issues in the <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/systat.1">systat(1)</a> state view:
 <ul>
