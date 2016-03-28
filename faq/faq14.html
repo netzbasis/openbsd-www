@@ -11,6 +11,8 @@
 <meta name= "copyright"         content="This document copyright 1998-2016
                                          by OpenBSD.">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../openbsd.css">
 <link rel="canonical" href="http://www.openbsd.org/faq/faq14.html">
 </head>
 
@@ -198,7 +200,7 @@ into OpenBSD filesystem partitions.
 To just view your partition table using fdisk, use:
 
 <blockquote><pre>
-# <b>fdisk sd0</b>
+$ <b>fdisk sd0</b>
 </pre></blockquote>
 
 Which will give an output similar to this:
@@ -220,8 +222,7 @@ We can see the OpenBSD partition (id <tt>A6</tt>) and its size.
 The <tt>*</tt> tells us that the OpenBSD partition is the bootable partition.
 
 <p>
-In the previous example, we just viewed our information.
-In order to edit the partition table use the <tt>-e</tt> flag:
+Edit the partition table with the <tt>-e</tt> flag:
 
 <blockquote><pre>
 # <b>fdisk -e sd0</b>
@@ -517,7 +518,7 @@ supported filesystems</a>
 and related commands can be obtained with
 
 <blockquote><pre>
-# <b>man -k -s 8 mount</b>
+$ <b>man -k -s 8 mount</b>
 </pre></blockquote>
 
 Note that support may be limited to read-only operation.

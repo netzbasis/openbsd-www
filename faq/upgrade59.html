@@ -1,14 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>OpenBSD Upgrade Guide: 5.7 to 5.8</title>
+<title>OpenBSD Upgrade Guide: 5.8 to 5.9</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="description"   content="OpenBSD Upgrade Process for 5.7 -> 5.8">
-<meta name="copyright"     content="This document copyright 2015 by OpenBSD">
+<meta name="description"   content="OpenBSD Upgrade Process for 5.8 -> 5.9">
+<meta name="copyright"     content="This document copyright 2016 by OpenBSD">
+<meta name="viewport"      content="width=device-width, initial-scale=1">
+<link rel="stylesheet"     type="text/css" href="../openbsd.css">
 
 <style type="text/css">
   .hidden  { display: none; }
   .visible { display: block; }
+  tt { white-space: pre; }
+  ul { list-style: none; }
 </style>
 <script type="text/javascript">
 function onload() {
@@ -105,7 +109,7 @@ Final steps:
 
 <h3 id="ConfigChanges">Configuration changes</h3>
 
-<ul style="list-style-type: none">
+<ul>
   <li><b><a href="http://man.openbsd.org/?query=ntpd.conf">ntpd.conf(5)</a>:</b>
     The <tt>rtable</tt> option was removed from <tt>server</tt> and
     <tt>servers</tt>.
@@ -195,16 +199,16 @@ rm -f freetype.h ftadvanc.h ftbbox.h ftbdf.h ftbitmap.h ftbzip2.h \
 
 <h3 id="SpecPkg">Special packages</h3>
 
-<ul style="list-style-type: none">
+<ul>
   <li><b>php-fpm:</b>
     To allow installing multiple versions of php-fpm on the same system,
     the rc script has been renamed to include the version number.
-    If you are using this, modify references to <tt>php_fpm</tt> in
+    Modify references to <tt>php_fpm</tt> in
     <tt>/etc/rc.conf.local</tt> to e.g. <tt>php56_fpm</tt>.
   <p><li><b>gophernicus:</b>
     <tt>in.gophernicus</tt> moved from <tt>/usr/local/sbin/</tt> to
     <tt>/usr/local/libexec</tt>.
-    Please remember to update your <tt>/etc/inetd.conf</tt> accordingly.
+    Update your <tt>/etc/inetd.conf</tt> accordingly.
   <p>
   <li><b>puppetboard:</b>
     The default configuration file (<tt>default_settings.py</tt>) format has
@@ -216,7 +220,7 @@ rm -f freetype.h ftadvanc.h ftbbox.h ftbdf.h ftbitmap.h ftbzip2.h \
     Users are encouraged to use another data encryption method.
     Possible alternatives are:
     softraid(4) crypto, encrypted vnd(4) devices or the security/encfs port.
-    Delete it with <tt># <b>pkg_delete cfs</b></tt>
+    Delete the package with <tt># <b>pkg_delete cfs</b></tt>
   <p>
   <li>
     <b>node modules:</b>
@@ -246,18 +250,21 @@ Show manual upgrade process</a>
 Use the install kernel method if at all possible!</b>
 
 <p>
-Sometimes, one needs to do an upgrade of a machine when one can't easily
-use the normal upgrade process.
-The most common case is when the machine is in a remote location and you
-don't have easy access to the system console.
-One can usually do this by carefully following this process:
+Sometimes, you need to do an upgrade of a machine for which the normal upgrade
+process is not possible.
+The most common case is a machine in a remote location and there is no easy
+access to the system console.
 
-<p>
 <h3>Preparation</h3>
-<ul style="list-style-type: none">
-  <li><b>Place install files in a "good" location.</b>
+
+<ul>
+  <li><b>Place install files in a good location.</b>
     Make sure you have sufficient space!
     Running out of space on a remote upgrade could be...unfortunate.
+    Note that using softdeps can exaggerate the situation as deleted and
+    overwritten files do not release their space immediately.
+    Consider disabling the <tt>softdep</tt> mount option in <tt>/etc/fstab</tt>
+    and rebooting before undertaking a manual upgrade.
     Having at least 200MB free on <tt>/usr</tt> would be recommended.
 
   <p>
@@ -282,10 +289,9 @@ One can usually do this by carefully following this process:
 
   <p>
   <li><b>Install new boot blocks.</b>
-    This should actually be done at the end of any upgrade, but we will
-    assume this has been neglected.
-    Failure to do this may break serial console or other things, depending
-    on your platform.
+    This should actually be done at the end of any upgrade.
+    If this has been neglected, then failure to do this now may break serial
+    console or other things, depending on your platform.
     Use <a href="http://man.openbsd.org/?query=installboot&amp;arch=i386">
     installboot(8)</a>,
     assuming <tt>sd0</tt> is your boot disk:
@@ -297,10 +303,10 @@ One can usually do this by carefully following this process:
 
 <h3>Upgrading manually</h3>
 
-<ul style="list-style-type: none">
+<ul>
   <li><b>Install new kernels.</b>
     The extra steps for copying over the primary kernel are done
-    to ensure that there is always a valid copy of the kernel on the disk.
+    to ensure that there is always a valid kernel on the disk.
     <blockquote><pre>
     <b>cd /usr/rel</b>    # where you put the release files
     <b>ln -f /bsd /obsd && cp bsd.mp /nbsd && mv /nbsd /bsd</b>
@@ -309,9 +315,9 @@ One can usually do this by carefully following this process:
     </pre></blockquote>
 
   <p>
-  <li><b>Save a copy of reboot(8), install new userland applications.</b>
-    Note that we are installing <tt>base59.tgz</tt> last, because the
-    new base system, in particular
+  <li><b>Install new userland.</b>
+    Save a copy of reboot(8), extract and install the release tarballs, reboot.
+    Install <tt>base59.tgz</tt> last, because the new base system, in particular
     <a href="http://man.openbsd.org/?query=tar">tar(1)</a> and
     <a href="http://man.openbsd.org/?query=reboot">reboot(8)</a>,
     will not work with the old kernel.
@@ -330,18 +336,16 @@ One can usually do this by carefully following this process:
     </pre></blockquote>
 
   <p>
-  <li><b>After reboot completes, upgrade <tt>/dev</tt>.</b>
-    The new
+  <li><b>After reboot, upgrade <tt>/dev</tt>.</b>
+    Run
     <a href="http://man.openbsd.org/?query=MAKEDEV&amp;arch=i386">
-    MAKEDEV</a>
-    script was copied to <tt>/dev</tt> by the installation of
-    <tt>base59.tgz</tt>, so you simply need to do the following:
+    MAKEDEV(8)</a>:
     <blockquote><pre>
     <b>cd /dev</b>
     <b>./MAKEDEV all</b>
     </pre></blockquote>
 
-  <li><b>Install the upgraded boot loader.</b>
+  <li><b>Upgrade boot loader.</b>
     Still assuming <tt>sd0</tt> is your boot disk:
     <blockquote><pre>
     <b>installboot -v sd0</b>
@@ -362,9 +366,6 @@ One can usually do this by carefully following this process:
     </pre></blockquote>
 
   <li><b>Finish up.</b>
-    Satisfy yourself that you have a working system, e.g.
-    by rebooting once more and working through
-    <a href="http://man.openbsd.org/?query=afterboot">afterboot(8)</a>.
     Review the console output from boot (using <tt><b>dmesg -s</b></tt>)
     and correct any failures as necessary.
     Proceed by <a href="#RmFiles">removing some files</a> -- don't forget
@@ -387,7 +388,7 @@ Hide manual upgrade process</a>
 <hr>
 <a href="index.html"><img height="24" width="24" src="../images/back.gif" border="0" alt="[back]"></a>
 <br>
-<small>$OpenBSD: upgrade59.html,v 1.10 2016/03/26 15:41:28 tb Exp $</small>
+<small>$OpenBSD: upgrade59.html,v 1.17 2016/03/28 03:25:53 tb Exp $</small>
 
 </body>
 </html>
