@@ -1,13 +1,13 @@
 # Makefile for WWW subdirectory.
 
-STABLE_VERSION=	5.8
-PREV_VERSION=	5.7
+STABLE_VERSION=	5.9
+PREV_VERSION=	5.8
 
 # also update mirrors/openbgpd-ftp.html.head
 OPENBGPD_VERSION=		4.6
 
 # also update mirrors/openntpd-ftp.html.head
-OPENNTPD_PORTABLE_VERSION=	5.7p4
+OPENNTPD_PORTABLE_VERSION=	5.9p1
 
 OPENSSH_VERSION=		7.2
 OPENSSH_PORTABLE_VERSION=	7.2p2
