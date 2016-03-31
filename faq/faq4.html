@@ -48,28 +48,18 @@
 <li><a href="#FilesNeeded"     >4.6 - What files are needed for
                                 installation?</a>
 <li><a href="#Partitioning"    >4.7 - How should I partition my disk?</a>
-<li><a href="#SendDmesg"       >4.8 - Sending your dmesg to dmesg@openbsd.org
+<li><a href="#AddThoughts"     >4.8 - Additional thoughts on partitioning</a>
+<li><a href="#SendDmesg"       >4.9 - Sending your dmesg to dmesg@openbsd.org
                                 after the install</a>
-<li><a href="#AddFileSet"      >4.9 - Adding a file set after install</a>
-<li><a href="#bsd.rd"          >4.10 - What is <tt>bsd.rd</tt>?</a>
-<li><a href="#InstProb"        >4.11 - Common installation problems
+<li><a href="#AddFileSet"      >4.10 - Adding a file set after install</a>
+<li><a href="#bsd.rd"          >4.11 - What is <tt>bsd.rd</tt>?</a>
+<li><a href="#InstProb"        >4.12 - Common installation problems
                                 (amd64, i386)</a>
-<li><a href="#Signify"         >4.12 - Problems with signatures</a>
-<li><a href="#site"            >4.13 - Customizing the install process</a>
-<li><a href="#Multiple"        >4.14 - How can I install a number of similar
-                                systems?</a>
-<li><a href="#getdmesg"        >4.15 - How can I get a dmesg(8) to report an
-                                install problem?</a>
-<li><a href="#Multibooting"    >4.16 - Multibooting OpenBSD (amd64, i386)</a>
-<li><a href="#More"            >4.17 - Details for a more complex install</a>
-  <ul>
-  <li><a href="#MoreNetwork"   >4.17.1 - Setting up the network</a>
-  <li><a href="#MoreTimeZone"  >4.17.2 - Setting the time zone</a>
-  <li><a href="#Morefdisk"     >4.17.3 - Custom fdisk(8) layout</a>
-  <li><a href="#Moredisklabel" >4.17.4 - Custom disklabel layout</a>
-  </ul>
-<li><a href="#AddThoughts"     >4.18 - Some additional thoughts on
-                                partitioning</a>
+<li><a href="#Signify"         >4.13 - Problems with signatures</a>
+<li><a href="#site"            >4.14 - Customizing the install process</a>
+<li><a href="#Multibooting"    >4.15 - Multibooting OpenBSD (amd64, i386)</a>
+<li><a href="#CustomFdisk"     >4.16 - A custom fdisk(8) layout for dual booting
+                                (amd64, i386)</a>
 </ul>
 <hr>
 
@@ -481,17 +471,67 @@ Some of the reasons for doing so are:
     You can mount partitions that you never or rarely need to write to as
     <tt>readonly</tt> most of the time, which will eliminate the need for
     fsck(8) after a crash or power interruption.
-    fsck(8) requires more RAM for larger partitions and on small-memory systems
-    it can end up having to use swap and thus take a very long time.
 </ul>
 
 Read the section on automatic disc allocation in the
 <a href="http://man.openbsd.org/?query=disklabel">disklabel(8)</a>
-manpage and 
+manpage and
 <a href="http://man.openbsd.org/?query=hier">hier(7)</a>
 before making decisions about custom partitioning schemes.
 
-<h2 id= "SendDmesg">4.8 - Sending your dmesg to dmesg@openbsd.org after the
+<h2 id="AddThoughts">4.8 - Additional thoughts on partitioning</h2>
+
+<ul>
+  <li>For experimenting, one big <tt>/</tt> partition and <tt>swap</tt> may be
+    easiest until you know how much space you need.
+    By doing this, you will be sacrificing some of the default security features
+    of OpenBSD that require separate filesystems for <tt>/</tt>, <tt>/tmp</tt>,
+    <tt>/var</tt>, <tt>/usr</tt> and <tt>/home</tt>.
+  <li>You do <b>not</b> have to allocate all space when you set the system up.
+    If you outgrow a partition, you can allocate a new partition from your
+    unused space.
+    Then
+    <a href="faq10.html#DupFS">duplicate</a> your existing partition to the
+    new partition, change
+    <a href="http://man.openbsd.org/?query=fstab">fstab(5)</a>
+    to point to the new partition, remount, you now have more space.
+  <li>If you make your partitions too close to the minimum size required, you
+    will probably regret it later, when it is time to upgrade your system.
+  <li>If you make very large partitions, keep in mind that performing
+    filesystem checks using
+    <a href="http://man.openbsd.org/?query=fsck">fsck(8)</a>
+    requires about 1MB of RAM per gigabyte of filesystem size.
+  <li>A <tt>/home</tt> partition can be nice.
+    New version of the OS?
+    Wipe and reload everything else, leave your <tt>/home</tt> partition
+    untouched.
+    Remember to save a copy of your configuration files.
+  <li>You may also want to create an <tt>/altroot</tt> partition, as
+    described in
+    <a href="http://man.openbsd.org/?query=daily">daily(8)</a> and the
+    <a href="faq14.html#altroot">altroot</a> section of FAQ 14.
+  <li>A system exposed to the Internet or other hostile forces should have a
+    separate <tt>/var</tt> and maybe even a separate <tt>/var/log</tt>.
+  <li>If you permit users to write to <tt>/var/www</tt> (personal web pages),
+    you might wish to put it on a separate partition, so you can use
+    <a href="faq10.html#Quotas">quotas</a> to restrict the space they use.
+  <li>
+    If you wish to <a href="faq5.html">rebuild your system from source</a> for
+    any reason, the source will be in <tt>/usr/src</tt>.
+    <b>If you don't make a separate partition for <tt>/usr/src</tt>, make sure
+    <tt>/usr</tt> has sufficient space.</b>
+  <li>Compiling some <a href="faq15.html#Ports">ports</a> from source
+    can take huge amounts of space on your <tt>/usr</tt> and <tt>/tmp</tt>
+    partitions.
+    This is another reason we suggest using
+    <a href="faq15.html#PkgMgmt">pre-compiled packages</a> instead.
+    <li>At least some editors use <tt>/tmp</tt> for scratch space, and
+    this often needs to be as big or bigger than the largest file you edit.
+    If you plan on editing 500MB files, your <tt>/tmp</tt> partition will
+    need to be much larger than you might have planned on.
+</ul>
+
+<h2 id= "SendDmesg">4.9 - Sending your dmesg to dmesg@openbsd.org after the
 install</h2>
 
 A quote from <tt>/usr/src/etc/root/root.mail</tt>:
@@ -533,7 +573,7 @@ check the following:
     Put the dmesg output into the body of the message.
 </ul>
 
-<h2 id="AddFileSet">4.9 - Adding a file set after install</h2>
+<h2 id="AddFileSet">4.10 - Adding a file set after install</h2>
 
 If you chose to skip some file sets at install time, you might realize later
 that you really do need them after all.
@@ -543,10 +583,10 @@ Simply <a href="#bsd.rd">boot bsd.rd</a> from your root file system.
 Choose <tt>(U)pgrade</tt>.
 When you get to the list of file sets, select the ones you need.
 
-<h2 id="bsd.rd">4.10 - What is <tt>bsd.rd</tt>?</h2>
+<h2 id="bsd.rd">4.11 - What is <tt>bsd.rd</tt>?</h2>
 
 The <tt>bsd.rd</tt> RAM disk kernel is a live OpenBSD environment that runs
-entirely in memory. 
+entirely in memory.
 It contains the install script and a small number of utilities needed to perform
 a complete installation.
 These utilities can also be useful for disaster recovery.
@@ -575,7 +615,7 @@ The general method of booting <tt>bsd.rd</tt> is to change your boot kernel
 from <tt>/bsd</tt> to <tt>/bsd.rd</tt> through whatever means used on your
 platform.
 
-<h2 id="InstProb">4.11 - Common installation problems (amd64, i386)</h2>
+<h2 id="InstProb">4.12 - Common installation problems (amd64, i386)</h2>
 
 <ul>
   <li><b>The computer won't boot after install.</b>
@@ -608,7 +648,7 @@ platform.
     should be fixed by recreating the disk's filesystems from scratch.
 </ul>
 
-<h2 id="Signify">4.12 - Problems with signatures</h2>
+<h2 id="Signify">4.13 - Problems with signatures</h2>
 
 <ul>
   <li><b>Why aren't downloadable images self-signed?</b>
@@ -637,7 +677,7 @@ platform.
     detailed <a href="faq3.html#Download">here</a>.
 </ul>
 
-<h2 id="site">4.13 - Customizing the install process</h2>
+<h2 id="site">4.14 - Customizing the install process</h2>
 
 <h3>The <tt>siteXX.tgz</tt> file set</h3>
 
@@ -649,7 +689,7 @@ Like the official <a href="#FilesNeeded">file sets</a>, this is a
 It is installed last, so it can be used to complement and modify the files from
 a default install. Furthermore, it is possible to use
 <a href="http://man.openbsd.org/?query=hostname">hostname(1)</a>-dependent
-sets named <tt>siteXX-$(hostname -s).tgz</i></tt>.
+sets named <tt>siteXX-$(hostname -s).tgz</tt>.
 
 <p>
 <b>Note:</b>
@@ -682,197 +722,64 @@ Example usages:
     At boot time, rc.firsttime is executed once then deleted.
 </ul>
 
-<h2 id="Multiple">4.14 - How can I install a number of similar systems?</h2>
-
-Here are some tools you can use when you have to deploy a number
-of similar OpenBSD systems.
-
-<h3><tt>siteXX.tgz</tt> and <tt>install/upgrade.site</tt> files</h3>
-
-See the <a href="#site">above</a> article.
-
-<h3>Restore from dump(8)</h3>
-
-On most platforms, the boot media includes the
-<a href="http://man.openbsd.org/?query=restore">restore(8)</a>
-program, which can be used to restore a backup made by
-<a href="http://man.openbsd.org/?query=dump">dump(8)</a>.
-Thus, you could boot from a
-<a href="#MkFlop">floppy</a>,
-<a href="../orders.html">CD</a>, or
-<a href="#bsd.rd">bsd.rd</a> file, then
-<a href="faq14.html#fdisk">fdisk</a>,
-<a href="faq14.html#disklabel">disklabel</a>, and
-<a href="http://man.openbsd.org/?query=restore">restore(8)</a>
-the desired configuration from tape or other media, and install the
-<a href="http://man.openbsd.org/?query=installboot">boot blocks</a>.
-
-<h3>Disk imaging</h3>
-
-Unfortunately, there are no known disk imaging packages which are
-FFS-aware and can make an image containing only the active file space.
-Most of the major disk imaging solutions will treat an OpenBSD partition
-as a "generic" partition, and can make an image of the whole disk.
-This often accomplishes your goal, but usually with huge amounts of wasted
-space --  an empty 10GB <tt>/home</tt> partition will require 10GB of
-space in the image, even if there isn't a single file in it.
-While you can typically install a drive image to a larger drive, you would
-not be able to directly use the extra space, and you would not be able to
-install an image to a smaller drive.
-
-<p>
-If this is an acceptable situation, you may find the
-<a href="http://man.openbsd.org/?query=dd">dd(1)</a>
-command will do what you need, allowing you to copy one disk to another,
-sector-for-sector.
-This would provide the same functionality as
-commercial programs without the cost.
-
-<h2 id="getdmesg">4.15 - How can I get a dmesg(8) to report an install
-problem?</h2>
-
-When <a href="../report.html">reporting a problem</a>, it is critical to
-include the complete system
-<a href="http://man.openbsd.org/?query=dmesg">dmesg(8)</a>.
-However, often when you need to do this, it is because the system is
-working improperly or won't install so you may not have disk, network,
-or other resources you need to get the dmesg to the appropriate
-<a href="../mail.html">mailing list</a>.
-There are other ways, however:
-
-<ul>
-<li><b>Floppy disk:</b>  The boot disks and CD-ROM have enough tools
-to let you record your dmesg to an MSDOS floppy disk for reading on
-another machine.
-Place an MSDOS formatted floppy in your disk drive and execute the
-following commands:
-
-<blockquote><pre>
-# <b>mount -t msdos /dev/fd0a /mnt</b>
-# <b>dmesg >/mnt/dmesg.txt</b>
-# <b>umount /mnt</b>
-</pre></blockquote>
-
-If you have another OpenBSD system, you can also write it to an OpenBSD
-compatible floppy -- often, the boot floppy has enough room on it to
-hold the dmesg.
-In that case, leave off the <tt>-t msdos</tt> above.
-
-<p>
-<li><b>Serial Console:</b>
-Using a serial console and capturing the output on another computer
-is often the best way to capture diagnostic information - particularly
-if the computer panics immediately after boot.
-As well as a second computer, you will need a suitable serial cable
-(often a null-modem cable), and a terminal emulator program that can
-capture screen output to file.
-
-<p>
-General information on setting up a serial console is provided
-<a href="faq7.html#SerCon">elsewhere in the FAQ</a>;
-in order to capture a log of the install,
-the following commands are usually sufficient.
-
-<p>
-<b>i386</b>
-
-<p>
-At the boot loader prompt, enter
-
-<blockquote><pre>
-boot> <b>set tty com0</b>
-</pre></blockquote>
-
-This will tell OpenBSD to use the first serial port (often called
-COM1 or COMA in PC documentation) as a serial console.
-The default baud rate is 9600.
-
-<p>
-<b>Sparc/Sparc64</b>
-
-<p>
-These machines will automatically use a serial console if started
-without a keyboard present.
-If you have a keyboard and monitor attached, you can still force the
-system to use a serial console with the following invocation at the
-<tt>ok</tt> prompt.
-
-<blockquote><pre>
-ok <b>setenv input-device ttya</b>
-ok <b>setenv output-device ttya</b>
-ok <b>reset</b>
-</pre></blockquote>
-
-</ul>
-
-<h2 id="Multibooting">4.16 - Multibooting OpenBSD (amd64, i386)</h2>
+<h2 id="Multibooting">4.15 - Multibooting OpenBSD (amd64, i386)</h2>
 
 Multibooting is having several operating systems on one computer, and
 some means of selecting which OS is to boot.
 It is <i>not</i> a trivial task!
 If you don't understand what you are doing, you may end up deleting
 large amounts of data from your computer.
+
+<p>
 New OpenBSD users are <i>strongly</i> encouraged to start with a blank hard
-drive on a dedicated machine, and then practice your desired configuration on a
-non-production system before attempting a multiboot configuration on a
+drive on a dedicated machine, and then practice their desired configuration on
+a non-production system before attempting a multiboot configuration on a
 production machine.
-<a href="faq14.html">FAQ 14</a> has more information about the OpenBSD
-boot process.
+FAQ 14 has  more information about
+the <a href="faq14.html#BootAmd64">OpenBSD boot process</a>.
 
 <p>
 Preferably use one of the four <i>primary</i> MBR partitions for
-booting OpenBSD (i.e., extended partitions may not work).
+booting OpenBSD.
+Extended partitions may not work.
 
 <p>
 Here are several ways you might configure multibooting:
 
+<h3>Boot loaders</h3>
+
+Some boot loaders OpenBSD users have used successfully include
+<a href="http://www.rodsbooks.com/refind/">rEFInd</a> and
+<a href="http://www.gnu.org/software/grub/">GRUB</a> as well as the
+two dormant projects
+<a href="http://gag.sourceforge.net/">GAG</a> and the
+<a href="http://www.ranish.com/part/">Ranish Partition Manager</a>.
+
 <h3>Setting active partitions</h3>
 
-This is probably the most overlooked, but yet sometimes the best,
-solution for multibooting.
-Simply set the active partition in whatever OS you are currently using to
-be the one you want to boot by default when you next boot.
+Set the active partition in whatever OS you are currently using to be the one
+you want to boot by default when you next boot.
 Virtually every OS offers a program to do this.
-OpenBSD's is <a href="faq14.html#fdisk">fdisk(8)</a>, and similarly
-named programs are in many other operating systems.
-This can be highly desirable for OSs or systems which take a
-long time to shut down and reboot -- you can set it and start the reboot
-process, then walk away, grab a cup of coffee, and come back to the system
-booted the way you want it -- no waiting for the Magic Moment to select
-the next OS.
+OpenBSD's is
+<a href="http://man.openbsd.org/?query=fdisk">fdisk(8)</a>,
+and similarly named programs are in many other operating systems.
+FAQ 14 contains a section on
+<a href="faq14.html#fdisk">using OpenBSD's fdisk(8)</a>.
 
-<h3>Boot floppy</h3>
+<h3>Bootable flash drive</h3>
 
-If you have a system that is used to boot OpenBSD infrequently (or don't
-wish other users of the computer to note anything has changed), consider
-using a boot floppy.
-Simply use one of the <a href="#MkFlop">standard OpenBSD install floppies</a>,
-and create an <tt>/etc/boot.conf</tt> file (yes, you will also have to create
-an <tt>/etc</tt> directory on the floppy) with the contents:
+Make a <a href="#MkFlash">bootable flash drive</a>.
+On that drive create an <tt>/etc/boot.conf</tt> file with the contents:
 
 <blockquote><pre>
    boot hd0a:/bsd
 </pre></blockquote>
 
-to cause the system to boot from hard drive 0, OpenBSD partition 'a',
-kernel file <tt>/bsd</tt>.
-Note you can also boot from other drives with a line like
-<tt>boot hd2a:/bsd</tt> to boot off the third hard drive on your system.
-To boot from OpenBSD, slip your floppy in,
-reboot.
-To boot from the other OS, eject the floppy, reboot.
-(You can, of course, use this floppy to make a bootable CD, too.)
-
-<p>
-The
+This line instructs
 <a href="http://man.openbsd.org/?query=boot&amp;sec=8&amp;arch=i386">boot(8)</a>
-program is loaded from the floppy, it then looks for and reads
-<tt>/etc/boot.conf</tt>.
-The <tt>boot hd0a:/bsd</tt> line instructs boot(8) where to load the
-kernel from -- in this case, the first HD the BIOS sees.
-Keep in mind that only a small file (<tt>/boot</tt>) is loaded
-from the floppy -- the system loads the entire kernel off the hard disk,
-so this only adds about five seconds to the boot process.
+to load the system from hard drive 0,
+<a href="faq/faq14.html#disklabel">disklabel(8) partition</a> <tt>a</tt> and
+the kernel file <tt>/bsd</tt>.
 
 <h3>Windows Vista</h3>
 
@@ -993,14 +900,6 @@ The operation completed successfully.
 C:\Windows\system32>
 </pre></blockquote>
 
-<h3>Other boot loaders</h3>
-
-Some other bootloaders OpenBSD users have used successfully include
-<a href="http://gag.sourceforge.net/">GAG</a>,
-<a href="http://www.ranish.com/part/">The Ranish Partition Manager</a>,
-<a href="http://www.rodsbooks.com/refind/">rEFInd</a>,
-and <a href="http://www.gnu.org/software/grub/">GRUB</a>.
-
 <h3>Time zone issues</h3>
 
 OpenBSD expects the computer's real-time clock to be set to UTC
@@ -1013,192 +912,29 @@ More info on doing this is in <a href="faq8.html#TimeZone">FAQ 8 - Why
 is my clock off by several hours?</a>
 
 
-<h2 id="More">4.17 - Details for a more complex install</h2>
+<h2 id="CustomFdisk">4.16 - A custom fdisk(8) layout for dual booting
+(amd64, i386)</h2>
 
-Sometimes you can't just take the defaults.
-Here are some more details on parts of the installation process.
+Before working with any system that has data you don't wish to lose,
+make sure you have a good backup.
+If you are adding OpenBSD to an existing system, you will probably need to
+create some free space before installing OpenBSD.
+In addition to your existing system's native tools,
+<a href="http://gparted.org/">gparted</a>
+may be useful for deleting or resizing existing partitions.
 
-<h3 id="MoreNetwork">4.17.1 - Setting up the network</h3>
-
-If you don't have a DHCP server available, you will have to set up
-your network adapter(s) manually.
-Here's an example:
-
-<blockquote><pre>
-Which one do you wish to configure? (or 'done') [xl0] <b>&lt;Enter&gt;</b>
-IPv4 address for xl0? (or 'dhcp' or 'none') [dhcp] <b>192.168.1.37</b>
-Netmask? [255.255.255.0] 255.255.254.0
-IPv6 address for xl0? (or 'rtsol' or 'none') [none] <b>&lt;Enter&gt;</b>
-</pre></blockquote>
-
-After that set of questions, you will be given a chance to configure any other
-network adapters that your machine has.
-If you specify another network adapter here, the above questions repeat.
-
-<blockquote><pre>
-Available network interfaces are: xl0 vlan0.
-Which one do you wish to configure? (or 'done') [done]
-</pre></blockquote>
-
-Now, you will set up the default gateway and DNS servers, things that
-impact all network adapters:
-
-<blockquote><pre>
-Default IPv4 route? (IPv4 address, 'dhcp' or 'none') <b>192.168.1.1</b>
-add net default: gateway 192.168.1.1
-DNS domain name? (e.g. 'bar.com') [my.domain] <b>example.org</b>
-DNS nameservers? (IP address list or 'none') [none] <b>192.168.1.250 192.168.1.251</b>
-</pre></blockquote>
-
-Note that multiple DNS servers can be listed, separated by spaces.
 
 <p>
-Sometimes you will have to do something more, for example set up a
-wireless access key or hard-set a duplex or speed setting (don't do this
-unless you absolutely HAVE to, fixing your switch configuration is a
-much better idea!).
-You are now given a chance to drop to the shell and do any manual configuration
-that you would like.
-
-<blockquote><pre>
-Do you want to do any manual network configuration? [no] <b>y</b>
-Type 'exit' to return to install.
-# <b>ifconfig xl0 media</b>
-xl0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500
-        lladdr 00:08:74:2c:df:9c
-        groups: egress
-        media: Ethernet autoselect (100baseTX full-duplex)
-        status: active
-        supported media:
-                media 10baseT
-                media 10baseT mediaopt full-duplex
-                media 100baseTX
-                media 100baseTX mediaopt full-duplex
-                media autoselect
-        inet 192.168.1.37 netmask 0xfffffe00 broadcast 192.168.1.255
-# <b>ifconfig xl0 media 100baseTX mediaopt full-duplex</b>
-# <b>ifconfig xl0</b>
-xl0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500
-        lladdr 00:08:74:2c:df:9c
-        groups: egress
-        media: Ethernet 100baseTX full-duplex
-        status: active
-        inet6 fe80::208:74ff:fe2c:df9c%xl0 prefixlen 64 scopeid 0x1
-        inet 192.168.1.37 netmask 0xfffffe00 broadcast 192.168.1.255
-# <b>exit</b>
-<i>...setup resumes...</i>
-</pre></blockquote>
-
-<a href="#backMoreNetwork">(back to where we might have been)</a>
-
-<h3 id="MoreTimeZone">4.17.2 - Setting the Time Zone</h3>
-
-Time in Unix is not a simple thing (or put another way, time in Unix is
-a <i>really</i> simple thing and human time is a politically manipulated
-mess).
-Time zone files help the system convert Unix time (the number of seconds
-past midnight GMT, Jan 1, 1970) to human time, taking into account things
-like time zones, daylight savings time (DST), DST rule changes, etc.
-They also include the history of changes.
-
-<p>
-Multiple time zone definition files will sometimes give the same
-<i>current</i> time, but may have different history.
-For example, EST5EDT and US/Michigan have the same time NOW, but back in
-1975, the rules were different, so if you were doing math with dates and
-times that involved 1975, you would care about the differences.
-You should use the most specific and accurate timezone file you can for
-your region, rather than one that just gives the correct time at this
-moment.
-
-<p>
-OpenBSD's installer will help you find an appropriate time zone file for
-you if you are not sure.
-Simply hit <tt>?</tt> at each prompt, and the installer will show you options.
-If the first level of answers doesn't suit you, pick a continent or
-country, and look at your options there:
-
-<blockquote><pre>
-What timezone are you in? ('?' for list) [right/EST5EDT] <b>?</b>
-Africa/      Chile/       GB-Eire      Israel       NZ-CHAT      UCT
-America/     Cuba         GMT          Jamaica      Navajo       US/
-Antarctica/  EET          GMT+0        Japan        PRC          UTC
-Arctic/      EST          GMT-0        Kwajalein    PST8PDT      Universal
-Asia/        EST5EDT      GMT0         Libya        Pacific/     W-SU
-Atlantic/    Egypt        Greenwich    MET          Poland       WET
-Australia/   Eire         HST          MST          Portugal     Zulu
-Brazil/      Etc/         Hongkong     MST7MDT      ROC          posix/
-CET          Europe/      Iceland      Mexico/      ROK          posixrules
-CST6CDT      Factory      Indian/      Mideast/     Singapore    right/
-Canada/      GB           Iran         NZ           Turkey
-What timezone are you in? ('?' for list) [right/EST5EDT] <b>US</b>
-What sub-timezone of 'US' are you in? ('?' for list) ?
-Alaska          Central         Hawaii          Mountain        Samoa
-Aleutian        East-Indiana    Indiana-Starke  Pacific
-Arizona         Eastern         Michigan        Pacific-New
-What sub-timezone of 'US' are you in? ('?' for list) <b>Michigan</b>
-</pre></blockquote>
-
-We've now set the time to "US/Michigan." This creates a symbolic link in
-<tt>/etc</tt> pointing to the appropriate zoneinfo file in
-<tt>/usr/share/zoneinfo</tt>, something like this:
-
-<blockquote><pre>
-/etc/localtime -> /usr/share/zoneinfo/US/Michigan
-</pre></blockquote>
-
-Note the directory <tt>right/</tt>, this directory includes leap second
-adjustments, but otherwise duplicates the standard zoneinfo choices.
-More <a href="faq8.html#NTPerror">here</a>.
-
-<p>
-<a href="#backMoreTimeZone">(back to where we might have been)</a>
-
-<h3 id="Morefdisk">4.17.3 - Custom fdisk(8) layout</h3>
-
-Note: only some OpenBSD platforms use fdisk at all, and usually, only
-<a href="../i386.html">i386</a> and <a href="../amd64.html">amd64</a>
-users will have to worry about getting fancy with fdisk.
-Users of most other fdisk(8) using platforms generally don't have to
-worry about multibooting or setup/diagnostic partitions.
-For this reason, this section is focused on i386 and amd64.
-
-<p>
+A brief introduction to
 <a href="http://man.openbsd.org/?query=fdisk">fdisk(8)</a>
-is used to mark off the OpenBSD part of your hard disk.
-It helps mark off the part of the disk used by OpenBSD from the parts used
-by other OSs or system functions.
-
-<p>
-If you have a partition on your disk you wish to retain or wish to leave
-space for another partition, you will NOT want to chose "(W)hole disk",
-but will need to edit the partition table with
-<a href="http://man.openbsd.org/?query=fdisk">fdisk(8)</a>.
-More information on manually running fdisk(8) can be found
-<a href="faq14.html#fdisk">here</a>.
-
-<b>Before working with any system that has data you don't wish to lose,
-make sure you have a good backup.</b>
-It is very easy in this process to clobber important data, so make sure
-you are ready to get it back, if need be.
-
-<p>
-If you are adding OpenBSD to an existing system, you will probably
-need to create some free space on your system before installing OpenBSD.
-This will usually involve deleting or possibly reducing the size of
-existing partitions.
-The program <a href="http://gparted.sourceforge.net/">gparted</a>
-has been found useful for shrinking the partitions of many popular OSs,
-making it possible to install OpenBSD on the freed space.
+is in the section on
+<a href="faq14.html#fdisk">using OpenBSD's fdisk(8)</a>
+of FAQ 14.
 
 <p>
 In this example, we will assume we are starting with a blank 40GB disk
 and wish to create a multiboot system, reserving 5GB at the beginning
 of the disk for Windows, and the rest for OpenBSD.
-Note that a blank drive has to have valid MBR boot code and signature
-written to the disk before it can be booted.
-
-<p>
 The process is very much the same for working around an existing
 partition, you just need to skip over the parts where we create the
 Windows partition and worry about installing the MBR boot code.
@@ -1207,13 +943,6 @@ Windows partition and worry about installing the MBR boot code.
 Available disks are: wd0.
 Which one is the root disk? (or 'done') [wd0] <b>&lt;Enter&gt;</b>
 MBR has invalid signature; not showing it.
-</pre></blockquote>
-
-If the disk had a valid MBR in place, it would show you the existing
-partition table, which can be a good way to show if a disk may have
-data on it already.
-
-<blockquote><pre>
 Use (W)hole disk or (E)dit the MBR? [whole] <b>e</b>
 
 You will now create a single MBR partition to contain your OpenBSD data. This
@@ -1234,208 +963,83 @@ Enter 'help' for information
 fdisk: 1>
 </pre></blockquote>
 
-First of all notice the fdisk prompt.
-The number "1" indicates the first level of partition tables -- if you
-were editing an extended partition, it would be "2" (or bigger).
-Extended partitions are partitions which have their own sub-partition
-table, getting around the IBM AT four partition design limit.
-Extended partitions won't be covered here.
-
+In the <tt>fdisk: 1></tt> prompt, the number <tt>1</tt> indicates the first
+level of partition tables.
+If you were editing an extended partition, it would be <tt>2</tt> or higher.
 <p>
-First, we will make partition "0" a 5GB Windows partition (using NTFS),
-and partition "1" will be our OpenBSD partition using the rest of the
-disk.
+First, we will make partition <tt>0</tt> a 5GB Windows partition using NTFS.
+Partition <tt>1</tt> will be our OpenBSD partition using the rest of the disk.
 
 <blockquote><pre>
-fdisk: 1> <b>e 0</b>
+fdisk: 1> <b>edit 0</b>
             Starting         Ending         LBA Info:
  #: id      C   H   S -      C   H   S [       start:        size ]
 -------------------------------------------------------------------------------
  0: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help)
+Partition id ('0' to disable)  [0 - FF]: [0] (? for help) <b>7</b>
 </pre></blockquote>
 
-Since we don't know by memory what the partition ID is for NTFS, we hit
-"?" here to get a list.
+NTFS has partition id <tt>7</tt> and OpenBSD partition id <tt>a6</tt>.
+Consult the help prompt for a full list.
 
 <blockquote><pre>
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) <b>?</b>
-Choose from the following Partition id values:
-00 unused         20 Willowsoft     66 NetWare 386    A9 NetBSD
-01 DOS FAT-12     24 NEC DOS        67 Novell         AB MacOS X boot
-02 XENIX /        27 Win Recovery   68 Novell         AF MacOS X HFS+
-03 XENIX /usr     38 Theos          69 Novell         B7 BSDI filesy*
-04 DOS FAT-16     39 Plan 9         70 DiskSecure     B8 BSDI swap
-05 Extended DOS   40 VENIX 286      75 PCIX           BF Solaris
-06 DOS > 32MB     41 Lin/Minux DR   80 Minix (old)    C0 CTOS
-07 NTFS           42 LinuxSwap DR   81 Minix (new)    C1 DRDOSs FAT12
-08 AIX fs         43 Linux DR       82 Linux swap     C4 DRDOSs < 32M
-09 AIX/Coherent   4D QNX 4.2 Pri    83 Linux files*   C6 DRDOSs >=32M
-0A OS/2 Bootmgr   4E QNX 4.2 Sec    84 OS/2 hidden    C7 HPFS Disbled
-0B Win95 FAT-32   4F QNX 4.2 Ter    85 Linux ext.     DB CPM/C.DOS/C*
-0C Win95 FAT32L   50 DM             86 NT FAT VS      DE Dell Maint
-0E DOS FAT-16     51 DM             87 NTFS VS        E1 SpeedStor
-0F Extended LBA   52 CP/M or SysV   8E Linux LVM      E3 SpeedStor
-10 OPUS           53 DM             93 Amoeba FS      E4 SpeedStor
-11 OS/2 hidden    54 Ontrack        94 Amoeba BBT     EB BeOS/i386
-12 Compaq Diag.   55 EZ-Drive       99 Mylex          EE EFI GPT
-14 OS/2 hidden    56 Golden Bow     9F BSDI           EF EFI Sys
-16 OS/2 hidden    5C Priam          A0 NotebookSave   F1 SpeedStor
-17 OS/2 hidden    61 SpeedStor      A5 FreeBSD        F2 DOS 3.3+ Sec
-18 AST swap       63 ISC, HURD, *   A6 OpenBSD        F4 SpeedStor
-19 Willowtech     64 NetWare 2.xx   A7 NEXTSTEP       FF Xenix BBT
-1C ThinkPad Rec   65 NetWare 3.xx   A8 MacOS X
-Partition id ('0' to disable)  [0 - FF]: [0] (? for help) <b>07</b>
-</pre></blockquote>
-
-Now we define its starting and ending points:
-
-<blockquote><pre>
-Do you wish to edit in CHS mode? [n]
-</pre></blockquote>
-
-CHS mode allows you to specify disk space in Cylinders, Heads and Sectors.
-Keep in mind that for modern hard disks, the CHS numbers are completely
-bogus, just three numbers that translate to a sector on the disk, which
-is translated to your drives physical geometry (which probably varies
-across the disk anyway).
-
-<p>
-If you answer "y" here, you will be prompted for the starting and
-ending cylinder, head and sector.
-If you answer "no" here (as we will), you will be prompted for starting
-sector and the size.
-Editing by CHS is often easier when working around an existing partition,
-starting sector and size is often easier when you want to quickly create
-a partition of a given size.
-
-<blockquote><pre>
+Do you wish to edit in CHS mode? [n] <b>&lt;Enter&gt;</b>
 offset: [0] <b>64</b>
 </pre></blockquote>
 
 <a name="trackoffset"></a>
-<p>
+
 The fdisk platforms need a gap before the first partition.
 The exact amount will not matter on modern machines, OpenBSD defaults
 to 64 sectors.
-This is recommended for performance reasons on modern disks, and does
-not matter on older disks.
 
 <blockquote><pre>
 size: [0] <b>5g</b>
 Rounding to nearest cylinder: 10490381
 </pre></blockquote>
 
-The "Size" value can be the number of sectors (512 bytes each), or the
-desired capacity when followed by a "k", "m" or "g".
-When editing using offset and size, fdisk will round your partition so
-it ends on a cylinder boundary (OpenBSD doesn't care about this, and it
-is possible no modern OS cares about this, but some might have at one
-time).
-
-<p>
-Now, let's look at our new partition:
-
-<blockquote><pre>
-fdisk:*1> p
-Disk: wd0       geometry: 4998/255/63 [80293248 Sectors]
-Offset: 0       Signature: 0x0
-            Starting         Ending         LBA Info:
- #: id      C   H   S -      C   H   S [       start:        size ]
--------------------------------------------------------------------------------
- 0: 07      0   1   2 -    652 254  63 [          64:    10490381 ] NTFS
- 1: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
- 2: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
- 3: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
-fdisk:*1>
-</pre></blockquote>
-
-Note that the prompt now includes an "*", this means there are unsaved
-changes.
+The <tt>size</tt> is measured in sectors (512 bytes), or the desired capacity
+when followed by a <tt>k</tt>, <tt>m</tt>, <tt>g</tt> or <tt>t</tt>.
 
 <p>
 We've now created our Windows partition.
-Note that this partition is so far just reserved space on the disk, it
-isn't formatted; no file system exists here.
-You will worry about that when you install Windows; we've accomplished
-our goal of reserving space for the Windows partition to be created
-later.
+Note that this partition is just reserved space on the disk, it isn't formatted.
 
 <p>
 Now we create our OpenBSD partition.
-In this case, the partition ID will be "A6".
+Note that the prompt now includes an <tt>*</tt>, this means there are unsaved
+changes.
 
 <blockquote><pre>
-fdisk:*1> e 1
+fdisk:*1> <b>e 1</b>
             Starting         Ending         LBA Info:
  #: id      C   H   S -      C   H   S [       start:        size ]
 -------------------------------------------------------------------------------
  1: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
 Partition id ('0' to disable)  [0 - FF]: [0] (? for help) <b>a6</b>
 Do you wish to edit in CHS mode? [n] <b>&lt;Enter&gt;</b>
-offset: [0]
-</pre></blockquote>
-
-Uh-oh!
-What's our offset?  Simple -- the offset of the previous partition plus
-the size of the partition, in this case, 64+10490381 = 10490445.
-
-<blockquote><pre>
 offset: [0] <b>10490445</b>
 size: [0] <b>*</b>
 fdisk:*1>
 </pre></blockquote>
 
-Note that here, we entered "*" as the size, meaning "rest of the disk".
-Again, we could have entered the size in sectors, "m" or "g" if we
-wanted to leave space for something else.
+The <tt>offset</tt> we chose is the offset of the previous partition plus
+the size of the partition, in this case, 64+10490381 = 10490445.
+Entering <tt>*</tt> for <tt>size</tt> means: use the rest of the disk.
 
 <p>
-Now we look at our partition table:
-
-<blockquote><pre>
-fdisk:*1> <b>p</b>
-Disk: wd0       geometry: 4998/255/63 [80293248 Sectors]
-Offset: 0       Signature: 0x0
-            Starting         Ending         LBA Info:
- #: id      C   H   S -      C   H   S [       start:        size ]
--------------------------------------------------------------------------------
- 0: 07      0   1   1 -    652 254  63 [          64:    10490381 ] NTFS
- 1: A6    653   0   1 -   4998   5  63 [    10490445:    69802803 ] OpenBSD
- 2: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
- 3: 00      0   0   0 -      0   0   0 [           0:           0 ] unused
-fdisk:*1>
-</pre></blockquote>
-
-<b>WE AREN'T DONE YET!</b><br>
-This disk is not yet bootable!
-As it was a brand new disk, the disk's
-<a href="faq14.html#BootAmd64">MBR</a> was completely blank.
-The "Signature: 0x0" message there shows there is not a valid signature
-(0xAA55), which indicates there definitely is not a valid boot code.
-Of course, you could have a valid signature without valid boot code,
-through either random bad luck or damage to the existing boot code, but
-an invalid signature pretty well indicates you are lacking boot code, so
-we will install it now using the "update" command:
+This disk is not yet bootable.
+As it was a brand new disk, the disk's <a href="faq14.html#BootAmd64">MBR</a>
+is completely blank.
+We install MBR bootcode using the <tt>update</tt> command and flag the OpenBSD
+partition as the bootable partition.
 
 <blockquote><pre>
 fdisk:*1> <b>update</b>
 Machine code updated.
-fdisk:*1>
-</pre></blockquote>
-
-We also have to "flag" a partition as "active" so the boot ROM knows
-what partition to boot from:
-
-<blockquote><pre>
-fdisk:*1> <b>f 1</b>
+fdisk:*1> <b>flag 1</b>
 Partition 1 marked active.
-</pre></blockquote>
-
-Now, let's see how it looks:
-
-<blockquote><pre>
-fdisk:*1> <b>p</b>
+fdisk:*1> <b>print</b>
 Disk: wd0       geometry: 4998/255/63 [80293248 Sectors]
 Offset: 0       Signature: 0xAA55
             Starting         Ending         LBA Info:
@@ -1448,408 +1052,24 @@ Offset: 0       Signature: 0xAA55
 fdisk:*1>
 </pre></blockquote>
 
-A checklist of things you want to make sure about before you exit
-fdisk(8):
+A checklist of things you want to make sure about before you exit fdisk(8):
 
 <ul>
-<li>Valid signature?
-<li>non-overlapping partitions?
-<li>OpenBSD partition with an "A6" id?
-<li>Proper partition (probably OpenBSD) flagged active?
+  <li>Non-overlapping partitions?
+  <li>The signature should be <tt>0xAA55</tt>. Otherwise <tt>update</tt>.
+  <li>Proper partition flagged bootable with <tt>*</tt> in front of the
+    partition <tt>#</tt>?
 </ul>
 
-<a href="#BackMorefdisk">(back to where we may have been)</a>
-
-<h3 id="Moredisklabel">4.17.4 - Custom disklabel layout</h3>
-
-Inside the OpenBSD fdisk(8) partition, we use
-<a href="http://man.openbsd.org/?query=disklabel">disklabel(8)</a>
-to create OpenBSD file system partitions.
-OpenBSD labels its file system partitions using sixteen letters, "a"
-through "p".
-Partition "a" on the boot disk is defined as the root partition,
-"b" on the boot disk is the default swap partition.
-"c" on all disks is the "whole disk" partition, it is used by programs
-that have to have raw access to the physical disk, such as fdisk(8)
-and disklabel(8).
-The "c" partition is created automatically for you, and should not be
-deleted or changed.
-The remaining letters are available for you to define mount points on.
-You may skip letters, you can define them in any order, and they can be
-in any order on the disk (although some platforms do have a requirement
-for where the "a" partition is).
-You can also leave gaps in the disk that are unallocated, and allocate
-them later, or potentially enlarge existing partitions later into that
-unallocated space using
-<a href="http://man.openbsd.org/?query=growfs">growfs(8)</a>.
-
-<p>
-All partitions which have native FFS partitions on them should be within
-the OpenBSD fdisk(8) partition, however
-<a href="faq14.html#foreignfs">non-OpenBSD</a> partitions can (and
-usually should) be outside the OpenBSD fdisk partition.
-
-<p>
-More information on using disklabel can be found
-<a href="faq14.html#disklabel">here</a>.
-
-<p>
-More information on the benefits of partitioning and strategies for
-creating a good partitioning plan are <a href="#Partitioning">below</a>.
-
-<p>
-The OpenBSD installer will attempt to auto-partition your
-disk in a usable, "general purpose" configuration, based on the size of
-your disk.
-If your disk is big enough, unused space will be allocated to the
-<tt>/home</tt> partition.
-While this is often quite useful, it doesn't satisfy all users' needs.
-
-<p>
-For our example, we'll assume we are building a static web server
-for some of our friends to use.
-We have a machine attached to a modest Internet connection, with a 40GB
-disk, with most of it used for OpenBSD (with the same 5GB Windows
-partition as the example above.
-Why?  Maybe this system has a RAID controller which is supported by
-OpenBSD, but manageable only from within Windows.
-More likely, because the FAQ editor doesn't feel like maintaining lots
-of different example systems).
-
-<p>
-The web pages served by an OpenBSD web server will be in
-<tt>/var/www</tt>, and very little will be stored in <tt>/home</tt>, so
-this indicates a definite change from the default that needs to be made.
-For the sake of discussion, we'll also assume that we won't need to
-rebuild the OS from source on this machine (we'll do that elsewhere).
-The system will not run X, however being that some web applications
-<a href="#FilesNeededX">expect X to be installed</a>, we will have X
-installed.
-The machine is not overly powerful, it can't have more than 1GB RAM in
-it, and it is unlikely our application will ever desire more than that.
-
-<p>
-So, after a bit of thought, our plan is to partition the system like
-this:
-<ul>
-<li><tt>/ - root</tt>: 100MB.  This will be 'a'.
-<li><tt>swap</tt>: 1GB (so we'll always have enough space for a core dump),
- this will be partition 'b'
-<li><tt>/usr</tt>: 2GB, partition d
-<li><tt>/tmp</tt>: 100MB (we don't anticipate much use of this), partition e
-<li><tt>/usr/local</tt>: 2GB, partition f
-<li><tt>/usr/X11R6</tt>: 1GB, partition g
-<li><tt>/home</tt>: 1GB, partition h
-<li><tt>/var</tt>: 1GB (that's a lot of system log files), partition j
-<li><tt>/var/www</tt>: rest of disk, partition k
-</ul>
+Quit and save current changes:
 
 <blockquote><pre>
-The auto-allocated layout for wd0 is:
-#                size           offset  fstype [fsize bsize  cpg]
-  a:          1024.0M         10490445  4.2BSD   2048 16384    1 # /
-  b:           252.1M         12587597    swap
-  c:         39205.7M                0  unused
-  d:          2319.3M         13103933  4.2BSD   2048 16384    1 # /tmp
-  e:          3653.9M         17853877  4.2BSD   2048 16384    1 # /var
-  f:          1149.8M         25337016  4.2BSD   2048 16384    1 # /usr
-  g:          1024.0M         27691862  4.2BSD   2048 16384    1 # /usr/X11R6
-  h:          3422.6M         29789014  4.2BSD   2048 16384    1 # /usr/local
-  i:          5122.3M               63    NTFS
-  j:          1848.7M         36798433  4.2BSD   2048 16384    1 # /usr/src
-  k:          1848.7M         40584654  4.2BSD   2048 16384    1 # /usr/obj
-  l:         17540.2M         44370875  4.2BSD   2048 16384    1 # /home
-Use (A)uto layout, (E)dit auto layout, or create (C)ustom layout? [a] <b>c</b>
+fdisk:*1> <b>quit</b>
+Writing MBR at offset 0.
 </pre></blockquote>
 
-If we had only minor revisions, we'd probably opt to "Edit" the custom
-layout rather than starting from a clean slate, but we are going to do
-things the hard way here.
+To discard all unwritten changes, use <tt><b>exit</b></tt> instead.
 
-<blockquote><pre>
-You will now create an OpenBSD disklabel inside the OpenBSD MBR
-partition. The disklabel defines how OpenBSD splits up the MBR partition
-into OpenBSD partitions in which filesystems and swap space are created.
-You must provide each filesystem's mountpoint in this program.
-
-The offsets used in the disklabel are ABSOLUTE, i.e. relative to the
-start of the disk, NOT the start of the OpenBSD MBR partition.
-
-Label editor (enter '?' for help at any prompt)
-> <b>p</b>
-OpenBSD area: 10490445-80293248; size: 69802803; free: 69802803
-#                size           offset  fstype [fsize bsize  cpg]
-  c:         80293248                0  unused
-  i:         10490381               64    NTFS
->
-</pre></blockquote>
-
-Note there are already two partitions here -- the "c" partition which is
-always there and created for you, but disklabel(8) has also noticed the
-existing NTFS partition and assigned it a disklabel partition so it
-could potentially be accessed by OpenBSD (note, at this time, NTFS
-support is experimental and requires a custom kernel but FAT/FAT32
-support is quite good).
-
-<p>
-We will now create our partitions.
-We will start with the "a" partition, our root partition:
-
-<blockquote><pre>
-> <b>a a</b>
-offset: [10490445] <b>&lt;Enter&gt;</b>
-size: [69802803] <b>100m</b>
-Rounding to cylinder: 208845
-FS type: [4.2BSD]  <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/</b>
->
-</pre></blockquote>
-
-Note that disklabel defaulted to the first available OpenBSD sector on
-the disk, which is what we want.
-It also defaulted to a size of all available space, which is NOT what we
-want.
-Here we overrode it with our preferred size, which can be specified in
-sectors, "M" or "G" here.
-
-<p>
-You will usually want to use the default FS type of "4.2BSD" for a
-FFS (Fast File System) or FFS2 partition, though other types you may find
-useful include "swap" and "RAID."
-
-<p>
-Finally is the mount point.
-Our "a" partition is the root partition, by definition.
-
-<p>
-Now, we do swap, which is our 'b' partition (again, this is a
-requirement -- 'b' on your boot disk is swap):
-
-<blockquote><pre>
-> <b>a b</b>
-offset: [10699290] <b>&lt;Enter&gt;</b>
-size: [69593958] <b>1g</b>
-Rounding to cylinder: 2104515
-FS type: [swap] <b>&lt;Enter&gt;</b>
->
-</pre></blockquote>
-
-Again, disklabel correctly calculated our starting sector, and presented
-us with a suggested size of "entire remaining space", which we again
-overrode with our desired size.
-Since this is the 'b' partition, disklabel assumed it was to be used
-for swap, and when we confirmed that, it didn't bother to ask us a
-mount point.
-
-<p>
-We are now ready to create the rest of the partitions.
-
-<blockquote><pre>
-> <b>a d</b>
-offset: [12803805] <b>&lt;Enter&gt;</b>
-size: [67489443] <b>2g</b>
-Rounding to cylinder: 4209030
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/usr</b>
-> <b>a e</b>
-offset: [17012835] <b>&lt;Enter&gt;</b>
-size: [63280413] <b>100m</b>
-Rounding to cylinder: 208845
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/tmp</b>
-> <b>a f</b>
-offset: [17221680] <b>&lt;Enter&gt;</b>
-size: [63071568] <b>2g</b>
-Rounding to cylinder: 4209030
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/usr/local</b>
-> <b>a g</b>
-offset: [21430710] <b>&lt;Enter&gt;</b>
-size: [58862538] <b>1g</b>
-Rounding to cylinder: 2104515
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/usr/X11R6</b>
-> <b>a h</b>
-offset: [23535225] <b>&lt;Enter&gt;</b>
-size: [56758023] <b>1g</b>
-Rounding to cylinder: 2104515
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/home</b>
-> <b>a j</b>
-offset: [25639740] <b>&lt;Enter&gt;</b>
-size: [54653508] <b>1g</b>
-Rounding to cylinder: 2104515
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/var</b>
-> <b>a k</b>
-offset: [27744255] <b>&lt;Enter&gt;</b>
-size: [52548993] <b>&lt;Enter&gt;</b>
-FS type: [4.2BSD] <b>&lt;Enter&gt;</b>
-mount point: [none] <b>/var/www</b>
->
-</pre></blockquote>
-
-Note that on the <tt>/var/www</tt> partition ("k"), we just took the
-default to use all remaining available disk space.
-With modern monstrously huge drives, this is usually a bad idea.
-If you know you will never use it, don't allocate it, and save it for
-some future use.
-
-<p>
-Now, let's look at our results, using the "p" and "p m" commands:
-
-<blockquote><pre>
-> <b>p</b>
-OpenBSD area: 10490445-80293248; size: 69802803; free: 0
-#                size           offset  fstype [fsize bsize  cpg]
-  a:           208845         10490445  4.2BSD   2048 16384    1 # /
-  b:          2104515         10699290    swap
-  c:         80293248                0  unused
-  d:          4209030         12803805  4.2BSD   2048 16384    1 # /usr
-  e:           208845         17012835  4.2BSD   2048 16384    1 # /tmp
-  f:          4209030         17221680  4.2BSD   2048 16384    1 # /usr/local
-  g:          2104515         21430710  4.2BSD   2048 16384    1 # /usr/X11R6
-  h:          2104515         23535225  4.2BSD   2048 16384    1 # /home
-  i:         10490381               64    NTFS
-  j:          2104515         25639740  4.2BSD   2048 16384    1 # /var
-  k:         52548993         27744255  4.2BSD   2048 16384    1 # /var/www
-> <b>p m</b>
-OpenBSD area: 10490445-80293248; size: 34083.4M; free: 0.0M
-  #                size           offset  fstype [fsize bsize  cpg]
-  a:           102.0M         10490445  4.2BSD   2048 16384    1 # /
-  b:          1027.6M         10699290    swap
-  c:         39205.7M                0  unused
-  d:          2055.2M         12803805  4.2BSD   2048 16384    1 # /usr
-  e:           102.0M         17012835  4.2BSD   2048 16384    1 # /tmp
-  f:          2055.2M         17221680  4.2BSD   2048 16384    1 # /usr/local
-  g:          1027.6M         21430710  4.2BSD   2048 16384    1 # /usr/X11R6
-  h:          1027.6M         23535225  4.2BSD   2048 16384    1 # /home
-  i:          5122.3M               64    NTFS
-  j:          1027.6M         25639740  4.2BSD   2048 16384    1 # /var
-  k:         25658.7M         27744255  4.2BSD   2048 16384    1 # /var/www
->
-</pre></blockquote>
-
-Like with fdisk, you don't want your OpenBSD disklabel partitions to
-overlap (other than the 'c' partition, which overlaps everything, of
-course).
-
-<p>
-Write your changes and quit disklabel:
-
-<blockquote><pre>
-> <b>w</b>
-> <b>q</b>
-No label changes.
-newfs: reduced number of fragments per cylinder group from 13048 to 12992 to
-enlarge last cylinder group
-/dev/rwd0a: 102.0MB in 208844 sectors of 512 bytes
-5 cylinder groups of 25.38MB, 1624 blocks, 3328 inodes each
-/dev/rwd0h: 1027.6MB in 2104512 sectors of 512 bytes
-6 cylinder groups of 202.47MB, 12958 blocks, 25984 inodes each
-newfs: reduced number of fragments per cylinder group from 13048 to 12992 to
-enlarge last cylinder group
-/dev/rwd0e: 102.0MB in 208844 sectors of 512 bytes
-5 cylinder groups of 25.38MB, 1624 blocks, 3328 inodes each
-/dev/rwd0d: 2055.2MB in 4209028 sectors of 512 bytes
-11 cylinder groups of 202.47MB, 12958 blocks, 25984 inodes each
-/dev/rwd0g: 1027.6MB in 2104512 sectors of 512 bytes
-6 cylinder groups of 202.47MB, 12958 blocks, 25984 inodes each
-/dev/rwd0f: 2055.2MB in 4209028 sectors of 512 bytes
-11 cylinder groups of 202.47MB, 12958 blocks, 25984 inodes each
-/dev/rwd0j: 1027.6MB in 2104512 sectors of 512 bytes
-6 cylinder groups of 202.47MB, 12958 blocks, 25984 inodes each
-/dev/rwd0k: 25658.7MB in 52548992 sectors of 512 bytes
-127 cylinder groups of 202.47MB, 12958 blocks, 25984 inodes each
-/dev/wd0a on /mnt type ffs (rw, asynchronous, local)
-/dev/wd0h on /mnt/home type ffs (rw, asynchronous, local, nodev, nosuid)
-/dev/wd0e on /mnt/tmp type ffs (rw, asynchronous, local, nodev, nosuid)
-/dev/wd0d on /mnt/usr type ffs (rw, asynchronous, local, nodev)
-/dev/wd0g on /mnt/usr/X11R6 type ffs (rw, asynchronous, local, nodev)
-/dev/wd0f on /mnt/usr/local type ffs (rw, asynchronous, local, nodev)
-/dev/wd0j on /mnt/var type ffs (rw, asynchronous, local, nodev, nosuid)
-/dev/wd0k on /mnt/var/www type ffs (rw, asynchronous, local, nodev, nosuid)
-
-Let's install the sets!
-...
-</pre></blockquote>
-
-<h2 id="AddThoughts">4.18 - Some additional thoughts on partitioning</h2>
-
-<ul>
- <li>For your first attempt at an experimentation system, one big
- <tt>/</tt> partition and swap may be easiest until you know how much
- space you need.
- By doing this, you will be sacrificing some of the default security
- features of OpenBSD that require separate filesystems for
- <tt>/</tt>, <tt>/tmp</tt>, <tt>/var</tt>, <tt>/usr</tt> and <tt>/home</tt>.
- However, you probably should not be going into production with your
- first OpenBSD install.
- <li>A system exposed to the Internet or other hostile forces should
- have a separate <tt>/var</tt> (and maybe even a separate
- <tt>/var/log</tt>) for logging.
- <li>A <tt>/home</tt> partition can be nice.
- New version of the OS?
- Wipe and reload everything else, leave your <tt>/home</tt> partition
- untouched.
- Remember to save a copy of your configuration files, though!
- <li>A separate partition for anything which may accumulate a large
- quantity of files that may need to be deleted can be faster to
- reformat and recreate than to delete.
- See the <a href="faq5.html#ProbObjPt">building from source FAQ</a>
- for an example (<tt>/usr/obj</tt>).
- <li>If you wish to rebuild your system from source for any reason,
- the source will be in <tt>/usr/src</tt>.
- <b>If you don't make a separate partition for <tt>/usr/src</tt>,
- make sure <tt>/usr</tt> has sufficient space.</b>
- <li>A commonly forgotten fact: you do <b>not</b> have to allocate
- all space on a drive when you set the system up!
- Since you will now find it a challenge to buy a new drive smaller than 100GB,
- it can make sense to leave a chunk of your drive unallocated.
- If you outgrow a partition, you can allocate a new partition from
- your unused space, <a href="faq10.html#DupFS">duplicate</a> your existing
- partition to the new partition, change
- <a href="http://man.openbsd.org/?query=fstab">/etc/fstab</a>
- to point to the new partition, remount, you now have more space.
- <li>If you make your partitions too close to the minimum size required,
- you will probably regret it later, when it is time to upgrade your
- system.
- <li>If you make very large partitions, keep in mind that performing
- filesystem checks using
- <a href="http://man.openbsd.org/?query=fsck">fsck(8)</a>
- requires about 1MB of RAM per gigabyte of filesystem size, and may be
- very time-consuming or not even feasible on older, slower systems.
- <li>If you permit users to write to <tt>/var/www</tt> (i.e., personal
- web pages), you might wish to put it on a separate partition, so you
- can use <a href="faq10.html#Quotas">quotas</a> to restrict the space
- they use, and if they fill the partition, no other parts of your
- system will be impacted.
- <li>You may also want to create an <tt>/altroot</tt> partition, as
- described in
- <a href="http://man.openbsd.org/?query=daily">daily(8)</a>.
- This can make a daily copy of your <tt>/</tt> partition, giving you
- an extra copy of your kernel and <tt>/etc</tt> configuration files should
- something happen to your root partition.
- Obviously, the <tt>/altroot</tt> partition needs to be at least as big
- as <tt>/</tt>.
- If you have a second drive and have something else duplicating the
- rest of your disk, either software
- <a href="http://man.openbsd.org/?query=softraid">softraid(4)</a>
- or a periodic copy using
- <a href="http://man.openbsd.org/?query=dump">dump(8)</a> and
- <a href="http://man.openbsd.org/?query=restore">restore(8)</a>,
- this disk can be bootable after the removal of the primary disk.
- <li>Compiling some <a href="faq15.html#Ports">ports</a> from source
- can take huge amounts of space on your <tt>/usr</tt> and <tt>/tmp</tt>
- partitions.
- This is another reason we suggest using
- <a href="faq15.html#PkgMgmt">pre-compiled packages</a> instead.
- <li>At least some editors use <tt>/tmp</tt> for scratch space, and
- this often needs to be as big or bigger than the largest file you edit.
- If you plan on editing 500MB files, your <tt>/tmp</tt> partition will
- need to be much larger than you might have planned on.
-</ul>
-<a href="#BackMoredisklabel">(back to where we may have been)</a>
 <p>
 <hr>
 <p>
