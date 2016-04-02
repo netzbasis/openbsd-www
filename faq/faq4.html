@@ -38,10 +38,9 @@
 <li><a href="#MkInsMedia"      >4.3 - Creating bootable OpenBSD install
                                 media</a>
   <ul>
-  <li><a href="#MkFlash"       >4.3.1 - Creating a bootable install flash drive
-                                from Unix</a>
-  <li><a href="#MkCD-ROM"      >4.3.2 - Creating a boot CD</a>
-  <li><a href="#MkFlop"        >4.3.3 - Creating floppies</a>
+  <li><a href="#MkFlash"       >4.3.1 - Flash drives</a>
+  <li><a href="#MkCD-ROM"      >4.3.2 - CD-ROMs</a>
+  <li><a href="#MkFlop"        >4.3.3 - Floppies</a>
   </ul>
 <li><a href="#Boot"            >4.4 - Booting OpenBSD install media</a>
 <li><a href="#Install"         >4.5 - Performing a simple install</a>
@@ -231,18 +230,17 @@ As an example, these are the installation images available for the
     bootable CD-ROMs.
 </ul>
 
-<h3 id="MkFlash">4.3.1 - Creating a bootable install flash drive from Unix</h3>
+<h3 id="MkFlash">4.3.1 - Flash drives</h3>
 
-A bootable USB flash drive (or an external hard disk, or a CF/SD/other card,
-&hellip;) can be created by attaching the target device on a Unix machine and
-then copying over the image with
+A bootable USB flash drive can be created by attaching the target device and
+copying over the image with
 <a href="http://man.openbsd.org/?query=dd">dd(1)</a>.
 
 <p>
 Using OpenBSD, assuming the device was recognized as <tt>sd6</tt>:
 
 <blockquote><pre>
-  # <b>dd if=/location/install*.fs of=/dev/rsd6c bs=1m</b>
+# <b>dd if=/location/install*.fs of=/dev/rsd6c bs=1m</b>
 </pre></blockquote>
 
 Details of this will vary on other platforms.
@@ -251,7 +249,7 @@ Note that the <b>raw I/O device</b> is used in its entirety:
 In some Linux variants, the entire seventh <tt>sd</tt> disk would be
 <tt>/dev/sdg</tt>.
 
-<h3 id="MkCD-ROM">4.3.2 - Making a CD-ROM</h3>
+<h3 id="MkCD-ROM">4.3.2 - CD-ROMs</h3>
 
 You can create a CD-ROM using the <tt>cdXX.iso</tt> or <tt>installXX.iso</tt>
 files using the tools at your disposal.
@@ -270,7 +268,7 @@ Modern Windows and Macintosh systems can directly create CDs from ISO images.
 On Linux or other Unix-like systems, use applications such as
 <a href="http://www.cdrkit.org/">cdrkit</a>.
 
-<h3 id="MkFlop">4.3.3 - Creating floppies</h3>
+<h3 id="MkFlop">4.3.3 - Floppies</h3>
 
 Creating floppies in OpenBSD can be done with
 <a href="http://man.openbsd.org/?query=fdformat">fdformat(1)</a>
@@ -279,12 +277,7 @@ to prep the disk,
 to write the image, then
 <a href="http://man.openbsd.org/?query=cmp">cmp(1)</a>
 to verify the write was good.
-A similar process and tools can be used on other Unix platforms.
-
-<p>
-Creating floppies on Windows can be done with the native low-level
-formatting tools, and a program like <tt>ntrw</tt> which can be retrieved
-from the <tt>tools</tt> directory on any of the mirror sites.
+A similar process can be used on other Unix platforms.
 
 <h2 id="Boot">4.4 - Booting OpenBSD install media</h2>
 
@@ -732,11 +725,15 @@ large amounts of data from your computer.
 
 <p>
 New OpenBSD users are <i>strongly</i> encouraged to start with a blank hard
-drive on a dedicated machine, and then practice their desired configuration on
-a non-production system before attempting a multiboot configuration on a
-production machine.
-FAQ 14 has  more information about
-the <a href="faq14.html#BootAmd64">OpenBSD boot process</a>.
+drive on a dedicated machine.
+
+<p>
+FAQ 14 has information about the
+<a href="faq14.html#BootAmd64">OpenBSD boot process</a>.
+An example showing how to use the installer to set up a custom
+<a href=http://man.openbsd.org/?query=fdisk>fdisk(8)</a>
+configuration for dual booting with Windows is in the
+<a href="faq4.html#CustomFdisk">next section</a>.
 
 <p>
 Preferably use one of the four <i>primary</i> MBR partitions for
