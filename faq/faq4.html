@@ -37,11 +37,6 @@
 <li><a href="#Checklist"       >4.2 - Pre-installation checklist</a>
 <li><a href="#MkInsMedia"      >4.3 - Creating bootable OpenBSD install
                                 media</a>
-  <ul>
-  <li><a href="#MkFlash"       >4.3.1 - Flash drives</a>
-  <li><a href="#MkCD-ROM"      >4.3.2 - CD-ROMs</a>
-  <li><a href="#MkFlop"        >4.3.3 - Floppies</a>
-  </ul>
 <li><a href="#Boot"            >4.4 - Booting OpenBSD install media</a>
 <li><a href="#Install"         >4.5 - Performing a simple install</a>
 <li><a href="#FilesNeeded"     >4.6 - What files are needed for
@@ -230,7 +225,7 @@ As an example, these are the installation images available for the
     bootable CD-ROMs.
 </ul>
 
-<h3 id="MkFlash">4.3.1 - Flash drives</h3>
+<h3 id="MkFlash">Flash drives</h3>
 
 A bootable USB flash drive can be created by attaching the target device and
 copying over the image with
@@ -249,26 +244,18 @@ Note that the <b>raw I/O device</b> is used in its entirety:
 In some Linux variants, the entire seventh <tt>sd</tt> disk would be
 <tt>/dev/sdg</tt>.
 
-<h3 id="MkCD-ROM">4.3.2 - CD-ROMs</h3>
+<h3 id="MkCD-ROM">CD-ROMs</h3>
 
 You can create a CD-ROM using the <tt>cdXX.iso</tt> or <tt>installXX.iso</tt>
-files using the tools at your disposal.
-Do note that the goal is to create a CD based on the image file,
-not to put the ISO file on a CD as a single file.
-
-<p>
-In OpenBSD, you can create a CD from an ISO image using
+files.
+In OpenBSD, use
 <a href="http://man.openbsd.org/?query=cdio">cdio(1)</a>:
 
 <blockquote><pre>
 # <b>cdio tao cd*.iso</b>
 </pre></blockquote>
 
-Modern Windows and Macintosh systems can directly create CDs from ISO images.
-On Linux or other Unix-like systems, use applications such as
-<a href="http://www.cdrkit.org/">cdrkit</a>.
-
-<h3 id="MkFlop">4.3.3 - Floppies</h3>
+<h3 id="MkFlop">Floppies</h3>
 
 Creating floppies in OpenBSD can be done with
 <a href="http://man.openbsd.org/?query=fdformat">fdformat(1)</a>
@@ -389,9 +376,9 @@ New users are recommended to install all of them.
   <li><b><tt>gameXX.tgz</tt></b>
     - text-based games
   <li><b><tt>xbaseXX.tgz</tt></b>
-    - the base libraries and utilities for X11
+    - the base libraries and utilities for X11 (requires <tt>xshareXX.tgz</tt>)
   <li><b><tt>xfontXX.tgz</tt></b>
-    - X11's font server and fonts
+    - fonts used by X11
   <li><b><tt>xservXX.tgz</tt></b>
     - X11's X servers
   <li><b><tt>xshareXX.tgz</tt></b>
@@ -401,25 +388,15 @@ New users are recommended to install all of them.
 <h3 id="FilesNeededX">Why do I have to install X for my non-graphical
 application?</h3>
 
-Even if you have no intention of running X, many third party
-<a href="faq15.html">packages</a> require the libraries or other
-utilities in X to be installed on your system.
-These applications can sometimes be satisfied simply by installing
-just <tt>xbaseXX.tgz</tt> - the rest of X is not always needed.
-Many people who resist installing X on their system don't have a valid reason:
+Some libraries from <tt>xbaseXX.tgz</tt>, like freetype or fontconfig, can be
+used outside of X by programs that manipulate text or graphics.
+Such programs will usually need fonts, either from <tt>xfontXX.tgz</tt> or
+font packages.
+For the sake of simplicity, the developers decided against maintaining a minimal
+<tt>xbaseXX.tgz</tt> set that would allow most non-X ports to run.
 
-<ul>
-<li>By itself, installing X does not cause any program to
-execute on the system.
-<li>By itself, installing X on a system does not change the
-risk of external security issues.
-<li>If someone is already ON your system, they can most likely install
-whatever they wish, so the presence or absence of the X
-does not appreciably change the situation.
-<li>The only parts of X that are running are the parts
-required by your application.
-<li>The space required for X is relatively modest on modern hardware.
-</ul>
+<p>
+The <tt>xservXX.tgz</tt> set is rarely needed if you don't intend to run X.
 
 <h3 id="FilesNeededComp">I don't want to install the compilers</h3>
 
@@ -509,10 +486,10 @@ before making decisions about custom partitioning schemes.
     you might wish to put it on a separate partition, so you can use
     <a href="faq10.html#Quotas">quotas</a> to restrict the space they use.
   <li>
-    If you wish to <a href="faq5.html">rebuild your system from source</a> for
-    any reason, the source will be in <tt>/usr/src</tt>.
-    <b>If you don't make a separate partition for <tt>/usr/src</tt>, make sure
-    <tt>/usr</tt> has sufficient space.</b>
+    If you wish to <a href="faq5.html">build the system from source</a>, you
+    will need room for <tt>/usr/src</tt> and <tt>/usr/obj</tt>.
+    Create separate partitions for them or make sure <tt>/usr</tt> is
+    sufficiently large.
   <li>Compiling some <a href="faq15.html#Ports">ports</a> from source
     can take huge amounts of space on your <tt>/usr</tt> and <tt>/tmp</tt>
     partitions.
@@ -614,6 +591,8 @@ platform.
   <li><b>The computer won't boot after install.</b>
     Your install seemed to go fine, but on first boot, you see no sign of
     OpenBSD attempting to boot.
+
+    <p>
     Possible reasons include:
     <ul>
       <li>No partition is flagged bootable.
@@ -627,9 +606,13 @@ platform.
         Run
         <a href="http://man.openbsd.org/?query=installboot">installboot(8)</a>.
     </ul>
+
+  <p>
   <li><b>The fdisk partition table is trashed or blank.</b>
     The system works, but with <tt><b>fdisk wd0</b></tt>, the partition table
     seems to be blank or garbage.
+
+    <p>
     This is usually caused by having created an
     <a href="http://man.openbsd.org/?query=fdisk">fdisk(8)</a>
     partition with an offset of zero sectors, rather than the
@@ -650,9 +633,8 @@ platform.
     find the installer will complain about no <tt>SHA256.sig file</tt>, and
     thus it can't verify the files during the installation.
     <p>
-    It is not possible to <i>usefully</i> have the complete installer verify
-    the sets.
-    After all, if someone were to make a "rogue" installXX.iso file, they
+    It is not possible to usefully have the complete installer verify the sets.
+    After all, if someone were to make a rogue installXX.iso file, they
     would almost certainly change the installer to say everything verified
     successfully.
     Thus, you must <a href="faq3.html#Download">verify</a> your installer

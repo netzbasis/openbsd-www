@@ -694,13 +694,17 @@ When this step is complete, you have newly compiled binaries in place on
 your system.
 
 <p>
-<li><b>If building <i>-current</i>:</b> Update <tt>/dev</tt> and
-<tt>/etc</tt>, with the changes listed in
-<a href="current.html">current.html</a>.
-If following -stable after a proper upgrade process or an install of the
-<a href="#BldBinary">proper starting binary</a>, this step is not needed
-or desired.
-
+<li><b>If building <i>-current</i></b>
+  <ul>
+    <li>review changes listed in <a href="current.html">current.html</a>
+    <li>update configuration files using
+      <a href="http://man.openbsd.org/?query=sysmerge">sysmerge(8)</a>
+    <li>update <tt>/dev</tt> using
+      <a href="http://man.openbsd.org/?query=MAKEDEV">MAKEDEV(8)</a>
+  </ul>
+  If following -stable after a proper upgrade process or an install of the
+  <a href="#BldBinary">proper starting binaries</a>, these steps are not needed
+  or desired.
 </ul>
 
 <h2 id="Release">5.3 - Building a release</h2>
@@ -807,10 +811,7 @@ that contains the list of all the files in your newly created release.
 </pre></blockquote>
 
 Once you have the complete release made, you can use those files for
-a standard <a href="faq4.html">install</a> or upgrade on another machine.
-If updating to a new <i>-stable</i>, simply <a href="faq4.html#AddFileSet">
-unpack</a> the sets and kernel to the root directory of the target machine
-and reboot.
+an <a href="faq4.html">install</a> or an upgrade on another machine.
 
 <h2 id="Xbld">5.4 - Building X</h2>
 
@@ -1247,7 +1248,7 @@ the most recent snapshot, but failures when building <i>-release</i> or
 Most problems are usually one of the following:
 
 <ul>
-<li>Failing to start from the <a href="#BldBinary">appropriate binary</a>,
+<li>Failing to start from the <a href="#BldBinary">appropriate binaries</a>,
 including attempting to upgrade from source or assuming a week old snapshot
 is "close enough"
 <li><a href="#BldGetSrc">Checking out</a> the wrong branch of the tree
@@ -1358,7 +1359,7 @@ Here are some other resources:
 <li><a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/Makefile">
 <tt>/usr/src/Makefile</tt></a>
 <li><a href="../stable.html">Patch Branches</a> (<i>-stable</i>)
-<li>(for X) <tt>/usr/X11R6/README</tt> on your installed system
+<li>(for X) <tt>/usr/xenocara/README</tt> on your installed system
 </ul>
 
 <h3 id="UpdateEtc">5.9.7 - What is the best way to update <tt>/etc</tt>,
