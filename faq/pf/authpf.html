@@ -27,22 +27,17 @@ PERFORMANCE OF THIS DOCUMENTATION
 -->
 
 <body bgcolor="#ffffff" text="#000000">
-<!-- Passes validator.w3.org, please keep it this way;
-please, use a max of 72 chars per line -->
 
 <h2>
 <a href="../../index.html">
 <font color="#0000ff"><i>Open</i></font><font color="#000084">BSD</font></a>
 <font color="#e00000">PF - Authpf: User Shell for Authenticating Gateways</font>
+<small>
+<a href="index.html" style="font-weight:normal; float:right">[Contents]</a>
+</small>
 </h2>
 <hr>
-<p>
-[<a href="index.html">Contents</a>]
-[<a href="ftp.html">Previous: Issues with FTP</a>]
-[<a href="carp.html">Next: Firewall Redundancy with CARP and pfsync</a>]
-<p>
 
-<h3>Table of Contents</h3>
 <ul>
 <li><a href="#intro">Introduction</a>
 <li><a href="#config">Configuration</a>
@@ -62,19 +57,19 @@ please, use a max of 72 chars per line -->
 <hr>
 
 <h2 id="intro">Introduction</h2>
-<a href="http://man.openbsd.org/?query=authpf&amp;sektion=8"
+<a href="http://man.openbsd.org/authpf.8"
 >Authpf(8)</a> is a user shell for authenticating gateways. An
 authenticating gateway is just like a regular network gateway (a.k.a. a
 router) except that users must first authenticate themselves to the
 gateway before it will allow traffic to pass through it. When a user's
 shell is set to <tt>/usr/sbin/authpf</tt> (i.e., instead of setting a
 user's shell to
-<a href="http://man.openbsd.org/?query=ksh&amp;sektion=1"
+<a href="http://man.openbsd.org/ksh.1"
 >ksh(1)</a>,
-<a href="http://man.openbsd.org/?query=csh&amp;sektion=1"
+<a href="http://man.openbsd.org/csh.1"
 >csh(1)</a>, etc) and the user logs in using SSH, authpf will make the
 necessary changes to the active  
-<a href="http://man.openbsd.org/?query=pf&amp;sektion=4"
+<a href="http://man.openbsd.org/pf.4"
 >pf(4)</a> ruleset so that the user's traffic is passed through the
 filter and/or translated using Network Address Translation or
 redirection. Once the user logs out or their session is disconnected,
@@ -125,7 +120,7 @@ complete access.
 Authpf logs the username and IP address of each user who authenticates
 successfully as well as the start and end times of their login session
 via
-<a href="http://man.openbsd.org/?query=syslogd&amp;sektion=8"
+<a href="http://man.openbsd.org/syslogd.8"
 >syslogd(8)</a>. By using this information, an administrator can
 determine who was logged in when and also make users accountable for
 their network traffic.
@@ -133,7 +128,7 @@ their network traffic.
 <h2 id="config">Configuration</h2>
 The basic steps needed to configure authpf are outlined here. For a
 complete description of authpf configuration, please refer to the
-<a href="http://man.openbsd.org/?query=authpf&amp;sektion=8"
+<a href="http://man.openbsd.org/authpf.8"
 >authpf man page</a>.
 
 <h3 id="enable">Enabling Authpf</h3>
@@ -255,7 +250,7 @@ message.
 <h3 id="shell">Assigning Authpf as a User's Shell</h3>
 In order for authpf to work it must be assigned as the user's login
 shell. When the user successfully authenticates to
-<a href="http://man.openbsd.org/?query=sshd&amp;sektion=8"
+<a href="http://man.openbsd.org/sshd.8"
 >sshd(8)</a>, authpf will be executed as the user's shell. It will then
 check if the user is allowed to use authpf, load the rules from the
 appropriate file, etc.
@@ -264,17 +259,17 @@ appropriate file, etc.
 There are a couple ways of assigning authpf as a user's shell:
 <ol>
 <li>Manually for each user using
-<a href="http://man.openbsd.org/?query=chsh&amp;sektion=1"
+<a href="http://man.openbsd.org/chsh.1"
 >chsh(1)</a>, 
-<a href="http://man.openbsd.org/?query=vipw&amp;sektion=8"
+<a href="http://man.openbsd.org/vipw.8"
 >vipw(8)</a>,
-<a href="http://man.openbsd.org/?query=useradd&amp;sektion=8"
+<a href="http://man.openbsd.org/useradd.8"
 >useradd(8)</a>,
-<a href="http://man.openbsd.org/?query=usermod&amp;sektion=8"
+<a href="http://man.openbsd.org/usermod.8"
 >usermod(8)</a>, etc.
 <li>By assigning users to a login class and changing the class's 
 <tt>shell</tt> option in
-<a href="http://man.openbsd.org/?query=login.conf&amp;sektion=5"
+<a href="http://man.openbsd.org/login.conf.5"
 ><tt>/etc/login.conf</tt></a>.
 </ol>
 
@@ -291,10 +286,10 @@ Some examples of what policies can be set:
 <li><b>shell</b> - Specify a user's login shell.
 This can be used to force a user's shell to <tt>authpf</tt> regardless
 of the entry in the
-<a href="http://man.openbsd.org/?query=passwd&amp;sektion=5"
+<a href="http://man.openbsd.org/passwd.5"
 >passwd(5)</a> database. 
 <li><b>welcome</b> - Specify which
-<a href="http://man.openbsd.org/?query=motd&amp;sektion=5"
+<a href="http://man.openbsd.org/motd.5"
 >motd(5)</a> file to display when a user logs in. 
 This is useful for displaying messages that are relevant only to authpf
 users.
@@ -302,7 +297,7 @@ users.
 
 <p>
 Login classes are created in the
-<a href="http://man.openbsd.org/?query=login.conf&amp;sektion=5"
+<a href="http://man.openbsd.org/login.conf.5"
 >login.conf(5)</a> file. 
 OpenBSD comes with an authpf login class defined as:
 
@@ -319,7 +314,7 @@ authpf:\<br>
 Users are assigned to a login class by editing the <tt>class</tt> field
 of the user's passwd(5) database entry.
 One way to do this is with the
-<a href="http://man.openbsd.org/?query=chsh&amp;sektion=1"
+<a href="http://man.openbsd.org/chsh.1"
 >chsh(1)</a> command.
 
 <h2 id="wholog">Seeing Who is Logged In</h2>
@@ -427,11 +422,6 @@ and to then flow through the gateway into the rest of the network. The
 <tt>quick</tt> keyword is used throughout so that PF doesn't have to
 evaluate each named ruleset when a new connection passes through the
 gateway.
-
-<p>
-[<a href="ftp.html">Previous: Issues with FTP</a>]
-[<a href="index.html">Contents</a>]
-[<a href="carp.html">Next: Firewall Redundancy with CARP and pfsync</a>]
 
 <p>
 </body>

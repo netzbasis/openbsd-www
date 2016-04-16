@@ -22,18 +22,15 @@
 <a href="../index.html">
 <font color="#0000ff"><i>Open</i></font><font color="#000084">BSD</font></a>
 <font color="#e00000">FAQ 8 - General Questions</font>
+<small>
+<a href="index.html" style="font-weight:normal; float:right">[FAQ Index]</a>
+</small>
 </h2>
 <hr>
-<p>
-<a href= "index.html">[FAQ Index]</a>
-<a href= "faq7.html">[To Section 7 - Keyboard and Display Controls]</a>
-<a href= "faq9.html">[To Section 9 - Migrating to OpenBSD]</a>
-<p>
 
-<h3>Table of Contents</h3>
 <ul>
 <li><a href= "#LostPW"      >8.1 - I forgot my root password</a>
-<li><a href= "#Bootloader"  >8.2 - OpenBSD's bootloader (i386, amd64)</a>
+<li><a href= "#Bootloader"  >8.2 - OpenBSD's bootloader</a>
 <li><a href= "#ksh"         >8.3 - ksh(1) does not appear to read my
                              .profile</a>
 <li><a href= "#Journaling"  >8.4 - Does OpenBSD support any journaling
@@ -44,6 +41,10 @@
 <li><a href= "#RevDNS"      >8.7 - Reverse DNS - or - Why is it taking so
                              long for me to log in?</a>
 <li><a href= "#SKey"        >8.8 - Using S/Key on your OpenBSD system</a>
+<li><a href="#GenNotConf"   >8.9 - A device is recognized but says
+                             "not configured" in dmesg</a>
+<li><a href="#GenSupport"   >8.10 - I have a card listed as supported but
+                             it doesn't work!</a>
 </ul>
 
 <hr>
@@ -52,7 +53,7 @@
 
 The basic process to regain root is to boot into single user mode, mount
 the relevant partitions (<tt>/</tt> and <tt>/usr</tt>), run
-<a href="http://man.openbsd.org/?query=passwd">passwd(1)</a>
+<a href="http://man.openbsd.org/passwd">passwd(1)</a>
 to change the root password.
 You can then boot and login normally.
 
@@ -64,7 +65,7 @@ This part of the process varies from <a href="../plat.html">platform</a>
 to platform.
 For amd64 and i386 platforms, the
 <a href="faq14.html#BootAmd64">second stage boot loader</a>,
-<a href="http://man.openbsd.org/?query=boot&amp;arch=i386">boot(8)</a>,
+<a href="http://man.openbsd.org/OpenBSD-current/i386/boot">boot(8)</a>,
 pauses for a few seconds to give you a chance to provide parameters
 to the kernel.
 The boot prompt looks like this:
@@ -102,7 +103,7 @@ will work:
 # <b>fsck -p /usr &amp;&amp; mount /usr</b>
 </pre></blockquote>
 
-<li><b>Run <a href="http://man.openbsd.org/?query=passwd">passwd(1)</a>
+<li><b>Run <a href="http://man.openbsd.org/passwd">passwd(1)</a>
 to change the root password.</b>
 As you already have root privileges (from being in single-user mode), it
 will not ask you to provide your current password.
@@ -110,13 +111,13 @@ will not ask you to provide your current password.
 <li><b>Boot into multiuser mode.</b>
 This can be done by either entering "CTRL-D" to resume the normal boot process,
 or by entering the
-<a href="http://man.openbsd.org/?query=reboot">reboot(8)</a>
+<a href="http://man.openbsd.org/reboot">reboot(8)</a>
 command.
 
 </ul>
 
 If this is a non-personal machine, you should probably use
-<a href="http://man.openbsd.org/?query=doas">doas(1)</a>
+<a href="http://man.openbsd.org/doas">doas(1)</a>
 to give multiple (trusted) people the ability to execute root commands.
 
 <p>
@@ -124,9 +125,9 @@ to give multiple (trusted) people the ability to execute root commands.
 If an attacker has physical access to your system, they win, regardless of the
 OS on the computer.
 There are ways to force the use of a password on single-user mode, see
-<a href="http://man.openbsd.org/?query=ttys">ttys(5)</a>,
+<a href="http://man.openbsd.org/ttys">ttys(5)</a>,
 or eliminate the pause on i386/amd64, see
-<a href="http://man.openbsd.org/?query=boot.conf&amp;arch=i386">boot.conf(8)</a>.
+<a href="http://man.openbsd.org/OpenBSD-current/i386/boot">boot.conf(8)</a>.
 Getting around those tricks is also pretty easy.
 One way would be to boot from a CD or USB drive and edit (or replace) the
 password file.
@@ -143,7 +144,7 @@ to grab console, insert a virtual floppy and force a reboot of the machine.
 They might as well have physical access to the system.
 The console management system is likely not as secure as OpenBSD.
 
-<h2 id="Bootloader">8.2 - OpenBSD's bootloader (i386, amd64)</h2>
+<h2 id="Bootloader">8.2 - OpenBSD's bootloader</h2>
 
 When booting your OpenBSD system, you have probably noticed the boot prompt.
 
@@ -156,7 +157,7 @@ It will automatically boot if no commands are given.
 But sometimes problems arise, or special functions are needed.
 That's where these options will come in handy.
 To start off, you should read through the
-<a href="http://man.openbsd.org/?query=boot&amp;arch=i386">boot(8)</a>
+<a href="http://man.openbsd.org/OpenBSD-current/i386/boot">boot(8)</a>
 man page.
 Here we will go over the most commonly used commands for the bootloader.
 
@@ -202,12 +203,12 @@ These are entered in the format of: <b>boot [ image [-acds]]</b>
 
 <p>
 For further information you can read
-<a href="http://man.openbsd.org/?query=boot&amp;arch=i386">boot(8)</a>.
+<a href="http://man.openbsd.org/OpenBSD-current/i386/boot">boot(8)</a>.
 
 <h2 id="ksh">8.3 - ksh(1) does not appear to read my <tt>.profile</tt></h2>
 
 There are two likely reasons for
-<a href="http://man.openbsd.org/?query=ksh">ksh(1)</a>
+<a href="http://man.openbsd.org/ksh">ksh(1)</a>
 to seemingly ignore a user's <tt>.profile</tt> file.
 <ul>
 <li><tt>.profile</tt> is not owned by the user.
@@ -219,10 +220,10 @@ To fix for <b>username</b>,
 
 <li>You are using ksh(1) from within the X Window System
 <p>
-Under <a href="http://man.openbsd.org/?query=xterm">xterm(1)</a>,
+Under <a href="http://man.openbsd.org/xterm">xterm(1)</a>,
 <tt>argv[0]</tt> for ksh(1) is not prepended with a dash.
 Prepending a dash to <tt>argv[0]</tt> will cause
-<a href="http://man.openbsd.org/?query=csh">csh(1)</a>
+<a href="http://man.openbsd.org/csh">csh(1)</a>
 and ksh(1) to know they should interpret their login files.
 For csh(1) that's <tt>.login</tt>, with a separate <tt>.cshrc</tt>
 that is always run when csh(1) starts up.
@@ -253,7 +254,7 @@ updates</a> to get more details.
 <h2 id="NTPerror">8.5 - Why is my clock off by twenty-some seconds?</h2>
 
 When using
-<a href="http://man.openbsd.org/?query=rdate">rdate(8)</a>
+<a href="http://man.openbsd.org/rdate">rdate(8)</a>
 to synchronize your clock to a NTP server, you may find your clock is
 off by twenty-some seconds from your local definition of time.
 
@@ -271,7 +272,7 @@ UTC TAI</tt>.
 Addressing the problem is fairly simple.
 In most countries you will get the correct time if you use the <tt>-c</tt>
 parameter to
-<a href="http://man.openbsd.org/?query=rdate">rdate(8)</a>
+<a href="http://man.openbsd.org/rdate">rdate(8)</a>
 and use a time zone out of the directory <tt>/usr/share/zoneinfo/right</tt>.
 For example, if you are located in Germany, you could use these commands:
 
@@ -311,7 +312,7 @@ Saving modified kernel.
 </pre></blockquote>
 
 See
-<a href="http://man.openbsd.org/?query=options">options(4)</a>
+<a href="http://man.openbsd.org/options">options(4)</a>
 and search for option "TIMEZONE=value" for more information.
 
 <p>
@@ -327,7 +328,7 @@ zone:
 
 See also:
 <ul>
-<li><a href="http://man.openbsd.org/?query=date">date(1)</a>
+<li><a href="http://man.openbsd.org/date">date(1)</a>
 <li><a href="faq6.html#OpenNTPD">OpenBSD's NTPD</a>
 </ul>
 
@@ -337,10 +338,10 @@ Why is it taking so long for me to log in?</h2>
 
 Many new users to OpenBSD experience a two minute login delay when using
 services such as
-<a href="http://man.openbsd.org/?query=ssh">ssh(1)</a> or
-<a href="http://man.openbsd.org/?query=ftp">ftp(1)</a>.
+<a href="http://man.openbsd.org/ssh">ssh(1)</a> or
+<a href="http://man.openbsd.org/ftp">ftp(1)</a>.
 This can also be experienced when using a proxy, such as
-<a href="http://man.openbsd.org/?query=ftp-proxy">ftp-proxy(8)</a>,
+<a href="http://man.openbsd.org/ftp-proxy">ftp-proxy(8)</a>,
 or when sending mail.
 
 <p>
@@ -355,9 +356,9 @@ This is known as a Reverse DNS entry.
 In order to provide better logging, OpenBSD performs a reverse DNS
 lookup on any machine that attaches to it in many different ways,
 including
-<a href="http://man.openbsd.org/?query=ssh">ssh(1)</a>,
-<a href="http://man.openbsd.org/?query=ftp">ftp(1)</a>,
-<a href="http://man.openbsd.org/?query=ftp-proxy">ftp-proxy(8)</a>.
+<a href="http://man.openbsd.org/ssh">ssh(1)</a>,
+<a href="http://man.openbsd.org/ftp">ftp(1)</a>,
+<a href="http://man.openbsd.org/ftp-proxy">ftp-proxy(8)</a>.
 Unfortunately, in some cases, the machine that is making the connection
 does not have a proper reverse DNS entry.
 
@@ -376,9 +377,9 @@ they end up with a two minute delay before things happen.
 From a workstation behind the NAT of the gateway with an
 <a href="http://tools.ietf.org/html/rfc1918">unregistered IP</a>
 address of 192.168.1.35, the user uses
-<a href="http://man.openbsd.org/?query=ssh">ssh(1)</a>
+<a href="http://man.openbsd.org/ssh">ssh(1)</a>
 to access the gateway system.
-The <a href="http://man.openbsd.org/?query=ssh">ssh(1)</a>
+The <a href="http://man.openbsd.org/ssh">ssh(1)</a>
 client prompts for username and password, and sends them to the gateway box.
 The gateway then tries to figure out who is trying to log in by performing a
 reverse DNS lookup of 192.168.1.35.
@@ -393,7 +394,7 @@ In this case, you will find yourself waiting for the OpenBSD name resolver to
 time out, which takes about two minutes before the login will be permitted to
 continue.
 In the case of
-<a href="http://man.openbsd.org/?query=ftp-proxy">ftp-proxy(8)</a>,
+<a href="http://man.openbsd.org/ftp-proxy">ftp-proxy(8)</a>,
 some ftp clients will timeout before the reverse DNS query
 times out, leading to the impression that ftp-proxy isn't working.
 
@@ -405,16 +406,16 @@ Fortunately, it is an easy thing to fix.
 
 The simplest fix is as follows:
 Populate your
-<a href="http://man.openbsd.org/?query=hosts">hosts(5)</a>
+<a href="http://man.openbsd.org/hosts">hosts(5)</a>
 file with all the workstations you have in your internal network.
 Make sure that your
-<a href="http://man.openbsd.org/?query=resolv.conf">resolv.conf(5)</a>
+<a href="http://man.openbsd.org/resolv.conf">resolv.conf(5)</a>
 file contains the line <tt>lookup file bind</tt>.
 This tells the resolver to start with the
-<a href="http://man.openbsd.org/?query=hosts">hosts(5)</a> file,
+<a href="http://man.openbsd.org/hosts">hosts(5)</a> file,
 and failing that, to use the DNS servers specified by the <tt>nameserver</tt>
 lines in your
-<a href="http://man.openbsd.org/?query=resolv.conf">resolv.conf(5)</a> file.
+<a href="http://man.openbsd.org/resolv.conf">resolv.conf(5)</a> file.
 
 <p>
 Your <tt>/etc/hosts</tt> file will look something like this:
@@ -463,7 +464,7 @@ the top of the file.
 <p>
 If your gateway must use DHCP for configuration, you may well find you
 have a problem --
-<a href="http://man.openbsd.org/?query=dhclient">dhclient(8)</a>
+<a href="http://man.openbsd.org/dhclient">dhclient(8)</a>
 will overwrite your <tt>/etc/resolv.conf</tt> every time the lease is
 renewed, which will remove the <tt>lookup file bind</tt> line.
 This can be solved by putting the line <tt>lookup file bind</tt> in the file
@@ -483,9 +484,9 @@ S/Key is a "one-time password" authentication system.
 It generates a sequence of one-time (single use) passwords from a user's
 secret passphrase along with a challenge received from the server, by means of a
 hash function:
-<a href="http://man.openbsd.org/?query=md5">md5</a>,
-<a href="http://man.openbsd.org/?query=sha1">sha1</a> or
-<a href="http://man.openbsd.org/?query=rmd160">rmd160</a>.
+<a href="http://man.openbsd.org/md5">md5</a>,
+<a href="http://man.openbsd.org/sha1">sha1</a> or
+<a href="http://man.openbsd.org/rmd160">rmd160</a>.
 
 <blockquote>
 <b>WARNING:</b>
@@ -508,7 +509,7 @@ If this directory doesn't exist, have the superuser create it by doing:
 </pre></blockquote>
 
 Then use
-<a href="http://man.openbsd.org/?query=skeyinit">skeyinit(1)</a>
+<a href="http://man.openbsd.org/skeyinit">skeyinit(1)</a>
 to initialize your S/Key.
 You will first be prompted for your login password, then you will be asked for
 your S/Key secret passphrase, which must be at least 10 characters long:
@@ -529,14 +530,14 @@ Next login password: HAUL BUS JAKE DING HOT HOG
 
 Notice the information in the last two lines.
 The program used to create your S/Key password is
-<a href="http://man.openbsd.org/?query=otp-md5">otp-md5(1)</a>,
+<a href="http://man.openbsd.org/otp-md5">otp-md5(1)</a>,
 the sequence number is <tt>100</tt> and the secret key is <tt>oshi45820</tt>.
 The six small words <tt>HAUL BUS JAKE DING HOT HOG</tt> constitute the S/Key
 password with sequence number <tt>100</tt>.
 
 <h3>Generating S/Key passwords</h3>
 To generate the S/Key password for the next login, use
-<a href="http://man.openbsd.org/?query=skeyinfo">skeyinfo(1)</a>
+<a href="http://man.openbsd.org/skeyinfo">skeyinfo(1)</a>
 to find out what command to run:
 
 <blockquote><pre>
@@ -583,8 +584,8 @@ ftp> <b>quit</b>
 </pre></blockquote>
 
 Similarly, for
-<a href="http://man.openbsd.org/?query=ssh">ssh(1)</a> or
-<a href="http://man.openbsd.org/?query=telnet">telnet(1)</a>:
+<a href="http://man.openbsd.org/ssh">ssh(1)</a> or
+<a href="http://man.openbsd.org/telnet">telnet(1)</a>:
 
 <blockquote><pre>
 $ <b>ssh -l ericj:skey localhost</b>
@@ -594,11 +595,86 @@ Last login: Thu Apr  7 12:21:48 on ttyp1 from 156.63.248.77
 $
 </pre></blockquote>
 
+<h2 id="GenNotConf">8.9 - My device is recognized but says "not configured"
+in dmesg</h2>
+
+In short, it means your device is not supported by the kernel you are using,
+so you will not be able to use it.
+
 <p>
-<hr>
+PCI and many other types of devices offer identifying information so that
+the OS can properly recognize and support devices.
+Adding recognition is easy, adding support is often not.
+Here are two examples of "not configured" devices:
+
+<blockquote><pre>
+[...]
+vendor "Intel", unknown product 0x5201 (class network subclass ethernet,
+rev 0x03) at pci2 dev 9 function 1 not configured
+[...]
+"Intel EE Pro 100" rev 0x03 at pci2 dev 10 function 0 not configured
+[...]
+</pre></blockquote>
+
+The first one (a network adapter) had its vendor code identified and the
+general type of card was determined, but not the precise model of the card.
+The second example is another network adapter, this one a developer had
+seen and entered into the identification file that is used to identify
+the card.
+In both cases, however, the cards will be non-functional, as both are
+shown as <tt>not configured</tt>, meaning no driver has attached to the card.
+
+<h4>What can I do about a "not configured" device?</h4>
+
+<ul>
+<li>If the device or card you are seeing is not one you need, you can safely
+ignore the <tt>not configured</tt> devices, they will not hurt your system.
+Some "special purpose" devices are deliberately left unconfigured so the
+system's BIOS will handle them.
+
+<li>In some cases, it is just a variation of an already supported device,
+in which case, it may be relatively easy for a developer to add support
+for the new card.
+In other cases, it may be a totally unsupported chip set or implementation
+(such as the above examples).
+In that case, a new driver would have to be written, which may not even
+be possible if the device is not fully documented.
+You are certainly welcome to write a driver for the device yourself.
+
+<li>If you are running an install kernel, the device may not be supported
+by the install media you used, but may be supported by a different boot disk.
+
+<li>If you are running a modified kernel, you may have removed support for
+a device you now need.
+In general, removing devices from a kernel is a bad idea.
+This is one reason why.
+
+<li>Before reporting a <tt>not configured</tt> device, make sure you
+have first tested the most recent <a href="faq5.html#Flavors">snapshot</a>,
+as support may already have been added, and check the <a href="../mail.html">
+mailing list archives</a> to see if the issue has been discussed already.
+Remember, however, if you are using an older version of OpenBSD, you
+will generally have to upgrade to get the benefit of any new drivers.
+</ul>
+
+<h2 id="GenSupport">8.10 - I have a card listed as supported but it
+doesn't work!</h2>
+
+Unfortunately, many manufacturers use product model numbers to indicate
+marketplace position, rather than the technical nature of a product.
+For this reason, you may buy a product with the same name or model number
+as a product listed in the <a href="../plat.html">platform pages</a>, but
+end up with a totally different product that may not work with OpenBSD.
+
 <p>
-<a href= "index.html">[FAQ Index]</a>
-<a href= "faq7.html">[To Section 7 - Keyboard and Display Controls]</a>
-<a href= "faq9.html">[To Section 9 - Migrating to OpenBSD]</a>
+For example, many early wireless network adapters were based on the Prism2
+chipset, using the <a href="http://man.openbsd.org/wi">wi(4)</a>
+driver, but later, when lower-cost chips became available, many manufacturers
+changed their product to use chips for which no open source drivers exist,
+but never changed their model numbers.
+Wireless network adapters, unfortunately, are far from the only example
+of this.
+
+<p>
 </body>
 </html>

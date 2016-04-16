@@ -28,30 +28,24 @@ PERFORMANCE OF THIS DOCUMENTATION
 -->
 
 <body bgcolor="#ffffff" text="#000000">
-<!-- Passes validator.w3.org, please keep it this way;
-please, use a max of 72 chars per line -->
 
 <h2>
 <a href="../../index.html">
 <font color="#0000ff"><i>Open</i></font><font color="#000084">BSD</font></a>
 <font color="#e00000">PF - Issues with FTP</font>
+<small>
+<a href="index.html" style="font-weight:normal; float:right">[Contents]</a>
+</small>
 </h2>
 <hr>
-<p>
-[<a href="index.html">Contents</a>]
-[<a href="perf.html">Previous: Performance</a>]
-[<a href="authpf.html">Next: Authpf: User Shell for Authenticating
-Gateways</a>]
-<p>
 
-<h3>Table of Contents</h3>
 <ul>
-<li><a href="#modes">FTP Modes</a>
-<li><a href="#client">FTP Client Behind the Firewall</a>
-<li><a href="#server">PF "Self-Protecting" an FTP Server</a>
-<li><a href="#natserver">FTP Server Protected by an External PF Firewall
-Running NAT</a>
-<li><a href="#info">More Information on FTP</a>
+<li><a href="#modes"     >FTP Modes</a>
+<li><a href="#client"    >FTP Client Behind the Firewall</a>
+<li><a href="#server"    >PF "Self-Protecting" an FTP Server</a>
+<li><a href="#natserver" >FTP Server Protected by an External PF Firewall
+                          Running NAT</a>
+<li><a href="#info"      >More Information on FTP</a>
 <li><a href="#tftp-proxy">Proxying TFTP</a>
 </ul>
 
@@ -88,7 +82,7 @@ won't deliver it to the client.
 
 <p>
 With passive mode FTP (the default mode with OpenBSD's <a
-href="http://man.openbsd.org/?query=ftp&amp;sektion=1"
+href="http://man.openbsd.org/ftp.1"
 >ftp(1)</a> client), the client requests that the server pick a random
 port to listen on for the data connection. The server informs the client
 of the port it has chosen, and the client connects to this port to
@@ -111,8 +105,7 @@ FTP traffic through the NAT gateway/firewall, by actively adding needed
 rules to PF system and removing them when done, by means of the PF
 <a href="anchors.html">anchors</a> system. 
 The FTP proxy used by PF is
-<a href="http://man.openbsd.org/?query=ftp-proxy&amp;sektion=8"
->ftp-proxy(8)</a>.
+<a href="http://man.openbsd.org/ftp-proxy.8">ftp-proxy(8)</a>.
 
 <p>
 To activate it, put something like this early in the rules section
@@ -164,7 +157,7 @@ In this case, PF is running on the FTP server itself rather than a
 dedicated firewall computer.  When servicing a passive FTP connection,
 FTP will use a randomly chosen, high TCP port for incoming data.  By
 default, OpenBSD's native FTP server 
-<a href="http://man.openbsd.org/?query=ftpd&amp;sektion=8"
+<a href="http://man.openbsd.org/ftpd.8"
 >ftpd(8)</a> uses the range 49152 to 65535.
 Obviously, these must be passed through the filter rules, along with
 port 21 (the FTP control port):
@@ -179,9 +172,9 @@ pass in on $ext_if proto tcp to port &gt; 49151
 <p>
 Note that if you desire, you can tighten up that range of ports
 considerably. In the case of the OpenBSD 
-<a href="http://man.openbsd.org/?query=ftpd&amp;sektion=8"
+<a href="http://man.openbsd.org/ftpd.8"
 >ftpd(8)</a> program, that is done using the 
-<a href="http://man.openbsd.org/?query=sysctl&amp;sektion=8"
+<a href="http://man.openbsd.org/sysctl.8"
 >sysctl(8)</a> variables <tt>net.inet.ip.porthifirst</tt> and
 <tt>net.inet.ip.porthilast</tt>.
 
@@ -252,8 +245,7 @@ Reviewed</a>
 Trivial File Transfer Protocol (TFTP) suffers from some of the same
 limitations as FTP does when it comes to passing through a firewall.
 Luckily, PF has a helper proxy for TFTP called
-<a href="http://man.openbsd.org/?query=tftp-proxy&amp;sektion=8"
->tftp-proxy(8)</a>.
+<a href="http://man.openbsd.org/tftp-proxy.8">tftp-proxy(8)</a>.
 
 <p>
 tftp-proxy(8) is setup in much the same way as ftp-proxy(8) was in
@@ -276,7 +268,7 @@ servers on the external network.
 
 <p>
 The last step is to enable tftp-proxy in
-<a href="http://man.openbsd.org/?query=inetd.conf&amp;sektion=5"
+<a href="http://man.openbsd.org/inetd.conf.5"
 >inetd.conf(5)</a> so that it listens on the same port that the
 <tt>divert-to</tt> rule specified above, in this case 6969.
 
@@ -288,13 +280,6 @@ The last step is to enable tftp-proxy in
 
 <p>
 Unlike ftp-proxy(8), tftp-proxy(8) is spawned from inetd.
-
-
-<p>
-[<a href="perf.html">Previous: Performance</a>]
-[<a href="index.html">Contents</a>]
-[<a href="authpf.html">Next: Authpf: User Shell for Authenticating
-Gateways</a>]
 
 <p>
 </body>

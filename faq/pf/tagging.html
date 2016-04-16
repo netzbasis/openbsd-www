@@ -27,27 +27,22 @@ PERFORMANCE OF THIS DOCUMENTATION
 -->
 
 <body bgcolor="#ffffff" text="#000000">
-<!-- Passes validator.w3.org, please keep it this way;
-please, use a max of 72 chars per line -->
 
 <h2>
 <a href="../../index.html">
 <font color="#0000ff"><i>Open</i></font><font color="#000084">BSD</font></a>
 <font color="#e00000">PF - Packet Tagging (Policy Filtering)</font>
+<small>
+<a href="index.html" style="font-weight:normal; float:right">[Contents]</a>
+</small>
 </h2>
 <hr>
-<p>
-[<a href="index.html">Contents</a>]
-[<a href="pools.html">Previous: Address Pools and Load Balancing</a>]
-[<a href="logging.html">Next: Logging</a>]
-<p>
 
-<h3>Table of Contents</h3>
 <ul>
-<li><a href="#intro">Introduction</a>
-<li><a href="#assign">Assigning Tags to Packets</a>
-<li><a href="#check">Checking for Applied Tags</a>
-<li><a href="#policy">Policy Filtering</a>
+<li><a href="#intro"   >Introduction</a>
+<li><a href="#assign"  >Assigning Tags to Packets</a>
+<li><a href="#check"   >Checking for Applied Tags</a>
+<li><a href="#policy"  >Policy Filtering</a>
 <li><a href="#ethernet">Tagging Ethernet Frames</a>
 </ul>
 
@@ -176,7 +171,7 @@ For example, examine the following firewall policy:
 <li>Traffic from the Internet to servers in the DMZ is permitted
 (INET_DMZ)
 <li>Traffic from the Internet that's being redirected to
-<a href="http://man.openbsd.org/?query=spamd&amp;sektion=8"
+<a href="http://man.openbsd.org/spamd.8"
 >spamd(8)</a> is permitted (SPAMD)
 <li>All other traffic is blocked
 </ul>
@@ -265,12 +260,12 @@ pass out quick on $dmz_if tagged INET_DMZ
 <h2 id="ethernet">Tagging Ethernet Frames</h2>
 Tagging can be performed at the Ethernet level if the machine doing the
 tagging/filtering is also acting as a
-<a href="http://man.openbsd.org/?query=bridge&amp;sektion=4"
+<a href="http://man.openbsd.org/bridge.4"
 >bridge(4)</a>.
 By creating bridge(4) filter rules that use the <tt>tag</tt> keyword, PF
 can be made to filter based on the source or destination MAC address.
 Bridge(4) rules are created using the
-<a href="http://man.openbsd.org/?query=ifconfig&amp;sektion=8"
+<a href="http://man.openbsd.org/ifconfig.8"
 >ifconfig(8)</a> command. Example:
 <blockquote>
 <tt>
@@ -286,11 +281,6 @@ And then in <tt>pf.conf</tt>:
 pass in on fxp0 tagged USER1
 </tt>
 </blockquote>
-
-<p>
-[<a href="pools.html">Previous: Address Pools and Load Balancing</a>]
-[<a href="index.html">Contents</a>]
-[<a href="logging.html">Next: Logging</a>]
 
 <p>
 </body>

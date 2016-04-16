@@ -22,15 +22,12 @@
 <a href="../index.html">
 <font color="#0000ff"><i>Open</i></font><font color="#000084">BSD</font></a>
 <font color="#e00000">FAQ 3 - Getting Started with OpenBSD</font>
+<small>
+<a href="index.html" style="font-weight:normal; float:right">[FAQ Index]</a>
+</small>
 </h2>
 <hr>
-<p>
-<a href= "index.html">[FAQ Index]</a>
-<a href= "faq2.html">[To Section 2 - Getting to Know OpenBSD]</a>
-<a href= "faq4.html">[To Section 4 - Installation Guide]</a>
-<p>
 
-<h3>Table of Contents</h3>
 <ul>
 <li><a href="#BuyCD"      >3.1 - Buying an OpenBSD CD set</a>
 <li><a href="#BuyTShirts" >3.2 - Buying OpenBSD shirts</a>
@@ -83,9 +80,9 @@ There are numerous international mirror sites offering access to
 OpenBSD releases and snapshots.
 You should always use the site nearest to you.
 Before you begin fetching a release or snapshot, you may wish to use
-<a href="http://man.openbsd.org/?query=ping">ping(8)</a>
+<a href="http://man.openbsd.org/ping">ping(8)</a>
 and
-<a href="http://man.openbsd.org/?query=traceroute">traceroute(8)</a>
+<a href="http://man.openbsd.org/traceroute">traceroute(8)</a>
 to determine which mirror site is nearest to you and whether that mirror is
 performing adequately.
 Access information is <a href= "../ftp.html">here</a>.
@@ -96,14 +93,14 @@ In the same directory as the installation sets, each mirror includes a file
 named <tt>SHA256</tt> that contains checksums of the various installation
 files.
 You can confirm that none of the downloaded files were mangled in transit
-using the <a href="http://man.openbsd.org/?query=sha256">sha256(1)</a> command.
+using the <a href="http://man.openbsd.org/sha256">sha256(1)</a> command.
 
 <blockquote><pre>
 $ <b>sha256 -c SHA256</b>
 </pre></blockquote>
 
 Note that this only checks for <i>accidental</i> corruption.
-You can use <a href="http://man.openbsd.org/?query=signify">signify(1)</a>
+You can use <a href="http://man.openbsd.org/signify">signify(1)</a>
 to cryptographically verify the downloaded files.
 
 <blockquote><pre>
@@ -195,10 +192,5 @@ when used on slower speed networks, due to superior buffering.
 </ul>
 
 <p>
-<hr>
-<p>
-<a href= "index.html">[FAQ Index]</a>
-<a href= "faq2.html">[To Section 2 - Getting to know OpenBSD]</a>
-<a href= "faq4.html">[To Section 4 - Installation Guide]</a>
 </body>
 </html>

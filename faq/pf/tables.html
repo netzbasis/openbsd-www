@@ -27,28 +27,23 @@ PERFORMANCE OF THIS DOCUMENTATION
 -->
 
 <body bgcolor="#ffffff" text="#000000">
-<!-- Passes validator.w3.org, please keep it this way;
-please, use a max of 72 chars per line -->
 
 <h2>
 <a href="../../index.html">
 <font color="#0000ff"><i>Open</i></font><font color="#000084">BSD</font></a>
 <font color="#e00000">PF - Tables</font>
+<small>
+<a href="index.html" style="font-weight:normal; float:right">[Contents]</a>
+</small>
 </h2>
 <hr>
-<p>
-[<a href="index.html">Contents</a>]
-[<a href="macros.html">Previous: Lists and Macros</a>]
-[<a href="filter.html">Next: Packet Filtering</a>]
-<p>
 
-<h3>Table of Contents</h3>
 <ul>
-<li><a href="#intro">Introduction</a>
+<li><a href="#intro" >Introduction</a>
 <li><a href="#config">Configuration</a>
-<li><a href="#manip">Manipulating with <tt>pfctl</tt></a>
-<li><a href="#addr">Specifying Addresses</a>
-<li><a href="#match">Address Matching</a>
+<li><a href="#manip" >Manipulating with <tt>pfctl</tt></a>
+<li><a href="#addr"  >Specifying Addresses</a>
+<li><a href="#match" >Address Matching</a>
 </ul>
 
 <hr>
@@ -70,9 +65,9 @@ rule options, respectively.
 
 <p>
 Tables are created either in 
-<a href="http://man.openbsd.org/?query=pf.conf&amp;sektion=5">
+<a href="http://man.openbsd.org/pf.conf.5">
 pf.conf(5)</a> or by using
-<a href="http://man.openbsd.org/?query=pfctl&amp;sektion=8"
+<a href="http://man.openbsd.org/pfctl.8"
 >pfctl(8)</a>.
 
 <h2 id="config">Configuration</h2>
@@ -81,10 +76,10 @@ directive. The following attributes may be specified for each table:
 <ul>
 <li><tt>const</tt> - the contents of the table cannot be changed once the
 table is created. When this attribute is not specified,
-<a href="http://man.openbsd.org/?query=pfctl&amp;sektion=8"
+<a href="http://man.openbsd.org/pfctl.8"
 >pfctl(8)</a> may be used to add or remove addresses from the
 table at any time, even when running with a
-<a href="http://man.openbsd.org/?query=securelevel&amp;sektion=7"
+<a href="http://man.openbsd.org/securelevel.7"
 >securelevel(7)</a> of two or greater.
 <li><tt>persist</tt> - causes the kernel to keep the table in memory even
 when no rules refer to it. Without this attribute, the kernel will
@@ -141,7 +136,7 @@ Any line beginning with <tt>#</tt> is treated as a comment and ignored.
 
 <h2 id="manip">Manipulating with <tt>pfctl</tt></h2>
 Tables can be manipulated on the fly by using
-<a href="http://man.openbsd.org/?query=pfctl&amp;sektion=8"
+<a href="http://man.openbsd.org/pfctl.8"
 >pfctl(8)</a>. For
 instance, to add entries to the &lt;spammers&gt; table created above:
 <blockquote>
@@ -166,7 +161,7 @@ table:
 <p>
 For more information on manipulating tables with <tt>pfctl</tt>,
 please read the
-<a href="http://man.openbsd.org/?query=pfctl&amp;sektion=8"
+<a href="http://man.openbsd.org/pfctl.8"
 >pfctl(8)</a> manpage.
 
 <h2 id="addr">Specifying Addresses</h2>
@@ -208,11 +203,6 @@ packet does not match the table and will be blocked
 table and will be passed
 <li>10.1.4.55 - does not match the table and will be blocked
 </ul>
-
-<p>
-[<a href="macros.html">Previous: Lists and Macros</a>]
-[<a href="index.html">Contents</a>]
-[<a href="filter.html">Next: Packet Filtering</a>]
 
 <p>
 </body>
