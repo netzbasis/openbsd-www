@@ -757,73 +757,55 @@ kernel file <tt>/bsd</tt>.
 Configure your system to boot from the other OS by default.
 Booting from the flash drive will load OpenBSD.
 
-<h3>Windows Vista</h3>
+<h3>Windows Vista and Windows 7</h3>
 
 With Vista, Microsoft dropped NTLDR support in favor of their newer Boot
 Configuration Data (BCD) store used for controlling the boot
 environment.
-Since <tt>BOOT.INI</tt> is no longer available for customization,
-a command-line utility, <tt>bcdedit</tt>, takes its place.
+Microsoft has enhanced BCD since releasing Vista to allow multiple
+versions of Windows to be booted through <tt>bcdedit</tt>.
+For those who find manual configuration daunting,
+<a href="http://neosmart.net/dl.php?id=1">EasyBCD</a> provides a GUI
+alternative.
 
 <p>
-Once OpenBSD's PBR is copied to Windows' system partition, the following
-three commands are required to select and boot OpenBSD when the system
-is restarted:
+Once OpenBSD's PBR is copied to the Windows system partition, issue
+the following command to initialize the needed registry hive.
+Use a shell with administrative privileges.
+Right click on cmd.exe and select "run as administrator".
 
 <blockquote><pre>
-C:\Windows\system32> bcdedit /create /d "OpenBSD/i386" /application bootsector
-The entry {05a763ce-d81b-11db-b3ec-000000000000} was successfully created.
-
-C:\Windows\System32>
+C:\Windows\system32> <b>bcdedit /create /d "OpenBSD/i386" /application bootsector</b>
+The entry {0154a872-3d41-11de-bd67-a7060316bbb1} was successfully created.
 </pre></blockquote>
 
-The GUID returned here, <tt>05a763ce-d81b-11db-b3ec-000000000000</tt>,
-is shown for illustrative reasons.
-Take note of the GUID displayed when you run this command as this value
-will need to be copied into the following commands.
-Simply copying the GUID shown above will not work.
-
-<p>
-The following two commands are also required:
+The <tt>{0154a872-3d41-11de-bd67-a7060316bbb1}</tt> GUID is system-dependent.
+Note the value you receive when executing, and copy it into the following
+commands:
 
 <blockquote><pre>
-C:\Windows\system32> bcdedit /set {05a763ce-d81b-11db-b3ec-000000000000} device boot
+C:\Windows\system32> <b>bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} device boot</b>
 The operation completed successfully.
 
-C:\Windows\system32> bcdedit /set {05a763ce-d81b-11db-b3ec-000000000000} path \openbsd.pbr
+C:\Windows\system32> <b>bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} path \openbsd.pbr</b>
+The operation completed successfully.
+</blockquote></pre>
+
+Windows Vista users are done at this point.
+For Windows 7, finish up with:
+
+<blockquote><pre>
+C:\Windows\system32> <b>bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} device partition=c:</b>
 The operation completed successfully.
 
-C:\Windows\system32>
+C:\Windows\system32> <b>bcdedit /displayorder {0154a872-3d41-11de-bd67-7060316bbb1} /addlast</b>
+The operation completed successfully.
 </pre></blockquote>
 
-This must be run in a shell with administrative privileges.
-Once you've located cmd.exe, right click to be able to select
-"run as administrator".
-
-<p>
-Note the absolute pathname of the imported PBR file.
-Do not add a drive letter as it is assumed that the file is placed
-in the system partition.
-<tt>bcdedit</tt> will not complain about an explicit drive
-specification, but the boot manager will later balk claiming that it
-cannot resolve the designated pathname.
-
-<p>
-Upon rebooting, Vista will be listed first in the boot manager
-ultimately followed by OpenBSD.
-Selecting either entry will boot the corresponding operating system.
-
-<p>
-If nothing happens, look around in the control panel for boot information.
-Most likely, your Windows boot is set up with no delay, so you don't see the
-boot menu.
-You can also use this to boot OpenBSD by default.
-
-<p>
 For more information, consult <tt>bcdedit</tt>'s help by issuing:
 
 <blockquote><pre>
-C:\Windows\system32> bcdedit /?
+C:\Windows\system32> <b>bcdedit /?</b>
 </pre></blockquote>
 
 or by searching Microsoft's documentation and Website.
@@ -831,62 +813,13 @@ A good introduction can be found in this TechNet
 <a href="http://technet.microsoft.com/en-us/library/cc721886%28WS.10%29.aspx">
 Frequently Asked Questions</a> article.
 
-<p>
-For those who find manual configuration daunting,
-<a href="http://neosmart.net/dl.php?id=1">EasyBCD</a> provides a GUI
-alternative.
-
-<h3>Windows 7</h3>
-
-Microsoft has enhanced BCD since releasing Vista to allow multiple
-versions of Windows to be booted through <tt>bcdedit</tt>.
-Because of this greater control, five commands are required to configure a
-multiboot environment with OpenBSD.
-
-<p>
-After copying OpenBSD's PBR into Windows 7's system partition, issue
-the following command to initialize the needed registry hive:
-
-<blockquote><pre>
-C:\Windows\system32> bcdedit /create /d "OpenBSD/i386" /application bootsector
-The entry {0154a872-3d41-11de-bd67-a7060316bbb1} was successfully created.
-
-C:\Windows\system32>
-</pre></blockquote>
-
-As admonished before, the
-<tt>{0154a872-3d41-11de-bd67-a7060316bbb1}</tt> GUID is
-system-dependent.
-Note the value you receive when executing, and copy it into the following
-commands:
-
-<blockquote><pre>
-C:\Windows\system32> bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} device boot
-The operation completed successfully.
-
-C:\Windows\system32> bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} path \openbsd.pbr
-The operation completed successfully.
-
-C:\Windows\system32> bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} device partition=c:
-The operation completed successfully.
-
-C:\Windows\system32> bcdedit /displayorder {0154a872-3d41-11de-bd67-7060316bbb1} /addlast
-The operation completed successfully.
-
-C:\Windows\system32>
-</pre></blockquote>
-
 <h3>Time zone issues</h3>
 
-OpenBSD expects the computer's real-time clock to be set to UTC
-(Universal Coordinated Time).
-Some other OSs expect the real-time clock to be set to local time.
-Obviously, this can create a bit of a problem if you are using both
-OSs on the same computer.
-One or the other is most likely going to have to be adapted.
-More info on doing this is in <a href="faq8.html#TimeZone">FAQ 8 - Why
-is my clock off by several hours?</a>
-
+OpenBSD expects the computer's real-time clock to be set to
+Universal Coordinated Time.
+Some other operating systems expect the real-time clock to be set to local time.
+See
+<a href="faq8.html#TimeZone">FAQ 8 - Why is my clock off by several hours?</a>
 
 <h2 id="CustomFdisk">4.16 - A custom fdisk(8) layout for dual booting</h2>
 
