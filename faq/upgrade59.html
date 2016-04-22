@@ -14,27 +14,9 @@
   tt { white-space: pre; }
   ul { list-style: none; }
 </style>
-<script type="text/javascript">
-function onload() {
-    var hide = [ 'NoInstKern' ];
-
-    for (id = 0; id < hide.length; id++) {
-        var item = document.getElementById(hide[id]);
-        if (item) {
-            item.className = 'hidden';
-        }
-    }
-}
-function flip_visibility(id) {
-    var item = document.getElementById(id);
-    if (item) {
-        item.className = (item.className === 'hidden') ? 'visible' : 'hidden';
-    }
-}
-</script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000" onload="javascript:onload();">
+<body bgcolor="#ffffff" text="#000000">
 
 <h2>
 <a href="../index.html">
@@ -244,11 +226,8 @@ rm -f freetype.h ftadvanc.h ftbbox.h ftbdf.h ftbitmap.h ftbzip2.h \
     </pre></blockquote>
 </ul>
 
-<a href="#NoInstKern" onclick="javascript:flip_visibility('NoInstKern')">
-Show manual upgrade process</a>
-<div id="NoInstKern" class="visible">
 <hr>
-<h2>Upgrade without the Install Kernel</h2>
+<h2 id="NoInstKern">Upgrade without the Install Kernel</h2>
 
 <b style="color:e00000">This is NOT the recommended process.
 Use the install kernel method if at all possible!</b>
@@ -385,11 +364,6 @@ access to the system console.
     <tt>/sbin/oreboot</tt> -- and <a href="#pkg_add-u">upgrading packages</a>.
 </ul>
 
-<a href="#NoInstKern" onclick="javascript:flip_visibility('NoInstKern')">
-Hide manual upgrade process</a>
-
-</div>
-
 <p>
 <a href="index.html">[FAQ Index]</a> |
 <a href="upgrade58.html">[5.7 -> 5.8]</a>
@@ -398,7 +372,7 @@ Hide manual upgrade process</a>
 <hr>
 <a href="index.html"><img height="24" width="24" src="../images/back.gif" border="0" alt="[back]"></a>
 <br>
-<small>$OpenBSD: upgrade59.html,v 1.23 2016/04/15 20:39:49 tb Exp $</small>
+<small>$OpenBSD: upgrade59.html,v 1.25 2016/04/22 01:48:34 tb Exp $</small>
 
 </body>
 </html>
