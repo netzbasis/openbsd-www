@@ -130,7 +130,7 @@ step before running <tt>make build</tt>.
 Handling of single-threaded programs is now closer to multi-threaded,
 with ld.so and libc.a doing thread information base (TIB) allocation.
 Threaded programs from before the
-<a href="r20160319">2016/03/19 csu and ld.so update</a>
+<a href="#r20160319">2016/03/19 csu and ld.so update</a>
 will no longer run.
 An updated <tt>ld.so</tt> must be built and installed before running
 <tt>make build</tt>.
@@ -146,8 +146,6 @@ make SUBDIR= depend
 make SUBDIR=
 make SUBDIR= install
 </pre></blockquote>
-
-<p>
 
 PowerPC has been updated to offset the TIB from the hardware register.
 As a result, <b>all</b> threaded programs are broken until they have been
@@ -179,9 +177,18 @@ make -f Makefile.bsd-wrapper
 make -f Makefile.bsd-wrapper NOMAN=1 install
 </pre></blockquote>
 
+<h3 id="r20160508">2016/05/08 - sysutils/runit default service
+  directory change</h3>
+Upstream moved back the default service directory to <tt>/service</tt>; to keep
+on using <tt>/var/service</tt>, install a symlink:
+
+<blockquote><pre>
+ln -s /var/service /
+</pre></blockquote>
+
 <p>
 <hr>
-<small>$OpenBSD: current.html,v 1.677 2016/05/07 22:08:46 guenther Exp $</small>
+<small>$OpenBSD: current.html,v 1.680 2016/05/08 09:37:12 tb Exp $</small>
 
 </body>
 </html>
