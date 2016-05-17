@@ -424,8 +424,9 @@ X#ifndef PSERVER_SUPPORT
 X#define PSERVER_SUPPORT
 X#endif
 X
+X
 X/*
-X * Define USE_SYSLOG if you want anoncvssh to log pserver connections 
+X * Define USE_SYSLOG if you want anoncvssh to log pserver connections
 X * using syslog()
 X */
 X#define USE_SYSLOG
@@ -479,17 +480,17 @@ X
 X#ifdef USE_SYSLOG
 X	openlog("anoncvssh", LOG_PID | LOG_NDELAY, LOG_FACILITY);
 X#endif /* USE_SYSLOG */
-X	
+X
 X#ifdef ANONCVS_USER
-X	/* 
+X	/*
 X	 * I love lusers who have to test every setuid binary on my machine.
 X	 */
 X	if (getuid() != 0 && (strcmp (pw->pw_name, ANONCVS_USER) != 0)) {
-X		fprintf(stderr, "You're not supposed to be running me!\n"); 
+X		fprintf(stderr, "You're not supposed to be running me!\n");
 X#ifdef USE_SYSLOG
 X		syslog(LOG_NOTICE,
 X		       "User %s(%d) invoked anoncvssh - Possible twink?",
-X		       pw->pw_name, pw->pw_uid); 
+X		       pw->pw_name, pw->pw_uid);
 X#endif /* USE_SYSLOG */
 X		exit(1);
 X	}
@@ -503,6 +504,9 @@ X		exit (1);
 X	}
 X	chdir("/");
 X	setuid(pw->pw_uid);
+X
+X	if (pledge("stdio inet exec", NULL) == -1)
+X		err(1, "pledge");
 X
 X	/*
 X	 * program now "safe"
@@ -538,7 +542,7 @@ X		if (them == NULL) {
 X		  fprintf(stderr, "malloc failed\n");
 X		  exit(1);
 X		}
-X	        syslog(LOG_PRIO, 
+X	        syslog(LOG_PRIO,
 X		       "pserver connection from %s:%d to %s:%d\n",
 X		       them, ntohs(peer_sa.sin_port),
 X		       us, ntohs(my_sa.sin_port));
@@ -552,7 +556,7 @@ X		/* NOTREACHED */
 X	}
 X#endif
 X
-X	if (argc != 3 || 
+X	if (argc != 3 ||
 X		strcmp("anoncvssh",  argv[0]) != 0 ||
 X		strcmp("-c",         argv[1]) != 0 ||
 X		(strcmp("cvs server", argv[2]) != 0 &&
