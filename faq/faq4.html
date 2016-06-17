@@ -30,6 +30,7 @@
 <ul>
 <li><a href="#Overview"    >Overview of the installation procedure</a>
 <li><a href="#Checklist"   >Pre-installation checklist</a>
+<li><a href="#Download"    >Downloading OpenBSD</a>
 <li><a href="#MkInsMedia"  >Creating bootable OpenBSD install media</a>
 <li><a href="#Boot"        >Booting OpenBSD install media</a>
 <li><a href="#Install"     >Performing a simple install</a>
@@ -42,7 +43,7 @@
 <li><a href="#Signify"     >Problems with signatures</a>
 <li><a href="#site"        >Customizing the install process</a>
 <li><a href="#Multibooting">Multibooting OpenBSD</a>
-<li><a href="#CustomFdisk" >A custom fdisk(8) layout for dual booting</a>
+<li><a href="#CustomFdisk" >A custom fdisk layout for dual booting</a>
 </ul>
 <hr>
 
@@ -149,8 +150,6 @@ You will want to know the following items, at least:
   <li>Hardware installed and available:
     <ul>
       <li>Verify compatibility with your platform's hardware compatibility page.
-      <li>If ISA, you also need to know hardware settings, and confirm they are
-        as OpenBSD requires.
     </ul>
   <li>Install method to be used.
   <li>Should an important bug be found, how will the system be patched?
@@ -183,14 +182,47 @@ You will want to know the following items, at least:
       encryption</a>?
 </ul>
 
-<h2 id="MkInsMedia">Creating bootable OpenBSD install media</h2>
+<h2 id="Download">Downloading OpenBSD</h2>
 
-Before creating install media, <a href="faq3.html#Download">verify</a> the
-signatures on your downloads.
-Consult <tt>INSTALL.&lt;plat&gt;</tt> if the instructions below are insufficient
-for your needs.
+There are numerous international mirror sites offering access to OpenBSD
+releases and snapshots.
+You should always use the site nearest to you.
+Before you begin fetching a release or snapshot, you may wish to use
+<a href="http://man.openbsd.org/ping">ping(8)</a> and
+<a href="http://man.openbsd.org/traceroute">traceroute(8)</a> to determine
+which mirror site is nearest to you, and whether that mirror is performing
+adequately.
+Access information can be found <a href= "../ftp.html">here</a>.
+Of course, your OpenBSD release CD is always closer than any mirror.
 
 <p>
+In the same directory as the installation sets, each mirror includes a file
+named <tt>SHA256</tt> that contains checksums of the various installation
+files.
+You can confirm that none of the downloaded files were mangled in transit
+using the <a href="http://man.openbsd.org/sha256">sha256(1)</a> command.
+
+<blockquote><pre>
+$ <b>sha256 -c SHA256</b>
+</pre></blockquote>
+
+However, this only checks for <i>accidental</i> corruption.
+You can use <a href="http://man.openbsd.org/signify">signify(1)</a>
+to cryptographically verify the downloaded files.
+
+<blockquote><pre>
+$ <b>signify -Cp /etc/signify/openbsd-XX-base.pub -x SHA256.sig install*.iso</b>
+Signature Verified
+installXX.iso: OK
+</pre></blockquote>
+
+This will verify the <tt>installXX.iso</tt> file, for example.
+Replace "XX" with the version of OpenBSD that you're verifying.
+Note that you will need the public key files for OpenBSD's base system
+(and the signify program!) in order to do this.
+
+<h2 id="MkInsMedia">Creating bootable OpenBSD install media</h2>
+
 As an example, these are the installation images available for the
 <a href="../i386.html">i386</a> platform:
 
@@ -544,8 +576,8 @@ the install script for you.
 If you have a running OpenBSD system, <tt>bsd.rd</tt> is all you need to
 reinstall or upgrade to a newer version of OpenBSD without the need for
 any removable media.
-To do so, simply <a href="faq3.html#Download">download and verify</a>
-<tt>bsd.rd</tt>, place it on an existing filesystem and boot from it.
+To do so, simply <a href="#Download">download and verify</a> <tt>bsd.rd</tt>,
+place it on an existing filesystem and boot from it.
 
 <p>
 Booting from <tt>bsd.rd</tt> on an i386 system:
@@ -575,8 +607,7 @@ check the signatures.
 It is not possible for the installer verify the sets with these images.
 After all, if someone were to make a rogue <tt>installXX.iso</tt> file,
 they could certainly change the installer to say the files were legitimate.
-Thus, you must <a href="faq3.html#Download">verify</a> installer downloads
-separately.
+Thus, you must <a href="#Download">verify</a> installer downloads separately.
 
 <h2 id="site">Customizing the install process</h2>
 
@@ -667,8 +698,7 @@ you want to boot by default when you next boot.
 Virtually every OS offers a program to do this.
 OpenBSD's is <a href="http://man.openbsd.org/fdisk">fdisk(8)</a>,
 and similarly named programs are in many other operating systems.
-See also the FAQ section on
-<a href="faq14.html#fdisk">using OpenBSD's fdisk(8)</a>.
+Also see the section on <a href="faq14.html#fdisk">using OpenBSD's fdisk</a>.
 
 <h3>Bootable flash drive</h3>
 
@@ -721,7 +751,7 @@ The operation completed successfully.
 
 C:\Windows\system32> <b>bcdedit /set {0154a872-3d41-11de-bd67-a7060316bbb1} path \openbsd.pbr</b>
 The operation completed successfully.
-</blockquote></pre>
+</pre></blockquote>
 
 Windows Vista users are done at this point.
 For Windows 7 and 10, finish up with:
@@ -750,10 +780,9 @@ Frequently Asked Questions</a> article.
 OpenBSD expects the computer's real-time clock to be set to
 Universal Coordinated Time.
 Some other operating systems expect the real-time clock to be set to local time.
-See
-<a href="faq8.html#TimeZone">Why is my clock off by several hours?</a>
+See <a href="faq8.html#TimeZone">this section</a> for more info.
 
-<h2 id="CustomFdisk">A custom fdisk(8) layout for dual booting</h2>
+<h2 id="CustomFdisk">A custom fdisk layout for dual booting</h2>
 
 Before working with any system that has data you don't wish to lose,
 make sure you have a good backup.
@@ -766,7 +795,7 @@ may be useful for deleting or resizing existing partitions.
 
 <p>
 A brief introduction to <a href="http://man.openbsd.org/fdisk">fdisk(8)</a>
-is in the section on <a href="faq14.html#fdisk">using OpenBSD's fdisk(8)</a>.
+is in the section on <a href="faq14.html#fdisk">using OpenBSD's fdisk</a>.
 
 <p>
 In this example, we will assume we are starting with a blank 40GB disk

@@ -30,10 +30,10 @@
 <ul>
 <li><a href="#wheel"            >When I try to su to root it says I'm in the
                                  wrong group</a>
-<li><a href="#DupFS"            >Duplicating filesystems with dump(8) and
-                                 restore(8)</a>
-<li><a href="#rc"               >The rc(8) system startup script</a>
-<li><a href="#doas"             >OpenBSD's sudo replacement, doas(1)</a>
+<li><a href="#DupFS"            >Duplicating filesystems with dump and
+                                 restore</a>
+<li><a href="#rc"               >The rc system startup script</a>
+<li><a href="#doas"             >OpenBSD's sudo replacement, doas</a>
 <li><a href="#vipw"             >Changing a user's password</a>
 <li><a href="#AddDelUser"       >Adding and deleting users</a>
 <li><a href="#Quotas"           >Setting up user disk quotas</a>
@@ -78,7 +78,7 @@ wheel:*:0:root,ericj
 If you want to give access to superuser privileges without adding users to the
 <tt>wheel</tt> group, you can use <a href="#doas">doas(1)</a>.
 
-<h2 id="DupFS">Duplicating filesystems with dump(8) and restore(8)</h2>
+<h2 id="DupFS">Duplicating filesystems with dump and restore</h2>
 
 To duplicate your filesystem, use
 <a href="http://man.openbsd.org/dump">dump(8)</a> and
@@ -100,7 +100,7 @@ The format looks very similar:
 # <b>cd /SRC && tar cf -  . | (cd /DST && tar xpf - )</b>
 </pre></blockquote>
 
-<h2 id="rc">The rc(8) system startup script</h2>
+<h2 id="rc">The rc system startup script</h2>
 
 OpenBSD itself uses an <a href="http://man.openbsd.org/rc">rc(8)</a> style
 startup.
@@ -163,24 +163,21 @@ After the kernel is booted, <tt>/etc/rc</tt> is started:
   <li>Local and package scripts in <tt>/etc/rc.d</tt> are processed and run
 </ul>
 
-<h3>Starting Daemons and Services that come with OpenBSD</h3>
+<h3>Starting daemons and services that come with OpenBSD</h3>
 
 Most daemons and services that come with OpenBSD are controlled on boot
-by variables defined in the <tt>/etc/rc.conf</tt> configuration file.
-Take a look at the
-<a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/etc/rc.conf?content-type=text/plain">
-/etc/rc.conf</a> file.
+by variables defined in
+<a href="http://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/etc/rc.conf?content-type=text/plain">/etc/rc.conf</a>.
 You'll see lines similar to this:
 
 <blockquote><pre>
-ftpd_flags=NO           # set to NO if ftpd is running out of inetd
+httpd_flags=NO
 </pre></blockquote>
 
-A line like this shows that <a href="http://man.openbsd.org/ftpd">ftpd(8)</a>
-is not to start up with the system (at least not as a daemon via rc(8);
-ftpd is often run out of <a href="http://man.openbsd.org/inetd">inetd(8)</a>).
-Each line has a comment showing you the flags for common usage of that
-daemon or service.
+This shows that <a href="http://man.openbsd.org/httpd">httpd(8)</a> is not to
+be started from <a href="http://man.openbsd.org/rc">rc(8)</a> at boot time.
+Each line has a comment showing you the flags for common usage of that daemon
+or service.
 This doesn't mean that you must run that daemon or service with those flags.
 Read the relevant man page to see how you can have that daemon or service start
 up in any way you like.
@@ -206,7 +203,7 @@ daemon for CPU scaling, you might do:
 
 For other daemons which you might install on the system via packages or other
 ways, you could use the <tt>/etc/rc.local</tt> file.
-For example, I've installed a daemon which lies at
+For example, say you installed a daemon located at
 <tt>/usr/local/sbin/daemonx</tt>.
 If you want it to start at boot time, put an entry into <tt>/etc/rc.local</tt>
 like this:
@@ -289,7 +286,7 @@ and adding the daemon name to the <tt>pkg_scripts</tt> variable in
 Anything you want done before the system shuts down should be added to this
 file.
 
-<h2 id="doas">OpenBSD's sudo replacement, doas(1)</h2>
+<h2 id="doas">OpenBSD's sudo replacement, doas</h2>
 
 <h3>What is doas(1)?</h3>
 
