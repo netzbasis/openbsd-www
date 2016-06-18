@@ -7,9 +7,8 @@
      with the rest of the pages -->
 
 <title>OpenBSD Frequently Asked Questions</title>
-<meta name= "description"   content= "the OpenBSD FAQ page">
-<meta name= "copyright"     content= "This document copyright 1998-2016
-                                      by OpenBSD.">
+<meta name= "copyright"         content= "This document copyright 1998-2016
+                                          by OpenBSD.">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="../openbsd.css">
@@ -35,9 +34,9 @@ There are likely new features and changes in the
 that are not covered in the FAQ.
 
 <h3>Quick Links:</h3>
-<p>
- <table> <!-- style="width:100%" --> <!-- XXXrelease -->
-  <tr>
+
+<table>
+  <tr>                                             <!-- XXXrelease -->
     <td><a href="upgrade59.html"        >Upgrade Guide: 5.8 to 5.9</a></td>
     <td><a href="current.html"          >Following -current</a></td>
   </tr>
@@ -56,40 +55,37 @@ that are not covered in the FAQ.
 </table>
 
 <p>
-
-<hr align= "right">
-<p>
+<hr>
 
 <h3><a href="faq1.html">Introduction to OpenBSD</a></h3>
 <ul>
-  <li><a href="faq1.html#WhatIs"     >Tell me about OpenBSD</a>
-  <li><a href="faq1.html#Platforms"  >Hardware support</a>
-  <li><a href="faq1.html#ReallyFree" >Is OpenBSD really free?</a>
-  <li><a href="faq1.html#Included"   >What is included with OpenBSD?</a>
-  <li><a href="faq1.html#Support"    >Supporting the project</a>
-  <li><a href="faq1.html#Desktop"    >OpenBSD on the desktop</a>
-  <li><a href="faq1.html#MailLists"  >Mailing lists</a>
-  <li><a href="faq1.html#ManPages"   >Manual pages</a>
-  <li><a href="faq1.html#Bugs"       >Reporting bugs</a>
+<li><a href="faq1.html#WhatIs"     >Tell me about OpenBSD</a>
+<li><a href="faq1.html#Platforms"  >Hardware support</a>
+<li><a href="faq1.html#ReallyFree" >Is OpenBSD really free?</a>
+<li><a href="faq1.html#Included"   >What is included with OpenBSD?</a>
+<li><a href="faq1.html#Support"    >Supporting the project</a>
+<li><a href="faq1.html#MailLists"  >Mailing lists</a>
+<li><a href="faq1.html#ManPages"   >Manual pages</a>
+<li><a href="faq1.html#Bugs"       >Reporting bugs</a>
+<li><a href="faq1.html#OtherUnixes">Migrating to OpenBSD</a>
 </ul>
 
-<h3><a href="faq4.html">OpenBSD Installation Guide</a></h3>
+<h3><a href="faq4.html">Installation Guide</a></h3>
 <ul>
 <li><a href="faq4.html#Overview"    >Overview of the installation procedure</a>
 <li><a href="faq4.html#Checklist"   >Pre-installation checklist</a>
 <li><a href="faq4.html#Download"    >Downloading OpenBSD</a>
-<li><a href="faq4.html#MkInsMedia"  >Creating bootable OpenBSD install media</a>
-<li><a href="faq4.html#Boot"        >Booting OpenBSD install media</a>
+<li><a href="faq4.html#MkInsMedia"  >Creating bootable install media</a>
+<li><a href="faq4.html#Boot"        >Booting the install media</a>
 <li><a href="faq4.html#Install"     >Performing a simple install</a>
 <li><a href="faq4.html#FilesNeeded" >What files are needed for installation?</a>
 <li><a href="faq4.html#Partitioning">How should I partition my disk?</a>
 <li><a href="faq4.html#AddThoughts" >Additional thoughts on partitioning</a>
 <li><a href="faq4.html#SendDmesg"   >Sending your dmesg after the install</a>
-<li><a href="faq4.html#AddFileSet"  >Adding a file set after install</a>
 <li><a href="faq4.html#bsd.rd"      >What is <tt>bsd.rd</tt>?</a>
 <li><a href="faq4.html#Signify"     >Problems with signatures</a>
 <li><a href="faq4.html#site"        >Customizing the install process</a>
-<li><a href="faq4.html#Multibooting">Multibooting OpenBSD</a>
+<li><a href="faq4.html#Multibooting">Multibooting</a>
 <li><a href="faq4.html#CustomFdisk" >A custom fdisk layout for dual booting</a>
 </ul>
 
@@ -112,10 +108,10 @@ that are not covered in the FAQ.
 <ul>
 <li><a href="faq6.html#Intro"    >Background</a>
 <li><a href="faq6.html#Setup"    >Network configuration</a>
-<li><a href="faq6.html#PF"       >Firewalling with OpenBSD</a>
+<li><a href="faq6.html#PF"       >Firewalling</a>
 <li><a href="faq6.html#DHCP"     >Dynamic Host Configuration Protocol</a>
 <li><a href="faq6.html#NFS"      >Using NFS</a>
-<li><a href="faq6.html#Bridge"   >Setting up a bridge with OpenBSD</a>
+<li><a href="faq6.html#Bridge"   >Setting up a network bridge</a>
 <li><a href="faq6.html#PXE"      >PXE booting</a>
 <li><a href="faq6.html#OpenNTPD" >Using OpenNTPD</a>
 <li><a href="faq6.html#Wireless" >Wireless networking</a>
@@ -138,32 +134,14 @@ that are not covered in the FAQ.
 <h3><a href="faq8.html">General Questions</a></h3>
 <ul>
 <li><a href="faq8.html#LostPW"    >I forgot my root password</a>
-<li><a href="faq8.html#Bootloader">OpenBSD's bootloader</a>
+<li><a href="faq8.html#Bootloader">The boot loader</a>
 <li><a href="faq8.html#ksh"       >ksh does not appear to read my .profile</a>
-<li><a href="faq8.html#Journaling">Does OpenBSD support any journaling
-                                   filesystems?</a>
 <li><a href="faq8.html#NTPerror"  >Why is my clock off by twenty-some
                                    seconds?</a>
 <li><a href="faq8.html#TimeZone"  >Time zones</a>
 <li><a href="faq8.html#RevDNS"    >Reverse DNS</a>
-<li><a href="faq8.html#SKey"      >Using S/Key on your OpenBSD system</a>
-
-<li><a href="faq8.html#GenNotConf">A device is recognized but says "not
-                                   configured" in dmesg</a>
-<li><a href="faq8.html#GenSupport">I have a card listed as supported but it
-                                   doesn't work!</a>
-</ul>
-
-<h3><a href="faq9.html">Migrating to OpenBSD</a></h3>
-<ul>
-<li><a href="faq9.html#Introduction">Tips for users of other Unix-like
-                                     operating systems</a>
-<li><a href="faq9.html#DualBoot"    >Dual booting Linux and OpenBSD</a>
-<li><a href="faq9.html#passwd"      >Converting your Linux (or other
-                                     Sixth Edition-style) password file
-                                     to BSD-style</a>
-<li><a href="faq9.html#Ext2FS"      >Accessing your Linux files from
-                                     OpenBSD</a>
+<li><a href="faq8.html#SKey"      >Using S/Key</a>
+<li><a href="faq8.html#GenNotConf">Device "not configured" in dmesg</a>
 </ul>
 
 <h3><a href="faq10.html">System Management</a></h3>
@@ -180,6 +158,8 @@ that are not covered in the FAQ.
 <li><a href="faq10.html#Patches"   >Applying errata patches</a>
 <li><a href="faq10.html#Dir"       >Directory services</a>
 <li><a href="faq10.html#locales"   >Character sets and localization</a>
+<li><a href="faq10.html#passwd"    >Converting your Linux password file to
+                                    BSD-style</a>
 </ul>
 
 <h3><a href="faq11.html">The X Window System</a></h3>
@@ -210,15 +190,15 @@ that are not covered in the FAQ.
 <h3><a href="faq14.html">Disk Setup</a></h3>
 <ul>
 <li><a href="faq14.html#intro"      >Disks and partitions</a>
-<li><a href="faq14.html#fdisk"      >Using OpenBSD's fdisk</a>
-<li><a href="faq14.html#disklabel"  >Using OpenBSD's disklabel</a>
-<li><a href="faq14.html#BootAmd64"  >The OpenBSD/amd64 boot process</a>
+<li><a href="faq14.html#fdisk"      >Using fdisk</a>
+<li><a href="faq14.html#disklabel"  >Using disklabel</a>
+<li><a href="faq14.html#BootAmd64"  >The amd64 boot process</a>
 <li><a href="faq14.html#SoftUpdates">Soft updates</a>
 <li><a href="faq14.html#altroot"    >Duplicating your root partition:
                                      <tt>/altroot</tt></a>
 <li><a href="faq14.html#foreignfs"  >Can I access data on filesystems other
                                      than FFS?</a>
-<li><a href="faq14.html#MountImage" >Mounting disk images in OpenBSD</a>
+<li><a href="faq14.html#MountImage" >Mounting disk images</a>
 <li><a href="faq14.html#NegSpace"   >Why does df tell me I have over 100%
                                      of my disk used?</a>
 <li><a href="faq14.html#softraid"   >RAID and disk encryption</a>
@@ -285,7 +265,7 @@ General questions about OpenBSD should be directed to the appropriate
 <p>
 <small>
 <em>OpenBSD FAQ Copyright &copy; 1998-2016 OpenBSD</em><br><br>
-$OpenBSD: index.html,v 1.470 2016/06/17 00:25:33 tj Exp $
+$OpenBSD: index.html,v 1.475 2016/06/18 03:40:49 tb Exp $
 <br>
 </small>
 

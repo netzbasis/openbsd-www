@@ -41,14 +41,14 @@
   <li><a href="#Setup.aliases" >Setting up aliases on interfaces</a>
   <li><a href="#Setup.replace" >Adding and replacing NICs</a>
 </ul>
-<li><a href= "#PF"             >Firewalling with OpenBSD</a>
+<li><a href= "#PF"             >Firewalling</a>
 <li><a href= "#DHCP"           >Dynamic Host Configuration Protocol</a>
 <ul>
   <li><a href="#DHCPclient"    >DHCP client</a>
   <li><a href="#DHCPserver"    >DHCP server</a>
 </ul>
 <li><a href="#NFS"             >Using NFS</a>
-<li><a href="#Bridge"          >Setting up a bridge with OpenBSD</a>
+<li><a href="#Bridge"          >Setting up a network bridge</a>
 <li><a href="#PXE"             >PXE booting</a>
 <li><a href="#OpenNTPD"        >Using OpenNTPD</a>
 <li><a href="#Wireless"        >Wireless networking</a>
@@ -70,7 +70,7 @@ man pages.
 If you are a network administrator, setting up routing protocols, using
 your OpenBSD box as a router or want to go in-depth into IP networking,
 you really need to read
-<a href="http://www.scribd.com/doc/52483921/3Com-Understanding-IP-Addressing">
+<a href="https://www.scribd.com/doc/52483921/3Com-Understanding-IP-Addressing">
 Understanding IP Addressing</a>.
 This is an excellent document.
 "Understanding IP Addressing" contains fundamental knowledge to build upon
@@ -213,7 +213,7 @@ These include, but are not limited to:
 
 <p>
 For a complete listing of virtual interfaces, refer to the
-<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> manpage.
+<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> man page.
 <p>
 Interfaces are configured at boot time using /etc/hostname.<i>if</i> files,
 where <i>if</i> is replaced by the full name of each interface.
@@ -597,7 +597,7 @@ Some likely candidates might include:
 <li>Trunk configuration (<tt>/etc/hostname.trunk*</tt>)
 </ul>
 
-<h2 id="PF">Firewalling with OpenBSD</h2>
+<h2 id="PF">Firewalling</h2>
 
 Packet Filter (from here on referred to as PF) is OpenBSD's system for
 filtering IP traffic and doing Network Address Translation.
@@ -981,7 +981,7 @@ All mount points on 10.0.0.1:
 This output shows that the client 10.0.0.37 has mounted the
 <tt>/work</tt> export being served from the server at 10.0.0.1.
 
-<h2 id="Bridge">Setting up a network bridge in OpenBSD</h2>
+<h2 id="Bridge">Setting up a network bridge</h2>
 
 A <a href="http://man.openbsd.org/bridge">bridge(4)</a> is a link between two or
 more separate networks.
@@ -1453,8 +1453,8 @@ OpenBSD has support for
 a number of wireless chipsets</a>.
 Further supported devices can be found in the
 <a href="http://man.openbsd.org/usb">usb(4)</a> and
-<a href="http://man.openbsd.org/pci">pci(4)</a> manpages.
-Please see the manpages for precise details.
+<a href="http://man.openbsd.org/pci">pci(4)</a> man pages.
+Please see the man pages for precise details.
 The following cards support "host-based access point" mode.
 This permits them to be made into the wireless access point.
 <ul>
@@ -1467,7 +1467,7 @@ This permits them to be made into the wireless access point.
   <li><a href="http://man.openbsd.org/pgt">pgt(4)</a>
     Conexant/Intersil Prism GT Full-MAC 802.11a/b/g
   <li><a href="http://man.openbsd.org/ral">ral(4)</a>
-    and <a href="http://man.openbsd.org/?query=ural">ural(4)</a>
+    and <a href="http://man.openbsd.org/ural">ural(4)</a>
     Ralink Technology RT25x0 802.11a/b/g
   <li><a href="http://man.openbsd.org/rtw">rtw(4)</a>
     Realtek 8180 802.11b
@@ -1490,7 +1490,7 @@ $ <b>ifconfig ath0 media</b>
 Adapters based on supported chips can be used much like any other network
 adapter.
 To connect an OpenBSD system to an existing wireless network, use the
-<a href="http://man.openbsd.org/?query=ifconfig">ifconfig(8)</a> utility.
+<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> utility.
 
 <p>
 Note that in order to use some of these cards, you will need to acquire
