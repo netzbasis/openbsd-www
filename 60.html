@@ -40,7 +40,7 @@ Copyright 1997-2016, Theo de Raadt.<br>
 <li>See a <a href="plus60.html">detailed log of changes</a> between the
     5.9 and 6.0 releases.
 <p>
-<li><a href="http://man.openbsd.org/?query=signify">signify(1)</a>
+<li><a href="http://man.openbsd.org/signify.1">signify(1)</a>
     pubkeys for this release:<br>
 <pre>
 base: RWSho3oKSqgLQy+NpIhFXZJDtkE65tzlmtC24mStf8DoJd2OPMgna4u8
@@ -100,18 +100,100 @@ to 6.0.
 
 <li>Routing daemons and other userland network improvements:
     <ul>
+    <li>Add routing table support to
+        <a href="http://man.openbsd.org/rc.d.8">rc.d(8)</a> and
+        <a href="http://man.openbsd.org/rcctl.8">rcctl(8)</a>.
+    <li>Let <a href="http://man.openbsd.org/nc.1">nc(1)</a>
+        support service names in addition to port numbers.
+    <li>Add <tt>-M</tt> and <tt>-m</tt> TTL flags to
+        <a href="http://man.openbsd.org/nc.1">nc(1)</a>.
+    <li>Add <tt>AF_UNIX</tt> support to
+        <a href="http://man.openbsd.org/tcpbench.1">tcpbench(1)</a>.
     <li>...
     </ul>
 <p>
 
 <li>Security improvements:
     <ul>
+    <li><tt>W^X</tt> is now strictly enforced by default;
+	a program can only violate it if the executable is marked with
+	<tt>PT_OPENBSD_WXNEEDED</tt> and its is located on a filesystem
+	mounted with the <tt>wxallowed</tt>
+	<a href="http://man.openbsd.org/mount.8">mount(8)</a> option.
+    <li>The <a href="http://man.openbsd.org/setjmp.3">setjmp(3)</a>
+	family of functions now apply XOR cookies to stack and return-address
+	values in the jmpbuf on amd64, hppa, i386, mips64, and powerpc.
+    <li><a href="http://man.openbsd.org/sigreturn.2">sigreturn(2)</a>
+	can now only be used by the kernel-provided signal trampoline,
+	with a cookie to detect attempts to reuse it.
+    <li>In <a href="http://man.openbsd.org/rc.8">rc(8)</a>,
+        re-link libc.so on startup, placing the objects in a random order. 
+    <li>In the <a href="http://man.openbsd.org/getpwnam.3">getpwnam(3)</a>
+        family of functions, stop opening the shadow database by default. 
+    <li>Allow <a href="http://man.openbsd.org/tcpdump.8">tcpdump(8)</a>
+        <tt>-r</tt> to be started without root privileges.
+    <li>Remove
+        <a href="http://man.openbsd.org/OpenBSD-5.9/systrace">systrace</a>.
+    <li>Remove Linux emulation support.
     <li>...
     </ul>
 <p>
 
 <li>Assorted improvements:
     <ul>
+    <li>The thread library can now be loaded into a single-threaded process.
+    <li>Improved symbol handling and standards compliance in libc.
+	For example, defining an <tt>open()</tt> function will no longer
+	interfere with the operation of
+	<a href="http://man.openbsd.org/fopen.3">fopen(3)</a>.
+    <li><tt>PT_TLS</tt> sections are now supported in initially loaded object.
+    <li>Improved handling of "no paths" and "empty path" in
+	<a href="http://man.openbsd.org/fts.3">fts(3)</a>.
+    <li>In <a href="http://man.openbsd.org/pcap.3">pcap(3)</a>,
+        provide the functions <tt>pcap_free_datalinks()</tt>
+        and <tt>pcap_offline_filter()</tt>.
+    <li>Many bugfixes and structural cleanup in the
+        <a href="http://man.openbsd.org/editline">editline(3)</a> library.
+    <li>Remove ancient
+        <a href="http://man.openbsd.org/OpenBSD-5.9/dbm.3">dbm(3)</a>
+        functions;
+        <a href="http://man.openbsd.org/ndbm.3">ndbm(3)</a> remains.
+    <li>Add a <tt>setenv</tt> keyword to
+        <a href="http://man.openbsd.org/doas.conf.5">doas.conf(5)</a>.
+    <li>Add <tt>-g</tt> and <tt>-p</tt> options to
+        <a href="http://man.openbsd.org/aucat.1">aucat.1</a>
+        for time positioning.
+    <li>Rewrite <a href="http://man.openbsd.org/audioctl.1">audioctl(1)</a>
+        with a simpler user interface.
+    <li>Add <tt>-F</tt> option to
+        <a href="http://man.openbsd.org/install.1">install(1)</a>
+        to <a href="http://man.openbsd.org/fsync.2">fsync(2)</a>
+        the file before closing it.
+    <li><a href="http://man.openbsd.org/kdump.1">kdump(1)</a>
+	now dumps <tt>pollfd</tt> structures.
+    <li>Improve various details of
+        <a href="http://man.openbsd.org/ksh.1">ksh(1)</a> POSIX compliance.
+    <li><a href="http://man.openbsd.org/mknod.8">mknod(8)</a> rewritten in a
+        <a href="http://man.openbsd.org/pledge.2">pledge(2)</a>-friendly
+        style and to support creating multiple devices at once.
+    <li>Implement <a href="http://man.openbsd.org/rcctl.8">rcctl(8)</a>
+        <tt>get all</tt> and <tt>getdef all</tt>.
+    <li>Implement the <a href="http://man.openbsd.org/rcs.1">rcs(1)</a>
+        <tt>-I</tt> (interactive) flag.
+    <li>In <a href="http://man.openbsd.org/rcs.1">rcs(1)</a>,
+        implement Mdocdate keyword substitution. 
+    <li>In <a href="http://man.openbsd.org/top.1">top(1)</a>,
+        allow to filter process arguments if they are being displayed. 
+    <li>Added UTF-8 support to
+        <a href="http://man.openbsd.org/fold.1">fold(1)</a> and
+        <a href="http://man.openbsd.org/rev.1">rev(1)</a>.
+    <li>Enable UTF-8 by default in
+        <a href="http://man.openbsd.org/xterm.1">xterm(1)</a> and
+        <a href="http://man.openbsd.org/pod2man.1">pod2man(1)</a>.
+    <li>Filter out non-ASCII characters in
+        <a href="http://man.openbsd.org/wall.1">wall(1)</a>.
+    <li>Handle the <a href="http://man.openbsd.org/?apropos=1&amp;query=Ev%3DCOLUMNS">COLUMNS</a>
+        environment variable consistently across many programs.
     <li>...
     </ul>
 <p>
@@ -138,19 +220,95 @@ to 6.0.
       </ul>
     <li>The following significant bugs have been fixed in this release:
       <ul>
+      <li>In <a href="http://man.openbsd.org/scp.1">scp(1)</a>
+        and <a href="http://man.openbsd.org/sftp.1">sftp(1)</a>,
+        prevent screwing up terminal settings by escaping bytes
+        not forming ASCII or UTF-8 characters. 
       <li>...
       </ul>
     </ul>
 <p>
-<li>LibreSSL X.X.X
+
+<li>OpenNTPD 6.0
+    <ul>
+    <li>When a single "constraint" is specified, try all returned addresses
+        until one succeeds, rather than the first returned address.
+    <li>Relaxed the constraint error margin to be proportional to the number
+        of NTP peers, avoid constant reconnections when there is a bad NTP
+        peer.
+    <li>Removed disabled
+        <a href="http://man.openbsd.org/hotplug.4">hotplug(4)</a>
+        sensor support.
+    <li>Added support for detecting crashes in constraint subprocesses.
+    <li>Moved the execution of constraints from the ntp process to the
+        parent process, allowing for better privilege separation since the
+        ntp process can be further restricted.
+    <li>Added
+        <a href="http://man.openbsd.org/pledge.2">pledge(2)</a>
+        support.
+    <li>Fixed high CPU usage when the network is down.
+    <li>Fixed various memory leaks.
+    <li>Switched to RMS for jitter calculations.
+    <li>Unified logging functions with other OpenBSD base programs.
+    <li>Set <tt>MOD_MAXERROR</tt> to avoid unsynced time status when using
+        ntp_adjtime.
+    <li>Fixed HTTP Timestamp header parsing to use
+        <a href="http://man.openbsd.org/strptime.3">strptime(3)</a>
+        in a more portable fashion.
+    <li>Hardened TLS for
+        <a href="http://man.openbsd.org/ntpd.8">ntpd(8)</a>
+        constraints, enabling server name verification.
+    </ul>
+<p>
+
+<li>LibreSSL 2.4.2
     <ul>
     <li>User-visible features:
       <ul>
-      <li>...
+      <li>Fixed some broken manpage links in the install target.
+      <li><tt>cert.pem</tt> has been reorganized and synced with Mozilla's
+          certificate store.
+      <li>Reliability fix, correcting an error when parsing certain ASN.1
+          elements over 16k in size.
+      <li>Implemented the IETF <i>ChaCha20-Poly1305</i> cipher suites.
+      <li>Fixed password prompts from
+          <a href="http://man.openbsd.org/openssl.1">openssl(1)</a>
+          to properly handle ^C.
       </ul>
     <li>Code improvements:
       <ul>
-      <li>...
+      <li>Fixed an <i>nginx</i> compatibility issue by adding an
+          '<tt>install_sw</tt>' build target.
+      <li>Changed default
+          <a href="http://man.openbsd.org/EVP_AEAD_CTX_init.3">EVP_aead_chacha20_poly1305(3)</a>
+          implementation to the IETF version, which is now the default.
+      <li>Reworked error handling in <tt>libtls</tt> so that configuration
+          errors are more visible.
+      <li>Added missing error handling around
+          <a href="http://man.openbsd.org/bn_wexpand.3">bn_wexpand(3)</a>
+          calls.
+      <li>Added
+          <a href="http://man.openbsd.org/explicit_bzero.3">explicit_bzero(3)</a>
+          calls for freed ASN.1 objects.
+      <li>Fixed <tt>X509_*set_object</tt> functions to return 0 on allocation
+          failure.
+      <li>Deprecated internal use of
+          <a href="http://man.openbsd.org/EVP_EncryptInit">EVP_[Cipher|Encrypt|Decrypt]_Final</a>.
+      <li>Fixed a problem that prevents the DSA signing algorithm from running
+          in constant time even if the flag <tt>BN_FLG_CONSTTIME</tt> is set. 
+      <li>Fixed several issues in the OCSP code that could result in the
+          incorrect generation and parsing of OCSP requests. This remediates
+          a lack of error checking on time parsing in these functions, and
+          ensures that only <tt>GENERALIZEDTIME</tt> formats are accepted for
+          OCSP, as per <i>RFC 6960</i>.
+      </ul>
+    <li>The following CVEs had been fixed:
+      <ul>
+      <li><tt>CVE-2016-2105</tt>&#8212;EVP_EncodeUpdate overflow.
+      <li><tt>CVE-2016-2106</tt>&#8212;EVP_EncryptUpdate overflow.
+      <li><tt>CVE-2016-2107</tt>&#8212;padding oracle in AES-NI CBC MAC check.
+      <li><tt>CVE-2016-2108</tt>&#8212;memory corruption in the ASN.1 encoder.
+      <li><tt>CVE-2016-2109</tt>&#8212;ASN.1 BIO excessive memory allocation.
       </ul>
     </ul>
 <p>
@@ -182,40 +340,43 @@ to 6.0.
     </dl>
     <table border=0 cellspacing=0 cellpadding=2 width="95%">
     <tr>
-    <td valign="top" width="33%"><ul>
-	<li>Chromium 48.0.2564.116		XXX
-	<li>Emacs 21.4 and 24.5		XXX
-	<li>GCC 4.9.3		XXX
-	<li>GHC 7.10.3		XXX
-	<li>GNOME 3.18.2		XXX
-	<li>Go 1.5.3		XXX
-	<li>Groff 1.22.3		XXX
-	<li>JDK 7u80 and 8u72		XXX
-	<li>KDE 3.5.10 and 4.14.3 (plus KDE4 core updates)		XXX
-	<li>LLVM/Clang 3.5 (20140228)		XXX
-	<li>LibreOffice 5.0.4.2		XXX
-	<li>MariaDB 10.0.23		XXX
-	<li>Mono 4.2.1.102		XXX
-	<li>Mozilla Firefox 38.6.1esr and 44.0.2		XXX
-	<li>Mozilla Thunderbird 38.6.0		XXX
-    </ul></td><td valign=top width="33%"><ul>
-	<li>Node.js 4.3.0		XXX
-	<li>OpenLDAP 2.3.43 and 2.4.43		XXX
-	<li>PHP 5.4.45, 5.5.32 and 5.6.18		XXX
-	<li>Postfix 3.0.3		XXX
-	<li>PostgreSQL 9.4.6			XXX
-	<li>Python 2.7.11, 3.4.4 and 3.5.1			XXX
-	<li>R 3.2.3			XXX
-	<li>Ruby 1.8.7.374, 2.0.0.648, 2.1.8, 2.2.4 and 2.3.0			XXX
-	<li>Rust 1.6.0			XXX
-	<li>Sendmail 8.15.2			XXX
-	<li>Sudo 1.8.15			XXX
-	<li>Tcl/Tk 8.5.18 and 8.6.4			XXX
-	<li>TeX Live 2014			XXX
-	<li>Vim 7.4.900			XXX
-	<li>Xfce 4.12			XXX
-    </ul></td><td valign=top width="34%">
-    </td></tr></table>
+    <td valign="top" width="50%"><ul>
+        <li>Afl 2.19b
+	<li>Chromium 51.0.2704.106
+	<li>Emacs 21.4 and 24.5
+	<li>GCC 4.9.3
+	<li>GHC 7.10.3
+	<li>Gimp 2.8.16
+	<li>GNOME 3.20.2
+	<li>Go 1.6.3
+	<li>Groff 1.22.3
+	<li>JDK 7u80 and 8u72
+	<li>KDE 3.5.10 and 4.14.3 (plus KDE4 core updates)
+	<li>LLVM/Clang 3.8.0
+	<li>LibreOffice 5.1.4.2
+	<li>Lua 5.1.5, 5.2.4, and 5.3.3
+	<li>MariaDB 10.0.25
+	<li>Mono 4.4.0.182
+	<li>Mozilla Firefox 45.2.0esr and 47.0.1
+    </ul></td><td valign=top width="50%"><ul>
+	<li>Mozilla Thunderbird 45.2.0
+	<li>Mutt 1.6.2
+	<li>Node.js 4.4.5
+	<li>OpenLDAP 2.3.43 and 2.4.44
+	<li>PHP 5.5.37, 5.6.23, and 7.0.8
+	<li>Postfix 3.1.1 and 3.2-20160515
+	<li>PostgreSQL 9.5.3
+	<li>Python 2.7.12, 3.4.5, and 3.5.2
+	<li>R 3.3.1
+	<li>Ruby 1.8.7.374, 2.0.0.648, 2.1.9, 2.2.5, and 2.3.1
+	<li>Rust 1.9.0-20160608
+	<li>Sendmail 8.15.2
+	<li>Sudo 1.8.17.1
+	<li>Tcl/Tk 8.5.18 and 8.6.4
+	<li>TeX Live 2015
+	<li>Vim 7.4.1467
+	<li>Xfce 4.12
+    </ul></td></tr></table>
 <p>
 
 <li>As usual, steady improvements in manual pages and other documentation.
@@ -223,18 +384,19 @@ to 6.0.
 
 <li>The system includes the following major components from outside suppliers:
     <ul>
-    <li>Xenocara (based on X.Org 7.7 with xserver 1.17.4 + patches,
-      freetype 2.6.2, fontconfig 2.11.1, Mesa 11.0.9, xterm 322,
-      xkeyboard-config 2.17 and more)			XXX
+    <li>Xenocara (based on X.Org 7.7 with xserver 1.18.3 + patches,
+      freetype 2.6.3, fontconfig 2.11.1, Mesa 11.2.2, xterm 322,
+      xkeyboard-config 2.18 and more)
     <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)			XXX
-    <li>Perl 5.20.2 (+ patches)			XXX
-    <li>SQLite 3.9.2 (+ patches)			XXX
-    <li>NSD 4.1.7			XXX
-    <li>Unbound 1.5.7			XXX
-    <li>Ncurses 5.7			XXX
-    <li>Binutils 2.17 (+ patches)			XXX
-    <li>Gdb 6.3 (+ patches)			XXX
-    <li>Awk Aug 10, 2011 version			XXX
+    <li>Perl 5.20.3 (+ patches)
+    <li>SQLite 3.9.2 (+ patches)
+    <li>NSD 4.1.10
+    <li>Unbound 1.5.9
+    <li>Ncurses 5.7
+    <li>Binutils 2.17 (+ patches)
+    <li>Gdb 6.3 (+ patches)
+    <li>Awk Aug 10, 2011 version
+    <li>Expat 2.1.1
     </ul>
 </ul>
 
@@ -271,8 +433,6 @@ extensive details on how to install OpenBSD 6.0 on your machine:
 <li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/sparc64/INSTALL.sparc64">
 	.../OpenBSD/6.0/sparc64/INSTALL.sparc64 (on CD3)</a>
 <p>
-<li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/alpha/INSTALL.alpha">
-	.../OpenBSD/6.0/alpha/INSTALL.alpha</a>
 <li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/armv7/INSTALL.armv7">
 	.../OpenBSD/6.0/armv7/INSTALL.armv7</a>
 <li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/hppa/INSTALL.hppa">
@@ -283,8 +443,6 @@ extensive details on how to install OpenBSD 6.0 on your machine:
 	.../OpenBSD/6.0/loongson/INSTALL.loongson</a>
 <li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/luna88k/INSTALL.luna88k">
 	.../OpenBSD/6.0/luna88k/INSTALL.luna88k</a>
-<li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/macppc/INSTALL.macppc">
-	.../OpenBSD/6.0/macppc/INSTALL.macppc</a>
 <li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/octeon/INSTALL.octeon">
 	.../OpenBSD/6.0/octeon/INSTALL.octeon</a>
 <li><a href="http://ftp.openbsd.org/pub/OpenBSD/6.0/sgi/INSTALL.sgi">
@@ -299,9 +457,10 @@ extensive details on how to install OpenBSD 6.0 on your machine:
 <hr>
 
 <p>
-Quick installer information for people familiar with OpenBSD, and the
-use of the "disklabel -E" command.  If you are at all confused when
-installing OpenBSD, read the relevant INSTALL.* file as listed above!
+Quick installer information for people familiar with OpenBSD, and the use of
+the "<a href="http://man.openbsd.org/disklabel.8">disklabel</a> -E" command.
+If you are at all confused when installing OpenBSD, read the relevant
+INSTALL.* file as listed above!
 
 <h3><font color="#e00000">OpenBSD/i386:</font></h3>
 
@@ -494,9 +653,10 @@ upgrade instructions and advice can be found in the
 
 <h3 id="sourcecode"><font color="#0000e0">Notes about the source code</font></h3>
 
-src.tar.gz contains a source archive starting at /usr/src.  This file
-contains everything you need except for the kernel sources, which are
-in a separate archive.  To extract:
+<tt>src.tar.gz</tt> contains a source archive starting at <tt>/usr/src</tt>.
+This file contains everything you need except for the kernel sources,
+which are in a separate archive.
+To extract:
 
 <blockquote><pre>
 # <b>mkdir -p /usr/src</b>
@@ -504,7 +664,7 @@ in a separate archive.  To extract:
 # <b>tar xvfz /tmp/src.tar.gz</b>
 </pre></blockquote>
 
-sys.tar.gz contains a source archive starting at /usr/src/sys.
+<tt>sys.tar.gz</tt> contains a source archive starting at <tt>/usr/src/sys</tt>.
 This file contains all the kernel sources you need to rebuild kernels.
 To extract:
 
@@ -539,11 +699,8 @@ at this point.  This text is not a manual of how to use ports.
 Rather, it is a set of notes meant to kickstart the user on the
 OpenBSD ports system.
 <p>
-The <i>ports/</i> directory represents a CVS (see the manpage for
-<a href="http://man.openbsd.org/?query=cvs">
-cvs(1)</a> if
-you aren't familiar with CVS) checkout of our ports.  As with our complete
-source tree, our ports tree is available via
+The <i>ports/</i> directory represents a CVS checkout of our ports.
+As with our complete source tree, our ports tree is available via
 <a href="anoncvs.html">AnonCVS</a>.
 So, in order to keep up to date with the <i>-stable</i> branch, you must make
 the <i>ports/</i> tree available on a read-write medium and update the tree
