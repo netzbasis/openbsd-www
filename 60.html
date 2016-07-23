@@ -68,8 +68,11 @@ to 6.0.
     <li>...
     </ul>
 <p>
+
 <li>Improved hardware support, including:
     <ul>
+    <li>The vax port has been removed.
+    <li>The iwm driver supports more models, notably the 3165 and 8260.
     <li>...
     </ul>
 <p>
@@ -117,7 +120,7 @@ to 6.0.
     <ul>
     <li><tt>W^X</tt> is now strictly enforced by default;
 	a program can only violate it if the executable is marked with
-	<tt>PT_OPENBSD_WXNEEDED</tt> and its is located on a filesystem
+	<tt>PT_OPENBSD_WXNEEDED</tt> and it is located on a filesystem
 	mounted with the <tt>wxallowed</tt>
 	<a href="http://man.openbsd.org/mount.8">mount(8)</a> option.
     <li>The <a href="http://man.openbsd.org/setjmp.3">setjmp(3)</a>
@@ -126,8 +129,8 @@ to 6.0.
     <li><a href="http://man.openbsd.org/sigreturn.2">sigreturn(2)</a>
 	can now only be used by the kernel-provided signal trampoline,
 	with a cookie to detect attempts to reuse it.
-    <li>In <a href="http://man.openbsd.org/rc.8">rc(8)</a>,
-        re-link libc.so on startup, placing the objects in a random order. 
+    <li>To deter code reuse exploits, <a href="http://man.openbsd.org/rc.8">rc(8)</a>
+        re-links libc.so on startup, placing the objects in a random order. 
     <li>In the <a href="http://man.openbsd.org/getpwnam.3">getpwnam(3)</a>
         family of functions, stop opening the shadow database by default. 
     <li>Allow <a href="http://man.openbsd.org/tcpdump.8">tcpdump(8)</a>
@@ -135,6 +138,18 @@ to 6.0.
     <li>Remove
         <a href="http://man.openbsd.org/OpenBSD-5.9/systrace">systrace</a>.
     <li>Remove Linux emulation support.
+    <li>Remove support for the usermount option.
+    <li>The TCP SYN cache reseeds its random hash function from
+        time to time.
+        This prevents an attacker from calculating the distribution
+        of the hash function with a timing attack.
+    <li>To work against SYN flooding attacks the administrator can
+        change the size of the hash array now.
+        <a href="http://man.openbsd.org/netstat.1">netstat(1)</a>
+        <tt>-s -p tcp</tt> shows the relevant information to tune
+        the SYN cache with
+        <a href="http://man.openbsd.org/sysctl.8">sysctl(8)</a>
+        <tt>net.inet.tcp</tt>.
     <li>...
     </ul>
 <p>
@@ -158,7 +173,7 @@ to 6.0.
         <a href="http://man.openbsd.org/OpenBSD-5.9/dbm.3">dbm(3)</a>
         functions;
         <a href="http://man.openbsd.org/ndbm.3">ndbm(3)</a> remains.
-    <li>Add a <tt>setenv</tt> keyword to
+    <li>Add <tt>setenv</tt> keyword for more powerful environment handling in
         <a href="http://man.openbsd.org/doas.conf.5">doas.conf(5)</a>.
     <li>Add <tt>-g</tt> and <tt>-p</tt> options to
         <a href="http://man.openbsd.org/aucat.1">aucat.1</a>
@@ -194,6 +209,15 @@ to 6.0.
         <a href="http://man.openbsd.org/wall.1">wall(1)</a>.
     <li>Handle the <a href="http://man.openbsd.org/?apropos=1&amp;query=Ev%3DCOLUMNS">COLUMNS</a>
         environment variable consistently across many programs.
+    <li>The options <tt>-c</tt> and <tt>-k</tt> allow to provide
+        TLS client certificates for
+        <a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+        on the sending side.
+        With that the receiving side can verify log messages
+        are authentic.
+        Note that syslogd does not have this check feature yet.
+    <li>When the klog buffer overflows, syslogd will write a log
+        message to show that some entries is missing.
     <li>...
     </ul>
 <p>
@@ -302,7 +326,7 @@ to 6.0.
           ensures that only <tt>GENERALIZEDTIME</tt> formats are accepted for
           OCSP, as per <i>RFC 6960</i>.
       </ul>
-    <li>The following CVEs had been fixed:
+    <li>The following CVEs have been fixed:
       <ul>
       <li><tt>CVE-2016-2105</tt>&#8212;EVP_EncodeUpdate overflow.
       <li><tt>CVE-2016-2106</tt>&#8212;EVP_EncryptUpdate overflow.
