@@ -24,10 +24,9 @@ To be released Sep 1, 2016<br>
 Copyright 1997-2016, Theo de Raadt.<br>
 <font color="#e00000">ISBN 978-0-9881561-8-0</font>
 <br>
-6.0 Songs: <a href="lyrics.html#60a">"XXX"</a>,
-<a href="lyrics.html#60b">"XXX"</a>, <a href="lyrics.html#60c">"XXX"</a>,
-<a href="lyrics.html#60d">"XXX"</a>, <a href="lyrics.html#60e">"XXX"</a>,
-<a href="lyrics.html#60f">"XXX"</a>.
+6.0 Songs: 
+<a href="lyrics.html#60a">"Another Smash of the Stack"</a>
+     (plus 5 more...)
 
 <ul>
 <li>Order a CDROM from our <a href="https://openbsdstore.com">ordering system</a>.
@@ -109,12 +108,17 @@ to 6.0.
         <a href="http://man.openbsd.org/?query=sdmmc">sdmmc(4)</a>,
         <a href="http://man.openbsd.org/?query=sdhc">sdhc(4)</a>, and
         <a href="http://man.openbsd.org/?query=imxesdhc&amp;sektion=4&amp;arch=armv7">imxesdhc(4)</a>.
+    <li>Support for EHCI and OHCI compliant USB controllers on Octeon II SoCs.
+    <li>Many USB device drivers have been enabled on OpenBSD/octeon.
     <li>...
     </ul>
 <p>
 
 <li>SMP network stack improvements:
     <ul>
+    <li>The Tx queue of the
+        <a href="http://man.openbsd.org/?query=cnmac">cnmac(4)</a>
+        driver can now be processed in parallel of the rest of the kernel.
     <li>...
     </ul>
 <p>
@@ -132,6 +136,10 @@ to 6.0.
 
 <li>Generic network stack improvements:
     <ul>
+    <li>The prio field on VLAN headers is now correctly set
+	on each fragment of an IPv4 packet going out on a
+        <a href="http://man.openbsd.org/vlan.4">vlan(4)</a>
+	interface.
     <li>...
     </ul>
 <p>
@@ -153,6 +161,11 @@ to 6.0.
         <a href="http://man.openbsd.org/nc.1">nc(1)</a>.
     <li>Add <tt>AF_UNIX</tt> support to
         <a href="http://man.openbsd.org/tcpbench.1">tcpbench(1)</a>.
+    <li>Fixed a regression in
+        <a href="http://man.openbsd.org/rarpd.8">rarpd(8)</a>.
+        The daemon could hang if it was idle for a long time.
+    <li>Added the <tt>llprio</tt> option in
+        <a href="http://man.openbsd.org/ifconfig.8">ifconfig(8)</a>.
     <li>...
     </ul>
 <p>
@@ -191,6 +204,12 @@ to 6.0.
         the SYN cache with
         <a href="http://man.openbsd.org/sysctl.8">sysctl(8)</a>
         <tt>net.inet.tcp</tt>.
+    <li>The administrator can require root privileges for binding to some TCP
+	and UDP ports with
+	<a href="http://man.openbsd.org/sysctl.8">sysctl(8)</a>
+	<tt>net.inet.tcp.rootonly</tt> and
+	<a href="http://man.openbsd.org/sysctl.8">sysctl(8)</a>
+	<tt>net.inet.udp.rootonly</tt>.
     <li>...
     </ul>
 <p>
@@ -259,6 +278,8 @@ to 6.0.
         Note that syslogd does not have this check feature yet.
     <li>When the klog buffer overflows, syslogd will write a log
         message to show that some entries is missing.
+    <li>On OpenBSD/octeon, CPU cache write buffering is enabled
+        to improve performance.
     <li>...
     </ul>
 <p>
@@ -452,7 +473,7 @@ to 6.0.
     <li>Xenocara (based on X.Org 7.7 with xserver 1.18.3 + patches,
       freetype 2.6.3, fontconfig 2.11.1, Mesa 11.2.2, xterm 322,
       xkeyboard-config 2.18 and more)
-    <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)			XXX
+    <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
     <li>Perl 5.20.3 (+ patches)
     <li>SQLite 3.9.2 (+ patches)
     <li>NSD 4.1.10
