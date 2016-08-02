@@ -182,7 +182,7 @@ make -f Makefile.bsd-wrapper NOMAN=1 install
 <h3 id="r20160508">2016/05/08 - [packages] sysutils/runit default service
   directory change</h3>
 Upstream moved back the default service directory to <tt>/service</tt>; to keep
-on using <tt>/var/service</tt>, install a symlink:
+on using <tt>/var/service</tt>, make a symlink:
 
 <blockquote><pre>
 ln -s /var/service /
@@ -213,8 +213,7 @@ mounted using the <b>wxallowed</b> option, for instance:
 </pre></blockquote>
 
 The base system has no W^X violating programs, but the ports tree
-contains a quite a few: chromium, mono, node, gnome, libreoffice, jdk,
-zeal, etc.
+contains quite a few: chromium, mono, node, gnome, libreoffice, jdk, zeal, etc.
 Progress in this area will be defined by repairing libraries and programs
 so that they don't request <tt>PROT_WRITE | PROT_EXEC</tt> memory.
 The library libffi (Used by python for instance) was the first to be fixed.
@@ -241,17 +240,25 @@ rebooting onto the install kernel.
 Some uses of the keepenv keyword should be replaced with setenv.
 A warning will be printed when necessary.
 
-
 <h3 id="r20160713">2016/07/13 - [packages] OpenSMTPD-extras filters removal</h3>
 Most filters were removed from the OpenSMTPD-extras distribution, as
 they are not considered ready.
 People who started using filters like <tt>filter-dkim-signer</tt>
-already, need to look for other alternatives in ports, e.g.
+already need to look for other alternatives in ports, e.g.
 <tt>mail/dkimproxy</tt>.
+
+<!-- 6.0 -->
+<h3 id="r20160801">2016/08/01 - new mandoc.db(5) format</h3>
+To update all <a href="http://man.openbsd.org/mandoc.db.5">mandoc.db(5)</a>
+files to the new format, run:
+
+<blockquote><pre>
+makewhatis
+</pre></blockquote>
 
 <p>
 <hr>
-<small>$OpenBSD: current.html,v 1.693 2016/07/13 20:25:36 jung Exp $</small>
+<small>$OpenBSD: current.html,v 1.697 2016/08/01 20:10:23 tb Exp $</small>
 
 </body>
 </html>
