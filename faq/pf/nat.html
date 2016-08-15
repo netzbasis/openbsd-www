@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="../../openbsd.css">
-<link rel="canonical" href="http://www.openbsd.org/faq/pf/nat.html">
+<link rel="canonical" href="https://www.openbsd.org/faq/pf/nat.html">
 </head>
 
 <!--
@@ -411,12 +411,12 @@ with <tt>nat</tt> rules.
 <p>
 Example:
 
-<blockquote>
+<blockquote><pre>
 web_serv_int = "192.168.1.100"
 web_serv_ext = "198.51.100.6"
 
 pass on tl0 from $web_serv_int to any binat-to $web_serv_ext
-</blockquote>
+</pre></blockquote>
 
 <h2 id="except">Translation rule exceptions</h2>
 
