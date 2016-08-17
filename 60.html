@@ -24,14 +24,15 @@ To be released Sep 1, 2016<br>
 Copyright 1997-2016, Theo de Raadt.<br>
 <font color="#e00000">ISBN 978-0-9881561-8-0</font>
 <br>
-6.0 Songs: 
+6.0 Songs:
 <a href="lyrics.html#60a">"Another Smash of the Stack"</a>,
 <a href="lyrics.html#60b">"Black Hat"</a>,
 <a href="lyrics.html#60c">"Money"</a><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-(plus 3 more...)
+<a href="lyrics.html#60d">"Comfortably Dumb (the misc song)"</a>,
+(plus 2 more...)
 
 <ul>
 <li>Order a CDROM from our <a href="https://openbsdstore.com">ordering system</a>.
@@ -105,7 +106,8 @@ to 6.0.
     <li>New <a href="http://man.openbsd.org/?query=utvfu">utvfu(4)</a>
         driver for audio/video capture devices based on the Fushicai USBTV007.
     <li>The <a href="http://man.openbsd.org/?query=iwm">iwm(4)</a> driver
-        supports more models, notably the Intel Wireless 3165 and 8260.
+        now supports Intel Wireless 3165 and 8260 devices, and works more
+	reliably in RAMDISK kernels.
     <li>Support for I2C HID devices with GPIO signalled interrupts has
         been added to <a href="http://man.openbsd.org/?query=dwiic">dwiic(4)</a>.
     <li>Support for larger bus widths, high speed modes, and DMA
@@ -117,11 +119,13 @@ to 6.0.
     <li>Support for EHCI and OHCI compliant USB controllers on Octeon II SoCs.
     <li>Many USB device drivers have been enabled on OpenBSD/octeon.
     <li>Improved support for hardware-reduced ACPI implementations.
-    <li>AES-NI crypto is now down without holding the kernel lock.
+    <li>Improved support for ACPI 5.0 implementations.
+    <li>AES-NI crypto is now done without holding the kernel lock.
     <li>Improved AGP support on PowerPC G5 machines.
     <li>Added support for the SD card slot in Intel Bay Trail SoCs.
     <li>The <a href="http://man.openbsd.org/?query=ichiic">ichiic(4)</a> driver
-        now ignores the SMBALERT# interrupt to prevent an interrupt storm.
+        now ignores the SMBALERT# interrupt to prevent an interrupt storm
+        with buggy BIOS implementations.
     <li>Device attachment problems with the
         <a href="http://man.openbsd.org/?query=axen">axen(4)</a> driver have
         been fixed.
@@ -132,7 +136,7 @@ to 6.0.
     <li>The <a href="http://man.openbsd.org/?query=rtsx">rtsx(4)</a> driver
         now supports RTS522A devices.
     <li>Initial support for MSI-X has been added.
-    <li>Support for MSI-X has been added to the
+    <li>Support MSI-X in the
         <a href="http://man.openbsd.org/?query=virtio">virtio(4)</a> driver.
     <li>Added a workaround for hardware DMA overruns to the
         <a href="http://man.openbsd.org/man4/dc.4">dc(4)</a> driver.
@@ -141,15 +145,16 @@ to 6.0.
         active cooling.
     <li>The <a href="http://man.openbsd.org/?query=xhci">xhci(4)</a> driver
         now performs handoff from an xHCI-capable BIOS correctly.
-    </ul>
-<p>
-
-<li>SMP network stack improvements:
-    <ul>
-    <li>The Tx queue of the
-        <a href="http://man.openbsd.org/?query=cnmac">cnmac(4)</a>
-        driver can now be processed in parallel of the rest of the kernel.
-    <li>Network input path is now run in thread context.
+    <li>Support for multi-touch input has been added to the
+        <a href="http://man.openbsd.org/?query=wsmouse">wsmouse(4)</a> driver.
+    <li>The <a href="http://man.openbsd.org/?query=uslcom">uslcom(4)</a> driver
+        now supports the serial console of Aruba 7xxx wireless controllers.
+    <li>The <a href="http://man.openbsd.org/?query=re">re(4)</a> driver
+        now works around broken LED configurations in APU1 EEPROMs.
+    <li>The <a href="http://man.openbsd.org/?query=ehci">ehci(4)</a> driver
+        now works around problems with ATI USB controllers (e.g. SB700).
+    <li>The <a href="http://man.openbsd.org/?query=xen">xen(4)</a> driver
+        now supports domU configuration under Qubes OS.
     </ul>
 <p>
 
@@ -161,6 +166,13 @@ to 6.0.
         keeps track of HT protection changes while associated to an 11n AP.
     <li>The wireless stack and several drivers make more aggressive use
         of RTS/CTS to avoid interference from legacy devices and hidden nodes.
+    <li>The <a href="http://man.openbsd.org/?query=netstat">netstat(1)</a> -W
+        command now shows information about 802.11n events.
+    <li>In hostap mode, do not reuse association IDs of nodes which are
+        still cached. Fixes a problem where an access point using the
+        <a href="http://man.openbsd.org/?query=ral">ral(4)</a> driver
+        would get stuck at 1 Mbps because Tx rate accounting happened
+        on the wrong node object.
     </ul>
 <p>
 
@@ -178,6 +190,10 @@ to 6.0.
         <a href="http://man.openbsd.org/bpf.4">bpf(4)</a>.
         This allows the system to have just one bpf device node in /dev
         that services all bpf consumers (up to 1024).
+    <li>The Tx queue of the
+        <a href="http://man.openbsd.org/?query=cnmac">cnmac(4)</a>
+        driver can now be processed in parallel of the rest of the kernel.
+    <li>Network input path is now run in thread context.
     </ul>
 <p>
 
@@ -252,9 +268,9 @@ to 6.0.
 	can now only be used by the kernel-provided signal trampoline,
 	with a cookie to detect attempts to reuse it.
     <li>To deter code reuse exploits, <a href="http://man.openbsd.org/rc.8">rc(8)</a>
-        re-links libc.so on startup, placing the objects in a random order. 
+        re-links libc.so on startup, placing the objects in a random order.
     <li>In the <a href="http://man.openbsd.org/getpwnam.3">getpwnam(3)</a>
-        family of functions, stop opening the shadow database by default. 
+        family of functions, stop opening the shadow database by default.
     <li>Allow <a href="http://man.openbsd.org/tcpdump.8">tcpdump(8)</a>
         <tt>-r</tt> to be started without root privileges.
     <li>Remove
@@ -278,6 +294,9 @@ to 6.0.
 	<tt>net.inet.tcp.rootonly</tt> and
 	<a href="http://man.openbsd.org/sysctl.8">sysctl(8)</a>
 	<tt>net.inet.udp.rootonly</tt>.
+    <li>Remove a function pointer from the
+	<a href="http://man.openbsd.org/mbuf.9">mbuf(9)</a> data structure
+	and use an index into an array of acceptable functions instead.
     </ul>
 <p>
 
@@ -323,9 +342,9 @@ to 6.0.
     <li>Implement the <a href="http://man.openbsd.org/rcs.1">rcs(1)</a>
         <tt>-I</tt> (interactive) flag.
     <li>In <a href="http://man.openbsd.org/rcs.1">rcs(1)</a>,
-        implement Mdocdate keyword substitution. 
+        implement Mdocdate keyword substitution.
     <li>In <a href="http://man.openbsd.org/top.1">top(1)</a>,
-        allow to filter process arguments if they are being displayed. 
+        allow to filter process arguments if they are being displayed.
     <li>Added UTF-8 support to
         <a href="http://man.openbsd.org/fold.1">fold(1)</a> and
         <a href="http://man.openbsd.org/rev.1">rev(1)</a>.
@@ -401,6 +420,16 @@ to 6.0.
         and various disk-related utilities, such as
         <a href="http://man.openbsd.org/disklabel">disklabel(8)</a> and
         <a href="http://man.openbsd.org/fdisk">fdisk(8)</a>.
+    <li>Block size calculation errors in the
+        <a href="http://man.openbsd.org/?query=audio">audio(4)</a> driver
+        have been fixed.
+    <li>The <a href="http://man.openbsd.org/?query=usb">usb(4)</a> driver
+        now caches vendor and product IDs. Fixes an issue where
+        <a href="http://man.openbsd.org/?query=usbdevs">usbdevs(8)</a> called
+        in a loop would cause a USB mass storage device to halt operation.
+    <li>The <a href="http://man.openbsd.org/?query=rsu">rsu(4)</a> and
+        <a href="http://man.openbsd.org/?query=ural">ural(4)</a> drivers
+        are now working again after they were accidentally broken in 5.9.
     </ul>
 <p>
 
@@ -413,29 +442,30 @@ to 6.0.
         <li>Fix a logic issue in the SMTP state machine that can lead to
             an invalid state and result in a crash.
         <li>Plug a file-pointer leak that can lead to resource exhaustion
-            and result in a crash. 
+            and result in a crash.
         <li>Use automatic DH parameters instead of fixed ones.
         <li>Disable DHE by default since it is computationally expensive
-            and a potential DoS vector. 
+            and a potential DoS vector.
         </ul>
       <li>The following improvements were brought in this release:
         <ul>
         <li>Add the <tt>-r</tt> option to the
             <a href="http://man.openbsd.org/smtpd">smtpd(8)</a>
             enqueuer for compatibility with mailx.
-        <li>Explicitly enclose SMTP transactions between BEGIN and
-            COMMIT/ROLLBACK filter events. 
         <li>Add missing date or message-id when listening on the submit
-            port. 
+            port.
         <li>Fix "smtpctl show queue" reporting "invalid" envelope state.
         <li>Rework the format of the "Received" header so that the TLS
             part does not violate the RFC.
         <li>Increase the number of connections a local address is
             allowed to establish, and decrease the delay between
             transactions in the same session.
-        <li>Properly reset the transaction when a filter rejects a
-            message.
-        <li>Deal with LMTP servers returning continuation lines. 
+        <li>Fix LMTP delivery to servers returning continuation lines.
+        <li>Further improve the still experimental filer API and fix
+            various related issues.
+        <li>Start improving and unifying the format of log messages.
+        <li>Fix several documentation discrepancies and typos in the man
+            pages.
         </ul>
     </ul>
 <p>
@@ -510,7 +540,7 @@ to 6.0.
       <li>In <a href="http://man.openbsd.org/scp.1">scp(1)</a>
           and <a href="http://man.openbsd.org/sftp.1">sftp(1)</a>,
           prevent screwing up terminal settings by escaping bytes
-          not forming ASCII or UTF-8 characters. 
+          not forming ASCII or UTF-8 characters.
       <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>,
           <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>:
           Reduce the syslog level of some relatively common protocol events
@@ -616,7 +646,7 @@ to 6.0.
       <li>Deprecated internal use of
           <a href="http://man.openbsd.org/EVP_EncryptInit">EVP_[Cipher|Encrypt|Decrypt]_Final</a>.
       <li>Fixed a problem that prevents the DSA signing algorithm from running
-          in constant time even if the flag <tt>BN_FLG_CONSTTIME</tt> is set. 
+          in constant time even if the flag <tt>BN_FLG_CONSTTIME</tt> is set.
       <li>Fixed several issues in the OCSP code that could result in the
           incorrect generation and parsing of OCSP requests. This remediates
           a lack of error checking on time parsing in these functions, and
