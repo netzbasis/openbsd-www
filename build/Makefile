@@ -1,7 +1,7 @@
 # Makefile for WWW subdirectory.
 
-STABLE_VERSION=	5.9
-PREV_VERSION=	5.8
+STABLE_VERSION=	6.0
+PREV_VERSION=	5.9
 
 # also update mirrors/openbgpd-ftp.html.head
 OPENBGPD_VERSION=		4.6
@@ -29,7 +29,7 @@ all: ../groups.html ../support.html ../ftp.html
 		@rm -f support-tbl.html support.countries
 
 # Build the FTP/HTTP/RSYNC mirrors page.
-ftp: mirrors.pl mirrors.dat mirrors/ftp.html.{end,head,mid1,mid2} \
+../ftp.html ftp: mirrors.pl mirrors.dat mirrors/ftp.html.{end,head,mid1,mid2} \
      mirrors/openntpd-portable.html.{head,end} \
      mirrors/openbgpd-ftp.html.{end,head}
 	perl mirrors.pl openbsd-ftp ${STABLE_VERSION}
