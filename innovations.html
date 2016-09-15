@@ -383,6 +383,11 @@ sorted in order of introduction, approximately.
   violate it if the executable is marked with <tt>PT_OPENBSD_WXNEEDED</tt>
   and it is located on a filesystem mounted with the <tt>wxallowed</tt>
   <a href="http://man.openbsd.org/mount.8">mount(8)</a> option.
+<li>GOT and PLT protection by ld.so: first done as part of the W^X
+  work in OpenBSD 3.3, by Dale Rahn and Theo de Raadt.
+  The GOT and PLT regions are read-only outside of ld.so itself.
+  Extended to the .init/.fini sections (constructors and destructors)
+  in OpenBSD 3.4.
 <li>ASLR: OpenBSD 3.4 was the first widely used operating system to
   provide it by default.
 <li><a href="http://man.openbsd.org/OpenBSD-current/man1/gcc-local.1">gcc-local(1)</a>
@@ -397,6 +402,12 @@ sorted in order of introduction, approximately.
   for OpenBSD 4.4.</li>
 <li>PIE: OpenBSD 5.3 was the first widely used operating system to enable
   it globally by default, on seven hardware platforms.
+<li>Random-data memory: the ability to specify that a variable
+  should be initialized at load time with random byte values was
+  implemented in OpenBSD 5.3 by Matthew Dempsky.
+<li>Stack protector per shared object: using the random-data memory
+  feature, each shared object was given its own stack protector
+  cookie in OpenBSD 5.3 by Matthew Dempsky.
 <li>Static-PIE: Position-independent static binaries for /bin, /sbin and ramdisks.
   First released with OpenBSD 5.7.
 <li>SROP (<a href="http://man.openbsd.org/sigreturn.2">sigreturn(2)</a>
@@ -409,6 +420,24 @@ sorted in order of introduction, approximately.
   <tt>libc.so</tt> on startup, placing the objects in a random order.
   Theo de Raadt and Robert Peichaer, May 2016,
   enabled by default since OpenBSD 6.0.
+<li>Kernel-assisted lazy-binding for W^X safety in multi-threaded programs.
+  A new syscall <a href="http://man.openbsd.org/kbind.2">kbind(2)</a>
+  permits lazy-binding to be W^X safe in multi-threaded programs.
+  Implemented for OpenBSD 5.9 by Philip Guenther in July 2015.
+<li>Process layouts in memory tightened to remove execute permission from
+  all segmented, non-instruction data and to remove write permission from
+  data that is only modified during loading and relocation.
+  By combining the RELRO (Read-Only after Relocation) design from the
+  GNU project with the original ASLR work from OpenBSD 3.3 and
+  strict lazy-binding work from OpenBSD 5.9, this is applied to not
+  just a subset of programs and libraries but rather to all programs
+  and libraries.
+  Implemented for OpenBSD 6.1 by Philip Guenther in August 2016.
+<li>Use of fork+exec in privilege separated programs.  The strategy is to give
+  each process a fresh & unique address space for ASLR, stack protector -- as
+  protection against address space discovery attacks.  Implemented first by
+  Damien Miller (<a href="http://man.openbsd.org/OpenBSD-current/man8/sshd.8">sshd(8)</a> 2004), Claudio Jeker (<a href="http://man.openbsd.org/OpenBSD-current/man8/bgpd.8">bgpd(8)</a>, 2015), Eric Faurot (<a href="http://man.openbsd.org/OpenBSD-current/man8/smtpd.8">smtpd(8)</a>, 2016),
+  Rafael Zalamena (various, 2016), and others.
 </ul>
 
 <h3>Functions</h3>
