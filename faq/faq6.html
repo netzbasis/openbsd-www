@@ -33,9 +33,8 @@
 <ul>
   <li><a href="#Setup.if"      >Identifying and setting up your
                                 network interfaces</a>
-  <li><a href="#Setup.gateway" >Default gateway</a>
+  <li><a href="#Setup.gateway" >Default hostname and gateway</a>
   <li><a href="#Setup.resolver">DNS resolution</a>
-  <li><a href="#Setup.myname"  >Host name</a>
   <li><a href="#Setup.activate">Activating the changes</a>
   <li><a href="#Setup.chkroute">Checking routes</a>
   <li><a href="#Setup.aliases" >Setting up aliases on interfaces</a>
@@ -60,11 +59,8 @@
 <h2 id="Intro">Background</h2>
 
 For the bulk of this document, it helps if you have read and at least partially
-understand the
-<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a>
-and
-<a href="http://man.openbsd.org/netstat">netstat(1)</a>
-man pages.
+understand the <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> and
+<a href="http://man.openbsd.org/netstat">netstat(1)</a> man pages.
 
 <p>
 If you are a network administrator, setting up routing protocols, using
@@ -79,32 +75,23 @@ especially when you deal with or are responsible for more than one network.
 If you are working with applications such as web servers, ftp servers
 and mail servers, you may benefit greatly by reading
 <a href="http://www.rfc-editor.org/rfc.html">the RFCs</a>.
-Most likely, you can't read all of them.
 Pick some topics that you are interested in or that you use in your
 network environment.
-Look them up, find out how they are intended to work.
 The RFCs define many (thousands of) standards for protocols on the
 internet and how they are supposed to work.
 
 <h2 id="Setup">Network configuration</h2>
 
 Normally, OpenBSD's network settings are initially configured by the
-<a href="faq4.html">installation</a> process.
-However, it is good to understand what is happening in this process and
-how it works.
-All network configuration is done using simple text files in the
-<tt>/etc</tt> directory.
+<a href="faq4.html">installation process</a>.
+All network configuration is done using text files in <tt>/etc</tt>.
 
-<h3 id="Setup.if">Identifying and setting up your network interfaces
-</h3>
+<h3 id="Setup.if">Identifying and setting up your network interfaces</h3>
 
-<p>
 In OpenBSD, interfaces are named for the type of card, not for the type of
 connection.
-You can see your network card get initialized during the booting process,
-or after the booting process using the
-<a href="http://man.openbsd.org/dmesg">dmesg(8)</a> command.
-For example, here is the part of dmesg for an Intel Fast Ethernet
+For example, here is the part of the
+<a href="http://man.openbsd.org/dmesg">dmesg(8)</a> for an Intel Fast Ethernet
 network card, which uses the device name <tt>fxp</tt>.
 
 <blockquote><pre>
@@ -114,20 +101,10 @@ inphy0 at fxp0 phy 1: i82555 10/100 media interface, rev. 4
 
 This device uses the <a href="http://man.openbsd.org/fxp">fxp(4)</a> driver, and
 is assigned the number 0 here.
-The number is assigned based on various criteria, depending upon the
-card and other details of the system.
-In most cases, with today's common hardware, cards are assigned in the order
-they are found during bus probing.
-The first fxp found will be <tt>fxp0</tt>, second will be <tt>fxp1</tt>
-and so on.
-Users of unusual or very old hardware (ISA) may find devices numbered by
-hardware resource settings (ISA ne2 is I/O 280 IRQ 9 even if there is no
-ne1 or ne0), or MAC address.
 
 <p>
 You can find out what network interfaces have been identified by using the
-<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a>
-utility.
+<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> utility.
 The following command will show all network interfaces on a system.
 This sample output shows us only one physical Ethernet interface, an
 <a href="http://man.openbsd.org/fxp">fxp(4)</a>.
@@ -135,35 +112,41 @@ This sample output shows us only one physical Ethernet interface, an
 <blockquote><pre>
 $ <b>ifconfig</b>
 lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 33200
-        priority: 0
+        index 3 priority 0 llprio 3
         groups: lo
         inet 127.0.0.1 netmask 0xff000000
 fxp0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500
         lladdr 00:04:ac:dd:39:6a
-        priority: 0
+        index 1 priority 0 llprio 3
         media: Ethernet autoselect (100baseTX full-duplex)
         status: active
         inet 10.0.0.38 netmask 0xffffff00 broadcast 10.0.0.255
 enc0: flags=0&lt;&gt;
-        priority: 0
+        index 2 priority 0 llprio 3
         groups: enc
         status: active
 pflog0: flags=141&lt;UP,RUNNING,PROMISC&gt; mtu 33200
-        priority: 0
+        index 4 priority 0 llprio 3
         groups: pflog
 </pre></blockquote>
 
-<p>
 As you can see here, <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a>
 gives us a lot more information than we need at this point.
-But, it still allows us to see our interface.
-In the above example, the interface card is already configured.
-This is obvious because an IP network is already configured on fxp0,
-hence the values
-&quot;inet 10.0.0.38 netmask 0xffffff00 broadcast 10.0.0.255&quot;.
-Also, the <b>UP</b> and <b>RUNNING</b> flags are set.
+In the above example, an IP network is configured on <tt>fxp0</tt>, hence the
+values <tt>inet 10.0.0.38 netmask 0xffffff00 broadcast 10.0.0.255</tt>.
+Also, the <tt>UP</tt> and <tt>RUNNING</tt> flags are set.
 
 <p>
+Interfaces are configured at boot time using
+<a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> files, where
+"if" is replaced by the full name of each interface.
+The example above would use the file <tt>/etc/hostname.fxp0</tt>:
+
+<blockquote><pre>
+$ <b>cat /etc/hostname.fxp0</b>
+inet 10.0.0.38 255.255.255.0
+</pre></blockquote>
+
 Finally, you will notice several other interfaces come enabled by default.
 These are virtual interfaces that serve various functions.
 The following manual pages describe them:
@@ -209,84 +192,22 @@ These include, but are not limited to:
  - Virtual eXtensible Local Area Network tunnel Interface
 </ul>
 
-<p>
 For a complete listing of virtual interfaces, refer to the
 <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> man page.
-<p>
-Interfaces are configured at boot time using /etc/hostname.<i>if</i> files,
-where <i>if</i> is replaced by the full name of each interface.
-Each interface has its own file.
-The example above would use the file <tt>/etc/hostname.fxp0</tt>.
 
-<p>
-The layout of this file is simple:
+<h3 id="Setup.gateway">Default hostname and gateway</h3>
 
-<blockquote><pre>
-address_family address netmask broadcast [other options]
-</pre></blockquote>
+The <tt>/etc/myname</tt> and <tt>/etc/mygate</tt> files are read by the
+<a href="http://man.openbsd.org/netstart">netstart(8)</a> script.
+Both of these files consist of a single line, specifying the fully qualified
+domain name of the system and the address of the gateway host, respectively.
+The <tt>/etc/mygate</tt> file need not exist on all systems.
+See <a href="http://man.openbsd.org/myname">myname(5)</a> for more details.
 
-Much more detail about the format of this file can be found in the
-<a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> man page.
-You will need to read this for less trivial configurations.
+<h3 id="Setup.resolver">DNS resolution</h3>
 
-<p>
-A typical interface configuration file, configured for an IPv4 address,
-would look like this:
-
-<blockquote><pre>
-$ <b>cat /etc/hostname.fxp0</b>
-inet 10.0.0.38 255.255.255.0 NONE
-</pre></blockquote>
-
-<p>
-In this case, we have defined an IPv4 (inet) address, with an IP address of
-10.0.0.38, a subnet mask of 255.255.255.0 and no specific broadcast address
-(which will default to 10.0.0.255 in this case).
-
-<p>
-You could also specify media types for Ethernet, say, if you wanted to
-force 100baseTX full-duplex mode.
-
-<blockquote><pre>
-$ <b>cat /etc/hostname.fxp0</b>
-inet 10.0.0.38 255.255.255.0 NONE media 100baseTX mediaopt full-duplex
-</pre></blockquote>
-
-<p>
-Of course, you should never force full duplex mode unless both sides of
-the connection are set to do this!
-In the absence of special needs, media settings should be excluded.
-A more likely case might be to force 10base-T or half duplex when your
-infrastructure requires it.
-
-<p>
-You may also want to use special flags specific to a certain interface.
-The format of the hostname file doesn't change much.
-
-<blockquote><pre>
-$ <b>cat /etc/hostname.vlan0</b>
-inet 172.21.0.31 255.255.255.0 NONE vlan 2 vlandev fxp1
-</pre></blockquote>
-
-<h3 id="Setup.gateway">Default gateway</h3>
-
-Put the IP of your gateway in the file <tt>/etc/mygate</tt>.
-This will allow for your gateway to be set upon boot.
-This file consists of one line, with just the address of this machine's
-gateway.
-
-<p>
-It is possible to use a symbolic name there, but be careful.
-You can't assume things like the resolver are fully configured
-(or even reachable) until <b>after</b> the default gateway is configured.
-In other words, it had better be an IP address or something that is
-defined in the <tt>/etc/hosts</tt> file.
-
-<h3 id="Setup.resolver">DNS Resolution</h3>
-
-DNS resolution is controlled by the file
+DNS resolution is controlled by
 <a href="http://man.openbsd.org/resolv.conf">resolv.conf(5)</a>.
-Here is an example of the <tt>/etc/resolv.conf</tt> file:
 
 <blockquote><pre>
 $ <b>cat /etc/resolv.conf</b>
@@ -296,68 +217,38 @@ nameserver 125.2.3.5
 lookup file bind
 </pre></blockquote>
 
-In this case, the default domain name will be <tt>example.com</tt>,
-there are two DNS resolvers, <tt>125.2.3.4</tt> and <tt>125.2.3.5</tt>
-specified, and the <tt>/etc/hosts</tt> file will be consulted before the
-DNS resolvers are.
+Here, the default domain name will be <tt>example.com</tt>, there will be two
+DNS resolvers, <tt>125.2.3.4</tt> and <tt>125.2.3.5</tt>, and the
+<a href="http://man.openbsd.org/hosts">hosts(5)</a> file will be consulted
+before the DNS resolvers are.
 
 <p>
-As with virtually all Unix (and many non-Unix) systems, there is a
-<a href="http://man.openbsd.org/hosts">hosts(5)</a>
-file that can be used to specify systems that are not in (or if used
-with the above "lookup" priority, not as desired in) the formal DNS
-system.
-
-<p>
-If you are using DHCP, you'll want to read <a href="#DHCP">DHCP</a>,
-taking note of
-<a href="http://man.openbsd.org/resolv.conf.tail">resolv.conf.tail(5)</a>.
-
-<h3 id="Setup.myname">Host name</h3>
-
-Every Unix machine has a name.
-In OpenBSD, the name is specified as a "Fully Qualified Domain Name" (FQDN)
-on one line in the file <tt>/etc/myname</tt>.
-If this machine is named "puffy" and in the domain example.com, the
-file would contain:
-
-<blockquote><pre>
-$ <b>cat /etc/myname</b>
-puffy.example.com
-</pre></blockquote>
+If you are using DHCP, you'll want to read <a href="#DHCP">DHCP</a>, taking note
+of <a href="http://man.openbsd.org/resolv.conf.tail">resolv.conf.tail(5)</a>.
 
 <h3 id="Setup.activate">Activating the changes</h3>
 
-From here, you can either reboot or run the <tt>/etc/netstart</tt> script.
-You can do this by simply typing (as root):
+From here, you can either reboot or run the
+<a href="http://man.openbsd.org/netstart">netstart(8)</a> script:
 
 <blockquote><pre>
 # <b>sh /etc/netstart</b>
-writing to routing socket: File exists
-add net 127: gateway 127.0.0.1: File exists
-writing to routing socket: File exists
-add net 224.0.0.0: gateway 127.0.0.1: File exists
 </pre></blockquote>
 
-<p>
-Notice that a few errors were produced.
-By running this script, you are reconfiguring things which are already
-configured.
-As such, some routes already exist in the kernel routing table.
-From here, your system should be up and running.
-Again, you can check to make sure that your interface was set up correctly with
-<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a>.
+Note that a few warnings may be produced when running this script if you are
+reconfiguring interfaces that have already been configured.
+Use <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> to make sure that
+your interfaces were set up correctly.
 
 <p>
-Even though you can completely reconfigure networking on an OpenBSD
-system without rebooting, a reboot is HIGHLY recommended after any
-significant reconfiguration.
-The reason for this is that the environment at boot is somewhat different
-than it is when the system is completely up and running.
-For example, if you had specified a DNS-resolved symbolic name in any of
-the files, you would probably find it worked as expected after reconfigure.
-On initial boot, however, your external resolver may not be available,
-so the configuration will fail.
+Even though you can completely reconfigure networking on a running OpenBSD
+system, a reboot is recommended after any significant reconfiguration.
+The reason for this is that the environment at boot is somewhat different than
+it is when the system is up and running.
+For example, if you had specified a DNS-resolved symbolic name in any of the
+files, you would probably find it worked as expected after reconfiguring.
+On initial boot, however, your external resolver may not be available, so the
+configuration will fail.
 
 <h3 id="Setup.chkroute">Checking routes</h3>
 
@@ -402,7 +293,6 @@ BASE-ADDRESS.MCA LOCALHOST          U
 
 <h3 id="Setup.aliases">Setting up aliases on an interface</h3>
 
-<p>
 OpenBSD has a simple mechanism for setting up IP aliases on an
 interface.
 To do this, simply edit the file <tt>/etc/hostname.<i>if</i></tt>.
@@ -418,7 +308,6 @@ Other important information:
 <li>NETMASK is 255.255.255.0
 </ul>
 
-<p>
 A few side notes about aliases.
 In OpenBSD, you only use the interface name.
 There is no difference between the first alias and the second alias.
@@ -605,7 +494,6 @@ OpenBSD can be a DHCP server (configuring other machines), a DHCP client
 
 <h3 id="DHCPclient">DHCP client</h3>
 
-<p>
 To use the DHCP client included with OpenBSD,
 <a href="http://man.openbsd.org/dhclient">dhclient(8)</a>, edit
 <tt>/etc/hostname.xl0</tt>.
@@ -616,7 +504,6 @@ Yours might be <tt>em0</tt> or <tt>fxp0</tt> or something else.
 # <b>echo dhcp > /etc/hostname.xl0</b>
 </pre></blockquote>
 
-<p>
 This will cause OpenBSD to automatically start the DHCP client on boot.
 OpenBSD will gather its IP address, default gateway, and DNS servers
 from the DHCP server.
@@ -671,7 +558,6 @@ file allows you to append anything you want to the resolv.conf file
 created by dhclient.
 </ul>
 
-<p>
 An example would be if you're using DHCP but want to append
 <tt>lookup file bind</tt> to the resolv.conf created by dhclient.
 There is no option for this in <tt>dhclient.conf</tt>, so you must use
@@ -692,7 +578,6 @@ lookup file bind
 
 <h3 id="DHCPserver">DHCP server</h3>
 
-<p>
 If you want to use OpenBSD as a DHCP server, enable the
 <a href="http://man.openbsd.org/dhcpd">dhcpd(8)</a> daemon at startup.
 For example:
@@ -710,7 +595,6 @@ For example:
 # <b>rcctl set dhcpd flags xl1 xl2 xl3</b>
 </pre></blockquote>
 
-<p>
 Then edit <tt>/etc/dhcpd.conf</tt>.
 The options are pretty self-explanatory.
 
@@ -788,7 +672,6 @@ These services must be enabled and running on the server:
 <li><a href="http://man.openbsd.org/nfsd">nfsd(8)</a>
 </ul>
 
-<p>
 By default, each of these is disabled in OpenBSD.
 If you want them enabled, run the following commands:
 
@@ -1098,7 +981,6 @@ here.
 </li>
 </ul>
 
-<p>
 First, mark the <tt>vr1</tt>, <tt>vr2</tt> and <tt>vr3</tt> interfaces as up:
 
 <blockquote><pre>
