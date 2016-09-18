@@ -40,17 +40,15 @@
   <li><a href="#Setup.aliases" >Setting up aliases on interfaces</a>
   <li><a href="#Setup.replace" >Adding and replacing NICs</a>
 </ul>
-<li><a href= "#PF"             >Firewalling</a>
 <li><a href= "#DHCP"           >Dynamic Host Configuration Protocol</a>
 <ul>
   <li><a href="#DHCPclient"    >DHCP client</a>
   <li><a href="#DHCPserver"    >DHCP server</a>
 </ul>
+<li><a href="#PXE"             >PXE booting</a>
+<li><a href="#Wireless"        >Wireless networking</a>
 <li><a href="#NFS"             >Using NFS</a>
 <li><a href="#Bridge"          >Setting up a network bridge</a>
-<li><a href="#PXE"             >PXE booting</a>
-<li><a href="#OpenNTPD"        >Using OpenNTPD</a>
-<li><a href="#Wireless"        >Wireless networking</a>
 <li><a href="#Multipath"       >Equal-cost multipath routing</a>
 </ul>
 
@@ -63,22 +61,24 @@ understand the <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> and
 <a href="http://man.openbsd.org/netstat">netstat(1)</a> man pages.
 
 <p>
-If you are a network administrator, setting up routing protocols, using
-your OpenBSD box as a router or want to go in-depth into IP networking,
-it is recommended that you read the chapter on
+If you are a network administrator, setting up routing protocols, using your
+OpenBSD box as a router or want to go in-depth into IP networking, it is
+recommended that you read the chapter on
 <a href="http://www.tcpipguide.com/free/t_IPAddressing.htm">IP addressing</a>
 in the TCP/IP guide.
 It contains fundamental knowledge to build upon when working with IP networks,
 especially when you deal with or are responsible for more than one network.
 
 <p>
-If you are working with applications such as web servers, ftp servers
-and mail servers, you may benefit greatly by reading
+If you are working with applications such as web servers, ftp servers and mail
+servers, you may wish to read some of
 <a href="http://www.rfc-editor.org/rfc.html">the RFCs</a>.
-Pick some topics that you are interested in or that you use in your
-network environment.
-The RFCs define many (thousands of) standards for protocols on the
-internet and how they are supposed to work.
+The RFCs define many standards for protocols on the internet and explain how
+they are supposed to work.
+
+<p>
+Note that this FAQ page does not cover firewalling on OpenBSD: this topic is
+described in the <a href="pf/index.html">PF User's Guide</a>.
 
 <h2 id="Setup">Network configuration</h2>
 
@@ -116,7 +116,7 @@ lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 33200
         groups: lo
         inet 127.0.0.1 netmask 0xff000000
 fxp0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500
-        lladdr 00:04:ac:dd:39:6a
+        lladdr 00:02:b3:2b:10:f7
         index 1 priority 0 llprio 3
         media: Ethernet autoselect (100baseTX full-duplex)
         status: active
@@ -137,7 +137,8 @@ values <tt>inet 10.0.0.38 netmask 0xffffff00 broadcast 10.0.0.255</tt>.
 Also, the <tt>UP</tt> and <tt>RUNNING</tt> flags are set.
 
 <p>
-Interfaces are configured at boot time using
+The <a href="http://man.openbsd.org/netstart">netstart(8)</a> script configures
+network interfaces at boot time using
 <a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> files, where
 "if" is replaced by the full name of each interface.
 The example above would use the file <tt>/etc/hostname.fxp0</tt>:
@@ -147,6 +148,16 @@ $ <b>cat /etc/hostname.fxp0</b>
 inet 10.0.0.38 255.255.255.0
 </pre></blockquote>
 
+Note that this <tt>hostname.fxp0</tt> file has an interactive equivalent:
+
+<blockquote><pre>
+# <b>ifconfig fxp0 10.0.0.38 255.255.255.0</b>
+</pre></blockquote>
+
+See <a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> for the
+precise relation with <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a>.
+
+<p>
 Finally, you will notice several other interfaces come enabled by default.
 These are virtual interfaces that serve various functions.
 The following manual pages describe them:
@@ -255,102 +266,67 @@ configuration will fail.
 You can check your routes via
 <a href="http://man.openbsd.org/netstat">netstat(1)</a> or
 <a href="http://man.openbsd.org/route">route(8)</a>.
-If you are having routing problems, you may want to use the <tt>-n</tt> flag
-to route(8), which prints the IP addresses rather than doing a DNS lookup
-and displaying the hostname.
-Here is an example of viewing your routing tables using both programs.
+If you are having routing problems, you may want to use the <tt>-n</tt> flag to
+route(8), which prints the IP addresses rather than doing a DNS lookup and
+displaying the hostname.
 
 <blockquote><pre>
 $ <b>netstat -rn</b>
 Routing tables
 
 Internet:
-Destination        Gateway            Flags     Refs     Use    Mtu  Interface
-default            10.0.0.1           UGS         0       86      -  fxp0
-127/8              127.0.0.1          UGRS        0        0      -  lo0
-127.0.0.1          127.0.0.1          UH          0        0      -  lo0
-10.0.0/24          link#1             UC          0        0      -  fxp0
-10.0.0.1           aa:0:4:0:81:d      UHL         1        0      -  fxp0
-10.0.0.38          127.0.0.1          UGHS        0        0      -  lo0
-224/4              127.0.0.1          URS         0        0      -  lo0
-
-Encap:
-Source             Port  Destination        Port  Proto SA(Address/SPI/Proto)
+Destination        Gateway            Flags     Refs     Use    Mtu  Prio Interface
+default            10.0.0.1           UGS         4       16      -    12 fxp0
+224/4              127.0.0.1          URS         0        0  32768     8 lo0
+127/8              127.0.0.1          UGRS        0        0  32768     8 lo0
+127.0.0.1          127.0.0.1          UH          2       15  32768     1 lo0
+10.0.0/24          link#1             UC          1        4      -     4 fxp0
+10.0.0.1           aa:0:4:0:81:d      UHL         1       11      -     1 fxp0
+10.0.0.38          127.0.0.1          UGHS        0        0      -     1 lo0
 
 $ <b>route show</b>
 Routing tables
 
 Internet:
-Destination      Gateway            Flags
-default          10.0.0.1           UG
-127.0.0.0        LOCALHOST          UG
-localhost        LOCALHOST          UH
-10.0.0.0         link#1             U
-10.0.0.1         aa:0:4:0:81:d      UH
-10.0.0.38        LOCALHOST          UGH
-BASE-ADDRESS.MCA LOCALHOST          U
+Destination        Gateway            Flags     Refs     Use    Mtu  Prio Iface
+default            10.0.0.1           UGS         4       16      -    12 fxp0
+base-address.mcast localhost          URS         0        0  32768     8 lo0
+loopback           localhost          UGRS        0        0  32768     8 lo0
+localhost          localhost          UH          2       15  32768     1 lo0
+10.0.0/24          link#1             UC          1        4      -     4 fxp0
+10.0.0.1           aa:0:4:0:81:d      UHL         1       11      -     1 fxp0
+10.0.0.38          localhost          UGHS        0        0      -     1 lo0
 </pre></blockquote>
 
 <h3 id="Setup.aliases">Setting up aliases on an interface</h3>
 
-OpenBSD has a simple mechanism for setting up IP aliases on an
+OpenBSD has a simple mechanism for setting up IP aliases on an interface.
+To do this, simply edit the
+<a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> file of that
 interface.
-To do this, simply edit the file <tt>/etc/hostname.<i>if</i></tt>.
-This file is read upon boot by the
-<a href="http://man.openbsd.org/netstart">netstart(8)</a>
-script, which is part of the <a href="faq10.html#rc">rc startup hierarchy</a>.
-For the example, we assume that the user has an
-interface <tt>dc0</tt> and is on the network 192.168.0.0.
-The IP address for <tt>dc0</tt> is 192.168.0.2 and the netmask is 255.255.255.0.
 
 <p>
-A few side notes about aliases.
-In OpenBSD, you only use the interface name.
-There is no difference between the first alias and the second alias.
-Unlike some other operating systems, OpenBSD doesn't refer to them as
-<tt>dc0:0</tt>, <tt>dc0:1</tt>.
-If you are referring to a specific aliased IP address with <tt>ifconfig</tt>,
-or adding an alias, be sure to use <tt>ifconfig int alias</tt> instead of
-just <tt>ifconfig int</tt> at the command line.
-You can delete aliases with <tt>ifconfig int delete</tt>.
+Suppose you have a <tt>dc0</tt> interface.
+You are on the network 192.168.0.0, the IP address for <tt>dc0</tt> is
+192.168.0.2 and the netmask is 255.255.255.0.
 
 <p>
-Assuming you are using multiple IP addresses which are in the same IP
-subnet with aliases, your netmask setting for each alias becomes
-255.255.255.255.
+Assuming you are using multiple IP addresses which are in the same IP subnet
+with aliases, your netmask setting for each alias becomes 255.255.255.255.
 They do not need to follow the netmask of the first IP bound to the interface.
-In this example, <tt>/etc/hostname.dc0</tt>, two aliases are added to the
-device <tt>dc0</tt>, which was configured as 192.168.0.2 netmask 255.255.255.0.
+In this example, two aliases are added to the interface <tt>dc0</tt>, which was
+configured as 192.168.0.2 netmask 255.255.255.0.
 
 <blockquote><pre>
 $ <b>cat /etc/hostname.dc0</b>
-inet 192.168.0.2 255.255.255.0 NONE media 100baseTX
+inet 192.168.0.2 255.255.255.0
 inet alias 192.168.0.3 255.255.255.255
 inet alias 192.168.0.4 255.255.255.255
 </pre></blockquote>
 
-Once you've created this file, a reboot is required for it to take effect.
-You can, however, bring up the aliases by hand using the
-<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> utility.
-To bring up the first alias, you would use the command:
-
-<blockquote><pre>
-# <b>ifconfig dc0 inet alias 192.168.0.3 netmask 255.255.255.255</b>
-</pre></blockquote>
-
-(but again, a reboot is recommended to make sure you entered everything
-as you expected it to be!)
-
-<p>
-To view these aliases, you must use the command:
-
-<blockquote><pre>
-$ <b>ifconfig -A</b>
-dc0: flags=8863&lt;UP,BROADCAST,NOTRAILERS,RUNNING,SIMPLEX,MULTICAST&gt;
-        media: Ethernet manual
-        inet 192.168.0.2 netmask 0xffffff00 broadcast 192.168.0.255
-        inet 192.168.0.3 netmask 0xffffffff broadcast 192.168.0.3
-</pre></blockquote>
+Once you've created this file, <a href="Setup.activate">run netstart</a> or
+reboot.
+To view all aliases, use <tt>$ <b>ifconfig -A</b></tt>
 
 <h3 id="Setup.replace">Adding and replacing NICs</h3>
 
@@ -471,41 +447,33 @@ Some likely candidates might include:
   <li>Trunk configuration (<tt>/etc/hostname.trunk*</tt>)
 </ul>
 
-<h2 id="PF">Firewalling</h2>
-
-Packet Filter (from here on referred to as PF) is OpenBSD's system for
-filtering IP traffic and doing Network Address Translation.
-PF is also capable of normalizing and conditioning IP traffic,
-providing bandwidth control and packet prioritization, and can be used
-to create powerful and flexible firewalls.
-It is described in the <a href="pf/index.html">PF User's Guide</a>.
-
 <h2 id="DHCP">Dynamic Host Configuration Protocol</h2>
 
-Dynamic Host Configuration Protocol is a way to configure network
-interfaces "automatically."
-OpenBSD can be a DHCP server (configuring other machines), a DHCP client
-(configured by another machine) or, in some cases, both.
+The Dynamic Host Configuration Protocol (DHCP) is a way to configure network
+interfaces automatically.
+OpenBSD can be a DHCP server that configures other machines, or a DHCP client
+that is configured by a DHCP server.
 
 <h3 id="DHCPclient">DHCP client</h3>
 
-To use the DHCP client included with OpenBSD,
-<a href="http://man.openbsd.org/dhclient">dhclient(8)</a>, edit
-<tt>/etc/hostname.xl0</tt>.
-This is assuming your main Ethernet interface is <tt>xl0</tt>.
-Yours might be <tt>em0</tt> or <tt>fxp0</tt> or something else.
+To use <a href="http://man.openbsd.org/dhclient">dhclient(8)</a>, edit the
+<a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> file of your
+interface.
+The <a href="#Wireless">wireless networking</a> section explains how to
+set up wireless interfaces.
+For ethernet interfaces one line is enough:
 
 <blockquote><pre>
-# <b>echo dhcp > /etc/hostname.xl0</b>
+$ <b>cat /etc/hostname.xl0</b>
+dhcp
 </pre></blockquote>
 
-This will cause OpenBSD to automatically start the DHCP client on boot.
-OpenBSD will gather its IP address, default gateway, and DNS servers
+This will cause OpenBSD to start the DHCP client on boot.
+By default, OpenBSD will gather its IP address, default gateway, and DNS servers
 from the DHCP server.
 
 <p>
-If you want to start a DHCP client from the command line, make sure
-<tt>/etc/dhclient.conf</tt> exists, then run:
+If you want to start a DHCP client from the command line, simply run
 
 <blockquote><pre>
 # <b>dhclient xl0</b>
@@ -514,81 +482,45 @@ If you want to start a DHCP client from the command line, make sure
 where <tt>xl0</tt> is the interface on which you want to receive DHCP.
 
 <p>
-No matter how you start the DHCP client, you can edit the
-<tt>/etc/dhclient.conf</tt> file to <b>not</b> update your DNS according to the
-DHCP server's idea of DNS by first uncommenting the "request" lines in it.
-They are examples of the default settings, but you need to uncomment
-them to override dhclient's defaults.
-
-<blockquote><pre>
-request subnet-mask, broadcast-address, time-offset, routers,
-      domain-name, domain-name-servers, host-name, lpr-servers, ntp-servers;
-</pre></blockquote>
-
-Then remove <tt>domain-name-servers</tt>.
-Of course, you may want to remove <tt>host-name</tt>, or other settings too.
-
-<p>
-By changing options in your
-<a href="http://man.openbsd.org/dhclient.conf">dhclient.conf(5)</a>
-file, you're telling the DHCP client how to build your
+Once the interface is configured, dhclient(8) will overwrite the
 <a href="http://man.openbsd.org/resolv.conf">resolv.conf(5)</a> file.
-The DHCP client overrides any information you already have in
-resolv.conf with the information it retrieves from the DHCP server.
-Therefore, you'll lose any changes you made manually to resolv.conf.
+You can customize the resolver configuration by using settings in
+<a href="http://man.openbsd.org/dhclient.conf">dhclient.conf(5)</a> and using
+<a href="http://man.openbsd.org/resolv.conf.tail">resolv.conf.tail(5)</a>.
 
 <p>
-There are two mechanisms available to prevent this:
-
-<ul>
-  <li>Option modifiers (<tt>default</tt>, <tt>supersede</tt>, <tt>prepend</tt>
-    and <tt>append</tt>) allow you to override any of the options in
-    <a href="http://man.openbsd.org/dhclient.conf">dhclient.conf(5)</a>.
-  <li>The
-    <a href="http://man.openbsd.org/resolv.conf.tail">resolv.conf.tail(5)</a>
-    file allows you to append anything you want to the resolv.conf file created
-    by dhclient.
-</ul>
-
-An example would be if you're using DHCP but want to append
-<tt>lookup file bind</tt> to the resolv.conf created by dhclient.
-There is no option for this in <tt>dhclient.conf</tt>, so you must use
-<tt>resolv.conf.tail</tt> to preserve this.
+For example, to prevent the DHCP server from overriding the DNS server you
+configured in <tt>/etc/resolv.conf.tail</tt>, add
 
 <blockquote><pre>
-# <b>echo "lookup file bind" > /etc/resolv.conf.tail</b>
+ignore domain-name-servers;
 </pre></blockquote>
 
-Now your resolv.conf should include "lookup file bind" at the end.
+to your <tt>/etc/dhclient.conf</tt>.
 
-<blockquote><pre>
-$ <b>cat /etc/resolv.conf</b>
-nameserver 192.168.1.1
-nameserver 192.168.1.2
-lookup file bind
-</pre></blockquote>
+<p>
+There are several useful configuration snippets in
+<tt>/etc/examples/dhclient.conf</tt>.
 
 <h3 id="DHCPserver">DHCP server</h3>
 
 If you want to use OpenBSD as a DHCP server, enable the
-<a href="http://man.openbsd.org/dhcpd">dhcpd(8)</a> daemon at startup.
-For example:
+<a href="http://man.openbsd.org/dhcpd">dhcpd(8)</a> daemon at startup:
 
 <blockquote><pre>
 # <b>rcctl enable dhcpd</b>
 </pre></blockquote>
 
-This will run dhcpd and attach to all NICs which have valid configurations
-in <a href="http://man.openbsd.org/dhcpd.conf">dhcpd.conf(5)</a>.
-You may specify individual interfaces instead by naming them explicitly.
-For example:
+On the next boot, this will run dhcpd and attach to all NICs which have valid
+configurations in <a href="http://man.openbsd.org/dhcpd.conf">dhcpd.conf(5)</a>.
+You may specify individual interfaces instead by naming them explicitly:
 
 <blockquote><pre>
 # <b>rcctl set dhcpd flags xl1 xl2 xl3</b>
 </pre></blockquote>
 
 Then edit <tt>/etc/dhcpd.conf</tt>.
-The options are pretty self-explanatory.
+The options are pretty self-explanatory:
 
 <blockquote><pre>
 option  domain-name "example.com";
@@ -599,41 +531,207 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 }
 </pre></blockquote>
 
-This will tell your DHCP clients that the domain to append to DNS
-requests is example.com (so, if the user types in 'telnet joe' then it
-will send them to joe.example.com).
-It will point them to DNS servers 192.168.1.3 and 192.168.1.5.
-For hosts that are on the same network as an Ethernet interface on the
-OpenBSD machine, which is in the 192.168.1.0/24 range, it will assign
-them an IP address between 192.168.1.32 and 192.168.1.127.
+This will tell your DHCP clients that the domain to append to DNS requests is
+<tt>example.com</tt> and the DNS servers are 192.168.1.3 and 192.168.1.5.
+For hosts that are on the same network as an ethernet interface on the OpenBSD
+machine, which is in the 192.168.1.0/24 range, it will assign them an IP address
+between 192.168.1.32 and 192.168.1.127.
 It will set their default gateway as 192.168.1.1.
 
 <p>
-If you want to start dhcpd(8) from the command line after editing
-<tt>/etc/dhcpd.conf</tt>, run:
+If you want to start dhcpd(8) from the command line, run:
 
 <blockquote><pre>
 # <b>rcctl start dhcpd</b>
 </pre></blockquote>
 
-If there were fatal configuration errors, it will exit and let you know
-that it failed to start.
+If there were fatal configuration errors, it will exit and let you know that it
+failed to start.
 You can usually see why in <tt>/var/log/messages</tt> or
 <tt>/var/log/daemon</tt>.
 
 <p>
-If you are serving DHCP to a Windows box, you may want dhcpd(8) to give
-the client a 'WINS' server address.
-To make this happen, just add the following line to your
-<tt>/etc/dhcpd.conf</tt>:
+If you are serving DHCP to a Windows box, you may want dhcpd(8) to give the
+client a <tt>WINS</tt> server address.
+To make this happen, just add the following to your <tt>/etc/dhcpd.conf</tt>:
 
 <blockquote><pre>
 option    netbios-name-servers    192.168.92.55;
 </pre></blockquote>
 
 where <tt>192.168.92.55</tt> is the IP of your Windows or Samba server.
-See <a href="http://man.openbsd.org/dhcp-options">dhcp-options(5)</a>
-for more options that your DHCP clients may want.
+See <a href="http://man.openbsd.org/dhcp-options">dhcp-options(5)</a> for more
+options that your DHCP clients may want.
+
+<h2 id="PXE">PXE booting (i386, amd64)</h2>
+
+The Preboot Execution Environment, or PXE, is a way to boot a computer from the
+network.
+It is supported by most major network card manufacturers.
+Traditionally, PXE booting is done using ROMs on the NIC or mainboard of the
+system.
+
+<p>
+Familiarize yourself with OpenBSD's
+<a href="faq14.html#BootAmd64">bootstrap procedure</a> first.
+Upon starting the boot process, the PXE-capable NIC broadcasts a DHCP request
+over the network.
+The DHCP server will assign the adapter an IP address.
+Then it will specify the name of a file to be retrieved from the tftp server
+<a href="http://man.openbsd.org/tftpd">tftpd(8)</a> and then execute it.
+This file then conducts the rest of the boot process.
+On OpenBSD, this file is known as
+<a href="http://man.openbsd.org/pxeboot">pxeboot(8)</a>, and it takes the
+place of the standard <a href="http://man.openbsd.org/boot">boot(8)</a> file.
+pxeboot(8) is then able to load and execute a kernel from the same TFTP server.
+
+<p>
+Details on how to set up PXE booting can be found in the
+<a href="http://man.openbsd.org/pxeboot">pxeboot(8)</a> manual.
+See also <a href="http://man.openbsd.org/tftpd">tftpd(8)</a>.
+
+<h2 id="Wireless">Wireless networking</h2>
+
+OpenBSD has support for
+<a href="http://man.openbsd.org/?query=wireless&amp;apropos=1"> a number of
+wireless chipsets</a>.
+Further supported devices can be found in
+<a href="http://man.openbsd.org/usb">usb(4)</a> and
+<a href="http://man.openbsd.org/pci">pci(4)</a>.
+The precise extent of their support is described in the driver man pages.
+
+<p>
+The following cards support Host-based Access Point (HostAP) mode, permitting
+them to be used as a wireless access point.
+
+<ul>
+  <li><a href="http://man.openbsd.org/acx">acx(4)</a>
+    TI ACX100/ACX111
+  <li><a href="http://man.openbsd.org/ath">ath(4)</a>
+    Atheros 802.11a/b/g
+  <li><a href="http://man.openbsd.org/athn">athn(4)</a>
+    Atheros 802.11/a/g/n devices
+  <li><a href="http://man.openbsd.org/pgt">pgt(4)</a>
+    Conexant/Intersil Prism GT Full-MAC 802.11a/b/g
+  <li><a href="http://man.openbsd.org/ral">ral(4)</a>
+    and <a href="http://man.openbsd.org/ural">ural(4)</a>
+    Ralink Technology RT25x0 802.11a/b/g
+  <li><a href="http://man.openbsd.org/rtw">rtw(4)</a>
+    Realtek 8180 802.11b
+  <li><a href="http://man.openbsd.org/rum">rum(4)</a>
+    Ralink Technology RT2501USB
+  <li><a href="http://man.openbsd.org/wi">wi(4)</a>
+    Prism2/2.5/3
+</ul>
+
+The <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> <tt>media</tt>
+subcommand shows media capabilities of network interfaces.
+For wireless devices, it displays supported 802.11a/b/g/n media modes and the
+supported operating modes (<tt>hostap</tt>, <tt>ibss</tt>, <tt>monitor</tt>).
+For example, to see media capabilities of interface <tt>ath0</tt>, type:
+
+<blockquote><pre>
+$ <b>ifconfig ath0 media</b>
+</pre></blockquote>
+
+In order to use some wireless cards, you will need to acquire firmware files
+with <a href="http://man.openbsd.org/fw_update">fw_update(1)</a>.
+Some manufacturers refuse to allow <a href="faq1.html#ReallyFree">free</a>
+distribution of their firmware, so it can't be included with OpenBSD.
+
+<p>
+Another option to consider: use a conventional NIC and an external bridging
+wireless access point for your OpenBSD-based firewall.
+This has the added advantage of letting you easily position the antenna where it
+is most effective, which is often not directly on the back of your firewall.
+
+<h3>Configuring your wireless adapter</h3>
+
+Adapters based on supported chips can be used like any other network interface.
+To connect an OpenBSD system to an existing wireless network, use the
+<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> utility.
+
+<p>
+Some examples of wireless
+<a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> files might be:
+
+<blockquote><pre>
+inet 10.0.0.157 255.255.255.0
+nwid puffyuberalles
+wpakey puffyguffy
+</pre></blockquote>
+
+or
+
+<blockquote><pre>
+nwid puffyuberalles
+wpakey puffyguffy
+dhcp
+</pre></blockquote>
+
+Note that the <tt>dhcp</tt> keyword should be after the other configuration
+lines, as the network adapter will not be able to send a
+<a href="#DHCPclient">DHCP</a> request until it is configured.
+
+<h3>Trunking your wireless adapter</h3>
+
+Many laptops have both a wireless and a hard-wired adapter.
+Sometimes, you may be directly connected to your high speed network and want the
+full performance of the wire, other times, you will be using the wireless.
+You probably don't want to reconfigure your machine each time you switch
+locations.
+
+<p>
+You could set up both interfaces with DHCP, but then you would have to wait for
+the unused interface to time out while booting (see the <tt>link-timeout</tt>
+option of <a href="http://man.openbsd.org/dhclient.conf">dhclient.conf(5)</a>).
+Things would be a little confusing if you had both resources available, and
+switching between the two resources would be a bit annoying.
+
+<p>
+Using a <a href="http://man.openbsd.org/trunk">trunk(4)</a> device may simplify
+your life.
+Trunks are virtual interfaces consisting of one or more network interfaces.
+
+<p>
+In the rest of this section, we will use a laptop with a wired
+<a href="http://man.openbsd.org/bge">bge0</a> and a wireless
+<a href="http://man.openbsd.org/iwn">iwn0</a> interface.
+Using these two interfaces, we will build a <tt>trunk0</tt> interface, then use
+DHCP to get an IP address for this virtual interface.
+
+<p>
+To do this, we first configure the two physical ports.
+As we are just assigning them to a combined <tt>trunk0</tt> interface, we won't
+do much of anything with the wired interface other than activate it:
+
+<blockquote><pre>
+# <b>echo up > /etc/hostname.bge0</b>
+</pre></blockquote>
+
+The wireless interface, however, needs a bit more configuration.
+It will need to attach to our wireless WPA-protected network:
+
+<blockquote><pre>
+$ <b>cat /etc/hostname.iwn0</b>
+nwid puffynet
+wpakey mysecretkey
+up
+</pre></blockquote>
+
+Now, our trunk interface is defined like this:
+
+<blockquote><pre>
+$ <b>cat /etc/hostname.trunk0</b>
+trunkproto failover trunkport bge0
+trunkport iwn0
+dhcp
+</pre></blockquote>
+
+The trunk is set up to be in <tt>failover</tt> mode, so either interface can be
+used.
+If both are available, it will prefer the <tt>bge0</tt> port, since that is the
+first one added to the trunk device.
 
 <h2 id="NFS">Using NFS</h2>
 
@@ -997,8 +1095,8 @@ Reboot, and voil&agrave;!
 
 While there are certainly uses for a simple bridge like this, it is likely you
 might want to DO something with the packets as they go through your bridge.
-As you might expect, <a href="#PF">Packet Filter</a> can be used to restrict
-what traffic goes through your bridge.
+As you might expect, <a href="pf/index.html">Packet Filter</a> can be used to
+restrict what traffic goes through your bridge.
 
 <p>
 Keep in mind, by the nature of a bridge, the same data flows through both
@@ -1059,220 +1157,6 @@ also be used to create a bridge after boot.
     Some NICs don't work properly in this mode -- the TI ThunderLAN chip is an
     example of a chip that won't work as part of a bridge.
 </ul>
-
-<h2 id="PXE">PXE booting (i386, amd64)</h2>
-
-The Preboot Execution Environment, or PXE, is a way to boot a computer from the
-network.
-It is supported by most major network card manufacturers.
-Traditionally, PXE booting is done using ROMs on the NIC or mainboard of the
-system.
-
-<p>
-Familiarize yourself with OpenBSD's
-<a href="faq14.html#BootAmd64">bootstrap procedure</a> first.
-Upon starting the boot process, the PXE-capable NIC broadcasts a DHCP request
-over the network.
-The DHCP server will assign the adapter an IP address.
-Then it will specify the name of a file to be retrieved from the tftp server
-<a href="http://man.openbsd.org/tftpd">tftpd(8)</a> and then execute it.
-This file then conducts the rest of the boot process.
-On OpenBSD, this file is known as
-<a href="http://man.openbsd.org/pxeboot">pxeboot(8)</a>, and it takes the
-place of the standard <a href="http://man.openbsd.org/boot">boot(8)</a> file.
-pxeboot(8) is then able to load and execute a kernel from the same TFTP server.
-
-<p>
-Details on how to set up PXE booting can be found in the
-<a href="http://man.openbsd.org/pxeboot">pxeboot(8)</a> manual.
-See also <a href="http://man.openbsd.org/tftpd">tftpd(8)</a>.
-
-<h2 id="OpenNTPD">Using OpenNTPD</h2>
-
-<a href="http://www.openntpd.org">OpenNTPD</a> is a trivial-to-administer, safe
-and simple NTP-compatible way to have accurate time on your computer.
-OpenBSD's <a href="http://man.openbsd.org/ntpd">ntpd(8)</a> is controlled with a
-simple configuration file,
-<a href="http://man.openbsd.org/ntpd.conf">ntpd.conf(5)</a>.
-
-<p>
-The OpenNTPD daemon is enabled by default at install time, which results in your
-computer's clock slowly moving into synchronization with the
-<a href="http://www.pool.ntp.org">pool.ntp.org</a> time servers.
-Once your clock is accurately set, <tt>ntpd</tt> will hold it at a high degree
-of accuracy.
-However, if your clock is more than a few minutes off, it is recommended that
-you bring it close to accurate initially, as it may take days or weeks to bring
-a very-off clock to sync.
-You can do this using the <tt>-s</tt> option of ntpd(8) or any other way to
-accurately set your system clock.
-
-<h3 id="OpenNTPDNoServe">Why can't my other machines synchronize to ntpd?</h3>
-
-OpenNTPD does not listen on any address by default.
-In order to use it as a server, you have to add a <tt>listen on *</tt> line to
-<a href="http://man.openbsd.org/ntpd.conf">/etc/ntpd.conf</a> and restart the
-daemon.
-Of course, if you want it to listen on a particular IP address rather than all
-available addresses and interfaces, replace the "*" with the desired address.
-
-<p>
-When you have ntpd(8) listening, it may happen that other machines still can't
-synchronize to it!
-A freshly started ntpd(8) daemon (for example, if you just restarted it after
-modifying ntpd.conf) refuses to serve time information to other clients until
-it adjusts its own clock to a reasonable level of stability first.
-When ntpd(8) considers its own time information stable, it announces it by a
-"clock now synced" message in <tt>/var/log/daemon</tt>.
-Even if the system clock is pretty accurate in the beginning, it can take up to
-10 minutes to get in sync, and hours or days if the clock is not accurately set
-at the start.
-
-<h2 id="Wireless">Wireless networking</h2>
-
-OpenBSD has support for
-<a href="http://man.openbsd.org/?query=wireless&amp;apropos=1">
-a number of wireless chipsets</a>.
-Further supported devices can be found in the
-<a href="http://man.openbsd.org/usb">usb(4)</a> and
-<a href="http://man.openbsd.org/pci">pci(4)</a> man pages.
-Please see the man pages for precise details.
-The following cards support "host-based access point" mode.
-This permits them to be made into the wireless access point.
-<ul>
-  <li><a href="http://man.openbsd.org/acx">acx(4)</a>
-    TI ACX100/ACX111
-  <li><a href="http://man.openbsd.org/ath">ath(4)</a>
-    Atheros 802.11a/b/g
-  <li><a href="http://man.openbsd.org/athn">athn(4)</a>
-    Atheros 802.11/a/g/n devices
-  <li><a href="http://man.openbsd.org/pgt">pgt(4)</a>
-    Conexant/Intersil Prism GT Full-MAC 802.11a/b/g
-  <li><a href="http://man.openbsd.org/ral">ral(4)</a>
-    and <a href="http://man.openbsd.org/ural">ural(4)</a>
-    Ralink Technology RT25x0 802.11a/b/g
-  <li><a href="http://man.openbsd.org/rtw">rtw(4)</a>
-    Realtek 8180 802.11b
-  <li><a href="http://man.openbsd.org/rum">rum(4)</a>
-    Ralink Technology RT2501USB
-  <li><a href="http://man.openbsd.org/wi">wi(4)</a>
-    Prism2/2.5/3
-</ul>
-
-The <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> <tt>media</tt>
-subcommand shows media capabilities of network interfaces.
-For wireless devices, it displays supported 802.11a/b/g/n media modes and the
-supported operating modes (hostap, ibss, monitor).
-For example, to see media capabilities of interface <tt>ath0</tt>, type:
-
-<blockquote><pre>
-$ <b>ifconfig ath0 media</b>
-</pre></blockquote>
-
-Adapters based on supported chips can be used much like any other network
-adapter.
-To connect an OpenBSD system to an existing wireless network, use the
-<a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> utility.
-
-<p>
-Note that in order to use some of these cards, you will need to acquire the
-firmware files, which the manufacturers refuse to allow
-<a href="faq1.html#ReallyFree">free</a> distribution of, so they can not be
-included with OpenBSD.
-When possible, the man pages linked above include contact information so you can
-contact the right people at the manufacturers to let them know what you feel
-about this, or to let them know what other product you have purchased instead.
-
-<p>
-Another option to consider for using your OpenBSD-based firewall to provide
-wireless access is to use a conventional NIC and an external bridging access
-point.
-This has the added advantage of letting you easily position the antenna where it
-is most effective, which is often not directly on the back of your firewall.
-
-<h3>Configuring your wireless adapter</h3>
-
-Your wireless adapter can be configured through a
-<a href="http://man.openbsd.org/hostname.if">hostname.if(5)</a> file as other
-network adapters are.
-
-<p>
-An example of a wireless hostname file might be:
-
-<blockquote><pre>
-nwid puffyuberalles
-wpakey puffyguffy
-dhcp
-</pre></blockquote>
-
-or
-
-<blockquote><pre>
-inet 10.0.0.157 255.255.255.0
-nwid puffyuberalles
-wpakey puffyguffy
-</pre></blockquote>
-
-Note that the <tt>dhcp</tt> should be AFTER the other configuration lines, as
-the network adapter will not be able to request the DHCP until it is configured.
-
-<h3>trunk(4)ing your wireless adapter</h3>
-
-Many laptops have both a wireless and a hard-wired adapter.
-Sometimes, you may be directly connected to your high speed network and want the
-full performance of the wire, other times, you will be using the wireless.
-You probably don't want to reconfigure your machine each time you switch
-locations.
-
-<p>
-You could set up both interfaces with DHCP, but then you would have to wait for
-the unused interface to time out while booting, plus things would be a little
-confusing if you had both resources available, and switching between the two
-resources would be a bit annoying.
-
-<p>
-Using a <a href="http://man.openbsd.org/trunk">trunk(4)</a> device may simplify
-your life.
-Trunks are virtual interfaces made up of one or more other network interfaces.
-In this case, we will use a laptop with a wired
-<a href="http://man.openbsd.org/bge">bge0</a> and a wireless
-<a href="http://man.openbsd.org/iwn">iwn0</a> interface.
-Using these two interfaces we will build an interface, <tt>trunk0</tt>, then use
-DHCP to get an IP address for this virtual interface.
-If we have a cable available, we want to use it, but if not we want to use the
-wireless interface.
-
-<p>
-To do this, we first configure the two physical ports.
-As we are just assigning them to a combined trunk0 interface, we won't do much
-of anything with the wired interface other than activate it:
-
-<blockquote><pre>
-# <b>echo up > /etc/hostname.bge0</b>
-</pre></blockquote>
-
-The wireless interface, however, needs a bit more configuration.
-It will need to attach to our wireless WPA-protected network:
-
-<blockquote><pre>
-$ <b>cat /etc/hostname.iwn0</b>
-nwid puffynet
-wpakey mysecretkey
-up
-</pre></blockquote>
-
-Now, our trunk interface is defined like this:
-
-<blockquote><pre>
-$ <b>cat /etc/hostname.trunk0</b>
-trunkproto failover trunkport bge0
-trunkport iwn0
-dhcp
-</pre></blockquote>
-
-The trunk is set up to be in "failover" mode, so either interface can be used.
-If both are available, it will prefer the <tt>bge0</tt> port, since that is the
-first one added to the trunk device.
 
 <h2 id="Multipath">Equal-cost multipath routing</h2>
 
