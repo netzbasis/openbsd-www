@@ -38,7 +38,6 @@
   <li><a href="#Setup.activate">Activating the changes</a>
   <li><a href="#Setup.chkroute">Checking routes</a>
   <li><a href="#Setup.aliases" >Setting up aliases on interfaces</a>
-  <li><a href="#Setup.replace" >Adding and replacing NICs</a>
 </ul>
 <li><a href= "#DHCP"           >Dynamic Host Configuration Protocol</a>
 <ul>
@@ -50,6 +49,7 @@
 <li><a href="#NFS"             >Using NFS</a>
 <li><a href="#Bridge"          >Setting up a network bridge</a>
 <li><a href="#Multipath"       >Equal-cost multipath routing</a>
+<li><a href="#Replace"         >Adding and replacing NICs</a>
 </ul>
 
 <hr>
@@ -307,15 +307,16 @@ interface.
 
 <p>
 Suppose you have a <tt>dc0</tt> interface.
-You are on the network 192.168.0.0, the IP address for <tt>dc0</tt> is
-192.168.0.2 and the netmask is 255.255.255.0.
+You are on the network <tt>192.168.0.0</tt>, the IP address for <tt>dc0</tt> is
+<tt>192.168.0.2</tt> and the netmask is <tt>255.255.255.0</tt>.
 
 <p>
 Assuming you are using multiple IP addresses which are in the same IP subnet
-with aliases, your netmask setting for each alias becomes 255.255.255.255.
+with aliases, your netmask setting for each alias becomes
+<tt>255.255.255.255</tt>.
 They do not need to follow the netmask of the first IP bound to the interface.
 In this example, two aliases are added to the interface <tt>dc0</tt>, which was
-configured as 192.168.0.2 netmask 255.255.255.0.
+configured as <tt>192.168.0.2</tt> netmask <tt>255.255.255.0</tt>.
 
 <blockquote><pre>
 $ <b>cat /etc/hostname.dc0</b>
@@ -327,125 +328,6 @@ inet alias 192.168.0.4 255.255.255.255
 Once you've created this file, <a href="Setup.activate">run netstart</a> or
 reboot.
 To view all aliases, use <tt>$ <b>ifconfig -A</b></tt>
-
-<h3 id="Setup.replace">Adding and replacing NICs</h3>
-
-You may have to replace or add a network adapter on an OpenBSD system,
-maybe upgrading the capabilities of the system or repairing failed
-hardware.
-This will require some reconfiguration.
-The good news is that it's relatively easy, though there are some things
-to be aware of.
-
-<p>
-The key is understanding how OpenBSD names NICs.
-Unlike some OSs that try to remember any network adapter the installed
-OS has ever seen, OpenBSD does not remember a NIC's identification
-between boots -- it names them in the order that they are found.
-In most cases, this is far simpler for you, as the system will always
-identify a NIC the same way in the same hardware configuration, and
-when configurations change, the results are easily understood.
-
-<p>
-Here are some cases:
-
-<ul>
-  <li><b>Replace a NIC with an identical device:</b>
-    This would be the case when you move the disk system from a failed machine
-    to another identical machine, or install an image or full backup to
-    identical hardware.
-    In this case, things are easy -- no change in configuration will be needed,
-    other than perhaps changing the IP address in the <tt>hostname.if</tt> file
-    if needed.
-
-  <li><b>Replace a NIC with a different device:</b>
-    This would also be the case when one moves a disk system to a non-identical
-    machine.
-    In this case, simply rename the old <tt>hostname.<i>if</i></tt> file to
-    match the new device.
-    For example, if you replace an
-    <a href="http://man.openbsd.org/fxp">fxp(4)</a> device which was
-    <tt>fxp0</tt> with a <a href="http://man.openbsd.org/re">re(4)</a> device,
-    which would end up as <tt>re0</tt>, you could rename
-    <tt>/etc/hostname.fxp0</tt> to <tt>/etc/hostname.re0</tt> and your new
-    device would take over the configuration of the old device.
-    If you might someday restore the original configuration, you may prefer to
-    make the new file a hard link to the original, rather than renaming it.
-
-  <li><b>Replacing one of several similar cards with a different type:</b>
-    Let's assume you have a machine with <tt>fxp0</tt>, <tt>fxp1</tt> and
-    <tt>fxp2</tt>, and <tt>fxp0</tt> fails.
-    Unfortunately, you don't have a spare similar fxp card, so you need to
-    replace it with an <a href="http://man.openbsd.org/em">em(4)</a> card.
-    This gets a little ugly, as <tt>fxp1</tt> and <tt>fxp2</tt> will rename
-    themselves:
-
-    <blockquote><pre>
-    <b>old  -> new</b>
-    fxp0 -> em0
-    fxp1 -> fxp0
-    fxp2 -> fxp1
-    </pre></blockquote>
-
-    Again, rename your <tt>/etc/hostname.<i>if</i></tt> files accordingly:
-
-    <blockquote><pre>
-    # <b>cd /etc</b>
-    # <b>mv hostname.fxp0 hostname.em0</b>
-    # <b>mv hostname.fxp1 hostname.fxp0</b>
-    # <b>mv hostname.fxp2 hostname.fxp1</b>
-    </pre></blockquote>
-
-  <li><b>Adding a new NIC to an existing system:</b>
-    If your added NIC is of a different type, it will be the "0" device of
-    whatever driver it is.
-    For example, if you are adding a
-    <a href="http://man.openbsd.org/bge">bge(4)</a> device to a machine with
-    only an <a href="http://man.openbsd.org/rl">rl(4)</a> device, life is easy
-    -- the new device will be <tt>bge0</tt>, so create an appropriate
-    <tt>/etc/hostname.bge0</tt>.
-
-    <p>
-    The more difficult variation is when you are adding a new card of the same
-    type as another in the machine.
-    Most add-on NICs will have their MAC address written somewhere on the card.
-    Make note of this, insert the card, and look at the dmesg.
-    Note the identifier of the new NIC and its relationship to the earlier NICs.
-    You may find that ALL the existing NICs have changed number.
-    You may be able to put the new NIC in a different slot to change the
-    identifier as desired, but if the earlier devices were onboard, you may have
-    no option but to adjust the <tt>hostname.<i>if</i></tt> files.
-
-  <li><b>Total Confusion:</b>
-    Sometimes, things get totally confused.
-    Maybe your new machine has lots of multi-port NICs, or several onboard NICs
-    and you aren't quite sure how they are identified.
-    Or perhaps changes were made with less care than might be hoped for, and now
-    you aren't sure what is what.
-
-    <p>
-    The first thing to note is that
-    <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> will tell you both
-    the MAC address and the link status of each port.
-    So the first trick might be to mark add-in cards with their MAC addresses.
-    Another trick in a confused situation can be to simply attach ONE unknown
-    NIC to a switch port at a time, and look for which NIC in
-    <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> is now showing a
-    link.
-    Once you have a few ports identified, you will often figure out the rest
-    quickly.
-</ul>
-
-In addition to the <tt>hostname.<i>if</i></tt> files, any other file that deals
-with hardware interfaces will have to be adjusted.
-Some likely candidates might include:
-
-<ul>
-  <li>PF configuration (<tt>/etc/pf.conf</tt>)
-  <li>CARP configuration (<tt>/etc/hostname.carp*</tt>)
-  <li>Bridge configuration (<tt>/etc/hostname.bridge*</tt>)
-  <li>Trunk configuration (<tt>/etc/hostname.trunk*</tt>)
-</ul>
 
 <h2 id="DHCP">Dynamic Host Configuration Protocol</h2>
 
@@ -532,11 +414,12 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 </pre></blockquote>
 
 This will tell your DHCP clients that the domain to append to DNS requests is
-<tt>example.com</tt> and the DNS servers are 192.168.1.3 and 192.168.1.5.
+<tt>example.com</tt> and the DNS servers are <tt>192.168.1.3</tt> and
+<tt>192.168.1.5</tt>.
 For hosts that are on the same network as an ethernet interface on the OpenBSD
-machine, which is in the 192.168.1.0/24 range, it will assign them an IP address
-between 192.168.1.32 and 192.168.1.127.
-It will set their default gateway as 192.168.1.1.
+machine, which is in the <tt>192.168.1.0/24</tt> range, it will assign them an
+IP address between <tt>192.168.1.32</tt> and <tt>192.168.1.127</tt>.
+It will set their default gateway as <tt>192.168.1.1</tt>.
 
 <p>
 If you want to start dhcpd(8) from the command line, run:
@@ -735,8 +618,7 @@ first one added to the trunk device.
 
 <h2 id="NFS">Using NFS</h2>
 
-NFS, or the Network File System, is used to share a filesystem over the
-network.
+The Network File System, NFS, is used to share a filesystem over the network.
 
 <p>
 This section will go through the steps for a simple setup of NFS.
@@ -754,85 +636,65 @@ When properly configured, IPsec protects against these types of attacks.
 
 <h3>Setting up an NFS server</h3>
 
-These services must be enabled and running on the server:
-
-<ul>
-  <li><a href="http://man.openbsd.org/portmap">portmap(8)</a>
-  <li><a href="http://man.openbsd.org/mountd">mountd(8)</a>
-  <li><a href="http://man.openbsd.org/nfsd">nfsd(8)</a>
-</ul>
-
-By default, each of these is disabled in OpenBSD.
-If you want them enabled, run the following commands:
+The <a href="http://man.openbsd.org/portmap">portmap(8)</a>,
+<a href="http://man.openbsd.org/mountd">mountd(8)</a> and
+<a href="http://man.openbsd.org/nfsd">nfsd(8)</a>
+services must be enabled on the server:
 
 <blockquote><pre>
 # <b>rcctl enable portmap mountd nfsd</b>
 # <b>rcctl set nfsd flags -tun 4</b>
 </pre></blockquote>
 
-The next step is to configure the list of filesystems that will be made
-available for clients to mount.
+The <tt>-t</tt> and <tt>-u</tt> flags for nfsd(8) enable TCP and UDP,
+respectively, and four server instances are created with <tt>-n 4</tt>.
+You should set an appropriate number of NFS server instances to handle the
+maximum number of concurrent client requests that you want to service.
 
 <p>
-In this example, we have a server with IP address 10.0.0.1.
+Then configure the list of filesystems that will be made available.
+
+<p>
+In this example, we have a server with IP address <tt>10.0.0.1</tt>.
 This server will be serving NFS only to clients within its own subnet.
-All of this is configured in the <tt>/etc/exports</tt> file.
-This file lists which filesystems you wish to have accessible via NFS
-and defines who is able to access them.
-There are many options that you can use in <tt>/etc/exports</tt>; it is
-best that you read the <a href="http://man.openbsd.org/exports">exports(5)</a>
-man page.
-For our example server, we've set up an exports file that looks like this:
+This is configured in the following
+<a href="http://man.openbsd.org/exports">exports(5)</a> file:
 
 <blockquote><pre>
-# NFS exports Database
-# See exports(5) for more information.  Be very careful, misconfiguration
-# of this file can result in your filesystems being readable by the world.
+$ <b>cat /etc/exports</b>
 /work -alldirs -ro -network=10.0.0 -mask=255.255.255.0
 </pre></blockquote>
 
-This means that the local filesystem <tt>/work</tt> will be made available via
-NFS.
+The local filesystem <tt>/work</tt> will be made available via NFS.
 The <tt>-alldirs</tt> option specifies that clients will be able to mount at any
 point under <tt>/work</tt> as well as <tt>/work</tt> itself.
 For example, if there was a directory called <tt>/work/monday</tt>, clients
-could mount <tt>/work</tt> (and have access to all files/directories underneath
-that directory) or they could mount <tt>/work/monday</tt> and have access to
-just the files/directories contained there.
+could mount <tt>/work</tt> or they could mount <tt>/work/monday</tt>.
 The <tt>-ro</tt> option specifies that clients will only be granted read-only
 access.
-The last two arguments specify that only clients within the 10.0.0.0 network
-using a netmask of 255.255.255.0 will be authorized to mount this filesystem.
+The last two arguments specify that only clients within the <tt>10.0.0.0</tt>
+network using a netmask of <tt>255.255.255.0</tt> will be authorized to mount
+this filesystem.
 This is important for some servers that are accessible by different networks.
 
 <p>
-Another important security note: don't just add a filesystem to
-<tt>/etc/exports</tt> without some kind of list of allowed host(s).
-Without a list of hosts which can mount a particular directory, anyone who can
-reach your server will be able to mount your NFS exported directories.
+Don't just add a filesystem to <tt>/etc/exports</tt> without some kind of list
+of allowed hosts, otherwise anyone who can reach your server will be able to
+mount your NFS exported directories.
 
 <p>
 Now you can start the server services.
-You can either reboot (after enabling them as per the instructions above) or
-start them manually.
 
 <blockquote><pre>
 # <b>rcctl start portmap mountd nfsd</b>
 </pre></blockquote>
 
-The <tt>nfsd_flags</tt> enable TCP (<tt>-t</tt>) and UDP (<tt>-u</tt>)
-connections and enable 4 instances (<tt>-n</tt>) of nfsd to run.
-You should set an appropriate number of NFS server instances to handle the
-maximum number of concurrent client requests that you want to service by
-adjusting the flags nfsd is started with.
+You're now ready to mount the exported filesystems from the clients.
 
 <p>
-You're now ready to mount the exported filesystems from the client(s).
-
-<p>
-Remember: If you make changes to <tt>/etc/exports</tt> while NFS is already
-running, you need to make mountd aware of this!
-Just HUP mountd and the changes will take affect.
+If you make changes to <tt>/etc/exports</tt> while NFS is already running, you
+need to make mountd aware of this.
+Just HUP mountd and the changes will take effect.
 
 <blockquote><pre>
 # <b>rcctl reload mountd</b>
@@ -840,46 +702,35 @@ Just HUP mountd and the changes will take affect.
 
 <h3>Mounting NFS Filesystems</h3>
 
-NFS filesystems can be mounted from a client without needing to enable any
-services or daemons.
-They can be mounted just like any other filesystem.
+NFS filesystems should be mounted via
+<a href="http://man.openbsd.org/mount_nfs">mount(8)</a>, or more specifically,
+<a href="http://man.openbsd.org/mount_nfs">mount_nfs(8)</a>.
 
 <p>
-NFS filesystems should be mounted via mount(8), or more specifically,
-<a href="http://man.openbsd.org/mount_nfs">mount_nfs(8)</a>.
-To mount the <tt>/work</tt> filesystem on host 10.0.0.1 to local filesystem
-<tt>/mnt</tt>, do this (note that you don't need to use an IP address;
-mount will resolve host names):
+To mount the <tt>/work</tt> filesystem on host <tt>10.0.0.1</tt> to local
+filesystem <tt>/mnt</tt>, do:
 
 <blockquote><pre>
 # <b>mount -t nfs 10.0.0.1:/work /mnt</b>
 </pre></blockquote>
 
-To have that filesystem mounted at boot, add something like this to
+Note that you don't need to use an IP address; mount(8) will resolve host names.
+
+<p>
+To have that filesystem mounted at boot, append a line to your
 <a href="http://man.openbsd.org/fstab">fstab(5)</a>:
 
 <blockquote><pre>
-# <b>echo '10.0.0.1:/work /mnt nfs rw 0 0' >> /etc/fstab</b>
+# <b>echo '10.0.0.1:/work /mnt nfs rw,nodev,nosuid 0 0' >> /etc/fstab</b>
 </pre></blockquote>
 
 It is important that you use <tt>0 0</tt> at the end of this line so that your
-computer does not try to fsck the NFS filesystem on boot.
-The other standard security options, such as <tt>noexec</tt>, <tt>nodev</tt>,
-and <tt>nosuid</tt>, should also be used where applicable.
-For example:
-
-<blockquote><pre>
-10.0.0.1:/work /mnt nfs rw,nodev,nosuid 0 0
-</pre></blockquote>
-
-This way, no devices or setuid programs on the NFS server can subvert security
-measures on the NFS client.
-If you are not mounting programs that you expect to run on the NFS client, add
-<tt>noexec</tt> to this list.
+computer does not try to <a href="http://man.openbsd.org/fsck">fsck(8)</a> the
+NFS filesystem on boot.
 
 <p>
 When accessing an NFS mount as the root user, the server automatically maps
-root's access to username "nobody" and group "nobody."
+root's access to username <tt>nobody</tt> and group <tt>nobody</tt>.
 This is important to know when considering file permissions.
 For example, take a file with these permissions:
 
@@ -889,10 +740,10 @@ For example, take a file with these permissions:
 
 If this file was on an NFS share and the root user tried to access this file
 from the NFS client, access would be denied.
-This is because the server uses the credentials of the user "nobody" when root
-tries to access the file.
-Since the user nobody doesn't have permissions to access the file, access is
-denied.
+This is because the server uses the credentials of the user <tt>nobody</tt> when
+root tries to access the file.
+Since the user <tt>nobody</tt> doesn't have permissions to access the file,
+access is denied.
 
 <p>
 The user and group that root are mapped to are configurable via the
@@ -919,23 +770,11 @@ $ <b>rpcinfo -p 10.0.0.1</b>
     100003    3   tcp   2049  nfs
 </pre></blockquote>
 
-During normal usage, there are a few other utilities that allow you to see what
-is happening with NFS.
-One is <a href="http://man.openbsd.org/showmount">showmount(8)</a>, which allows
-you to view what is currently mounted and who is mounting it.
+There are a few utilities that allow you to see what is happening with NFS.
+<a href="http://man.openbsd.org/showmount">showmount(8)</a> allows you to view
+what is currently mounted by whom.
 There is also <a href="http://man.openbsd.org/nfsstat">nfsstat(1)</a>, which
 shows much more verbose statistics.
-To use showmount(8), try <tt>/usr/bin/showmount -a host</tt>.
-For example:
-
-<blockquote><pre>
-$ <b>showmount -a 10.0.0.1</b>
-All mount points on 10.0.0.1:
-10.0.0.37:/work
-</pre></blockquote>
-
-This output shows that the client 10.0.0.37 has mounted the <tt>/work</tt>
-export being served from the server at 10.0.0.1.
 
 <h2 id="Bridge">Setting up a network bridge</h2>
 
@@ -1161,7 +1000,7 @@ also be used to create a bridge after boot.
 <h2 id="Multipath">Equal-cost multipath routing</h2>
 
 Equal-cost multipath routing refers to having multiple routes in the routing
-table for the same network, such as the default route, 0.0.0.0/0.
+table for the same network, such as the default route, <tt>0.0.0.0/0</tt>.
 When the kernel is doing a route lookup to determine where to send packets
 destined to that network, it can choose from any of the equal-cost routes.
 In most scenarios, multipath routing is used to provide redundant uplink
@@ -1185,9 +1024,9 @@ default     10.130.128.1      UGS       2      134      -     fxp1
 default     10.132.0.1        UGS       0      172      -     fxp2
 </pre></blockquote>
 
-In this example we can see that one default route points to 10.130.128.1, which
-is accessible via the <tt>fxp1</tt> interface, and the other points to
-10.132.0.1, which is accessible via <tt>fxp2</tt>.
+In this example we can see that one default route points to
+<tt>10.130.128.1</tt>, which is accessible via the <tt>fxp1</tt> interface, and
+the other points to <tt>10.132.0.1</tt>, which is accessible via <tt>fxp2</tt>.
 
 <p>
 Since the <a href="http://man.openbsd.org/mygate">mygate(5)</a> file does not
@@ -1204,7 +1043,7 @@ $ <b>tail -1 /etc/hostname.fxp2</b>
 </pre></blockquote>
 
 Lastly, don't forget to activate the use of multipath routes by enabling the
-proper sysctl(3) variable.
+proper <a href="http://man.openbsd.org/sysctl">sysctl(8)</a> variable.
 
 <blockquote><pre>
 # <b>sysctl net.inet.ip.multipath=1</b>
@@ -1246,6 +1085,125 @@ This traffic will of course be blackholed and end up going nowhere.
 It's highly recommended to use
 <a href="http://man.openbsd.org/ifstated">ifstated(8)</a> to check for
 unavailable interfaces and adjust the routing table accordingly.
+
+<h2 id="Replace">Adding and replacing NICs</h2>
+
+You may have to replace or add a network adapter on an OpenBSD system,
+maybe upgrading the capabilities of the system or repairing failed
+hardware.
+This will require some reconfiguration.
+The good news is that it's relatively easy, though there are some things
+to be aware of.
+
+<p>
+The key is understanding how OpenBSD names NICs.
+Unlike some OSs that try to remember any network adapter the installed
+OS has ever seen, OpenBSD does not remember a NIC's identification
+between boots -- it names them in the order that they are found.
+In most cases, this is far simpler for you, as the system will always
+identify a NIC the same way in the same hardware configuration, and
+when configurations change, the results are easily understood.
+
+<p>
+Here are some cases:
+
+<ul>
+  <li><b>Replace a NIC with an identical device:</b>
+    This would be the case when you move the disk system from a failed machine
+    to another identical machine, or install an image or full backup to
+    identical hardware.
+    In this case, things are easy -- no change in configuration will be needed,
+    other than perhaps changing the IP address in the <tt>hostname.if</tt> file
+    if needed.
+
+  <li><b>Replace a NIC with a different device:</b>
+    This would also be the case when one moves a disk system to a non-identical
+    machine.
+    In this case, simply rename the old <tt>hostname.if</tt> file to match the
+    new device.
+    For example, if you replace an
+    <a href="http://man.openbsd.org/fxp">fxp(4)</a> device which was
+    <tt>fxp0</tt> with a <a href="http://man.openbsd.org/re">re(4)</a> device,
+    which would end up as <tt>re0</tt>, you could rename
+    <tt>/etc/hostname.fxp0</tt> to <tt>/etc/hostname.re0</tt> and your new
+    device would take over the configuration of the old device.
+    If you might someday restore the original configuration, you may prefer to
+    make the new file a hard link to the original, rather than renaming it.
+
+  <li><b>Replacing one of several similar cards with a different type:</b>
+    Let's assume you have a machine with <tt>fxp0</tt>, <tt>fxp1</tt> and
+    <tt>fxp2</tt>, and <tt>fxp0</tt> fails.
+    Unfortunately, you don't have a spare similar fxp card, so you need to
+    replace it with an <a href="http://man.openbsd.org/em">em(4)</a> card.
+    This gets a little ugly, as <tt>fxp1</tt> and <tt>fxp2</tt> will rename
+    themselves:
+
+    <blockquote><pre>
+    <b>old  -> new</b>
+    fxp0 -> em0
+    fxp1 -> fxp0
+    fxp2 -> fxp1
+    </pre></blockquote>
+
+    Again, rename your <tt>/etc/hostname.if</tt> files accordingly:
+
+    <blockquote><pre>
+    # <b>cd /etc</b>
+    # <b>mv hostname.fxp0 hostname.em0</b>
+    # <b>mv hostname.fxp1 hostname.fxp0</b>
+    # <b>mv hostname.fxp2 hostname.fxp1</b>
+    </pre></blockquote>
+
+  <li><b>Adding a new NIC to an existing system:</b>
+    If your added NIC is of a different type, it will be the "0" device of
+    whatever driver it is.
+    For example, if you are adding a
+    <a href="http://man.openbsd.org/bge">bge(4)</a> device to a machine with
+    only an <a href="http://man.openbsd.org/rl">rl(4)</a> device, life is easy
+    -- the new device will be <tt>bge0</tt>, so create an appropriate
+    <tt>/etc/hostname.bge0</tt>.
+
+    <p>
+    The more difficult variation is when you are adding a new card of the same
+    type as another in the machine.
+    Most add-on NICs will have their MAC address written somewhere on the card.
+    Make note of this, insert the card, and look at the dmesg.
+    Note the identifier of the new NIC and its relationship to the earlier NICs.
+    You may find that ALL the existing NICs have changed number.
+    You may be able to put the new NIC in a different slot to change the
+    identifier as desired, but if the earlier devices were onboard, you may have
+    no option but to adjust the <tt>hostname.if</tt> files.
+
+  <li><b>Total Confusion:</b>
+    Sometimes, things get totally confused.
+    Maybe your new machine has lots of multi-port NICs, or several onboard NICs
+    and you aren't quite sure how they are identified.
+    Or perhaps changes were made with less care than might be hoped for, and now
+    you aren't sure what is what.
+
+    <p>
+    The first thing to note is that
+    <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> will tell you both
+    the MAC address and the link status of each port.
+    So the first trick might be to mark add-in cards with their MAC addresses.
+    Another trick in a confused situation can be to simply attach ONE unknown
+    NIC to a switch port at a time, and look for which NIC in
+    <a href="http://man.openbsd.org/ifconfig">ifconfig(8)</a> is now showing a
+    link.
+    Once you have a few ports identified, you will often figure out the rest
+    quickly.
+</ul>
+
+In addition to the <tt>hostname.if</tt> files, any other file that deals with
+hardware interfaces will have to be adjusted.
+Some likely candidates might include:
+
+<ul>
+  <li>PF configuration (<tt>/etc/pf.conf</tt>)
+  <li>CARP configuration (<tt>/etc/hostname.carp*</tt>)
+  <li>Bridge configuration (<tt>/etc/hostname.bridge*</tt>)
+  <li>Trunk configuration (<tt>/etc/hostname.trunk*</tt>)
+</ul>
 
 <p>
 </body>
