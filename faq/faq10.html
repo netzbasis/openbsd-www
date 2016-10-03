@@ -30,7 +30,7 @@
 <ul>
 <li><a href="#DupFS"            >Duplicating filesystems</a>
 <li><a href="#rc"               >The rc system startup script</a>
-<li><a href="#doas"             >OpenBSD's sudo replacement, doas</a>
+<li><a href="#doas"             >Executing commands as another user</a>
 <li><a href="#AddDelUser"       >Managing users and groups</a>
 <li><a href="#vipw"             >Editing the password file</a>
 <li><a href="#Quotas"           >Setting up user disk quotas</a>
@@ -176,54 +176,32 @@ rc_cmd $1
 and adding the daemon name to the <tt>pkg_scripts</tt> variable in
 <tt>/etc/rc.conf.local</tt>.
 
-<h2 id="doas">OpenBSD's sudo replacement, doas</h2>
+<h2 id="doas">Executing commands as another user</h2>
 
-<a href="http://man.openbsd.org/doas">doas(1)</a> allows a user to run commands
+One challenge system administrators face is the contradictory requirement
+of multiple people managing machines using logins that shouldn't be shared.
+The <a href="http://man.openbsd.org/doas">doas(1)</a> tool can solve this
+problem by permitting a certain subset of users to run predetermined commands
 as another user.
-For example, if appropriately configured,
+Regular users can run administrative commands, only needing to authenticate
+as themselves, rather than needing the root password.
+When using doas, all commands are logged to <tt>/var/log/secure</tt>.
+
+<p>
+For example, if appropriately configured, the following command would display
+root's <a href="http://man.openbsd.org/crontab.5">crontab(5)</a> file:
 
 <blockquote><pre>
 $ <b>doas crontab -l -u root</b>
 </pre></blockquote>
 
-will display root's <a href="http://man.openbsd.org/crontab.5">crontab(5)</a>
-file.
+Check the <a href="http://man.openbsd.org/doas.conf">doas.conf(5)</a> manual
+for configuration examples.
 
 <p>
-One common challenge system administrators face is the contradictory requirement
-of multiple people managing machines using logins that shouldn't be shared.
-<a href="http://man.openbsd.org/doas">doas(1)</a> solves this problem by
-permitting a certain subset of your users to run predetermined commands as
-another user.
-Now, these users can run administrative commands, only needing to authenticate
-as themselves.
-They do not need to know the root password.
-
-<p>
-All activity is logged to <tt>/var/log/secure</tt>.
-
-<p>
-A very basic <a href="http://man.openbsd.org/doas.conf">doas.conf(5)</a> might
-look like this:
-
-<blockquote><pre>
-permit setenv { PKG_PATH ENV PS1 SSH_AUTH_SOCK } :wheel as root
-</pre></blockquote>
-
-This file gives users in the wheel group root-level access to all commands, with
-the environment variables <tt>PKG_PATH</tt>, <tt>ENV</tt>, <tt>PS1</tt> and
-<tt>SSH_AUTH_SOCK</tt> passed through to the program they are invoking.
-The user will be asked to verify their password before the command is run.
-
-<p>
-The <a href="http://man.openbsd.org/doas.conf">doas.conf(5)</a> manual contains
-more examples.
-
-<p>
-doas(1) is designed to be a minimalistic and simple replacement of sudo(8) and
-might not cover all your needs.
-An up-to-date version of sudo(8) is available as a
-<a href="faq15.html">package</a>.
+The doas(1) utility is designed to be a modern, simple replacement for sudo.
+If you need features specific to sudo, an up-to-date version is available
+as a <a href="faq15.html">package</a>. 
 
 <h2 id="AddDelUser">Managing users and groups</h2>
 
