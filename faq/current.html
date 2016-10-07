@@ -59,7 +59,7 @@ makewhatis
 </pre></blockquote>
 
 
-<h3 id="r20160808">2016/08/08 - Mandatory W^X enforcement</h3>
+<h3 id="r20160808">2016/08/08 - mandatory W^X enforcement</h3>
 
 W^X violations are now only permitted for binaries marked <b>wxneeded</b>
 executed from filesystems marked <b>wxallowed</b>.
@@ -245,13 +245,13 @@ new packages.
 
 <!-- XXX For 6.1 upgrade notes: 1. update OS, 2. update all packages, 3. rm files. -->
 <p>
-Otherwise, users should wait until updated packages are available
+Users should wait until updated packages are available
 before removing the libraries, otherwise many installed packages
 will break.
 You can check:
 
 <blockquote><pre>
-$ pkg_info -S nss
+$ <b>pkg_info -S nss</b>
 Information for inst:nss-3.26
 
 Signature: nss-3.26,@nspr-4.12p0,c.89.1,nspr4.23.3,plc4.23.3,plds4.23.3,pthread.23.0,<b>sqlite3.<font color="#e00000">33.0</font></b>,z.5.0
@@ -272,8 +272,49 @@ or rebuild the system&mdash;involves pieces in libc,
 so following <a href="http://man.openbsd.org/release.8">release(8)</a>
 is the best way.
 
+
+<h3 id="r20161005">2016/10/06 - new build infrastructure,
+<tt>noperm</tt> release process</h3>
+
+The infrastructure to build the base system from source and to make a release
+has changed.
+The <tt>SUDO</tt> variable was removed from the base system makefiles and the
+<tt>make build</tt> command now <b>must</b> be issued by root.
+Whenever possible, the makefiles will de-escalate privileges to
+<tt>BUILDUSER</tt> (as specified in
+<a href="http://man.openbsd.org/mk.conf.5">mk.conf(5)</a>; defaults to
+<tt>USER</tt>).
+Make sure that <tt>/usr/obj</tt> or <tt>/usr/xobj</tt> is empty and owned by
+<tt>BUILDUSER</tt> before starting a build. 
+
+<p>
+Start the build from <tt>/usr/src</tt> as follows:
+
+<blockquote><pre>
+# <b>cd /usr/src/share/mk && make install</b>
+# <b>export BUILDUSER=your-build-user</b>	# only needed the first time
+# <b>make obj && make build</b>
+</pre></blockquote>
+
+To make a <a href="http://man.openbsd.org/release.8">release(8)</a>, further
+setup is required:
+
+<ul>
+  <li>Mount a <b>noperm filesystem</b> on <tt>/dest</tt>, of size at least
+    <tt>1G</tt>, of type <tt>ffs</tt>, and with the <tt>noperm</tt>
+    <a href="http://man.openbsd.org/mount.8#noperm">mount(8)</a> option set.
+  <li>The root directory of the filesystem must be owned by <tt>BUILDUSER</tt>, with
+    permissions <tt>700</tt>.
+  <li>Create directories <tt>/dest/base</tt> and <tt>/dest/xbase</tt> owned by
+    <tt>BUILDUSER</tt>.
+  <li>The <tt>RELEASEDIR</tt> must also be owned by <tt>BUILDUSER</tt>.
+</ul>
+
+To build a base release, set <tt>DESTDIR=/dest/base</tt> and to build a xenocara
+release, set <tt>DESTDIR=/dest/xbase</tt>.
+
 <hr>
-<small>$OpenBSD: current.html,v 1.729 2016/10/04 20:05:50 tb Exp $</small>
+<small>$OpenBSD: current.html,v 1.735 2016/10/07 04:20:09 jsg Exp $</small>
 
 </body>
 </html>
