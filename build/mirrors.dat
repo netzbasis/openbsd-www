@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.478 2016/12/21 21:13:42 sthen Exp $
+# $OpenBSD: mirrors.dat,v 1.481 2016/12/22 22:53:49 benno Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -53,7 +53,8 @@ GC	Australia
 GZ	au
 LF	2
 UH	http://mirror.aarnet.edu.au/pub/OpenBSD/
-UHS	https://mirror.aarnet.edu.au/pub/OpenBSD/
+# no TLS 1.2
+#UHS	https://mirror.aarnet.edu.au/pub/OpenBSD/
 UR	rsync://mirror.aarnet.edu.au/openbsd/
 GT	Brisbane
 ME	mirror@aarnet.edu.au
@@ -308,7 +309,8 @@ FE	2
 FF	ftp.eu.openbsd.org
 UF	ftp://mirror.one.com/pub/OpenBSD/
 UH	http://mirror.one.com/pub/OpenBSD/
-UHS	https://mirror.one.com/pub/OpenBSD/
+# no stapling
+#UHS	https://mirror.one.com/pub/OpenBSD/
 UR	rsync://mirror.one.com/openbsd/
 
 ##	Start of Estonia
@@ -515,6 +517,7 @@ CF	anoncvs1.ca.openbsd.org
 LC	2
 UF	ftp://ftp.hostserver.de/pub/OpenBSD/
 UH	http://ftp.hostserver.de/pub/OpenBSD/
+UHS	https://ftp.hostserver.de/pub/OpenBSD/
 UR	rsync://ftp.hostserver.de/OpenBSD/
 FE	2
 FF	openbsd.cs.toronto.edu
@@ -780,7 +783,8 @@ FF	ftp.ch.openbsd.org
 FE	24
 UF	ftp://ftp.icm.edu.pl/pub/OpenBSD/
 UH	http://ftp.icm.edu.pl/pub/OpenBSD/
-UHS	https://ftp.icm.edu.pl/pub/OpenBSD/
+# no stapling
+#UHS	https://ftp.icm.edu.pl/pub/OpenBSD/
 UR	rsync://ftp.icm.edu.pl/pub/OpenBSD/
 
 ##	Start of Romania
@@ -808,7 +812,8 @@ ME	opensource@yandex-team.ru
 MN	Аркадий Шейн (Arkady L. Shane)
 UF	ftp://mirror.yandex.ru/pub/OpenBSD/
 UH	http://mirror.yandex.ru/pub/OpenBSD/
-UHS	https://mirror.yandex.ru/pub/OpenBSD/
+# no stapling
+#UHS	https://mirror.yandex.ru/pub/OpenBSD/
 FF	ftp.eu.openbsd.org
 FE	12
 
@@ -986,7 +991,8 @@ FE	24
 FF	ftp.ini.uzh.ch
 UF	ftp://ftp.mirrorservice.org/pub/OpenBSD/
 UH	http://www.mirrorservice.org/pub/OpenBSD/
-UHS	https://www.mirrorservice.org/pub/OpenBSD/
+# no stapling
+#UHS	https://www.mirrorservice.org/pub/OpenBSD/
 UR	rsync://rsync.mirrorservice.org/ftp.openbsd.org/pub/OpenBSD/
 
 0
@@ -1002,7 +1008,8 @@ FE	4
 FF	ftp.eu.openbsd.org
 UF	ftp://anorien.csc.warwick.ac.uk/pub/OpenBSD/
 UH	http://anorien.csc.warwick.ac.uk/pub/OpenBSD/
-UHS	https://anorien.csc.warwick.ac.uk/pub/OpenBSD/
+# no TLS 1.2
+#UHS	https://anorien.csc.warwick.ac.uk/pub/OpenBSD/
 UR	rsync://anorien.csc.warwick.ac.uk/OpenBSD/
 
 0
@@ -1105,6 +1112,7 @@ MN	Todd C. Miller
 HA	anoncvs4.usa.openbsd.org
 LC	2
 UH	http://ftp4.usa.openbsd.org/pub/OpenBSD/
+UHS	https://ftp4.usa.openbsd.org/pub/OpenBSD/
 UF	ftp://ftp4.usa.openbsd.org/pub/OpenBSD/
 UR	rsync://ftp4.usa.openbsd.org/ftp/
 CE	1
@@ -1133,6 +1141,7 @@ MN	Todd C. Miller
 HA	anoncvs2.usa.openbsd.org openbsd.se.rit.edu
 LC	2
 UH	http://ftp5.usa.openbsd.org/pub/OpenBSD/
+UHS	https://ftp5.usa.openbsd.org/pub/OpenBSD/
 UF	ftp://ftp5.usa.openbsd.org/pub/OpenBSD/
 UR	rsync://ftp5.usa.openbsd.org/ftp/
 CE	1
@@ -1174,13 +1183,14 @@ MN	Todd C. Miller
 LF	2
 LC	2
 UH	http://ftp3.usa.openbsd.org/pub/OpenBSD/
+UHS	https://ftp3.usa.openbsd.org/pub/OpenBSD/
 UF	ftp://ftp3.usa.openbsd.org/pub/OpenBSD/
 UR	rsync://ftp3.usa.openbsd.org/ftp/
 CE	1
 AU	anoncvs
 AH	anoncvs3.usa.openbsd.org
 AR	/cvs
-AP	ssh, ssh port 2022, pserver
+AP	ssh, ssh port 2022
 VH	anoncvs3.usa.openbsd.org
 SR	SHA256:ZjlsP/GTTyMEKKkUNWTTA3p/+keRIxvp1kc6s+lQqTw
 SD	SHA256:/+o+ogn8mzH+VQ8ZC85n4lItkx92YWrPFraLMrC2r3s
