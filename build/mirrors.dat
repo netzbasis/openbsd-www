@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.483 2016/12/31 16:30:48 ajacoutot Exp $
+# $OpenBSD: mirrors.dat,v 1.486 2017/01/04 16:29:19 benno Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -256,6 +256,7 @@ MN	Nick Holland
 FE	2
 UF	ftp://openbsd.cs.toronto.edu/pub/OpenBSD/
 UH	http://openbsd.cs.toronto.edu/pub/OpenBSD/
+UHS	https://openbsd.cs.toronto.edu/pub/OpenBSD/
 UR	rsync://openbsd.cs.toronto.edu/openbsd/
 CE	2
 AU	anoncvs
@@ -557,6 +558,7 @@ GZ	hk
 ME	peter@membrey.hk
 MN	Peter Membrey
 UH	http://openbsd.hk/pub/OpenBSD/
+UHS	https://openbsd.hk/pub/OpenBSD/
 FE	24
 FF	openbsd.cs.toronto.edu
 
@@ -1300,6 +1302,7 @@ LF	2
 FE	3
 UF	ftp://mirror.esc7.net/pub/OpenBSD/
 UH	http://mirror.esc7.net/pub/OpenBSD/
+UHS	https://mirror.esc7.net/pub/OpenBSD/
 UR	rsync://mirror.esc7.net/openbsd/
 CE	2
 CF	anoncvs1.usa.openbsd.org
