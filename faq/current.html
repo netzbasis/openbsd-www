@@ -531,8 +531,51 @@ Unable to connect using https. Use http instead = yes	# "no" is default
 
 between the <tt>HTTP Server</tt> and <tt>Set name(s)</tt> responses.
 
+
+<h3 id="r20170121">2017/01/21 - acme-client(1) uses config file</h3>
+
+The <a href="http://man.openbsd.org/acme-client(1)">acme-client(1)</a> program
+now uses
+<a href="http://man.openbsd.org/acme-client.conf(5)">acme-client.conf(5)</a>.
+
+<p>
+Copy your account keys to the new location:
+
+<blockquote><pre>
+cp -p /etc/acme/privkey.pem /etc/acme/letsencrypt-privkey.pem
+cp -p /etc/acme/privkey.pem /etc/acme/letsencrypt-staging-privkey.pem
+</pre></blockquote>
+
+It is recommended that you leave all current content of the new
+<tt>/etc/acme.conf</tt> untouched and append your <tt>domain { }</tt> sections.
+This will make future upgrades easier.
+
+<p>
+For example, for the domain <tt>www.openbsd.org</tt>, append this to the file:
+
+<blockquote><pre>
+domain www.openbsd.org {
+        alternative names { openbsd.org ftp.openbsd.org }
+        domain key "/etc/ssl/acme/private/privkey.pem"
+        domain certificate "/etc/ssl/acme/cert.pem"
+        domain chain certificate "/etc/ssl/acme/chain.pem"
+        domain full chain certificate "/etc/ssl/acme/fullchain.pem"
+        #challengedir "/var/www/acme"
+        sign with letsencrypt
+}
+</pre></blockquote>
+
+What was previously achieved with the command
+<tt>acme-client www.openbsd.org openbsd.org ftp.openbsd.org</tt>
+can now be simplified to:
+
+<blockquote><pre>
+acme-client www.openbsd.org
+</pre></blockquote>
+
+
 <hr>
-<small>$OpenBSD: current.html,v 1.772 2017/01/06 10:07:06 tb Exp $</small>
+<small>$OpenBSD: current.html,v 1.774 2017/01/21 09:33:58 tb Exp $</small>
 
 </body>
 </html>
