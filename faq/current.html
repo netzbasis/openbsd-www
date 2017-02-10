@@ -3,8 +3,7 @@
 <head>
 <title>Following -current and using snapshots</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name= "copyright"     content= "This document copyright 2005-2016
-                                      by OpenBSD">
+<meta name="copyright" content="This document copyright 2005-2017 by OpenBSD">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="../openbsd.css">
 <link rel="canonical" href="https://www.openbsd.org/faq/current.html">
@@ -43,7 +42,11 @@ before using -current and the instructions below.
 <p>
 You should <b>always</b> use a snapshot as the starting point for running
 <i>-current</i>.
-Upgrading by compiling your own source code is not supported.
+<!-- XXXrelease: put the following sentence back and remove its replacement -->
+<!--Upgrading by compiling your own source code is not supported.-->
+<p>
+In particular, upgrading by compiling from source from OpenBSD 6.0
+<i>-release</i> to <i>-current</i> is <b>not supported</b>.
 
 <p>
 Most of these changes will have to be performed as root.
@@ -73,28 +76,6 @@ executed from filesystems marked <b>wxallowed</b>.
 </ul>
 
 
-<h3 id="r20160810">2016/08/10 - RELRO by default on all archs but luna88k</h3>
-
-The system now uses the RELRO design ("read-only after relocation") to
-lay out executables and libraries such that they use fewer mappings and
-more of the initial data can be protected as read-only.
-Unlike other OSes, this applies to <b>all</b> dynamic executables and libraries
-by default, as well as to static PIE executables.
-<p>
-To upgrade over this, start from a system running 6.0-release or later and an
-up-to-date source tree:
-<blockquote><pre>
-cd /usr/src &amp;&amp; make obj &amp;&amp; make clean &amp;&amp; make includes
-cd /usr/src/libexec/ld.so
-make SUBDIR= depend &amp;&amp; make SUBDIR= &amp;&amp; doas make SUBDIR= install
-cd /usr/src/lib/csu
-make depend &amp;&amp; make &amp;&amp; doas make install
-cd /usr/src/gnu/usr.bin/binutils-2.17
-make -f Makefile.bsd-wrapper &amp;&amp; doas make -f Makefile.bsd-wrapper install
-cd /usr/src &amp;&amp; make build
-</pre></blockquote>
-
-
 <h3 id="r20160812">2016/08/12 - [ports] py-elasticsearch-curator update</h3>
 
 With the update of Elasticsearch Curator to the 4.x version, the CLI interface
@@ -117,80 +98,11 @@ makewhatis
 </pre></blockquote>
 
 
-<h3 id="r20160901">2016/09/01 - armv7 complete ABI break</h3>
-
-OpenBSD/armv7 moved to the ARM EABI.  This is a hard ABI break which
-you cannot cross with a simple build.  To upgrade through this break,
-you need to upgrade from a snapshot.
-
-
 <h3 id="r20160901a">2016/09/01 - [ports] letskencrypt renamed/moved to base</h3>
 
 <tt>letskencrypt</tt>, previously in <tt>ports/security</tt>, has been imported
 to base under its new name <tt>acme-client</tt>.
 Adjust scripts/cronjobs as necessary.
-
-
-<h3 id="r20160903">2016/09/03 - armv7 is now PIE</h3>
-
-The armv7 platform has been switched to PIE (position-independent executables)
-by default.
-Everyone is encouraged to update via snapshots (dated after 2016/09/02); if you
-want to upgrade via sources, follow these instructions:
-
-<p>
-First, install the new system Makefiles with the change to PIE_ARCH in
-<tt>bsd.own.mk</tt>:
-
-<blockquote><pre>
-cd /usr/src/share/mk &amp;&amp; make install
-</pre></blockquote>
-
-Then, recompile and install gcc and binutils.
-
-<blockquote><pre>
-cd /usr/src/gnu/usr.bin/binutils-2.17
-make -f Makefile.bsd-wrapper clean &amp;&amp; make -f Makefile.bsd-wrapper obj &amp;&amp; \
-       make -f Makefile.bsd-wrapper depend &amp;&amp; make -f Makefile.bsd-wrapper
-cd /usr/src/gnu/usr.bin/cc
-make clean &amp;&amp; make obj &amp;&amp; make depend &amp;&amp; make &amp;&amp; make install
-cd /usr/src/gnu/usr.bin/binutils-2.17 &amp;&amp; make -f Makefile.bsd-wrapper install
-</pre></blockquote>
-
-Finally, recompile your system by following the procedure outlined in
-<a href="http://man.openbsd.org/release.8">release(8)</a>.
-
-
-<h3 id="r20160908">2016/09/08 - armv7 now supports static PIE</h3>
-
-The armv7 platform now also supports PIE for static binaries.
-Everyone is encouraged to update via snapshots (dated after 2016/09/09);
-if you want to upgrade via sources, follow these instructions:
-
-<p>
-First, install the new system Makefiles with the change to
-<tt>STATICPIE_ARCH</tt> in <tt>bsd.own.mk</tt>:
-
-<blockquote><pre>
-cd /usr/src/share/mk &amp;&amp; make install
-</pre></blockquote>
-
-Then, build and install <tt>rcrt0.o</tt>:
-
-<blockquote><pre>
-cd /usr/src/lib/csu
-make clean &amp;&amp; make obj &amp;&amp; make depend &amp;&amp; make &amp;&amp; make install
-</pre></blockquote>
-
-Then, recompile and install gcc:
-
-<blockquote><pre>
-cd /usr/src/gnu/usr.bin/cc
-make clean &amp;&amp; make obj &amp;&amp; make depend &amp;&amp; make &amp;&amp; make install
-</pre></blockquote>
-
-Finally, recompile your system by following the procedure outlined in
-<a href="http://man.openbsd.org/release.8">release(8)</a>.
 
 
 <h3 id="r20160909">2016/09/09 - /dev/sound removed</h3>
@@ -229,7 +141,8 @@ support bcrypt PBKDF) will not be able to "unlock" the volume.
 <h3 id="r20160923">2016/09/23 - sqlite3 moved back to ports</h3>
 
 SQLite has moved from base back to ports.
-The old files must be removed before building from ports:
+Remove the following files <b>after</b> upgrading the OS and updating the
+packages, but <b>before</b> building any ports:
 
 <blockquote><pre>
 rm /usr/bin/sqlite3
@@ -237,28 +150,8 @@ rm /usr/include/sqlite3*.h
 rm /usr/lib/pkgconfig/sqlite3.pc
 rm /usr/libdata/perl5/site_perl/*-openbsd/sqlite3*.ph
 rm /usr/share/man/man1/sqlite3.1
-rm /usr/lib/libsqlite3*         <b># see below</b>
+rm /usr/lib/libsqlite3*
 </pre></blockquote>
-
-Ports bulk builders must remove the old libraries before building
-new packages.
-
-<!-- XXX For 6.1 upgrade notes: 1. update OS, 2. update all packages, 3. rm files. -->
-<p>
-Users should wait until updated packages are available
-before removing the libraries, otherwise many installed packages
-will break.
-You can check:
-
-<blockquote><pre>
-$ <b>pkg_info -S nss</b>
-Information for inst:nss-3.26
-
-Signature:
-nss-3.26,@nspr-4.12p0,c.89.1,nspr4.23.3,plc4.23.3,plds4.23.3,pthread.23.0,<b>sqlite3.</b><b style="color:#e00000">33.0</b>,z.5.0
-</pre></blockquote>
-
-If the sqlite3 version number is 32.0 or lower, they are not updated yet.
 
 
 <h3 id="r20160927">2016/09/27 - more secure package and firmware signatures</h3>
@@ -581,7 +474,8 @@ cp -p /etc/acme/privkey.pem /etc/acme/letsencrypt-staging-privkey.pem
 </pre></blockquote>
 
 It is recommended that you leave all current content of the new
-<tt>/etc/acme.conf</tt> untouched and append your <tt>domain { }</tt> sections.
+<tt>/etc/acme-client.conf</tt> untouched and append your <tt>domain { }</tt>
+sections.
 This will make future upgrades easier.
 
 <p>
@@ -644,7 +538,7 @@ To remove any stale manpages, issue <b><tt>rm -rf /usr/share/man</tt></b> before
 upgrading.
 
 <hr>
-<small>$OpenBSD: current.html,v 1.780 2017/02/05 07:02:51 tb Exp $</small>
+<small>$OpenBSD: current.html,v 1.785 2017/02/09 22:10:41 tb Exp $</small>
 
 </body>
 </html>
