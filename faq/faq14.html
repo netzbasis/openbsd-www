@@ -50,127 +50,94 @@
 
 <h2 id="intro">Disks and partitions</h2>
 
-The details of setting up disks in OpenBSD vary between platforms, so
-you should read the installation instructions in the
-<tt>INSTALL.&lt;arch&gt;</tt> file for your
-<a href="../plat.html">platform</a>
-to determine the specifics for your system.
+The details of setting up disks in OpenBSD vary between
+<a href="../plat.html">platforms</a>, so you should read the instructions in
+your platform's <tt>INSTALL.&lt;arch&gt;</tt> file.
 
 <h3>Drive identification</h3>
 
-OpenBSD handles mass storage with two drivers on most platforms,
-depending upon the normal command set that kind of device supports:
+On most platforms, OpenBSD handles mass storage with two drivers:
 
 <ul>
   <li><a href="http://man.openbsd.org/wd">wd(4)</a>:
-    IDE-like disks: IDE, SATA, MFM or ESDI disks, or a flash device
-    with an appropriate adapter, attached to a
-    <a href="http://man.openbsd.org/wdc">wdc(4)</a>
-    or
-    <a href="http://man.openbsd.org/pciide">pciide(4)</a>
-    interface.
+    IDE-like disks: IDE, SATA, MFM or ESDI disks, or a flash device, attached to
+    a <a href="http://man.openbsd.org/wdc">wdc(4)</a> or a
+    <a href="http://man.openbsd.org/pciide">pciide(4)</a> interface.
   <li><a href="http://man.openbsd.org/sd">sd(4)</a>:
-    SCSI-like disks:
-    Devices that utilize SCSI commands, USB disks, SATA disks attached to an
-    <a href="http://man.openbsd.org/ahci">ahci(4)</a>
-    interface, and disk arrays attached to a RAID controller.
+    SCSI-like disks: Devices that utilize SCSI commands, USB disks, SATA disks
+    attached to an <a href="http://man.openbsd.org/ahci">ahci(4)</a> interface,
+    and disk arrays attached to a RAID controller.
 </ul>
 
-The first drive of a particular type identified by OpenBSD will be
-drive <tt>0</tt>, the second will be <tt>1</tt>, etc.
-So, the first IDE-like disk will be <tt>wd0</tt>, the third SCSI-like disk will
-be <tt>sd2</tt>.
-If you have two SCSI-like drives and three IDE-like drives on a system,
-you would have <tt>sd0</tt>, <tt>sd1</tt>, <tt>wd0</tt>, <tt>wd1</tt> and
-<tt>wd2</tt> on that machine.
-The order is based on the order they are found during hardware discovery
-at boot.
-There are a few key points to keep in mind:
+The devices are numbered by the order in which they are detected at boot time,
+starting at zero.
+So, the first IDE-like disk will be <tt>wd0</tt> and the third SCSI-like disk
+will be <tt>sd2</tt>.
+Removing or adding a disk may impact the identity of other drives on the system.
+Note that OpenBSD will not necessarily number drives in the same order as your
+boot ROM.
+
+<h3>Partitions and filesystems</h3>
+
+The term "partition" can mean two different things in OpenBSD:
 
 <ul>
   <li>
-    Drives may not be numbered in the same order as your boot ROM
-    attempts to boot them (i.e., your system may attempt to boot what OpenBSD
-    identifies as <tt>wd2</tt> or <tt>sd1</tt>).
-    Sometimes you may be able to change this, sometimes not.
-  <li>Removing or adding a disk may impact the identity of other drives on
-    the system.
-</ul>
-
-<h3>Partitioning</h3>
-
-Due to historical reasons, the term "partition" is regularly used for
-two different things in OpenBSD:
-
-<ul>
+    <a href="http://man.openbsd.org/disklabel">disklabel(8)</a> partitions, also
+    called filesystem partitions.
   <li>
-    <a href="http://man.openbsd.org/disklabel">disklabel(8)</a>
-    partitions, often called filesystem partitions.
-  <li>
-    <a href="http://man.openbsd.org/fdisk">fdisk(8)</a>
-    partitions, often called Master Boot Record (MBR) partitions.
+    <a href="http://man.openbsd.org/fdisk">fdisk(8)</a> partitions, sometimes
+    called Master Boot Record (MBR) partitions.
 </ul>
 
-All OpenBSD platforms use disklabel(8) as the primary way to manage
-OpenBSD filesystem partitions.
-Some platforms also require using fdisk(8) to manage MBR partitions.
-On the platforms that use them, one fdisk partition is used
-to hold all of the OpenBSD file systems.
-This partition is then sliced up into 16 disklabel partitions,
-labeled <tt>a</tt> through <tt>p</tt>.
-A few of these are special:
+All OpenBSD platforms use the disklabel program as the primary way to manage
+filesystem partitions.
+On the platforms that use fdisk, one MBR partition is used to hold all of the
+OpenBSD filesystems.
+This partition can be sliced into 16 disklabel partitions, labeled <tt>a</tt>
+through <tt>p</tt>.
 
-<ul>
-  <li><tt>a</tt>:
-    On the boot disk, the <tt>a</tt> partition is your root partition.
-  <li><tt>b</tt>:
-    On the boot disk, the <tt>b</tt> partition is automatically used
-    as a swap partition.
-  <li><tt>c</tt>:
-    On all disks, the <tt>c</tt> partition is the entire disk, from the
-    first sector to the last.
-</ul>
-
-<h3>Partition identification</h3>
-
-An OpenBSD filesystem is identified by the disk it is on, plus the
-disklabel partition on that disk.
-So, file systems may be identified by identifiers like <tt>sd0a</tt>
-(the <tt>a</tt> partition of the first <tt>sd</tt> device),
-<tt>wd2h</tt> (the <tt>h</tt> partition of the third <tt>wd</tt> device),
-or <tt>sd1c</tt> (the entire second <tt>sd</tt> device).
-The corresponding device files would be <tt>/dev/sd0a</tt> for the block device
-and <tt>/dev/rsd0a</tt> for the raw (character) device, etc.
+<p>
+Thus, a device name plus a disklabel identify an OpenBSD filesystem.
+For example, the identifier <tt>sd2a</tt> refers to the filesystem on the
+<tt>a</tt> partition of the third <tt>sd</tt> device.
+Its device files would be <tt>/dev/sd2a</tt> for the block device and
+<tt>/dev/rsd2a</tt> for the raw (character) device.
 Remembering whether a rarely used command needs a block or a character device
 is difficult.
 Therefore, many commands make use of the
-<a href="http://man.openbsd.org/opendev">opendev(3)</a>
-function, which automatically expands <tt>sd0</tt> to <tt>/dev/rsd0c</tt> or
-<tt>wd0a</tt> to <tt>/dev/wd0a</tt>, as appropriate.
+<a href="http://man.openbsd.org/opendev">opendev(3)</a> function, which
+automatically expands <tt>sd0</tt> to <tt>/dev/rsd0c</tt> or <tt>wd0a</tt> to
+<tt>/dev/wd0a</tt>, as appropriate.
 
 <p>
-If you put data on <tt>wd2d</tt>, then later remove <tt>wd1</tt>
-from the system and reboot, your data is now on <tt>wd1d</tt>, as your old
-<tt>wd2</tt> is now <tt>wd1</tt>.
-However, a drive's identification won't change after boot, so if
-a USB drive is unplugged or fails, it won't change the identification
-of other drives until reboot.
+A few labels are special:
+
+<ul>
+  <li><tt>a</tt>:
+    The boot disk's <tt>a</tt> partition is your root partition.
+  <li><tt>b</tt>:
+    The boot disk's <tt>b</tt> partition is usually a swap partition.
+  <li><tt>c</tt>:
+    The <tt>c</tt> partition is always the entire disk.
+</ul>
 
 <h3 id="DUID">Disklabel Unique Identifiers</h3>
 
 Disks can also be identified by Disklabel Unique Identifiers (DUIDs), a
 16 hex digit number, managed by the
-<a href="http://man.openbsd.org/diskmap">diskmap(4)</a>
-device.
+<a href="http://man.openbsd.org/diskmap">diskmap(4)</a> device.
 This number is a random number generated when a disklabel is first created.
-These UIDs are persistent -- if you identify your disks this way,
-drive <tt>f18e359c8fa2522b</tt> will always be <tt>f18e359c8fa2522b</tt>,
-no matter what order or how it is attached.
-You can specify partitions on the disk by appending a period and the
-partition letter, for example, <tt>f18e359c8fa2522b.d</tt> is the <tt>d</tt>
-partition of the disk <tt>f18e359c8fa2522b</tt> and will always refer
-to the same chunk of storage, no matter what order the device is attached
-to the system, or what kind of interface it is attached to.
+You can specify partitions on the disk by appending a period and the partition
+letter.
+For example, <tt>f18e359c8fa2522b.d</tt> is the <tt>d</tt> partition of the disk
+<tt>f18e359c8fa2522b</tt> and will always refer to the same chunk of storage, no
+matter what order the devices attached to the system, or what kind of interface
+it is attached to.
+If you put data on <tt>wd2d</tt>, then later remove <tt>wd1</tt> from the system
+and reboot, your data is now on <tt>wd1d</tt>, as your old <tt>wd2</tt> is now
+<tt>wd1</tt>.
+However, a drive's DUID won't change after boot.
 
 <h2 id="fdisk">Using fdisk</h2>
 
@@ -247,7 +214,7 @@ fdisk: 1>
 
 <h2 id="disklabel">Using disklabel</h2>
 
-<h3 id="disklabel.1">What is disklabel?</h3>
+<h3>What is disklabel?</h3>
 
 First, be sure to read the
 <a href="http://man.openbsd.org/disklabel">disklabel(8)</a> man page.
@@ -283,7 +250,7 @@ With
 you use one of these primary partitions to store all of your OpenBSD partitions,
 and you will still have 3 more partitions available for other OSs.
 
-<h3 id="disklabel.2">disklabel(8) during OpenBSD's install</h3>
+<h3>disklabel(8) during OpenBSD's install</h3>
 
 By default, the installer will allocate disklabels automatically.
 
@@ -615,42 +582,26 @@ This virtual disk is treated as any other disk, first partitioned with
 
 <h3 id="softraidDI">Installing to a mirror</h3>
 
-The tools to assemble your softraid system are in the basic OpenBSD
-install (for adding softraid devices after install), but they are
-also available on the CD-ROM and <a href="faq4.html#bsd.rd">bsd.rd</a>
-for installing your system to a softraid setup.
 This section covers installing OpenBSD to a mirrored pair of hard drives,
-and assumes familiarity with the <a href="faq4.html">installation process</a>
-and ramdisk kernel.
+and assumes familiarity with the <a href="faq4.html">installation process</a>.
 Disk setup may vary from platform to platform, and
 <b>booting from softraid devices isn't supported on all of them</b>.
 It's currently only possible to boot from RAID1, RAID5 and crypto volumes
 on i386, amd64 and sparc64.
 
 <p>
-The installation process will be a little different than the standard
-OpenBSD install, as you will want to drop to the shell and create your
-softraid(4) drive before doing the install.
-Once the softraid(4) disk is created, you will perform the install relatively
-normally, placing the partitions you wish to be RAIDed on the newly
-configured drive.
-If it sounds confusing at first, don't worry.
-All the steps will be explained in detail.
+Before using the install script, you will drop to a shell and set up a
+<a href="http://man.openbsd.org/softraid">softraid(4)</a> device.
 
 <p>
 The install kernel only has the <tt>/dev</tt> entries for one
-<a href="http://man.openbsd.org/wd">wd(4)</a>
-device and one
-<a href="http://man.openbsd.org/sd">sd(4)</a>
-device on boot, so you will need to manually create more disk devices
-if your desired softraid setup requires them.
-
-This process is normally done automatically by the installer, but you
-haven't yet run the installer, and you will be adding a disk that didn't
-exist at boot.
-For example, if we needed to support a second and third sd(4) device
-for a mirrored setup, you could do the following from the shell
-prompt:
+<a href="http://man.openbsd.org/wd">wd(4)</a> device and one
+<a href="http://man.openbsd.org/sd">sd(4)</a> device on boot, so you will need
+to manually create more disk devices if your desired softraid setup requires
+them.
+For example, if you need to support a second and third
+<a href="http://man.openbsd.org/sd">sd(4)</a> device for a mirrored setup, you
+could do the following from the shell prompt:
 
 <blockquote><pre>
 Welcome to the OpenBSD/amd64 X.X installation program.
@@ -664,16 +615,27 @@ You now have full support for the <tt>sd0</tt>, the <tt>sd1</tt> and
 
 <p>
 Next, we'll initialize the disks with
-<a href="http://man.openbsd.org/fdisk">fdisk(8)</a> and create the softraid
-partition with <a href="http://man.openbsd.org/disklabel">disklabel(8)</a>.
-An "a" partition will be made on both of the drives for the new RAID device.
-If you wish to boot from the MBR, do:
+<a href="http://man.openbsd.org/fdisk">fdisk(8)</a> and create RAID partitions
+with <a href="http://man.openbsd.org/disklabel">disklabel(8)</a>.
+
+<p>
+If you're booting from MBR, do:
 
 <blockquote><pre>
 # <b>fdisk -iy sd0</b>
-Writing MBR at offset 0.
 # <b>fdisk -iy sd1</b>
-Writing MBR at offset 0.
+</pre></blockquote>
+
+If you use GPT for UEFI booting, do:
+
+<blockquote><pre>
+# <b>fdisk -iy -g -b 960 sd0</b>
+# <b>fdisk -iy -g -b 960 sd1</b>
+</pre></blockquote>
+
+Create the partition layout on the first device:
+
+<blockquote><pre>
 # <b>disklabel -E sd0</b>
 Label editor (enter '?' for help at any prompt)
 > <b>a a</b>
@@ -685,19 +647,7 @@ FS type: [4.2BSD] <b>RAID</b>
 No label changes.
 </pre></blockquote>
 
-If you use GPT for UEFI booting, the fdisk(8) command is:
-
-<blockquote><pre>
-# <b>fdisk -b 960 -giy sd0</b>
-</pre></blockquote>
-
-This will change the offset of the first disklabel slice to 1024.
-
-<p>
-You'll notice that we initialized both disks, but only created a partition
-layout on the first drive.
-That's because you can easily import the drive's configuration directly with the
-<a href="http://man.openbsd.org/disklabel">disklabel(8)</a> command.
+Copy the partition layout to the second device:
 
 <blockquote><pre>
 # <b>disklabel sd0 > layout</b>
@@ -705,39 +655,23 @@ That's because you can easily import the drive's configuration directly with the
 # <b>rm layout</b>
 </pre></blockquote>
 
-The "layout" file in this example can be named anything.
-
-<p>
-Next, create the mirror with the
-<a href="http://man.openbsd.org/bioctl">bioctl(8)</a>
-command.
+Assemble the mirror with the
+<a href="http://man.openbsd.org/bioctl">bioctl(8)</a> command:
 
 <blockquote><pre>
 # <b>bioctl -c 1 -l sd0a,sd1a softraid0</b>
-</pre></blockquote>
-
-Note that if you are creating multiple RAID devices, either on one disk
-or on multiple devices, you're always going to be using the <tt>softraid0</tt>
-virtual disk interface driver.
-You won't be using "softraid1" or others.
-The "softraid0" there is a virtual RAID controller, and you can hang many
-virtual disks off this controller.
-
-<p>
-The new pseudo-disk device will show up as <tt>sd2</tt> here, assuming there
-are no other sd(4) devices on your system.
-This device will now show on the system console and dmesg as a newly
-installed device:
-
-<blockquote><pre>
 scsibus1 at softraid0: 1 targets
 sd2 at scsibus2 targ 0 lun 0: &lt;OPENBSD, SR RAID 1, 005&gt; SCSI2 0/direct fixed
 sd2: 10244MB, 512 bytes/sec, 20980362 sec total
 </pre></blockquote>
 
 This shows that we now have a new SCSI bus and a new disk, <tt>sd2</tt>.
-This volume will be automatically detected and assembled from this point
-onward when the system boots.
+This volume will be automatically detected and assembled when the system boots.
+
+<p>
+Even if you create multiple RAID arrays, the device name will always be
+<tt>softraid0</tt>.
+There won't be a <tt>softraid1</tt> or anything else.
 
 <p>
 Because the new device probably has a lot of garbage where you expect
@@ -759,18 +693,13 @@ example here) that should be there, rather than on <tt>sd0</tt> or <tt>sd1</tt>
 (the non-RAID disks).
 
 <p>
-Now you can reboot your system and, if you have done things properly, it
-will automatically assemble your RAID set and mount the appropriate
-partitions.
-
-<p>
 To check on the status of your mirror, issue the following command:
 
 <blockquote><pre>
 # <b>bioctl sd2</b>
 </pre></blockquote>
 
-A nightly cron job to check the status might also be a good idea.
+A nightly cron job to check the status might be a good idea.
 
 <h4>Rebuilding a mirror</h4>
 
@@ -826,11 +755,23 @@ adversary to deduce how much space is actually being used.
 Next, we'll initialize the disk with
 <a href="http://man.openbsd.org/fdisk">fdisk(8)</a> and create the softraid
 partition with <a href="http://man.openbsd.org/disklabel">disklabel(8)</a>.
-If you wish to boot from the MBR, do:
+
+<p>
+If you're booting from MBR, do:
 
 <blockquote><pre>
 # <b>fdisk -iy sd0</b>
-Writing MBR at offset 0.
+</pre></blockquote>
+
+If you use GPT for UEFI booting, do:
+
+<blockquote><pre>
+# <b>fdisk -iy -g -b 960 sd0</b>
+</pre></blockquote>
+
+Next, create the partition layout:
+
+<blockquote><pre>
 # <b>disklabel -E sd0</b>
 Label editor (enter '?' for help at any prompt)
 > <b>a a</b>			<!-- sparc64 users MUST use 'a a' here -->
@@ -842,15 +783,6 @@ FS type: [4.2BSD] <b>RAID</b>
 No label changes.
 </pre></blockquote>
 
-If you use GPT for UEFI booting, the fdisk(8) command is:
-
-<blockquote><pre>
-# <b>fdisk -b 960 -giy sd0</b>
-</pre></blockquote>
-
-This will change the offset of the first disklabel slice to 1024.
-
-<p>
 We'll use the entire disk, but note that the encrypted device can be
 split up into multiple partitions as if it were a regular hard drive.
 
