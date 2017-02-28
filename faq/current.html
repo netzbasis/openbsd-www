@@ -558,26 +558,60 @@ should be appended to the appropriate config files
 In addition, if MySQL is used, the option <tt>MYSQL_OPT 0</tt> should also be
 set.
 
+
 <h3 id="r20170226">2017/02/26 - switch from xdm(1) to xenodm(1)</h3>
 
-The X Display Manager has been switched to <a href="http://man.openbsd.org/xenodm.1">xenodm(1)</a>. If you enabled xdm in <tt>/etc/rc.conf.local</tt> you need to update your configuration.
+The X Display Manager has been switched to
+<a href="http://man.openbsd.org/xenodm.1">xenodm(1)</a>.
+If you enabled xdm in <tt>/etc/rc.conf.local</tt>, you need to update your
+configuration:
 
 <blockquote><pre>
 # <b>rcctl disable xdm</b>
 # <b>rcctl enable xenodm</b>
 </pre></blockquote>
 
-If any local configuration change was made to <tt>/etc/X11/xdm/</tt>, it should be migrated to the corresponding <tt>/etc/X11/xenodm</tt> file. After that the xdm files can be removed:
+If any local configuration change was made to <tt>/etc/X11/xdm/</tt>, it should
+be migrated to the corresponding <tt>/etc/X11/xenodm</tt> file.
+After that the xdm files can be removed:
 
 <blockquote><pre>
 # <b>rm -rf /etc/X11/xdm</b>
-# <b>rm /usr/X11R6/bin/xdm \
-  /usr/X11R6/man/man1/xdm.1 \
-  /etc/rc.d/xdm</b>
+# <b>rm /usr/X11R6/bin/xdm /usr/X11R6/man/man1/xdm.1 /etc/rc.d/xdm</b>
 </pre></blockquote>
 
+Your <a href="http://man.openbsd.org/autoinstall">autoinstall(8)</a> response
+file may need to be adjusted since the xdm question was changed to:
+
+<blockquote><pre>
+Do you want the X Window System to be started by xenodm(1)
+</pre></blockquote>
+
+
+<h3 id="r20170227">2017/02/27 - pkg.conf(5) no longer supported</h3>
+
+The <tt>pkg_*</tt> tools now use the
+<a href="http://man.openbsd.org/installurl.5">installurl(5)</a> file to
+find the main package repository.
+Please create the <tt>/etc/installurl</tt> file manually with your preferred
+<a href="../ftp.html">mirror</a>:
+
+<blockquote><pre>
+# <b>echo 'https://your.mirror/pub/OpenBSD' > /etc/installurl</b>
+</pre></blockquote>
+
+Since the <a href="http://man.openbsd.org/pkg.conf.5">pkg.conf(5)</a> file
+will no longer be used by tools, you may remove it:
+
+<blockquote><pre>
+# <b>rm /etc/pkg.conf</b>
+</pre></blockquote>
+
+Use the <tt>PKG_PATH</tt> environment variable in case you need to specify more
+than one repository.
+
 <hr>
-<small>$OpenBSD: current.html,v 1.791 2017/02/26 22:00:58 matthieu Exp $</small>
+<small>$OpenBSD: current.html,v 1.796 2017/02/28 01:05:14 tb Exp $</small>
 
 </body>
 </html>

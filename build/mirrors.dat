@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.498 2017/02/23 19:52:59 tj Exp $
+# $OpenBSD: mirrors.dat,v 1.501 2017/02/27 20:03:58 tj Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -126,6 +126,7 @@ GT	Sofia
 FE	1
 FF	ftp.eu.openbsd.org
 UH	http://openbsd.ipacct.com/pub/OpenBSD/
+UHS	https://openbsd.ipacct.com/pub/OpenBSD/
 UF	ftp://openbsd.ipacct.com/pub/OpenBSD/
 UR	rsync://openbsd.ipacct.com/OpenBSD/
 ME	office@ipacct.com
@@ -646,8 +647,7 @@ GI	Japan Advanced Institute of Science and Technology
 ME	ftp-admin@is.naist.jp
 UF	ftp://ftp.jaist.ac.jp/pub/OpenBSD/
 UH	http://ftp.jaist.ac.jp/pub/OpenBSD/
-# we don't have CA yet:
-# C=JP/O=SECOM Trust Systems CO.,LTD./OU=Security Communication RootCA2
+# redirects to http
 #UHS	https://ftp.jaist.ac.jp/pub/OpenBSD/
 UR	rsync://ftp.jaist.ac.jp/pub/OpenBSD/
 
@@ -912,6 +912,7 @@ GZ	ch
 GT	Zurich
 ME	SWITCHmirror@switch.ch
 FE	4
+# will not implement https
 UF	ftp://mirror.switch.ch/pub/OpenBSD/
 UH	http://mirror.switch.ch/ftp/pub/OpenBSD/
 
