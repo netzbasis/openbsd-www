@@ -159,7 +159,7 @@ This information is used by
 
 You can make things easy by defining your preferred
 <a href="../ftp.html">mirror</a> in the <tt>PKG_PATH</tt> environment variable
-or <a href="http://man.openbsd.org/pkg.conf">pkg.conf(5)</a> file.
+or <a href="http://man.openbsd.org/OpenBSD-6.0/pkg.conf">pkg.conf(5)</a> file.
 
 <p>
 <b>Example 1:</b> fetching packages with <tt>PKG_PATH</tt>:
@@ -186,7 +186,7 @@ If you are using snapshots, replace "$(uname -r)" with "snapshots" instead.
 
 <p>
 <b>Example 2:</b> fetching packages with
-<a href="http://man.openbsd.org/pkg.conf">pkg.conf(5)</a>:
+<a href="http://man.openbsd.org/OpenBSD-6.0/pkg.conf">pkg.conf(5)</a>:
 
 <blockquote><pre>
 # <b>echo 'installpath = a.local.mirror' > /etc/pkg.conf</b>
@@ -332,8 +332,6 @@ unzip-5.52->unzip-5.52p0: ok
 Read shared items: ok
 </pre></blockquote>
 
-For safety, modified configuration files will not be removed.
-If you prefer to have them removed automatically, use the <tt>-c</tt> flag.
 When a package has dependencies, they are also examined for updates.
 Invoking <a href="http://man.openbsd.org/pkg_add">pkg_add(1)</a> with
 only the <tt>-u</tt> flag will try to update all installed packages.
@@ -469,10 +467,9 @@ Once you have decided which flavor of the ports tree you want, you can
 get it from different sources.
 The table below gives an overview of where you can find the different
 flavors, and in which form.
-An 'x' marks availability and '-' means it is not available through
+An 'o' marks availability and '-' means it is not available through
 that specific source.
 
-<!-- XXXrelease - remove cd mentions for 6.1 -->
 <p>
 <table border="1" align="center" style="empty-cells: show;">
 <tr align="center">
@@ -488,34 +485,25 @@ that specific source.
 <td>-current</td>
 </tr>
 <tr align="center">
-<td align="left"><a href="../orders.html">CD-ROM</a></td>
+<td align="left"><a href="../ftp.html">Mirrors</a></td>
 <td>.tar.gz</td>
-<td>x</td>
+<td>o</td>
 <td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr align="center">
-<td align="left"><a href="../ftp.html">HTTP mirrors</a></td>
-<td>.tar.gz</td>
-<td>x</td>
-<td>-</td>
-<td>x</td>
+<td>o</td>
 <td>-</td>
 </tr>
 <tr align="center">
 <td align="left"><a href="../anoncvs.html">AnonCVS</a></td>
 <td>cvs checkout</td>
-<td>x</td>
-<td>x</td>
+<td>o</td>
+<td>o</td>
 <td>-</td>
-<td>x</td>
+<td>o</td>
 </tr>
 </table>
 
 <p>
-<!-- XXXrelease - remove cd mentions for 6.1 -->
-On the CD-ROM and HTTP mirrors, look for a file named <tt>ports.tar.gz</tt>.
+Look for a file named <tt>ports.tar.gz</tt> on the mirrors.
 
 <blockquote><pre>
 $ <b>cd /tmp</b>
