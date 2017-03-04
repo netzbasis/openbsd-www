@@ -605,7 +605,7 @@ Since the <a href="http://man.openbsd.org/pkg.conf.5">pkg.conf(5)</a> file
 will no longer be used by tools, you may remove it:
 
 <blockquote><pre>
-# <b>rm /etc/pkg.conf /usr/share/man/man5/pkg.conf.5</b>
+# <b>rm /etc{,/examples}/pkg.conf /usr/share/man/man5/pkg.conf.5</b>
 </pre></blockquote>
 
 Use the <tt>PKG_PATH</tt> environment variable in case you need to specify more
@@ -620,11 +620,22 @@ Please read the official
 <a href="https://awesomewm.org/apidoc/documentation/17-porting-tips.md.html#v4">
 tips for upgrading your configuration</a>.
 
+
+<h3 id="r20170302">2017/03/02 - sysctl machdep.lidsuspend renamed to machdep.lidaction</h3>
+
+The <tt>machdep.lidsuspend</tt> sysctl variable has been renamed to
+<tt>machdep.lidaction</tt> to reflect newly added functionality in the name.
+For now the old name will stay around, but it might be removed in a future
+release.
+It is advised to update
+<a href="http://man.openbsd.org/sysctl.conf.5">sysctl.conf(5)</a>
+to use the new name.
+
 <p>
 
 
 <hr>
-<small>$OpenBSD: current.html,v 1.799 2017/03/02 21:42:55 tb Exp $</small>
+<small>$OpenBSD: current.html,v 1.801 2017/03/03 11:17:32 natano Exp $</small>
 
 </body>
 </html>
