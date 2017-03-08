@@ -93,6 +93,57 @@ to 6.1.
         <a href="http://man.openbsd.org/switchd.8">switchd(8)</a> and
         <a href="http://man.openbsd.org/switchctl.8">switchctl(8)</a>
         programs.
+    <li><a href="http://man.openbsd.org/route.8">route(8)</a>
+	and netstat -r display all routing flags correctly and they
+	are completely documented in the
+	<a href="http://man.openbsd.org/netstat.1">netstat(1)</a>
+	man page.
+    <li>When sending TCP streams they are locally stored in large
+	mbuf clusters to improve memory management.
+	The maximum TCP send and receive buffer size has been
+	increased from 256MB to 2GB.
+	Note that this results in a different
+	<a href="http://man.openbsd.org/pf.4">pf(4)</a>
+	OS fingerprint for OpenBSD.
+	The default limit for mbuf clusters has been increased.
+	You can check the values with
+	<a href="http://man.openbsd.org/netstat.1">netstat(1)</a>
+	-m and adjust them with
+	<a href="http://man.openbsd.org/sysctl.8">sysctl(8)</a>
+	kern.maxclusters.
+    <li>Make the TCP_NOPUSH flag work for
+	<a href="http://man.openbsd.org/listen.2">listen(2)</a>
+	sockets.
+	It is inherited by the socket returned from
+	<a href="http://man.openbsd.org/accept.2">accept(2)</a>.
+    <li>A lot of code has been removed or simplified to make the
+	transition to multi-processor easier.
+	Redesign the interrupt and multi-processor locks in the
+	network stack.
+    <li>When passing packets from the network stack to the
+	interface layer, make sure that they have no pointers to
+	<a href="http://man.openbsd.org/pf.4">pf(4)</a>
+	which could result in a memory free operation at the wrong
+	protection level.
+    <li>Fix checksum calculation in
+	<a href="http://man.openbsd.org/pf.4">pf(4)</a>
+	af-to ICMP packet conversions.
+	Simplify af-to processing in and fix path MTU discovery in
+	some corner cases.
+    <li>Improve IPv6 fragment processing.
+	Drop empty atomic fragments early.
+	Be more paranoid when IPv6 hop-by-hop headers appear after
+	fragment headers.
+	Follow RFC 5722 "Handling of Overlapping IPv6 Fragments"
+	more strictly in
+	<a href="http://man.openbsd.org/pf.4">pf(4)</a>.
+	RFC 8021 "IPv6 Atomic Fragments Considered Harmful" deprecates
+	generating atomic fragments, so do not send them anymore.
+    <li>Depending on the addresses,
+	<a href="http://man.openbsd.org/ipsecctl.8">ipsecctl(8)</a>
+	may automatically group SA bundles together.
+	To make clear what is going on, the kernel provides this
+	information and ipsecctl -s sa prints IPsec SA bundles.
     <li>...
     </ul>
 <p>
@@ -112,13 +163,16 @@ to 6.1.
         binary and share the engine.
     <li><a href="http://man.openbsd.org/ripd.8">ripd(8)</a> now supports
         p2p links with addresses in different subnets.
+    <li>UDP speakers can specify an IPv4 source address using
+        <tt>IP_SENDSRCADDR</tt>.
+        <a href="http://man.openbsd.org/iked.8">iked(8)</a>
+        and <a href="http://man.openbsd.org/snmpd.8">snmpd(8)</a> now
+        use the proper source address when sending replies.
+    <li><a href="http://man.openbsd.org/snmpd.8">snmpd(8)</a> now
+        supports multiple listening sockets.
     <li><a href="http://man.openbsd.org/ospfd.8">ospfd(8)</a> and
         <a href="http://man.openbsd.org/ospf6d.8">ospf6d(8)</a> now cope
         with interface MTU change at runtime.
-    <li>support for the RES_USE_EDNS0 and RES_USE_DNSSEC flags has
-        been added to the
-        <a href="http://man.openbsd.org/resolver.3">resolver(3)</a>
-        implementation.
     <li>...
     </ul>
 <p>
@@ -128,6 +182,16 @@ to 6.1.
     <li>Enforcement of userland W^X on OCTEON Plus and later.
     <li>The size of user virtual address space has been increased
         from 2GB to 1TB on mips64.
+    <li><a href="http://man.openbsd.org/route6d.8">route6d(8)</a> now
+        runs with fewer privileges.
+    <li>For incoming TLS connections
+	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	can validate client certificates with a given CA file.
+    <li>The priviledged parent process of
+	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	calls
+	<a href="http://man.openbsd.org/execve.2">exec(2)</a>
+	to reshuffle its random memory layout.
     <li>...
     </ul>
 <p>
@@ -146,6 +210,36 @@ to 6.1.
         <a href="http://man.openbsd.org/ksh.1">ksh(1)</a> Vi input mode.
     <li>UTF-8 support in
         <a href="http://man.openbsd.org/column.1">column(1)</a>.
+    <li>Estonian keyboard support.
+    <li><a href="http://man.openbsd.org/read.2">read(2)</a> on
+        directories now fails instead of returning 0.
+    <li>Support for the <tt>RES_USE_EDNS0</tt> and <tt>RES_USE_DNSSEC</tt>
+        flags has been added to the
+        <a href="http://man.openbsd.org/resolver.3">resolver(3)</a>
+        implementation.
+    <li><a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	limits the socket buffer for TCP an TLS connections to 64K
+	to avoid wasting kernel memory.
+    <li><a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	supports the option -Z to print the timestamp in RFC 5424
+	ISO format.
+	This logs everything in UTC including the year, timezone
+	and fractions of seconds.
+	The default is still RFC 3164 BSD syslog time format.
+    <li>The
+	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	options -a, -T, and -U can be given more than once to specify
+	multiple input sources.
+    <li>Improve the
+	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	output and diagnostics in case the klog buffer
+	overflows.
+    <li>Make SIGHUP handling in
+	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	more reliable.
+    <li>An NMI sends the amd64 kernel into
+	<a href="http://man.openbsd.org/ddb.4">ddb(4)</a>
+	more reliably.
     <li>...
     </ul>
 <p>
@@ -278,34 +372,24 @@ to 6.1.
 
 <h3 id="install"><font color="#0000e0">How to install</font></h3>
 
-Following this are the instructions which you would have on a piece of
-paper if you had purchased a CDROM set instead of doing an alternate
-form of install.  The instructions for doing an HTTP (or other style
-of) install are very similar; the CDROM instructions are left intact
-so that you can see how much easier it would have been if you had
-purchased a CDROM instead.
-<p>
-
-<hr>
-<p>
-Please refer to the following files on the three CDROMs or mirror site for
+Please refer to the following files on the mirror site for
 extensive details on how to install OpenBSD 6.1 on your machine:
 
 <ul>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/alpha/INSTALL.alpha">
-	.../OpenBSD/6.1/alpha/INSTALL.alpha (on CD1)</a>
+	.../OpenBSD/6.1/alpha/INSTALL.alpha</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/i386/INSTALL.i386">
-	.../OpenBSD/6.1/i386/INSTALL.i386 (on CD1)</a>
+	.../OpenBSD/6.1/i386/INSTALL.i386</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/hppa/INSTALL.hppa">
-	.../OpenBSD/6.1/hppa/INSTALL.hppa (on CD1)</a>
+	.../OpenBSD/6.1/hppa/INSTALL.hppa</a>
 <p>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/amd64/INSTALL.amd64">
-	.../OpenBSD/6.1/amd64/INSTALL.amd64 (on CD2)</a>
+	.../OpenBSD/6.1/amd64/INSTALL.amd64</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/macppc/INSTALL.macppc">
-	.../OpenBSD/6.1/macppc/INSTALL.macppc (on CD2)</a>
+	.../OpenBSD/6.1/macppc/INSTALL.macppc</a>
 <p>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/sparc64/INSTALL.sparc64">
-	.../OpenBSD/6.1/sparc64/INSTALL.sparc64 (on CD3)</a>
+	.../OpenBSD/6.1/sparc64/INSTALL.sparc64</a>
 <p>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/armv7/INSTALL.armv7">
 	.../OpenBSD/6.1/armv7/INSTALL.armv7</a>
@@ -321,10 +405,7 @@ extensive details on how to install OpenBSD 6.1 on your machine:
 	.../OpenBSD/6.1/octeon/INSTALL.octeon</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/sgi/INSTALL.sgi">
 	.../OpenBSD/6.1/sgi/INSTALL.sgi</a>
-<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/socppc/INSTALL.socppc">
-	.../OpenBSD/6.1/socppc/INSTALL.socppc</a>
 </ul>
-
 
 <hr>
 
@@ -338,9 +419,9 @@ INSTALL.* file as listed above!
 
 <ul style="list-style-type: none">
 <li>
-The OpenBSD/i386 release is on CD1.
-Boot from the CD to begin the install - you may need to adjust
-your BIOS options first.
+If your machine can boot from CD, you can write <i>install61.iso</i> or
+<i>cd61.iso</i> to a CD and boot from it.
+You may need to adjust your BIOS options first.
 <p>
 <li>
 If your machine can boot from USB, you can write <i>install61.fs</i> or
@@ -360,9 +441,9 @@ read INSTALL.i386.
 
 <ul style="list-style-type: none">
 <li>
-The OpenBSD/amd64 release is on CD2.
-Boot from the CD to begin the install - you may need to adjust
-your BIOS options first.
+If your machine can boot from CD, you can write <i>install61.iso</i> or
+<i>cd61.iso</i> to a CD and boot from it.
+You may need to adjust your BIOS options first.
 <p>
 <li>
 If your machine can boot from USB, you can write <i>install61.fs</i> or
@@ -395,11 +476,12 @@ Alternatively, at the Open Firmware prompt, enter <i>boot cd:,ofwboot
 
 <ul style="list-style-type: none">
 <li>
-Put CD3 in your CDROM drive and type <i>boot cdrom</i>.
+Burn the image from a mirror site to a CDROM, boot from it, and type
+<i>boot cdrom</i>.
 <p>
 <li>
 If this doesn't work, or if you don't have a CDROM drive, you can write
-<i>CD3:6.1/sparc64/floppy61.fs</i> or <i>CD3:6.1/sparc64/floppyB61.fs</i>
+<i>floppy61.fs</i> or <i>floppyB61.fs</i>
 (depending on your machine) to a floppy and boot it with <i>boot
 floppy</i>. Refer to INSTALL.sparc64 for details.
 <p>
@@ -408,7 +490,7 @@ Make sure you use a properly formatted floppy with NO BAD BLOCKS or your install
 will most likely fail.
 <p>
 <li>
-You can also write <i>CD3:6.1/sparc64/miniroot61.fs</i> to the swap partition on
+You can also write <i>miniroot61.fs</i> to the swap partition on
 the disk and boot with <i>boot disk:b</i>.
 <p>
 <li>
@@ -419,9 +501,9 @@ If nothing works, you can boot over the network as described in INSTALL.sparc64.
 
 <ul style="list-style-type: none">
 <li>
-Write <i>FTP:6.1/alpha/floppy61.fs</i> or
-<i>FTP:6.1/alpha/floppyB61.fs</i> (depending on your machine) to a diskette and
-enter <i>boot dva0</i>. Refer to INSTALL.alpha for more details.
+Write <i>floppy61.fs</i> or <i>floppyB61.fs</i> (depending on your machine)
+to a diskette and enter <i>boot dva0</i>.
+Refer to INSTALL.alpha for more details.
 <p>
 <li>
 Make sure you use a properly formatted floppy with NO BAD BLOCKS or your install
@@ -494,14 +576,6 @@ Refer to the instructions in INSTALL.sgi for more details.
 If your machine doesn't have a CD drive, you can setup a DHCP/tftp network
 server, and boot using "bootp()/bsd.rd.IP##" using the kernel matching your
 system type. Refer to the instructions in INSTALL.sgi for more details.
-</ul>
-
-<h3><font color="#e00000">OpenBSD/socppc:</font></h3>
-
-<ul style="list-style-type: none">
-<li>
-After connecting a serial port, boot over the network via DHCP/tftp.
-Refer to the instructions in INSTALL.socppc for more details.
 </ul>
 
 <hr>
