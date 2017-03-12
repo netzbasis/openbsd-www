@@ -245,9 +245,10 @@ to 6.1.
 <li>Security improvements:
     <ul>
     <li>Enforcement of userland W^X on OCTEON Plus and later.
-    <li>All shared libraries and all dynamic and static-PIE executables use
+    <li>All shared libraries, all dynamic and static-PIE executables, and
+	<a href="http://man.openbsd.org/ld.so.1">ld.so(1)</a> itself use
 	the RELRO ("read-only after relocation") design such that
-	more of the initial data can be protected as read-only.
+	more of the initial data is protected as read-only.
     <li>The size of user virtual address space has been increased
         from 2GB to 1TB on mips64.
     <li>PIE and -static -pie on arm (XXX someone please explain this better).
@@ -265,15 +266,21 @@ to 6.1.
         <a href="http://man.openbsd.org/recallocarray.3">recallocarray(3)</a>
         to reduce the risk of incorrect clearing of memory before and after
         <a href="http://man.openbsd.org/reallocarray.3">reallocarray(3)</a>.
-    <li><a href="http://man.openbsd.org/sha256init.3">SHA512_256</a> family
+    <li><a href="http://man.openbsd.org/sha2.3">SHA512_256</a> family
 	of functions added to libc.
-    <li>arm added to the list of arch where the
+    <li>arm added to the list of archs where the
 	<a href="http://man.openbsd.org/setjmp.3">setjmp(3)</a>
 	family of functions apply XOR cookies to stack and return-address
-	values in the jmpbuf on arm as well.
+	values in the jmpbuf.
     <li><a href="http://man.openbsd.org/printf.3">printf(3)</a> family
         of formatting functions now report to syslog when the %s
         format is used with a NULL pointer.
+    <li>Heap buffer overflow detection has been improved when the C
+	<a href="http://man.openbsd.org/malloc.3">malloc(3)</a> option is used.
+	The existing S option now includes C.
+    <li>Support for permitting non-root users to
+	<a href="http://man.openbsd.org/mount.8">mount(8)</a> filesystems
+	has been removed.
     <li>...
     </ul>
 <p>
@@ -292,6 +299,9 @@ to 6.1.
         <a href="http://man.openbsd.org/ksh.1">ksh(1)</a> Vi input mode.
     <li>UTF-8 support in
         <a href="http://man.openbsd.org/column.1">column(1)</a>.
+    <li>The performance and concurrency of the
+	<a href="http://man.openbsd.org/malloc.3">malloc(3)</a> family
+	in multi-threaded processes has been improved.
     <li>Estonian keyboard support.
     <li><a href="http://man.openbsd.org/read.2">read(2)</a> on
         directories now fails instead of returning 0.
@@ -322,6 +332,17 @@ to 6.1.
     <li>An NMI sends the amd64 kernel into
 	<a href="http://man.openbsd.org/ddb.4">ddb(4)</a>
 	more reliably.
+    <li><a href="http://man.openbsd.org/ld.so.1">ld.so(1)</a> now
+	supports the DT_PREINITARRAY, DT_INITARRAY, DT_FINIARRAY, DT_FLAGS,
+	and DT_RUNPATH dynamic tags.
+    <li><a href="http://man.openbsd.org/kdump.1">kdump(1)</a>
+	now dumps the fds returned by 
+	<a href="http://man.openbsd.org/pipe.2">pipe(2)</a> and
+	<a href="http://man.openbsd.org/socketpair.2">socketpair(2)</a>.
+    <li>Added support to <a href="http://man.openbsd.org/doas.1">doas(1)</a>
+	for session-locked persistent authentication.
+    <li>Use a hardware register for the thread pointer on arm for improved
+	performance in multi-threaded processes.
     <li>...
     </ul>
 <p>
