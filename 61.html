@@ -285,6 +285,41 @@ to 6.1.
     </ul>
 <p>
 
+<li><a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
+    <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
+    <ul>
+    <li>Support for i386 hosts
+    <li>Support for AMD SVM hosts (i386/amd64)
+    <li>Better interrupt handling and legacy device emulation
+    <li><a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a> no longer
+        requires VMX unrestricted guest capability (Nehalem and later CPUs
+        are sufficient)
+    <li>Removed bounce buffers prevoiusly used by
+        <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> for
+        <a href="http://man.openbsd.org/vio.4">vio(4)</a> and 
+        <a href="http://man.openbsd.org/vioblk.4">vioblk(4)</a> devices.
+    <li>Support VMs with &gt; 2GB RAM
+    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> now uses
+        fork+exec model
+    <li>More
+        <a href="http://man.openbsd.org/pledge.2">pledge(2)</a> usage across
+        <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>
+    <li><a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
+        expanded to include VM ownership rules (uid/gid)
+    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> support for
+        basic boot&gt; options (eg, "-s" for single user mode)
+    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>/
+        <a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a> now
+        supports automatic
+        <a href="http://man.openbsd.org/bridge.4">bridge(4)</a> and
+        <a href="http://man.openbsd.org/switch.4">switch(4)</a> configuration
+        for VM network interfaces
+    <li><a href="http://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> supports
+        graceful VM shutdown via
+        <a href="http://man.openbsd.org/amd64/vmmci.4">vmmci(4)</a>
+    </ul>
+<p>
+ 
 <li>Assorted improvements:
     <ul>
     <li><a href="http://man.openbsd.org/acme-client.1">acme-client(1)</a>, a
@@ -414,8 +449,8 @@ to 6.1.
     <table border=0 cellspacing=0 cellpadding=2 width="95%">
     <tr>
     <td valign="top" width="50%"><ul>
-	<li>Afl 2.39b
-	<li>Chromium 56.0.2924.87
+	<li>AFL 2.39b
+	<li>Chromium 57.0.2987.98
 	<li>Emacs 21.4 and 25.1
 	<li>GCC 4.9.4
 	<li>GHC 7.10.3
@@ -425,7 +460,7 @@ to 6.1.
 	<li>Groff 1.22.3
 	<li>JDK 7u80 and 8u121
 	<li>KDE 3.5.10 and 4.14.3 (plus KDE4 core updates)
-	<li>LLVM/Clang 4.0.0rc2
+	<li>LLVM/Clang 4.0.0
 	<li>LibreOffice 5.2.4.2
 	<li>Lua 5.1.5, 5.2.4, and 5.3.4
 	<li>MariaDB 10.0.29
