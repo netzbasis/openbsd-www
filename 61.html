@@ -209,6 +209,8 @@ to 6.1.
 	may automatically group SA bundles together.
 	To make clear what is going on, the kernel provides this
 	information and ipsecctl -s sa prints IPsec SA bundles.
+    <li>A new routing socket message type, RTM_PROPOSAL, was added to
+	facilitate future improvements to the network configuration process.
     <li>...
     </ul>
 <p>
@@ -219,6 +221,11 @@ to 6.1.
         verifying the install sets.
     <li>Install sets are now fetched over an HTTPS connection by default
         when using a <a href="ftp.html">mirror</a> that supports it.
+    <li>The installer now considers all of the DHCP information in filename,
+	bootfile-name, server-name, tftp-server-name, and next-server when
+	attempting to do automatic installs or upgrades.
+    <li>The installer no longer adds a route to an alias IP via 127.0.0.1, due
+	to improvements in the kernel routing components.
     <li>...
     </ul>
 <p>
@@ -293,6 +300,23 @@ to 6.1.
     </ul>
 <p>
 
+<li><a href="http://man.openbsd.org/dhclient.8">dhclient(8)</a>/
+    <a href="http://man.openbsd.org/dhcpd.8">dhcpd(8)</a>/
+    <a href="http://man.openbsd.org/dhcrelay.8">dhcrelay(8)</a> improvements:
+    <ul>
+    <li>Add DHO_BOOTFILE_NAME and DHO_TFTP_SERVER to the options requested by default.
+    <li>Add support for RFC 6842 (Client Identifier Option in DHCP Server Replies).
+    <li>Stop leaking option data received on the udp socket.
+    <li>Stop pretending we use RFC 3046/Option 82/Relay Agent Information.
+    <li>Stop recording ignored DHO_ROUTERS and DHO_STATIC_ROUTES options in the effective lease.
+    <li>Use only leases from no SSID or the current SSID when restarting.
+    <li>Reduce default values for various timeouts to something more
+	    appropriate to modern networks.
+    <li>Fix issues with redundant dhcpd servers and CARP'd interfaces.
+    <li>Switch to standard logging functions
+    </ul>
+
+<p>
 <li><a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
     <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
     <ul>
@@ -401,6 +425,18 @@ to 6.1.
 	This lets the interface work with DHCP.
     <li>Multiprocessor-safe PCI interrupt handlers are run
 	without the kernel lock on OpenBSD/sgi.
+    <li><a href="http://man.openbsd.org/fdisk.8">fdisk(8)</a> now unconditionally
+	sets the size of the protective MBR's EFI GPT partition to UINT32_MAX.
+    <li><a href="http://man.openbsd.org/fdisk.8">fdisk(8)</a> now respects the
+	current MBR or GPT format when initializing a disk.
+    <li><a href="http://man.openbsd.org/softraid.4">softraid(4)</a> now uses
+	    sufficient parallel i/o's to efficiently rebuild RAID5 volumes.
+    <li><a href="http://man.openbsd.org/asr_run.3">asr</a> now accepts UDP
+	    packets of up to 4096 bytes to account for broken DNS servers.
+    <li><a href="http://man.openbsd.org/umass.4">umass(4)</a> no longer assumes
+	    that ATAPI or UFI devices have only 1 LUN.
+    <li><a href="http://man.openbsd.org/scsi.4">scsi(4)</a> now correctly
+	    detects end of tape on LTO5 devices.
     <li>...
     </ul>
 <p>
@@ -501,7 +537,7 @@ to 6.1.
 	<li>Python 2.7.13, 3.4.5, 3.5.2 and 3.6.0
 	<li>R 3.3.3
 	<li>Ruby 1.8.7.374, 2.1.9, 2.2.6, 2.3.3 and 2.4.0
-	<li>Rust 1.15.1
+	<li>Rust 1.16.0
 	<li>Sendmail 8.15.2
 	<li>SQLite3 3.17.0
 	<li>Sudo 1.8.19.2

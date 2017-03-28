@@ -512,6 +512,7 @@ version before removing these files.
 <blockquote><pre>
 # <b>rm -rf \
   /usr/bin/perl5* \
+  /usr/lib/libperl.so.17.* \
   /usr/libdata/perl5/*-openbsd/5.*/ \
   /usr/bin/a2p \
   /usr/bin/config_data \
@@ -643,21 +644,33 @@ If you installed dnsdist, run the following commands.
 # <b>usermod -g 788 -u 788 _dnsdist</b>
 </pre></blockquote>
 
-<p>
 
-<h3 id="r20170325">2017/03/25 - binutils update</h3>
-Binutils must be installed before compiling an amd64 kernel, due to
-assembler support change.
+<h3 id="r20170325">2017/03/25 - amd64 binutils update</h3>
+
+If you have binutils older than from March 16th, a new version must be installed
+before compiling an amd64 kernel, due to assembler support change:
+
 <blockquote><pre>
 $ <b>cd /usr/src/gnu/usr.bin/binutils-2.17</b>
-$ <b>doas make -f Makefile.bsd-wrapper obj</b>
-$ <b>doas make -f Makefile.bsd-wrapper depend</b>
-$ <b>doas make -f Makefile.bsd-wrapper</b>
+$ <b>make -f Makefile.bsd-wrapper obj</b>
+$ <b>make -f Makefile.bsd-wrapper depend</b>
+$ <b>make -f Makefile.bsd-wrapper</b>
 $ <b>doas make -f Makefile.bsd-wrapper install</b>
 </pre></blockquote>
 
+
+<h3 id="r20170325a">2017/03/25 - vmd(8) changes</h3>
+
+VMs now boot using the LGPLv3 SeaBIOS from <tt>/etc/firmware/vmm-bios</tt>.
+Booting OpenBSD kernels or non-default BIOS images is still supported:
+instead of <tt>-k/kernel</tt>, you now need to use the new <tt>-b</tt>
+command line option of <a href="http://man.openbsd.org/vmctl">vmctl(8)</a>.
+Similarly, in <a href="http://man.openbsd.org/vm.conf">vm.conf(5)</a>,
+the <tt>kernel</tt> option was replaced with <tt>boot</tt>.
+
+<p>
 <hr>
-<small>$OpenBSD: current.html,v 1.804 2017/03/26 14:04:29 espie Exp $</small>
+<small>$OpenBSD: current.html,v 1.808 2017/03/27 20:53:59 tb Exp $</small>
 
 </body>
 </html>
