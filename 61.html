@@ -511,7 +511,7 @@ to 6.1.
     <tr>
     <td valign="top" width="50%"><ul>
 	<li>AFL 2.39b
-	<li>Chromium 57.0.2987.110
+	<li>Chromium 57.0.2987.133
 	<li>Emacs 21.4 and 25.1
 	<li>GCC 4.9.4
 	<li>GHC 7.10.3
@@ -526,11 +526,11 @@ to 6.1.
 	<li>Lua 5.1.5, 5.2.4, and 5.3.4
 	<li>MariaDB 10.0.30
 	<li>Mono 4.6.2.6
-	<li>Mozilla Firefox 52.0esr and 52.0
+	<li>Mozilla Firefox 52.0.2esr and 52.0.2
 	<li>Mozilla Thunderbird 45.8.0
     </ul></td><td valign=top width="50%"><ul>
 	<li>Mutt 1.8.0
-	<li>Node.js 6.10.0
+	<li>Node.js 6.10.1
 	<li>Ocaml 4.03.0
 	<li>OpenLDAP 2.3.43 and 2.4.44
 	<li>PHP 5.5.38, 5.6.30, and 7.0.16
@@ -538,7 +538,7 @@ to 6.1.
 	<li>PostgreSQL 9.6.2
 	<li>Python 2.7.13, 3.4.5, 3.5.2 and 3.6.0
 	<li>R 3.3.3
-	<li>Ruby 1.8.7.374, 2.1.9, 2.2.6, 2.3.3 and 2.4.0
+	<li>Ruby 1.8.7.374, 2.1.9, 2.2.6, 2.3.3 and 2.4.1
 	<li>Rust 1.16.0
 	<li>Sendmail 8.15.2
 	<li>SQLite3 3.17.0
@@ -558,6 +558,7 @@ to 6.1.
     <li>Xenocara (based on X.Org 7.7 with xserver 1.18.3 + patches,
       freetype 2.7.1, fontconfig 2.12.1, Mesa 13.0.6, xterm 327,
       xkeyboard-config 2.20 and more)
+    <li>LLVM/Clang 4.0.0 (+ patches)
     <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
     <li>Perl 5.24.1 (+ patches)
     <li>NSD 4.1.15
@@ -582,6 +583,8 @@ extensive details on how to install OpenBSD 6.1 on your machine:
 	.../OpenBSD/6.1/alpha/INSTALL.alpha</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/amd64/INSTALL.amd64">
 	.../OpenBSD/6.1/amd64/INSTALL.amd64</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/arm64/INSTALL.arm64">
+	.../OpenBSD/6.1/arm64/INSTALL.arm64</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/armv7/INSTALL.armv7">
 	.../OpenBSD/6.1/armv7/INSTALL.armv7</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.1/hppa/INSTALL.hppa">
@@ -645,6 +648,15 @@ INSTALL.amd64 document.
 <li>
 If you are planning to dual boot OpenBSD with another OS, you will need to
 read INSTALL.amd64.
+</ul>
+
+<h3><font color="#e00000">OpenBSD/arm64:</font></h3>
+
+<ul style="list-style-type: none">
+<li>
+Write <i>miniroot61.fs</i> to a disk and boot from it after connecting
+to the serial console.  Refer to INSTALL.arm64 for more details.
+<p>
 </ul>
 
 <h3><font color="#e00000">OpenBSD/armv7:</font></h3>
