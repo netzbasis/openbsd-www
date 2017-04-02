@@ -11,7 +11,7 @@ $ make plist
 $
 
 $ cat pkg/PLIST                                         
-@comment $OpenBSD: mgp00033.txt,v 1.1 2007/12/10 21:51:02 bernd Exp $
+@comment $OpenBSD$
 @man man/man8/iodine.8
 sbin/iodine
 sbin/iodined

@@ -2,7 +2,7 @@
 Configuration
 
 
-        # $OpenBSD: mgp00005.txt,v 1.1 2004/09/13 04:38:36 marco Exp $
+        # $OpenBSD: ntpd.conf,v 1.7 2004/07/20 17:38:35 henning Exp $
         # sample ntpd configuration file, see ntpd.conf(5)
 
         # Addresses to listen on (ntpd does not listen by default)

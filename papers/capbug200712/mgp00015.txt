@@ -3,7 +3,7 @@ Perl Ports
 
 Perl ports have become very easy to create with the perl and cpan modules. This is the Makefile for p5-List-Cycle:
 
- # $OpenBSD: mgp00015.txt,v 1.1 2007/12/21 08:02:22 merdely Exp $  
+ # $OpenBSD$  
 
 COMMENT=        objects for cycling through a list of values
 

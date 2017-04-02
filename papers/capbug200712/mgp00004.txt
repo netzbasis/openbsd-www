@@ -2,7 +2,7 @@
 MULTI_PACKAGES - Makefile
 
 First we edit the Makefile and change it to look like this:
- # $OpenBSD: mgp00004.txt,v 1.1 2007/12/21 08:02:22 merdely Exp $
+ # $OpenBSD$
 
 COMMENT-main=           client to tunnel IPv4 data through a DNS server
 COMMENT-server=         server to tunnel IPv4 data through a DNS server

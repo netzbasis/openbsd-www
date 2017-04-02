@@ -6,7 +6,7 @@ Now we have a file called patch-Makefile in our patches/ directory.
 It looks like this:
 
 $ cat patches/patch-Makefile                            
-$OpenBSD: mgp00031.txt,v 1.1 2007/12/10 21:51:02 bernd Exp $
+$OpenBSD$
 --- Makefile.orig       Fri Nov 30 09:15:38 2007
 +++ Makefile    Fri Nov 30 09:16:39 2007
 @@ -1,4 +1,4 @@
