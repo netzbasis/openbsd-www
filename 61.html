@@ -71,7 +71,7 @@ to 6.1.
     <li>The following platforms were retired:
         <a href="https://www.openbsd.org/armish.html">armish</a>,
         <a href="https://www.openbsd.org/sparc.html">sparc</a>,
-        <a href="https://www.openbsd.org/zaurus.html">zaurus</a>
+        <a href="https://www.openbsd.org/zaurus.html">zaurus</a>.
     </ul>
 <p>
 
@@ -131,6 +131,39 @@ to 6.1.
     <li>Support for X550 family of 10 Gigabit Ethernet based devices
 	has been added to the
 	<a href="http://man.openbsd.org/?query=ix">ix(4)</a> driver.
+    </ul>
+
+<p>
+<li>New <a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
+    <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>:
+    <ul>
+    <li>Support for amd64 and i386 hosts.
+    <li>BIOS payload provided via vmm-firmware, delivered via
+        <a href="http://man.openbsd.org/fw_update.1">fw_update(1)</a>.
+    <li>Support for Linux guest VMs.
+    <li>Better interrupt handling and legacy device emulation.
+    <li><a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a> no longer
+        requires VMX unrestricted guest capability (Nehalem and later CPUs
+        are sufficient).
+    <li>Removed bounce buffers previously used by
+        <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> for
+        <a href="http://man.openbsd.org/vio.4">vio(4)</a> and
+        <a href="http://man.openbsd.org/vioblk.4">vioblk(4)</a> devices.
+    <li>Support VMs with &gt; 2GB RAM.
+    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> uses 
+        <a href="http://man.openbsd.org/pledge.2">pledge(2)</a> and the
+        fork+exec model.
+    <li><a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
+        expanded to include VM ownership rules (uid/gid).
+    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>/
+        <a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
+        supports automatic
+        <a href="http://man.openbsd.org/bridge.4">bridge(4)</a> and
+        <a href="http://man.openbsd.org/switch.4">switch(4)</a> configuration
+        for VM network interfaces.
+    <li><a href="http://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> supports
+        graceful VM shutdown via
+        <a href="http://man.openbsd.org/amd64/vmmci.4">vmmci(4)</a>.
     </ul>
 <p>
 
@@ -252,8 +285,14 @@ to 6.1.
         <a href="http://man.openbsd.org/iked.8">iked(8)</a>
         and <a href="http://man.openbsd.org/snmpd.8">snmpd(8)</a> now
         use the proper source address when sending replies.
-    <li><a href="http://man.openbsd.org/snmpd.8">snmpd(8)</a> now
-        supports multiple listening sockets.
+    <li><a href="http://man.openbsd.org/iked.8">iked(8)</a> now
+        supports ECDSA and RFC 7427 signatures for authentication.
+    <li><a href="http://man.openbsd.org/iked.8">iked(8)</a> now
+        supports replying to IKEv2 responder cookies.
+    <li>Many fixes and improvements for
+        <a href="http://man.openbsd.org/iked.8">iked(8)</a> and
+        <a href="http://man.openbsd.org/ikectl.8">ikectl(8)</a>, including
+        various fixes for rekeying.
     <li><a href="http://man.openbsd.org/ospfd.8">ospfd(8)</a> and
         <a href="http://man.openbsd.org/ospf6d.8">ospf6d(8)</a> now cope
         with interface MTU change at runtime.
@@ -275,7 +314,7 @@ to 6.1.
 	more of the initial data is protected as read-only.
     <li>The size of user virtual address space has been increased
         from 2GB to 1TB on mips64.
-    <li>PIE and -static -pie on arm (XXX someone please explain this better).
+    <li>PIE and -static -pie on arm.
     <li><a href="http://man.openbsd.org/route6d.8">route6d(8)</a> now
         runs with fewer privileges.
     <li>For incoming TLS connections
@@ -325,44 +364,7 @@ to 6.1.
     <li>Fix vis/unvis of strings in
 	<a href="http://man.openbsd.org/dhclient.8">dhclient(8)</a> leases files.
     </ul>
-
-<p>
-<li><a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
-    <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
-    <ul>
-    <li>Support for i386 hosts
-    <li>BIOS payload provided via vmm-firmware, delivered via
-        <a href="http://man.openbsd.org/fw_update.1">fw_update(1)</a>
-    <li>Support for Linux guest VMs
-    <li>Better interrupt handling and legacy device emulation
-    <li><a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a> no longer
-        requires VMX unrestricted guest capability (Nehalem and later CPUs
-        are sufficient)
-    <li>Removed bounce buffers previously used by
-        <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> for
-        <a href="http://man.openbsd.org/vio.4">vio(4)</a> and
-        <a href="http://man.openbsd.org/vioblk.4">vioblk(4)</a> devices.
-    <li>Support VMs with &gt; 2GB RAM
-    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> now uses
-        fork+exec model
-    <li>More
-        <a href="http://man.openbsd.org/pledge.2">pledge(2)</a> usage across
-        <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>
-    <li><a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
-        expanded to include VM ownership rules (uid/gid)
-    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> support for
-        basic boot&gt; options (eg, "-s" for single user mode)
-    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>/
-        <a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a> now
-        supports automatic
-        <a href="http://man.openbsd.org/bridge.4">bridge(4)</a> and
-        <a href="http://man.openbsd.org/switch.4">switch(4)</a> configuration
-        for VM network interfaces
-    <li><a href="http://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> supports
-        graceful VM shutdown via
-        <a href="http://man.openbsd.org/amd64/vmmci.4">vmmci(4)</a>
-    </ul>
-<p>
+<p> 
 
 <li>Assorted improvements:
     <ul>
@@ -392,7 +394,7 @@ to 6.1.
         <a href="http://man.openbsd.org/resolver.3">resolver(3)</a>
         implementation.
     <li><a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
-	limits the socket buffer for TCP an TLS connections to 64K
+	limits the socket buffer for TCP and TLS connections to 64K
 	to avoid wasting kernel memory.
     <li><a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
 	supports the option -Z to print the timestamp in RFC 5424
@@ -400,6 +402,9 @@ to 6.1.
 	This logs everything in UTC including the year, timezone
 	and fractions of seconds.
 	The default is still RFC 3164 BSD syslog time format.
+    <li>When log files are rotated,
+	<a href="http://man.openbsd.org/newsyslog.8">newsyslog(8)</a>
+	writes the creation time in UTC ISO format into the first line.
     <li>The
 	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
 	options -a, -T, and -U can be given more than once to specify
@@ -411,6 +416,13 @@ to 6.1.
     <li>Make SIGHUP handling in
 	<a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
 	more reliable.
+    <li>Let <a href="http://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	tolerate most errors on startup.
+	Keep running and receive messages from all working subsystems,
+	but do not die.
+    <li>The <a href="http://man.openbsd.org/syslog.3">syslog(3)</a>
+	priority of fatal and warning messages of various daemons
+	has been adjusted.
     <li>An NMI sends the amd64 kernel into
 	<a href="http://man.openbsd.org/ddb.4">ddb(4)</a>
 	more reliably.
@@ -467,6 +479,9 @@ to 6.1.
 	<a href="http://man.openbsd.org/httpd.8">httpd(8)</a> support now
 	TLS session resumption using TLS session tickets.
 	See the respective configuration man page for more information.
+    <li>With the -f option
+	<a href="http://man.openbsd.org/sensorsd.8">sensorsd(8)</a>
+	can use an alternative config file.
     </ul>
 <p>
 
