@@ -137,6 +137,7 @@ to 6.1.
 <li>New <a href="http://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
     <a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a>:
     <ul>
+    <li>Support was partially integrated in 6.0, but disabled.
     <li>Support for amd64 and i386 hosts.
     <li>BIOS payload provided via vmm-firmware, delivered via
         <a href="http://man.openbsd.org/fw_update.1">fw_update(1)</a>.
@@ -150,7 +151,7 @@ to 6.1.
         <a href="http://man.openbsd.org/vio.4">vio(4)</a> and
         <a href="http://man.openbsd.org/vioblk.4">vioblk(4)</a> devices.
     <li>Support VMs with &gt; 2GB RAM.
-    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> uses 
+    <li><a href="http://man.openbsd.org/amd64/vmd.8">vmd(8)</a> uses
         <a href="http://man.openbsd.org/pledge.2">pledge(2)</a> and the
         fork+exec model.
     <li><a href="http://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
@@ -364,7 +365,7 @@ to 6.1.
     <li>Fix vis/unvis of strings in
 	<a href="http://man.openbsd.org/dhclient.8">dhclient(8)</a> leases files.
     </ul>
-<p> 
+<p>
 
 <li>Assorted improvements:
     <ul>
@@ -474,7 +475,7 @@ to 6.1.
 	   to permit OCSP responses to be stapled to the tls handshake
     <li><a href="http://man.openbsd.org/nc.1">nc(1)</a> now also
       supports OCSP stapling server side, and will show the stapling information
-      client side. 
+      client side.
     <li>Both <a href="http://man.openbsd.org/relayd.8">relayd(8)</a> and
 	<a href="http://man.openbsd.org/httpd.8">httpd(8)</a> support now
 	TLS session resumption using TLS session tickets.
@@ -497,196 +498,356 @@ to 6.1.
 
 <li>OpenSSH 7.4
     <ul>
-    <li>...
+    <li>Security:
+      <ul>
+      <li>ssh-agent(1): Will now refuse to load PKCS#11 modules from paths
+          outside a trusted whitelist (run-time configurable). Requests to
+          load modules could be passed via agent forwarding and an attacker
+          could attempt to load a hostile PKCS#11 module across the forwarded
+          agent channel: PKCS#11 modules are shared libraries, so this would
+          result in code execution on the system running the ssh-agent if the
+          attacker has control of the forwarded agent-socket (on the host
+          running the sshd server) and the ability to write to the filesystem
+          of the host running ssh-agent (usually the host running the ssh
+          client).
+      <li>sshd(8): When privilege separation is disabled, forwarded Unix-
+          domain sockets would be created by sshd(8) with the privileges of
+          'root' instead of the authenticated user. This release refuses
+          Unix-domain socket forwarding when privilege separation is disabled
+          (Privilege separation has been enabled by default for 14 years).
+      <li>sshd(8): Avoid theoretical leak of host private key material to
+          privilege-separated child processes via realloc() when reading
+          keys. No such leak was observed in practice for normal-sized keys,
+          nor does a leak to the child processes directly expose key material
+          to unprivileged users.
+      <li>sshd(8): The shared memory manager used by pre-authentication
+          compression support had a bounds checks that could be elided by
+          some optimising compilers. Additionally, this memory manager was
+          incorrectly accessible when pre-authentication compression was
+          disabled. This could potentially allow attacks against the
+          privileged monitor process from the sandboxed privilege-separation
+          process (a compromise of the latter would be required first).
+          This release removes support for pre-authentication compression
+          from sshd(8).
+      <li>sshd(8): Fix denial-of-service condition where an attacker who
+          sends multiple KEXINIT messages may consume up to 128MB per
+          connection.
+      <li>sshd(8): Validate address ranges for AllowUser and DenyUsers
+          directives at configuration load time and refuse to accept invalid
+          ones. It was previously possible to specify invalid CIDR address
+          ranges (e.g. user@127.1.2.3/55) and these would always match,
+          possibly resulting in granting access where it was not intended.
+      <li>ssh(1), sshd(8): Fix weakness in CBC padding oracle countermeasures
+          that allowed a variant of the attack fixed in OpenSSH 7.3 to proceed.
+      </ul>
+    <li>New/changed features:
+      <ul>
+      <li>Server support for the SSH v.1 protocol has been removed.
+      <li>ssh(1): Remove 3des-cbc from the client's default proposal. 64-bit
+          block ciphers are not safe in 2016 and we don't want to wait until
+          attacks like SWEET32 are extended to SSH. As 3des-cbc was the
+          only mandatory cipher in the SSH RFCs, this may cause problems
+          connecting to older devices using the default configuration,
+          but it's highly likely that such devices already need explicit
+          configuration for key exchange and hostkey algorithms already
+          anyway.
+      <li>sshd(8): Remove support for pre-authentication compression.
+          Doing compression early in the protocol probably seemed reasonable
+          in the 1990s, but today it's clearly a bad idea in terms of both
+          cryptography (cf. multiple compression oracle attacks in TLS) and
+          attack surface. Pre-auth compression support has been disabled by
+          default for >10 years. Support remains in the client.
+      <li>ssh-agent will refuse to load PKCS#11 modules outside a whitelist
+          of trusted paths by default. The path whitelist may be specified
+          at run-time.
+      <li>sshd(8): When a forced-command appears in both a certificate and
+          an authorized keys/principals command= restriction, sshd will now
+          refuse to accept the certificate unless they are identical.
+          The previous (documented) behaviour of having the certificate
+          forced-command override the other could be a bit confusing and
+          error-prone.
+      <li>sshd(8): Remove the UseLogin configuration directive and support
+          for having /bin/login manage login sessions.
+      <li>ssh(1): Add a proxy multiplexing mode to ssh(1) inspired by the
+          version in PuTTY by Simon Tatham. This allows a multiplexing
+          client to communicate with the master process using a subset of
+          the SSH packet and channels protocol over a Unix-domain socket,
+          with the main process acting as a proxy that translates channel
+          IDs, etc.  This allows multiplexing mode to run on systems that
+          lack file- descriptor passing (used by current multiplexing
+          code) and potentially, in conjunction with Unix-domain socket
+          forwarding, with the client and multiplexing master process on
+          different machines. Multiplexing proxy mode may be invoked using
+          "ssh -O proxy ..."
+      <li>sshd(8): Add a sshd_config DisableForwarding option that disables
+          X11, agent, TCP, tunnel and Unix domain socket forwarding, as well
+          as anything else we might implement in the future. Like the
+          'restrict' authorized_keys flag, this is intended to be a simple
+          and future-proof way of restricting an account.
+      <li>sshd(8), ssh(1): Support the "curve25519-sha256" key exchange
+          method. This is identical to the currently-supported method named
+          "curve25519-sha256@libssh.org".
+      <li>sshd(8): Improve handling of SIGHUP by checking to see if sshd is
+          already daemonised at startup and skipping the call to daemon(3)
+          if it is. This ensures that a SIGHUP restart of sshd(8) will
+          retain the same process-ID as the initial execution. sshd(8) will
+          also now unlink the PidFile prior to SIGHUP restart and re-create
+          it after a successful restart, rather than leaving a stale file in
+          the case of a configuration error.
+      <li>sshd(8): Allow ClientAliveInterval and ClientAliveCountMax
+          directives to appear in sshd_config Match blocks.
+      <li>sshd(8): Add %-escapes to AuthorizedPrincipalsCommand to match
+          those supported by AuthorizedKeysCommand (key, key type,
+          fingerprint, etc.) and a few more to provide access to the
+          contents of the certificate being offered.
+      <li>Added regression tests for string matching, address matching and
+          string sanitisation functions.
+      <li>Improved the key exchange fuzzer harness.
+      <li>Deprecate the sshd_config UsePrivilegeSeparation
+          option, thereby making privilege separation mandatory. Privilege
+          separation has been on by default for almost 15 years and
+          sandboxing has been on by default for almost the last five.
+      <li>ssh(1), sshd(8): Support "=-" syntax to easily remove methods from
+          algorithm lists, e.g. Ciphers=-*cbc.
+      </ul>
+    <li>The following significant bugs have been fixed in this release:
+      <ul>
+      <li>ssh(1): Allow IdentityFile to successfully load and use
+          certificates that have no corresponding bare public key.
+          certificate id_rsa-cert.pub (and no id_rsa.pub).
+      <li>ssh(1): Fix public key authentication when multiple
+          authentication is in use and publickey is not just the first
+          method attempted.
+      <li>ssh-agent(1), ssh(1): improve reporting when attempting to load
+          keys from PKCS#11 tokens with fewer useless log messages and more
+          detail in debug messages.
+      <li>ssh(1): When tearing down ControlMaster connections, don't
+          pollute stderr when LogLevel=quiet.
+      <li>sftp(1): On ^Z wait for underlying ssh(1) to suspend before
+          suspending sftp(1) to ensure that ssh(1) restores the terminal mode
+          correctly if suspended during a password prompt.
+      <li>ssh(1): Avoid busy-wait when ssh(1) is suspended during a password
+          prompt.
+      <li>ssh(1), sshd(8): Correctly report errors during sending of ext-
+          info messages.
+      <li>sshd(8): fix NULL-deref crash if sshd(8) received an out-of-
+          sequence NEWKEYS message.
+      <li>sshd(8): Correct list of supported signature algorithms sent in
+          the server-sig-algs extension.
+      <li>sshd(8): Fix sending ext_info message if privsep is disabled.
+      <li>sshd(8): more strictly enforce the expected ordering of privilege
+          separation monitor calls used for authentication and allow them
+          only when their respective authentication methods are enabled
+          in the configuration
+      <li>sshd(8): Fix uninitialised optlen in getsockopt() call; harmless
+          on Unix/BSD but potentially crashy on Cygwin.
+      <li>Fix false positive reports caused by explicit_bzero(3) not being
+          recognised as a memory initialiser when compiled with
+          -fsanitize-memory.
+      <li>sshd_config(5): Use 2001:db8::/32, the official IPv6 subnet for
+          configuration examples.
+      <li>sshd(1): Fix NULL dereference crash when key exchange start
+          messages are sent out of sequence.
+      <li>ssh(1), sshd(8): Allow form-feed characters to appear in
+          configuration files.
+      <li>sshd(8): Fix regression in OpenSSH 7.4 support for the
+          server-sig-algs extension, where SHA2 RSA signature methods were
+          not being correctly advertised.
+      <li>ssh(1), ssh-keygen(1): Fix a number of case-sensitivity bugs in
+          known_hosts processing.
+      <li>ssh(1): Allow ssh to use certificates accompanied by a private key
+          file but no corresponding plain *.pub public key.
+      <li>ssh(1): When updating hostkeys using the UpdateHostKeys option,
+          accept RSA keys if HostkeyAlgorithms contains any RSA keytype.
+          Previously, ssh could ignore RSA keys when only the ssh-rsa-sha2-*
+          methods were enabled in HostkeyAlgorithms and not the old ssh-rsa
+          method.
+      <li>ssh(1): Detect and report excessively long configuration file
+          lines.
+      <li>Merge a number of fixes found by Coverity and reported via Redhat
+          and FreeBSD. Includes fixes for some memory and file descriptor
+          leaks in error paths.
+      <li>ssh-keyscan(1): Correctly hash hosts with a port number.
+      <li>ssh(1), sshd(8): When logging long messages to stderr, don't truncate
+          "\r\n" if the length of the message exceeds the buffer.
+      <li>ssh(1): Fully quote [host]:port in generated ProxyJump/-J command-
+          line; avoid confusion over IPv6 addresses and shells that treat
+          square bracket characters specially.
+      <li>ssh-keygen(1): Fix corruption of known_hosts when running
+          "ssh-keygen -H" on a known_hosts containing already-hashed entries.
+      <li>Fix various fallout and sharp edges caused by removing SSH protocol
+          1 support from the server, including the server banner string being
+          incorrectly terminated with only \n (instead of \r\n), confusing
+          error messages from ssh-keyscan a segfault in sshd
+          if protocol v.1 was enabled for the client and sshd_config
+          contained references to legacy keys.
+      <li>ssh(1), sshd(8): Free fd_set on connection timeout.
+      <li>sshd(8): Fix Unix domain socket forwarding for root (regression in
+          OpenSSH 7.4).
+      <li>sftp(1): Fix division by zero crash in "df" output when server
+          returns zero total filesystem blocks/inodes.
+      <li>ssh(1), ssh-add(1), ssh-keygen(1), sshd(8): Translate OpenSSL errors
+          encountered during key loading to more meaningful error codes.
+      <li>ssh-keygen(1): Sanitise escape sequences in key comments sent to
+          printf but preserve valid UTF-8 when the locale supports it.
+      <li>ssh(1), sshd(8): Return reason for port forwarding failures where
+          feasible rather than always "administratively prohibited".
+      <li>sshd(8): Fix deadlock when AuthorizedKeysCommand or
+          AuthorizedPrincipalsCommand produces a lot of output and a key is
+          matched early.
+      <li>ssh(1): Fix typo in ~C error message for bad port forward
+          cancellation.
+      <li>ssh(1): Show a useful error message when included config files
+          can't be opened.
+      <li>sshd(8): Make sshd set GSSAPIStrictAcceptorCheck=yes as the manual page
+          (previously incorrectly) advertised.
+      <li>sshd_config(5): Repair accidentally-deleted mention of %k token
+          in AuthorizedKeysCommand.
+      <li>sshd(8): Remove vestiges of previously removed LOGIN_PROGRAM;
+      <li>ssh-agent(1): Relax PKCS#11 whitelist to include libexec and
+          common 32-bit compatibility library directories.
+      <li>sftp-client(1): Fix non-exploitable integer overflow in SSH2_FXP_NAME
+          response handling.
+      <li>ssh-agent(1): Fix regression in 7.4 of deleting PKCS#11-hosted
+          keys. It was not possible to delete them except by specifying
+          their full physical path.
+      </ul>
     </ul>
 <p>
 
 <li>LibreSSL 2.5.3
-  <ul>
-    
-  <li> libtls now supports ALPN and SNI
-
-  <li> libtls adds a new callback interface for integrating custom IO
-    functions. Thanks to Tobias Pape.
-
-  <li> libtls now handles 4 cipher suite groups:
-    <Ul>
-      <li> "secure" (TLSv1.2+AEAD+PFS)
-      <li> "compat" (HIGH:!aNULL)
-      <li> "legacy" (HIGH:MEDIUM:!aNULL)
-      <li> "insecure" (ALL:!aNULL:!eNULL)
-    </ul> 
-      This allows for flexibility and finer grained control, rather than
-      having two extremes (an issue raised by Marko Kreen some time ago).
-
-  <li> Tightened error handling for tls_config_set_ciphers().
-
-  <li> libtls now always loads CA, key and certificate files at the time the
-    configuration function is called. This simplifies code and results in
-    a single memory based code path being used to provide data to libssl.
-
-  <li> Add support for OCSP intermediate certificates.
-
-  <li> Added functions used by stunnel and exim from BoringSSL - this
-    brings in X509_check_host, X509_check_email, X509_check_ip, and
-    X509_check_ip_asc.
-
-  <li> Added initial support for iOS, thanks to Jacob Berkman.
-
-  <li> Improved behavior of arc4random on Windows when using memory leak
-    analysis software.
-
-  <li> Correctly handle an EOF that occurs prior to the TLS handshake
-    completing. Reported by Vasily Kolobkov, based on a diff from Marko
-    Kreen.
-
-  <li> Limit the support of the "backward compatible" ssl2 handshake to
-    only be used if TLS 1.0 is enabled.
-
-  <li> Fix incorrect results in certain cases on 64-bit systems when
-    BN_mod_word() can return incorrect results. BN_mod_word() now can
-    return an error condition. Thanks to Brian Smith.
-
-  <li> Added constant-time updates to address CVE-2016-0702
-
-  <li> Fixed undefined behavior in BN_GF2m_mod_arr()
-
-  <li> Removed unused Cryptographic Message Support (CMS)
-
- <li> More conversions of long long idioms to time_t
-
- <li> Improved compatibility by avoiding printing NULL strings with
-  printf.
-
- <li> Reverted change that cleans up the EVP cipher context in
-    EVP_EncryptFinal() and EVP_DecryptFinal(). Some software relies on the
-    previous behaviour.
-
- <li> Avoid unbounded memory growth in libssl, which can be triggered
-    by a TLS client repeatedly renegotiating and sending OCSP Status
-    Request TLS extensions.
-
- <li> Avoid falling back to a weak digest for (EC)DH when using SNI
-  with libssl.
-
- <li> X509_cmp_time() now passes a malformed GeneralizedTime field as
-     an error. Reported by Theofilos Petsios.
-
- <li> Detect zero-length encrypted session data early, instead of when
-     malloc(0) fails or the HMAC check fails. Noted independently by
-     jsing@ and Kurt Cancemi.
-
- <li> Check for and handle failure of HMAC_{Update,Final} or
-    EVP_DecryptUpdate().
-
- <li> Massive update and normalization of manpages, conversion to
-    mandoc format. Many pages were rewritten for clarity and accuracy.
-    Portable doc links are up-to-date with a new conversion tool.
-
- <li> Curve25519 Key Exchange support.
-
- <li> Support for alternate chains for certificate verification.
-
- <li> Code cleanups, CBB conversions, further unification of DTLS/SSL
-      handshake code, further ASN1 macro expansion and removal.
-
- <li> Private symbols are now hidden in libssl and libcrypto.
-
- <li> Friendly certificate verification error messages in libtls, peer
-    verification is now always enabled.
-
- <li> Added OCSP stapling support to libtls and nc.
-
- <li> Added ocspcheck utility to validate a certificate against its OCSP
-      responder and save the reply for stapling
-
- <li> Enhanced regression tests and error handling for libtls.
-
- <li> Added explicit constant and non-constant time BN functions,
-      defaulting to constant time wherever possible.
-
- <li> Moved many leaked implementation details in public structs behind
-      opaque pointers.
-
- <li> Added ticket support to libtls.
-
- <li> Added support for setting the supported EC curves via
-      SSL{_CTX}_set1_groups{_list}() - also provide defines for the
-      previous SSL{_CTX}_set1_curves{_list} names. This also changes
-      the default list of curves to be X25519, P-256 and P-384. All
-      other curves must be manually enabled.
-
- <li> Added -groups option to openssl(1) s_client for specifying the
-      curves to be used in a colon-separated list.
-
- <li> Merged client/server version negotiation code paths into one,
-      reducing much duplicate code.
-
- <li> Removed error function codes from libssl and libcrypto.
-
- <li> Fixed an issue where a truncated packet could crash via an OOB
- read.
-
- <li> Added SSL_OP_NO_CLIENT_RENEGOTIATION option that disallows
-      client-initiated renegotiation. This is the default for libtls
-      servers.
-
- <li> Avoid a side-channel cache-timing attack that can leak the ECDSA
-      private keys when signing. This is due to BN_mod_inverse() being
-      used without the constant time flag being set. Reported by Cesar
-      Pereida Garcia and Billy Brumley (Tampere University of
-      Technology).  The fix was developed by Cesar Pereida Garcia.
-
- <li> iOS and MacOS compatibility updates from Simone Basso and Jacob
-      Berkman.
-  
- <li> Added the recallocarray(3) memory allocation function, and
-      converted various places in the library to use it, such as CBB
-      and BUF_MEM_grow.  recallocarray(3) is similar to
-      reallocarray. Newly allocated memory is cleared similar to
-      calloc(3). Memory that becomes unallocated while shrinking or
-      moving existing allocations is explicitly discarded by unmapping
-      or clearing to 0.
-
- <li> Added new root CAs from SECOM Trust Systems / Security
-      Communication of Japan.
-
- <li> Added EVP interface for MD5+SHA1 hashes.
-
- <li> Fixed DTLS client failures when the server sends a certificate
-      request.
-
- <li> Correct handling of padding when upgrading an SSLv2 challenge
-      into an SSLv3/TLS connection.
-
- <li> Allow protocols and ciphers to be set on a TLS config object in
-      libtls.
-
- <li> Improved nc(1) TLS handshake CPU usage and server-side error
-   reporting.
-
- <li> Add a constant time version of BN_gcd and use it default for
-   BN_gcd to avoid the possibility of sidechannel timing attacks
-   against RSA private key generation - Thanks to Alejandro
-   Cabrera <aldaya@gmail.com>
-
- </ul>
+    <ul>
+    <li>libtls now supports ALPN and SNI
+    <li>libtls adds a new callback interface for integrating custom IO
+	functions. Thanks to Tobias Pape.
+    <li>libtls now handles 4 cipher suite groups:
+	<ul>
+	<li>"secure" (TLSv1.2+AEAD+PFS)
+	<li>"compat" (HIGH:!aNULL)
+	<li>"legacy" (HIGH:MEDIUM:!aNULL)
+	<li>"insecure" (ALL:!aNULL:!eNULL)
+	</ul>
+	This allows for flexibility and finer grained control, rather than
+	having two extremes (an issue raised by Marko Kreen some time ago).
+    <li>Tightened error handling for tls_config_set_ciphers().
+    <li>libtls now always loads CA, key and certificate files at the time the
+	configuration function is called. This simplifies code and results in
+	a single memory based code path being used to provide data to libssl.
+    <li>Add support for OCSP intermediate certificates.
+    <li>Added functions used by stunnel and exim from BoringSSL - this
+	brings in X509_check_host, X509_check_email, X509_check_ip, and
+	X509_check_ip_asc.
+    <li>Added initial support for iOS, thanks to Jacob Berkman.
+    <li>Improved behavior of arc4random on Windows when using memory leak
+	analysis software.
+    <li>Correctly handle an EOF that occurs prior to the TLS handshake
+	completing. Reported by Vasily Kolobkov, based on a diff from Marko
+	Kreen.
+    <li>Limit the support of the "backward compatible" ssl2 handshake to
+	only be used if TLS 1.0 is enabled.
+    <li>Fix incorrect results in certain cases on 64-bit systems when
+	BN_mod_word() can return incorrect results. BN_mod_word() now can
+	return an error condition. Thanks to Brian Smith.
+    <li>Added constant-time updates to address CVE-2016-0702
+    <li>Fixed undefined behavior in BN_GF2m_mod_arr()
+    <li>Removed unused Cryptographic Message Support (CMS)
+    <li>More conversions of long long idioms to time_t
+    <li>Improved compatibility by avoiding printing NULL strings with
+	printf.
+    <li>Reverted change that cleans up the EVP cipher context in
+       EVP_EncryptFinal() and EVP_DecryptFinal(). Some software relies on the
+       previous behaviour.
+    <li>Avoid unbounded memory growth in libssl, which can be triggered
+	by a TLS client repeatedly renegotiating and sending OCSP Status
+	Request TLS extensions.
+    <li>Avoid falling back to a weak digest for (EC)DH when using SNI
+	with libssl.
+    <li>X509_cmp_time() now passes a malformed GeneralizedTime field as
+	an error. Reported by Theofilos Petsios.
+    <li>Detect zero-length encrypted session data early, instead of when
+	malloc(0) fails or the HMAC check fails.
+    <li>Check for and handle failure of HMAC_{Update,Final} or
+	EVP_DecryptUpdate().
+    <li>Massive update and normalization of manpages, conversion to
+	mandoc format. Many pages were rewritten for clarity and accuracy.
+	Portable doc links are up-to-date with a new conversion tool.
+    <li>Curve25519 Key Exchange support.
+    <li>Support for alternate chains for certificate verification.
+    <li>Code cleanups, CBB conversions, further unification of DTLS/SSL
+	handshake code, further ASN1 macro expansion and removal.
+    <li>Private symbols are now hidden in libssl and libcrypto.
+    <li>Friendly certificate verification error messages in libtls, peer
+	verification is now always enabled.
+    <li>Added OCSP stapling support to libtls and nc.
+    <li>Added ocspcheck utility to validate a certificate against its OCSP
+	responder and save the reply for stapling
+    <li>Enhanced regression tests and error handling for libtls.
+    <li>Added explicit constant and non-constant time BN functions,
+	defaulting to constant time wherever possible.
+    <li>Moved many leaked implementation details in public structs behind
+	opaque pointers.
+    <li>Added ticket support to libtls.
+    <li>Added support for setting the supported EC curves via
+	SSL{_CTX}_set1_groups{_list}() - also provide defines for the
+	previous SSL{_CTX}_set1_curves{_list} names. This also changes
+	the default list of curves to be X25519, P-256 and P-384. All
+	other curves must be manually enabled.
+    <li>Added -groups option to openssl(1) s_client for specifying the
+	curves to be used in a colon-separated list.
+    <li>Merged client/server version negotiation code paths into one,
+	reducing much duplicate code.
+    <li>Removed error function codes from libssl and libcrypto.
+    <li>Fixed an issue where a truncated packet could crash via an OOB
+	read.
+    <li>Added SSL_OP_NO_CLIENT_RENEGOTIATION option that disallows
+	client-initiated renegotiation. This is the default for libtls
+	servers.
+    <li>Avoid a side-channel cache-timing attack that can leak the ECDSA
+	private keys when signing. This is due to BN_mod_inverse() being
+	used without the constant time flag being set. Reported by Cesar
+	Pereida Garcia and Billy Brumley (Tampere University of
+	Technology).  The fix was developed by Cesar Pereida Garcia.
+    <li>iOS and MacOS compatibility updates from Simone Basso and Jacob
+	Berkman.
+    <li>Added the recallocarray(3) memory allocation function, and
+	converted various places in the library to use it, such as CBB
+	and BUF_MEM_grow.  recallocarray(3) is similar to
+	reallocarray. Newly allocated memory is cleared similar to
+	calloc(3). Memory that becomes unallocated while shrinking or
+	moving existing allocations is explicitly discarded by unmapping
+	or clearing to 0.
+    <li>Added new root CAs from SECOM Trust Systems / Security
+	Communication of Japan.
+    <li>Added EVP interface for MD5+SHA1 hashes.
+    <li>Fixed DTLS client failures when the server sends a certificate
+	request.
+    <li>Correct handling of padding when upgrading an SSLv2 challenge
+	into an SSLv3/TLS connection.
+    <li>Allow protocols and ciphers to be set on a TLS config object in
+	libtls.
+    <li>Improved nc(1) TLS handshake CPU usage and server-side error
+	reporting.
+    <li>Add a constant time version of BN_gcd and use it default for
+	BN_gcd to avoid the possibility of sidechannel timing attacks
+	against RSA private key generation - Thanks to Alejandro
+	Cabrera <aldaya@gmail.com>
+    </ul>
 <p>
 
 <li>mandoc 1.14.1
     <ul>
     <li>New <a href="http://man.openbsd.org/mandoc.db.5">mandoc.db(5)</a>
-        file format: <a href="http://man.openbsd.org/man.1">man(1)</a>,
-        <a href="http://man.openbsd.org/apropos.1">apropos(1)</a>, and
-        <a href="http://man.openbsd.org/makewhatis.8">makewhatis(8)</a>
-        no longer need SQLite3.
+	file format: <a href="http://man.openbsd.org/man.1">man(1)</a>,
+	<a href="http://man.openbsd.org/apropos.1">apropos(1)</a>, and
+	<a href="http://man.openbsd.org/makewhatis.8">makewhatis(8)</a>
+	no longer need SQLite3.
     <li>Much improved HTML output and CSS.
     <li>In <a href="http://man.openbsd.org/man.1">man(1)</a>, internal
-        searching with <a href="http://man.openbsd.org/less.1">less(1)</a>
-        <code>:t</code> has been improved.
+	searching with <a href="http://man.openbsd.org/less.1">less(1)</a>
+	<code>:t</code> has been improved.
     <li>New <a href="http://man.openbsd.org/mandoc.1">mandoc(1)</a>
-        <code>-mdoc -T markdown</code> output mode
-        (already a post-1.14.1 feature).
+	<code>-mdoc -T markdown</code> output mode
+	(already a post-1.14.1 feature).
     </ul>
 <p>
 
