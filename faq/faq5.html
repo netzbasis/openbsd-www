@@ -277,7 +277,7 @@ The corresponding <a href="http://man.openbsd.org/fstab">fstab(5)</a>
 line might look like this:
 
 <blockquote><pre>
-c73d2198f83ef845.m /dest ffs rw,nodev,nosuid,noperm 1 2
+c73d2198f83ef845.m /dest ffs rw,nosuid,noperm 1 2
 </pre></blockquote>
 
 The root directory of this filesystem must be owned by <tt>build</tt> with
@@ -306,7 +306,7 @@ partition instead of a physical disk.
 Add a line similar to this to your <tt>/etc/fstab</tt>:
 
 <blockquote><pre>
-swap /dest mfs rw,noperm,-P/var/dest,-s1.5G,noauto 0 0
+swap /dest mfs rw,nosuid,noperm,-P/var/dest,-s1.5G,noauto 0 0
 </pre></blockquote>
 
 Create the prototype <tt>DESTDIR</tt> directories:
