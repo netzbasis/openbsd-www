@@ -150,8 +150,7 @@ If you wish to retain your current ksh history,
 create a plaintext version of it before upgrading:
 
 <blockquote><pre>
-# there is a &lt;tab&gt; in the sed substitution string
-$ <b>fc -ln 1 | sed 's/^&#09;//' > ~/ksh_hist.txt</b>
+$ <b>fc -ln 1 | cut -f2- > ~/ksh_hist.txt</b>
 </pre></blockquote>
 
 After the upgrade, you can use <tt>ksh_hist.txt</tt> as your history file.
@@ -164,28 +163,39 @@ A reboot after the build is recommended.
 
 
 <h3 id="r20170530">2017/05/30 - IPv6 stateless address auto configuration
-moved to user land</h3>
+moved to userland</h3>
 
 Sending of router solicitations and processing of router advertisements
 has been disabled in the kernel.
-This task is now handled by <a href="http://man.openbsd.org/slaacd">
-slaacd(8)</a>.
-When building from source make sure to keep kernel and user land in
-sync to not lose IPv6 stateless address auto configuration.
-When in doubt upgrade via snapshots.
+This task is now handled by
+<a href="http://man.openbsd.org/slaacd">slaacd(8)</a>.
+If you upgrade by building from source, make sure that kernel and userland
+are kept in sync to avoid losing IPv6 stateless address auto configuration.
 
 
 <h3 id="r20170531">2017/05/31 - pf blocks IPv6 options header</h3>
 
-Now pf(4) blocks IPv6 packets that have a hop-by-hop options header
-or destination options header.
-So IPv6 options are handled like their counterpart in IPv4.
-Add an "allow-opts" to your rule if you want to pass IP packets
+IPv6 packets that have a hop-by-hop options header or a destination options
+header are now blocked by <a href="http://man.openbsd.org/pf.4">pf(4)</a>.
+Thus, IPv6 options are handled like their counterparts in IPv4.
+Add <tt>allow-opts</tt> to your rule if you want to pass IP packets
 with options.
+
+
+<h3 id="r20170603">2017/06/03 - slaacd(8) moved to /sbin</h3>
+
+There were a few snapshots that had
+<a href="http://man.openbsd.org/slaacd">slaacd(8)</a> in <tt>/usr/sbin</tt>.
+The old binary can be removed if the new one in <tt>/sbin</tt> is present:
+
+<blockquote><pre>
+# <b>rm /usr/sbin/slaacd</b>
+</pre></blockquote>
+
 
 <p>
 <hr>
-<small>$OpenBSD: current.html,v 1.826 2017/05/31 10:03:03 tb Exp $</small>
+<small>$OpenBSD: current.html,v 1.831 2017/06/04 01:20:47 tb Exp $</small>
 
 </body>
 </html>
