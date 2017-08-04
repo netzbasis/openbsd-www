@@ -405,8 +405,19 @@ reinstall them all:
 pkg_add -D installed -u
 </pre></blockquote>
 
+<h3 id="r20170803">2017/08/03 - pf.conf: icmp6-type notnbr-unr removed</h3>
+
+Nearly 20 years ago RFC 1885 was obsoleted.
+Catch up by no longer supporting notnbr-unr
+(<tt>ICMP6_DST_UNREACH_NOTNEIGHBOR</tt>).
+The correct type is beyond-unr (<tt>ICMP6_DST_UNREACH_BEYONDSCOPE</tt>).
+
+<p>
+In <a href="https://man.openbsd.org/pf.conf">pf.conf(5)</a>,
+<tt>notnbr-unr</tt> needs to be replaced with <tt>beyond-unr</tt>.
+
 <hr>
-<small>$OpenBSD: current.html,v 1.842 2017/07/29 21:42:24 tb Exp $</small>
+<small>$OpenBSD: current.html,v 1.844 2017/08/03 18:13:26 tb Exp $</small>
 
 </body>
 </html>
