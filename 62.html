@@ -69,6 +69,37 @@ to 6.2.
 
 <li>Improved hardware support, including:
     <ul>
+    <li>arm: New <a href="https://man.openbsd.org/rkgrf.4">rkgrf(4)</a> driver for the Rockchip RK3399/RK3288 register file.
+    <li>arm: New <a href="https://man.openbsd.org/rkclock.4">rkclock(4)</a> driver for Rockchip RK3399/RK3288 clocks.
+    <li>arm: New <a href="https://man.openbsd.org/rkpinctrl.4">rkpinctrl(4)</a> driver for controlling Rockchip RK3399/RK3288 pins.
+    <li>arm: New <a href="https://man.openbsd.org/rkpgpio.4">rkpgpio(4)</a> driver for Rockchip RK3399 GPIO.
+    <li>arm: New <a href="https://man.openbsd.org/rkgtemp.4">rkptemp(4)</a> driver for Rockchip RK3399 temperature sensors.
+    <li>arm: New <a href="https://man.openbsd.org/rkiic.4">rkiic(4)</a> driver for Rockchip RK3399 I2C controllers.
+    <li>arm: New <a href="https://man.openbsd.org/rkpmic.4">rkpmic(4)</a> driver for the RK808 Power Management IC.
+    <li>arm: New <a href="https://man.openbsd.org/dwmmc.4">dwmmc(4)</a> driver for Synopsis Designware SD/MMC controllers.
+    <li>arm: New <a href="https://man.openbsd.org/dwdog.4">dwdog(4)</a> driver for the Synopsys Designware watchdog timer.
+    <li>arm: New <a href="https://man.openbsd.org/dwxe.4">dwxe(4)</a> driver for the Synopsys Designware Ethernet controller.
+    <li>arm: New <a href="https://man.openbsd.org/sxitwi.4">sxitwi(4)</a> driver for the two-wire bus on Allwinnder SoCs.
+    <li>arm: New <a href="https://man.openbsd.org/axppmic.4">axppmic(4)</a> driver for the AXP209 I2C PMIC.
+    <li>arm: New <a href="https://man.openbsd.org/bcmaux.4">bcmaux(4)</a> driver for clocks and interrupts on the auxilliary UART on BCM2835 devices.
+    <li>arm: New <a href="https://man.openbsd.org/mvpinctrl.4">mvpinctrl(4)</a> driver to configure pins on Marvell SoCs (Armada 388).
+    <li>arm: New <a href="https://man.openbsd.org/mvneta.4">mvneta(4)</a> driver the Ethernet controller on the Armada 38x series.
+    <li>arm: New <a href="https://man.openbsd.org/amdisplay.4">amdisplay(4) & nxphdmi(4)</a> drivers for the Texas Instruments AM335x LCD controller.
+    <li>octeon: New <a href="https://man.openbsd.org/octeon/octsctl.4">octsctl(4)</a> driver for the OCTEON SATA controller bridge.
+    <li>octeon: New <a href="https://man.openbsd.org/octeon/octxctl.4">octxctl(4)</a> driver for the OCTEON USB3 controller bridge.
+    <li>New <a href="https://man.openbsd.org/hvs.4">hvs(4)</a> driver for Hyper-V storage.
+    <li>New <a href="https://man.openbsd.org/pcxrtc.4">pcxrtc(4)</a> driver for the NXP PCF8563 Real Time Clock.
+    <li>New <a href="https://man.openbsd.org/urng.4">urng(4)</a> driver for USB random number generator devices.
+    <li>Intel 8265 and 3168 support was added to the <a href="https://man.openbsd.org/iwm.4">iwm(4)</a> driver.
+    <li>RTL8192CE support was added to the <a href="https://man.openbsd.org/rtwn.4">rtwn(4)</a> driver.
+    <li>RT5360 support was added to the <a href="https://man.openbsd.org/ral.4">ral(4)</a> driver.
+    <li>RTS525A support was added to the <a href="https://man.openbsd.org/rtsx.4">rtsx(4)</a> driver.
+    <li>The <a href="https://man.openbsd.org/acpibat.4">acpibat(4)</a> driver now supports _BIX entries from ACPI 4.0.
+    <li>ACPI hibernate support was added to the <a href="https://man.openbsd.org/nvme.4">nvme(4)</a> driver.
+    <li>Substantially improved ACPI hibernate performance in the <a href="https://man.openbsd.org/ahci.4">ahci(4)</a> driver.
+    <li>The <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a> driver was updated to code based on Linux 4.4.70. It now supports Skylake, Kaby Lake, and Cherryview devices and has better support for Broadwell and Valleyview devices.
+    <li>The <a href="https://man.openbsd.org/pucdata.4">pucdata(4)</a> driver now supports ASIX AX99100 devices.
+    <li>Xen platform support and the <a href="https://man.openbsd.org/xbf.4">xbf(4)</a> driver in particular have been substantially improved.
     <li>...
     </ul>
 
@@ -82,31 +113,63 @@ to 6.2.
 
 <li>IEEE 802.11 wireless stack improvements:
     <ul>
-    <li>...
+    <li>MiRA 802.11n TX rate scaling now supports devices with unequal numbers of Tx and Rx streams. Fixes 11n mode for some <a href="https://man.openbsd.org/athn.8">athn(8)</a> devices.
+    <li>The <a href="https://man.openbsd.org/iwn.8">iwn(8)</a> and <a href="https://man.openbsd.org/iwm.8">iwm(8)</a> drivers will now start scanning for a new access point if they no longer receive beacons from their current AP.
+    <li>Prefer the 5GHz band over the 2GHz band during access point selection.
+    <li>Improved debug output in <a href="https://man.openbsd.org/dmesg.8">dmesg(8)</a> when a wireless interface is put into debug mode with <a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>.
     </ul>
 <p>
 
 <li>Generic network stack improvements:
     <ul>
+    <li> The kernel no longer handles IPv6 Stateless Address
+         Autoconfiguration (RFC 4862), allowing cleanup and simplification
+         of the IPv6 network stack.
+    <li> The kernel sends IPv6 router solicitations for link local addresses
+         with a link local source address.
+    <li> FQ-CoDel algorithm has been implemented for use with <a
+         href="https://man.openbsd.org/pf.conf#QUEUEING">pf(4) queueing</a>.
     <li>...
     </ul>
 <p>
 
 <li>Installer improvements:
     <ul>
+    <li> The installer now uses the Allotment Routing Table (ART).
+    <li> A unique kernel is now created by the installer to boot from after install/upgrade.
+    <li> On release installs of architectures supported by syspatch "syspatch -c" is added to rc.firsttime.
+    <li> Backwards compatibility code to support the 'rtsol' keyword in hostname.if(5) has been removed.
+    <li> The install.site and upgrade.site scripts are now executed at the end of the install/upgrade process.
+    <li> More detailed information is shown to identify disks.
+    <li> The IPv6 default router selection has been fixed.
     <li>...
     </ul>
 <p>
 
 <li>Routing daemons and other userland network improvements:
     <ul>
+    <li> A new daemon, <a
+         href="https://man.openbsd.org/slaacd">slaacd(8)</a> handles IPv6
+         Stateless Address Autoconfiguration (RFC 4862).
+    <li> <a href="https://man.openbsd.org/rtadvd">rtadvd(8)<a> now supports
+         "Reducing Energy Consumption of Router Advertisements" (RFC 7772).
     <li>...
     </ul>
 <p>
 
 <li>Security improvements:
     <ul>
-    <li>...
+    <li>A new function
+	<a href="https://man.openbsd.org/freezero.3">freezero(3)</a>
+	to easily clear and free memory holding sensitive data has been added.
+    <li>Double free detection has been improved when the F
+    	<a href="https://man.openbsd.org/malloc.3">malloc(3)</a> option is used.
+    	The existing S option now includes F.
+    <li>The <a href="http://man.openbsd.org/tty.4#TIOCSTI">TOICSTI</a>
+	tty ioctl has been removed.  The I/O-loops in the last two consumers
+	<a href="http://man.openbsd.org/csh.1">csh(1)</a> and
+	<a href="http://man.openbsd.org/mail.1">mail(1)</a>
+	were rewritten to cope with the removal.
     </ul>
 <p>
 
@@ -120,7 +183,9 @@ to 6.2.
 
 <li>Assorted improvements:
     <ul>
-    <li>..
+    <li>Improved UTF-8 line editing support for
+	<a href="http://man.openbsd.org/ksh.1">ksh(1)</a>
+	Emacs and Vi input mode.
     </ul>
 <p>
 
@@ -161,6 +226,7 @@ to 6.2.
 
 <li>Ports and packages:
     <dl>
+    <dt>A massive amount of clang-related fixes happened between 6.1 and 6.2.
     <dt>Many pre-built packages for each architecture:
     </dl>
     <!-- number of FTP packages minus SHA256, SHA256.sig, index.txt -->
@@ -188,42 +254,41 @@ to 6.2.
     <table border=0 cellspacing=0 cellpadding=2 width="95%">
     <tr>
     <td valign="top" width="50%"><ul>
-	<li>AFL 2.39b
-	<li>Chromium 57.0.2987.133
-	<li>Emacs 21.4 and 25.1
+	<li>AFL 2.51b
+	<li>Chromium 61.0.3163.100
+	<li>Emacs 21.4 and 25.3
 	<li>GCC 4.9.4
 	<li>GHC 7.10.3
-	<li>Gimp 2.8.18
-	<li>GNOME 3.22.2
-	<li>Go 1.8
+	<li>Gimp 2.8.22
+	<li>GNOME 3.24.2
+	<li>Go 1.9
 	<li>Groff 1.22.3
-	<li>JDK 7u80 and 8u121
+	<li>JDK 8u144
 	<li>KDE 3.5.10 and 4.14.3 (plus KDE4 core updates)
-	<li>LLVM/Clang 4.0.0
-	<li>LibreOffice 5.2.4.2
+	<li>LLVM/Clang 5.0.0
+	<li>LibreOffice 5.2.7.2
 	<li>Lua 5.1.5, 5.2.4, and 5.3.4
-	<li>MariaDB 10.0.30
-	<li>Mono 4.6.2.6
-	<li>Mozilla Firefox 52.0.2esr and 52.0.2
-	<li>Mozilla Thunderbird 45.8.0
+	<li>MariaDB 10.0.32
+	<li>Mozilla Firefox 52.4.0esr and 56.0.0
+	<li>Mozilla Thunderbird 52.2.1
     </ul></td><td valign=top width="50%"><ul>
-	<li>Mutt 1.8.0
-	<li>Node.js 6.10.1
+	<li>Mutt 1.9.1 and NeoMutt 20170912
+	<li>Node.js 6.11.2
 	<li>Ocaml 4.03.0
-	<li>OpenLDAP 2.3.43 and 2.4.44
-	<li>PHP 5.5.38, 5.6.30, and 7.0.16
-	<li>Postfix 3.2.0 and 3.3-20170218
-	<li>PostgreSQL 9.6.2
-	<li>Python 2.7.13, 3.4.5, 3.5.2 and 3.6.0
-	<li>R 3.3.3
-	<li>Ruby 1.8.7.374, 2.1.9, 2.2.6, 2.3.3 and 2.4.1
-	<li>Rust 1.16.0
-	<li>Sendmail 8.15.2
-	<li>SQLite3 3.17.0
-	<li>Sudo 1.8.19.2
-	<li>Tcl/Tk 8.5.18 and 8.6.4
-	<li>TeX Live 2015
-	<li>Vim 8.0.0388
+	<li>OpenLDAP 2.3.43 and 2.4.45
+	<li>PHP 5.6.31 and 7.0.23
+	<li>Postfix 3.2.2 and 3.3-20170910
+	<li>PostgreSQL 9.6.5
+	<li>Python 2.7.14 and 3.6.2
+	<li>R 3.4.1
+	<li>Ruby 1.8.7.374, 2.1.9, 2.2.8, 2.3.5 and 2.4.2
+	<li>Rust 1.20.0
+	<li>Sendmail 8.16.0.21
+	<li>SQLite3 3.20.1
+	<li>Sudo 1.8.21.2
+	<li>Tcl/Tk 8.5.19 and 8.6.6
+	<li>TeX Live 2016
+	<li>Vim 8.0.0987
 	<li>Xfce 4.12
     </ul></td></tr></table>
 <p>
@@ -233,14 +298,14 @@ to 6.2.
 
 <li>The system includes the following major components from outside suppliers:
     <ul>
-    <li>Xenocara (based on X.Org 7.7 with xserver 1.18.3 + patches,
-      freetype 2.7.1, fontconfig 2.12.1, Mesa 13.0.6, xterm 327,
+    <li>Xenocara (based on X.Org 7.7 with xserver 1.18.4 + patches,
+      freetype 2.8.0, fontconfig 2.12.4, Mesa 13.0.6, xterm 330,
       xkeyboard-config 2.20 and more)
     <li>LLVM/Clang 4.0.0 (+ patches)
     <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
-    <li>Perl 5.24.1 (+ patches)
-    <li>NSD 4.1.15
-    <li>Unbound 1.6.1
+    <li>Perl 5.24.2 (+ patches)
+    <li>NSD 4.1.17
+    <li>Unbound 1.6.6
     <li>Ncurses 5.7
     <li>Binutils 2.17 (+ patches)
     <li>Gdb 6.3 (+ patches)
@@ -533,7 +598,7 @@ with a command like:
 
 <blockquote><pre>
 # <b>cd /usr/ports</b>
-# <b>cvs -d anoncvs@server.openbsd.org:/cvs update -Pd -rOPENBSD_6_1</b>
+# <b>cvs -d anoncvs@server.openbsd.org:/cvs update -Pd -rOPENBSD_6_2</b>
 </pre></blockquote>
 
 [Of course, you must replace the server name here with a nearby anoncvs
