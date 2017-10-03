@@ -63,6 +63,11 @@ to 6.2.
 <ul>
 <li>New/extended platforms:
     <ul>
+    <li>The <a href="https://www.openbsd.org/i386.html">i386</a> and
+        <a href="https://www.openbsd.org/amd64.html">amd64</a>
+        platforms have switched to using
+        <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
+        as the base system compiler.
     <li>...
     </ul>
 <p>
@@ -98,15 +103,17 @@ to 6.2.
     <li>ACPI hibernate support was added to the <a href="https://man.openbsd.org/nvme.4">nvme(4)</a> driver.
     <li>Substantially improved ACPI hibernate performance in the <a href="https://man.openbsd.org/ahci.4">ahci(4)</a> driver.
     <li>The <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a> driver was updated to code based on Linux 4.4.70. It now supports Skylake, Kaby Lake, and Cherryview devices and has better support for Broadwell and Valleyview devices.
-    <li>The <a href="https://man.openbsd.org/pucdata.4">pucdata(4)</a> driver now supports ASIX AX99100 devices.
+    <li>The <a href="https://man.openbsd.org/puc.4">puc(4)</a> driver now supports ASIX AX99100 devices.
     <li>Xen platform support and the <a href="https://man.openbsd.org/xbf.4">xbf(4)</a> driver in particular have been substantially improved.
     <li>...
     </ul>
 
 <p>
-<li>New <a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
-    <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a>:
+<li><a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
+    <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
     <ul>
+    <li><a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> supports
+    paused VM migration using send and receive commands.
     <li>...
     </ul>
 <p>
@@ -122,6 +129,8 @@ to 6.2.
 
 <li>Generic network stack improvements:
     <ul>
+    <li> Incoming and forwarded IP packets are now processed without
+         KERNEL_LOCK, resulting in better performances and reduced latency
     <li> The kernel no longer handles IPv6 Stateless Address
          Autoconfiguration (RFC 4862), allowing cleanup and simplification
          of the IPv6 network stack.
@@ -129,6 +138,23 @@ to 6.2.
          with a link local source address.
     <li> FQ-CoDel algorithm has been implemented for use with <a
          href="https://man.openbsd.org/pf.conf#QUEUEING">pf(4) queueing</a>.
+    <li>Improve IPv6 checks for IPsec policies and make them consistent
+	with IPv4.
+    <li>Refactor local IP delivery to process IPsec packets in a flow.
+	Avoid that they are enqueued a second time.
+    <li><a href="https://man.openbsd.org/pf.4">pf(4)</a>
+	looks into AH packets and matches on the inner protocol.
+	This makes IPv4 authentication headers work like IPv6.
+    <li>The length of extension header chains in pf(4) is limited.
+	This prevents spending excessive cpu time on crafted packets.
+    <li>Block IPv6 packets in pf(4) that have hop-by-hop options
+	header or destination options header.
+	Such packets can be passed by adding "allow-opts" to the
+	rule.
+	So IPv6 options are handled like their counterpart in IPv4
+	now.
+    <li>If the IPv4 ID gets reused to fast, pf(4) fragment reassembly
+	uses a smarter strategy to drop packets.
     <li>...
     </ul>
 <p>
@@ -149,10 +175,22 @@ to 6.2.
 <li>Routing daemons and other userland network improvements:
     <ul>
     <li> A new daemon, <a
-         href="https://man.openbsd.org/slaacd">slaacd(8)</a> handles IPv6
+         href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> handles IPv6
          Stateless Address Autoconfiguration (RFC 4862).
-    <li> <a href="https://man.openbsd.org/rtadvd">rtadvd(8)<a> now supports
+    <li> <a href="https://man.openbsd.org/rtadvd.8">rtadvd(8)</a> now supports
          "Reducing Energy Consumption of Router Advertisements" (RFC 7772).
+    <li><a href="https://man.openbsd.org/ipsecctl.8">ipsecctl(8)</a>
+	can show SA bundles now.
+	The keyword "bundle" allows to create them explicitly.
+	This avoids confusion as they were used implicitly before.
+    <li><a href="https://man.openbsd.org/nc.1">nc(1)</a>
+        has got the option -W "recvlimit" to terminate netcat after
+        receiving a number of packets.
+        This allows to send a UDP request, receive a reply and check
+        the result on the command line.
+    <li>Fix a bunch of races in
+	<a href="https://man.openbsd.org/relayd.8">relayd(8)</a>
+	expecially in HTTP chunked mode.
     <li>...
     </ul>
 <p>
@@ -165,27 +203,155 @@ to 6.2.
     <li>Double free detection has been improved when the F
     	<a href="https://man.openbsd.org/malloc.3">malloc(3)</a> option is used.
     	The existing S option now includes F.
-    <li>The <a href="http://man.openbsd.org/tty.4#TIOCSTI">TOICSTI</a>
+    <li>The <a href="https://man.openbsd.org/tty.4#TIOCSTI">TIOCSTI</a>
 	tty ioctl has been removed.  The I/O-loops in the last two consumers
-	<a href="http://man.openbsd.org/csh.1">csh(1)</a> and
-	<a href="http://man.openbsd.org/mail.1">mail(1)</a>
+	<a href="https://man.openbsd.org/csh.1">csh(1)</a> and
+	<a href="https://man.openbsd.org/mail.1">mail(1)</a>
 	were rewritten to cope with the removal.
+    <li>Trapsleds, a new mitigation that significantly reduces the amount of
+        nops in the instruction stream, converting them to traps, making it
+        harder to target potential gadgets.
+    <li>Kernel Address Randomized Link (KARL), a new "link-kit" allows the .o
+        files of the kernel to be relinked in a random order, creating a unique
+        kernel for each boot.
+    <li>Like with libc previously,
+        <a href="https://man.openbsd.org/rc.8">rc(8)</a> re-links libcrypto on
+        startup, placing the objects in a random order.
+    <li>In addition to libcrypto, to deter code reuse exploits,
+        <a href="https://man.openbsd.org/rc.8">rc(8)</a> re-links
+        <a href="https://man.openbsd.org/ld.so.1">ld.so</a> on
+        startup, placing the objects in a random order.
+    <li>If process accounting is activated with
+	<a href="https://man.openbsd.org/accton.8">accton(8)</a>,
+	the daily mail shows pledge violations and program crashes.
+	<a href="https://man.openbsd.org/lastcomm.8">lastcomm(8)</a>
+	uses the flags P and T for such processes.
+    <li><a href="https://man.openbsd.org/pflogd.8">pflogd(8)</a> uses the
+	fork+exec model.
+    <li><a href="https://man.openbsd.org/tcpdump.8">tcpdump(8)</a> uses the
+	fork+exec model.
     </ul>
 <p>
 
-<li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>/
-    <a href="https://man.openbsd.org/dhcpd.8">dhcpd(8)</a>/
+<li><a href="https://man.openbsd.org/dhcpd.8">dhcpd(8)</a>/
     <a href="https://man.openbsd.org/dhcrelay.8">dhcrelay(8)</a> improvements:
     <ul>
-    <li>...
+    <li>Add support for echo-client-id statement to
+      <a href="https://man.openbsd.org/dhcpd.conf.5">dhclient.conf(5)</a>.
+    <li>Take greater care to process all data read, and only data read, from the
+      <a href="https://man.openbsd.org/bpf.4">bpf(4)</a>
+      socket.
+    <li>Use /dev/bpf instead of /dev/bpf0.
+    <li>Handle DHCPINFORM messages from clients behind a DHCP relay.
+    <li>Fix handling of
+      <a href="https://man.openbsd.org/carp.4">carp(4)</a>
+      interfaces in
+       <a href="https://man.openbsd.org/dhcrelay.8">dhcrelay(8)</a>.
+    <li>Don't stop
+      <a href="https://man.openbsd.org/dhcrelay.8">dhcrelay(8)</a>
+      logging to stderr when it is started with the -d option.
+    </ul>
+<p>
+    
+<li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a> improvements:
+    <ul>
+    <li>Log messages reworked and clarified, in particular by prefixing
+	the name of the relevant network interface.
+    <li>Treat SSID as 0 to 32 bytes of binary data, not a string.
+    <li>Use RTM_PROPOSAL to take control of an interface rather than flipping
+      interface down and up in the hope that other
+      <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+      instances notice.
+    <li>Reduce file operations needed by -L option by opening file at
+      startup and using it throughout process lifetime.
+    <li>Improve <a href="https://man.openbsd.org/resolv.conf.5">resolv.conf(5)</a>
+      handling by reducing writes and more reliably determining which interface
+      has the current default route.
+    <li>Take greater care to process all data read, and only data read, from the
+      <a href="https://man.openbsd.org/bpf.4">bpf(4)</a>
+      socket.
+    <li>Improve the determination of the link state of an interface.
+    <li>Decline inappropriate lease offers as soon as they are deemed
+      inappropriate.
+    <li>Drop support for the timestamp formats used in lease files created
+      more than four years ago.
+    <li>Accept an offer from the server that sent the first copy of
+      the offer, not the server that sent the last copy.
+    <li>Don't delete addresses and routes when exiting.
+    <li>Ensure IPv6 packets are not read from sockets.
+    <li>Don't silently ignore obsolete keywords in
+      <a href="https://man.openbsd.org/dhclient.conf.5">dhclient.conf(5)</a>
+    <li>Reduce memory footprint by shrinking oversized static buffers.
+    <li>Eliminate repeated socket opens by opening the required sockets during
+      startup.
+    <li>Fix construction of unicast UDP packets, broken in 5.6.
+    <li>Improve determination of when a renewed lease requires interface
+      configuration changes.
+    <li>Don't exit when addresses are manually added or deleted from an
+      interface.
+    <li>Don't support option 33, classfull IP addresses.
+    <li>Fix configuration of default routes supplied by classless route options.
+    <li>Consider
+      <a href="https://man.openbsd.org/dhclient.conf.5">dhclient.conf(5)</a>
+      contents when determining what MTU value to configure.
+    <li>Consider
+      <a href="https://man.openbsd.org/dhclient.conf.5">dhclient.conf(5)</a>
+      contents when creating the content of
+      <a href="https://man.openbsd.org/resolv.conf.5">resolv.conf(5)</a>.
+    <li>Delete direct routes when routes are flushed.
+    <li>Don't label routes with "DHCLIENT nnnn".
+    <li>Don't delete addresses or routes that will be immediately added back.
+    <li>Delete addresses and routes only when a renewal request is NAK'ed.
+    <li>Don't wait forever for requested information on the default route.
+    <li>Don't exit when an attempt to send a packet fails.
+    <li>Don't log a packet send when the send fails.
+    <li>Remove the -u option, broken since 2013 without complaints.
+    <li>Use /dev/bpf instead of /dev/bpf0.
     </ul>
 <p>
 
 <li>Assorted improvements:
     <ul>
     <li>Improved UTF-8 line editing support for
-	<a href="http://man.openbsd.org/ksh.1">ksh(1)</a>
+	<a href="https://man.openbsd.org/ksh.1">ksh(1)</a>
 	Emacs and Vi input mode.
+    <li>The HISTFILE of <a href="https://man.openbsd.org/ksh.1">ksh(1)</a> now uses
+        a plain text format. Support for the
+        <a href="https://man.openbsd.org/ksh#HISTCONTROL">HISTCONTROL</a>
+        environment variable was added.
+	  <li>New <a href="https://man.openbsd.org/futex">futex(2)</a> syscall
+	  <li>New pthread <a href="https://man.openbsd.org/pthread_mutex_init">mutex</a>
+	  and <a href="https://man.openbsd.org/pthread_cond_init">condition variable</a>
+	  implementations improving latency of threaded applications
+	  <li>New <a href="https://man.openbsd.org/ctfdump">ctfdump</a>
+	  and <a href="https://man.openbsd.org/ctfconv">ctfconv</a> tools to manipulate
+	  CTF (Compact C Type Format).
+    <li>The error handling in
+	<a href="https://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	has been improved.
+	Even if internal errors occur, the deamon tries to keep
+	unaffected subsystems active.
+	So as many messages as possible are logged.
+	They can be filtered by severity and facility "syslog".
+    <li>syslogd(8) can now suppress "last message repeated" which is
+	useful for remote logging.
+    <li>syslogd(8) can listen on multiple TLS sockets.
+    <li>syslogd(8) closes the *.514 UDP sockets when they are not
+	needed.
+    <li>Truncate log messates at 8192 bytes everywhere.
+    <li>Nested mount points are umounted in correct order.
+    <li>Fix creation of
+      <a href="https://man.openbsd.org/softraid.4">softraid(4)</a>
+      CONCAT volumes.
+    <li>Include
+      <a href="https://man.openbsd.org/softraid.4">softraid(4)</a>
+      volume and backing disk information in i/o error messages.
+    <li>Make
+      <a href="https://man.openbsd.org/vioscsi.4">vioscsi(4)</a>
+      a normal
+      <a href="https://man.openbsd.org/scsi.4">scsi(4)</a>
+      device by eliminating its use of the obsolete XS_NO_CCB mechanism.
+    <li>Rmove last vestiges of now unused XS_NO_CCB mechanism.
     </ul>
 <p>
 
@@ -203,6 +369,11 @@ to 6.2.
       </ul>
     <li>New/changed features:
       <ul>
+      <li>Add RemoteCommand option to specify a command in the
+	<a href="https://man.openbsd.org/ssh.1">ssh(1)</a>
+	config file instead of giving it on the client's command
+	line.
+	The feature allows to automate tasks using ssh config.
       <li>...
       </ul>
     <li>The following significant bugs have been fixed in this release:
@@ -310,7 +481,7 @@ to 6.2.
     <li>Binutils 2.17 (+ patches)
     <li>Gdb 6.3 (+ patches)
     <li>Awk Aug 10, 2011 version
-    <li>Expat 2.1.1
+    <li>Expat 2.2.4
     </ul>
 </ul>
 
