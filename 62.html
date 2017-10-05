@@ -18,14 +18,14 @@
 <font color="#e00000">6.2</font>
 </h2>
 
-<a href="images/XXX.gif">
-<img align="left" width="227" height="343" hspace="24" src="images/XXX.gif"></a>
+<a href="images/MoBSD.gif">
+<img align="left" width="227" height="343" hspace="24" src="images/MoBSD.gif"></a>
 Released October 15, 2017<br>
 Copyright 1997-2017, Theo de Raadt.<br>
 <br>
 <br>
 6.2 Song:
-<a href="lyrics.html#62">XXX</a>.
+<a href="lyrics.html#62">coming in December</a>.
 
 <br>
 <ul>
@@ -61,16 +61,6 @@ For a comprehensive list, see the <a href="plus62.html">changelog</a> leading
 to 6.2.
 
 <ul>
-<li>New/extended platforms:
-    <ul>
-    <li>The <a href="https://www.openbsd.org/i386.html">i386</a> and
-        <a href="https://www.openbsd.org/amd64.html">amd64</a>
-        platforms have switched to using
-        <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
-        as the base system compiler.
-    <li>...
-    </ul>
-<p>
 
 <li>Improved hardware support, including:
     <ul>
@@ -94,6 +84,7 @@ to 6.2.
     <li>octeon: New <a href="https://man.openbsd.org/octeon/octcit.4">octcit(4)</a> driver for the central interrupt unit version 3 on CN72xx/CN73xx/CN77xx/CN78xx.
     <li>octeon: New <a href="https://man.openbsd.org/octeon/octsctl.4">octsctl(4)</a> driver for the OCTEON SATA controller bridge.
     <li>octeon: New <a href="https://man.openbsd.org/octeon/octxctl.4">octxctl(4)</a> driver for the OCTEON USB3 controller bridge.
+    <li>octeon: Rhino Labs Inc. SDNA Shasta, and Ubiquiti Networks EdgeRouter 4 and 6 are now supported.
     <li>New <a href="https://man.openbsd.org/hvs.4">hvs(4)</a> driver for Hyper-V storage.
     <li>New <a href="https://man.openbsd.org/pcxrtc.4">pcxrtc(4)</a> driver for the NXP PCF8563 Real Time Clock.
     <li>New <a href="https://man.openbsd.org/urng.4">urng(4)</a> driver for USB random number generator devices.
@@ -108,16 +99,24 @@ to 6.2.
     <li>The <a href="https://man.openbsd.org/puc.4">puc(4)</a> driver now supports ASIX AX99100 devices.
     <li>Xen platform support and the <a href="https://man.openbsd.org/xbf.4">xbf(4)</a> driver in particular have been substantially improved.
     <li><a href="https://man.openbsd.org/nvme.4">nvme(4)</a> driver now reports correct last sector address to scsi, allowing valid GPT to be created.
-    <li>...
+    <li>Repair ioapic(8) misconfigurations.
     </ul>
 
 <p>
 <li><a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
     <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
     <ul>
-    <li><a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> supports
-    paused VM migration using send and receive commands.
-    <li>...
+    <li><a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> supports paused VM migration and memory snapshotting using send and receive commands.
+    <li>VPID/ASID reuse/rollover in <a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>.
+    <li>SGABIOS imported as an option ROM payload in SeaBIOS (for VGA to serial console redirection.)
+    <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> resets the guest VM RTC (real time clock) on host resume from suspend/hibernate (OpenBSD guests only.)
+    <li>Allow guest VMs access to AVX/AVX2 host CPU features
+    <li>Support for AMD SVM/RVI hosts
+    <li>Allow larger guest VM memory sizes (up to MAXDSIZ sized guests - eg, 32GB on amd64 hosts)
+    <li>Better handling of guest VM MONITOR/MWAIT and HLT instructions
+    <li>Various device emulation improvements in <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a>.
+    <li>Increase the <a href="https://man.openbsd.org/virtio.4">virtio(4)</a> queue size provided by <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> from 64 to 128 entries, to increase performance.
+    <li>Many fixes to <a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a> and <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> error handling.
     </ul>
 <p>
 
@@ -158,6 +157,7 @@ to 6.2.
 	now.
     <li>If the IPv4 ID gets reused too fast, pf(4) fragment reassembly
 	uses a smarter strategy to drop packets.
+    <li>Enable the use of per-CPU caches on the network packet allocators
     <li>...
     </ul>
 <p>
@@ -171,6 +171,7 @@ to 6.2.
     <li> The install.site and upgrade.site scripts are now executed at the end of the install/upgrade process.
     <li> More detailed information is shown to identify disks.
     <li> The IPv6 default router selection has been fixed.
+    <li> On the amd64 platform, the AES-NI is used if present.
     <li>...
     </ul>
 <p>
@@ -201,6 +202,10 @@ to 6.2.
       domain.
     <li><a href="https://man.openbsd.org/ifstated.8">ifstated(8)</a> now
       copes with interface departures/arrivals.
+    <li><a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a> can now
+      be started multiple times in different
+      <a href="https://man.openbsd.org/rdomain.4">routing domains</a>,
+      this provides virtual router functionality.
     <li>...
     </ul>
 <p>
@@ -219,11 +224,13 @@ to 6.2.
 	<a href="https://man.openbsd.org/mail.1">mail(1)</a>
 	were rewritten to cope with the removal.
     <li>Trapsleds, a new mitigation that significantly reduces the amount of
-        nops in the instruction stream, converting them to traps, making it
-        harder to target potential gadgets.
+        nops in the instruction stream, replacing them with trap instructions
+        or jump-over-trap sequences, thereby requiring greater accuracy for
+        targetting potential gadgets.
     <li>Kernel Address Randomized Link (KARL), a new "link-kit" allows the .o
         files of the kernel to be relinked in a random order, creating a unique
-        kernel for each boot.
+        kernel for each boot.  /bsd is now non-readable to users, to try to
+        keep the secret.
     <li>Like with libc previously,
         <a href="https://man.openbsd.org/rc.8">rc(8)</a> re-links libcrypto on
         startup, placing the objects in a random order.
@@ -245,6 +252,20 @@ to 6.2.
     <li><a href="https://man.openbsd.org/snmpd.8">snmpd(8)</a> and
       <a href="https://man.openbsd.org/snmpd.8">snmpctl(8)</a> now use
       <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
+    <li>Tighter pledge for <a href="https://man.openbsd.org/at.1">at(1)</a>.
+    <li>Fixed and simplified pledge logic for
+      <a href="https://man.openbsd.org/nc.1">nc(1)</a>.
+    <li>More application of recallocarray(3) in userland, and tracked sizes
+        to free(9) in the kernel.
+    <li>Achieve higher levels of paranoia regarding structure packing, and
+        clear many kernel objects before passing to userland.
+    <li>Disable some optimizations in clang(1) due to incompatibility
+        with security.
+    <li>For instance, cope with clang(1)'s assumption that static or const
+        objects placed in unknown sections (such as .openbsd.randomdata)
+        are surely always 0, and therefore such memory accesses can be
+        optimized away..
+    <li>In kernel, randomly bias down the top-of-stack per kthread.
     </ul>
 <p>
 
@@ -327,6 +348,11 @@ to 6.2.
 
 <li>Assorted improvements:
     <ul>
+    <li>The <a href="https://www.openbsd.org/i386.html">i386</a> and
+        <a href="https://www.openbsd.org/amd64.html">amd64</a>
+        platforms have switched to using
+        <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
+        as the base system compiler.
     <li>Improved UTF-8 line editing support for
 	<a href="https://man.openbsd.org/ksh.1">ksh(1)</a>
 	Emacs and Vi input mode.
@@ -349,8 +375,8 @@ to 6.2.
         all POSIX *locale(3) and *_l(3) functions are included, but in
         OpenBSD, we of course only really care about <code>LC_CTYPE</code>
         and we only support ASCII and UTF-8.
-    <li>New <a href="https://man.openbsd.org/ctfdump">ctfdump</a> and
-        <a href="https://man.openbsd.org/ctfconv">ctfconv</a>
+    <li>New <a href="https://man.openbsd.org/ctfdump">ctfdump(1)</a> and
+        <a href="https://man.openbsd.org/ctfconv">ctfconv(1)</a>
         tools to manipulate CTF (Compact C Type Format).
     <li>The error handling in
 	<a href="https://man.openbsd.org/syslogd.8">syslogd(8)</a>
@@ -383,6 +409,33 @@ to 6.2.
     <li>Userspace can now get the address of the thread control block
         without a system call on OCTEON II and later.
     <li>FPU is enabled on OCTEON III.
+    <li>GENERIC kernels now include a .SUNW_ctf section containing CTF data
+    <li>New <a href="https://man.openbsd.org/ddb.4">ddb(4)</a> <tt>kill</tt>
+    command, send an uncatchable SIGABRT to a process.
+    <li>New <a href="https://man.openbsd.org/ddb.4">ddb(4)</a> <tt>pprint</tt>
+    command, using CTF information to "pretty print" global symbols.
+    <li>New <a href="https://man.openbsd.org/ddb.4">ddb(4)</a>
+    <tt>show struct</tt> command, using CTF information to display the content
+    of in memory C structures.
+    <li>x86: <a href="https://man.openbsd.org/ddb.4">ddb(4)</a> uses CTF data
+    to display the correct number of function arguments in backtraces
+    <li>Power off all codecs in
+      <a href="https://man.openbsd.org/azalia.4">azalia(4)</a> to avoid static
+      noise in speakers and headphones on reboot.
+    <li>Fix i386 boot regression seen on very old 486DX CPUs. 
+    <li>New <a href="https://man.openbsd.org/witness.4">witness(4)</a> tool
+        for debugging lock order issues in the kernel.
+        The tool is not built in by default, and only amd64, hppa and i386
+        are supported.
+    <li>Modernize some bizzare tty behaviours of getty(8).
+    <li>Some subtle changes to pledge(2) to satisfy requirements observed
+        in real life. 
+    <li>Prefer use of waitpid(2) rather than wait(3) where possible, to
+        avoid problems with pre-existing children.
+    <li>Rewrite swaths of machine-dependent system call stub code in ld.so(1)
+        in a more portable fashion.
+    <li><a href="https://man.openbsd.org/pool_cache_init.9">Per-CPU
+        caches</a> implemented in pools
     </ul>
 <p>
 
@@ -474,11 +527,11 @@ to 6.2.
     <td valign="top" width="25%">
     <ul>
       <li>alpha:      XXXX
-      <li>amd64:      XXXX
+      <li>amd64:      9728
       <li>arm:        XXXX
     </ul></td><td valign=top width="25%"><ul>
       <li>hppa:       XXXX
-      <li>i386:       XXXX
+      <li>i386:       9285
       <li>mips64:     XXXX
     </ul></td><td valign=top width="25%"><ul>
       <li>mips64el:   XXXX
@@ -494,6 +547,7 @@ to 6.2.
     <tr>
     <td valign="top" width="50%"><ul>
 	<li>AFL 2.51b
+	<li>CMake 3.9.3
 	<li>Chromium 61.0.3163.100
 	<li>Emacs 21.4 and 25.3
 	<li>GCC 4.9.4
