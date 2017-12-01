@@ -71,15 +71,6 @@ the following commands:
 </pre></blockquote>
 
 
-<h3 id="r20171027">2017/10/27 - iked(8): ECP group incompatibility</h3>
-
-In the final RFC 5903, the computation for the DH shared secret changed and
-<a href="https://man.openbsd.org/iked">iked(8)</a>
-was modified to follow the RFC.
-This change is not backwards compatible, so if you are using ECP groups,
-please make sure to upgrade all peers at the same time.
-
-
 <h3 id="r20171029">2017/10/29 - vmd(8): switch configuration</h3>
 
 <a href="https://man.openbsd.org/vmd">vmd(8)</a> no longer automatically
@@ -112,12 +103,13 @@ you may want to run
 <b>before</b> rebooting into <tt>bsd.rd</tt>.
 
 
-<h3 id="r20171108">2017/11/08 - isakmpd(8): ECP group incompatibility</h3>
+<h3 id="r20171108">2017/11/08 - iked(8) and isakmpd(8): ECP group incompatibility</h3>
 
-In the final RFC 5903, the computation for the DH shared secret changed and
+In the final RFC 5903, the computation for the DH shared secret changed.
+The <a href="https://man.openbsd.org/iked">iked(8)</a> and
 <a href="https://man.openbsd.org/isakmpd">isakmpd(8)</a>
-was modified to follow the RFC.
-This change is not backwards compatible, so if you are using ECP groups,
+programs were modified to follow the RFC.
+These changes are not backwards compatible, so if you are using ECP groups,
 please make sure to upgrade all peers at the same time.
 
 
@@ -128,8 +120,16 @@ The <a href="https://man.openbsd.org/ifconfig">ifconfig(8)</a>
 Adjust your <a href="https://man.openbsd.org/hostname.if">hostname.if(5)</a>
 configuration and scripts accordingly.
 
+
+<h3 id="r20171130">2017/11/30 - [packages] PostgreSQL major update</h3>
+
+There was a major update to PostgreSQL 10.1.
+Use <tt>pg_upgrade</tt> as described in the
+<a href="https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/ports/databases/postgresql/pkg/README-server?rev=1.23&content-type=text/plain">postgresql-server pkg-readme</a>
+or do a dump/restore.
+
 <hr id="end">
-<small>$OpenBSD: current.html,v 1.867 2017/11/17 18:37:25 benno Exp $</small>
+<small>$OpenBSD: current.html,v 1.870 2017/11/30 19:57:09 tb Exp $</small>
 
 </body>
 </html>
