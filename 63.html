@@ -63,7 +63,62 @@ to 6.3.
 
 <li>Improved hardware support, including:
     <ul>
-    <li>...
+    <li>SMP support on OpenBSD/arm64 platforms.
+    <li>VFP and NEON support on OpenBSD/armv7 platforms.
+    <li>New <a href="https://man.openbsd.org/acrtc.4">acrtc(4)</a> driver
+       for X-Powers AC100 audio codec and Real Time Clock.
+    <li>New <a href="https://man.openbsd.org/axppmic.4">axppmic(4)</a> driver
+       for X-Powers AXP Power Management ICs.
+    <li>New <a href="https://man.openbsd.org/bcmrng.4">bcmrng(4)</a> driver
+       for Broadcom BCM2835/BCM2836/BCM2837 random number generator.
+    <li>New <a href="https://man.openbsd.org/bcmtemp.4">bcmtemp(4)</a> driver
+       for Broadcom BCM2835/BCM2836/BCM2837 temperature monitor.
+    <li>New <a href="https://man.openbsd.org/bgw.4">bgw(4)</a> driver
+       for Bosch motion sensor.
+    <li>New <a href="https://man.openbsd.org/bwfm.4">bwfm(4)</a> driver
+       for Broadcom and Cypress FullMAC 802.11 devices.
+    <li>New <a href="https://man.openbsd.org/efi.4">efi(4)</a> driver
+       for EFI runtime services.
+    <li>New <a href="https://man.openbsd.org/imxanatop.4">imxanatop(4)</a> driver
+       for i.MX6 integrated regulator.
+    <li>New <a href="https://man.openbsd.org/rkpcie.4">rkpcie(4)</a> driver
+       for Rockchip RK3399 Host/PCIe bridge.
+    <li>New <a href="https://man.openbsd.org/sxirsb.4">sxirsb(4)</a> driver
+       for Allwinner Reduced Serial Bus controller.
+    <li>New <a href="https://man.openbsd.org/sxitemp.4">sxitemp(4)</a> driver
+       for Allwinner temperature monitor.
+    <li>New <a href="https://man.openbsd.org/sxits.4">sxits(4)</a> driver
+       for temperature sensor on Allwinner A10/A20 touchpad controller.
+    <li>New <a href="https://man.openbsd.org/sxitwi.4">sxitwi(4)</a> driver
+       for two-wire bus found on several Allwinner SoCs.
+    <li>New <a href="https://man.openbsd.org/sypwr.4">sypwr(4)</a> driver
+       for the Silergy SY8106A regulator.
+    <li>Support for Rockchip RK3328 SoCs has been added to the 
+        <a href="https://man.openbsd.org/dwge.4">dwge(4)</a>,
+        <a href="https://man.openbsd.org/rkgrf.4">rkgrf(4)</a>,
+	<a href="https://man.openbsd.org/rkclock.4">rkclock(4)</a> and
+	<a href="https://man.openbsd.org/rkpinctrl.4">rkpinctrl(4)</a>
+	drivers.
+    <li>Support for Rockchip RK3228/3328 SoCs has been added to the 
+        <a href="https://man.openbsd.org/rktemp.4">rktemp(4)</a>
+	driver.
+    <li>Support for Allwinner A10/A20, A23/A33, A80 and R40/V40
+        SoCs has been added to the
+	<a href="https://man.openbsd.org/sxiccmu.4">sxiccmu(4)</a> driver.
+    <li>Support for Allwinner A33, GR8 and R40/V40 SoCs has been
+        added to the
+	<a href="https://man.openbsd.org/sxipio.4">sxipio(4)</a> driver.
+    <li>support for SAS3.5 MegaRAIDs was added to the
+        <a href="https://man.openbsd.org/mfii.4">mfii(4)</a> driver.
+    <li>support for Intel Cannon Lake and Ice Lake integrated Ethernet
+        was added to the
+        <a href="https://man.openbsd.org/em.4">em(4)</a> driver.
+    <li><a href="https://man.openbsd.org/cnmac.4">cnmac(4)</a> ports are now
+        assigned to different CPU cores for distributed interrupt processing.
+    <li>The <a href="https://man.openbsd.org/pms.4">pms(4)</a> driver now
+        detects and handles reset announcements.
+    <li>On amd64 Intel CPU microcode is loaded on boot and installed/updated by
+        <a href="https://man.openbsd.org/fw_update.1">fw_update(1)</a>.
     </ul>
 
 <p>
@@ -75,13 +130,23 @@ to 6.3.
 	href="https://man.openbsd.org/vioscsi.4">vioscsi(4)</a>.
     <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> no longer
 	creates an underlying bridge interface for virtual switches defined in
-	<a href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>.
+	<a href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
     <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> receives
 	switch information (rdomain, etc) from underlying switch interface in
 	conjunction of settings in <a
-	href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>.
+	href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
+    <li>TSC (time stamp counter) support in guest VMs
+    <li>Support ukvm/Solo5 unikernels in
+        <a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>
+    <li>Handle valid (but uncommon) instruction encodings better
+    <li>Better PAE paging support for 32-bit Linux guest VMs
+    <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> now allows up
+        to 4 network interfaces in each VM
+    <li>Add paused migration and snapshotting support to <a
+        href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a> for AMD SVM/RVI
+        hosts.
     <li>Many fixes to <a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a>
-        and <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> error handling.
+        and <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> error handling
     </ul>
 <p>
 
@@ -93,6 +158,8 @@ to 6.3.
 
 <li>Generic network stack improvements:
     <ul>
+    <li> Cleanup and removal of code in sys/netinet6 since autoconfiguration
+         runs in userland now.
     <li>...
     </ul>
 <p>
@@ -105,12 +172,41 @@ to 6.3.
 
 <li>Routing daemons and other userland network improvements:
     <ul>
+    <li><a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a> has a new
+        <b>ssv</b> option which outputs rib entries as a single semicolon-seperated
+        like for selection before output.
+    <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> generates
+        random but stable IPv6 stateless autoconfiguration addresses according
+        to RFC 7217.
+        These are enabled per default in accordance with RFC 8064.
+    <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> can generate
+        RFC 7217 (random but stable) and RFC 4941 (privacy) style stateless
+        autoconfiguration addresses on non-/64 prefixes.
+    <li><a href="https://man.openbsd.org/ospfd.8">ospfd(8)</a> can now set the
+        metric for a route depending on the status of an interface.
     <li>...
     </ul>
 <p>
 
 <li>Security improvements:
     <ul>
+    <li>Use even more trap-sleds on various architectures.
+    <li>More use of .rodata for constant variables in assembly source.
+    <li>Stop using x86 "repz ret" in dusty corners of the tree.
+    <li>Introduce "execpromises" in
+        <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
+    <li>Prepare for the introduction of <b>MAP_STACK</b> to 
+        <a href="https://man.openbsd.org/mmap.2">mmap(2)</a> after 6.3.
+    <li>Push a small piece of KARL-linked kernel text into the random
+        number generator as entropy at startup.
+    <li>Put a small random gap at the top of thread stacks, so that attackers
+        have yet another calculation to perform for their ROP work.
+    <li>Mitigation for Meltdown vulnerability for Intel brand amd64 CPUs
+    <li>OpenBSD/arm64 now uses kernel page table isolation to mitigate
+        Spectre variant 3 (Meltdown) attacks.
+    <li>OpenBSD/armv7 and OpenBSD/arm64 now flush the branch target
+        cache (BTB) on processors that do speculative execution to
+        mitigate Spectre variant 2 attacks.
     <li>...
     </ul>
 <p>
@@ -124,23 +220,89 @@ to 6.3.
     
 <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a> improvements:
     <ul>
+      <li>parsing <a href="https://man.openbsd.org/dhclient.conf.5">
+	dhclient.conf(5)</a> no longer leaks SSID strings, strings that are
+	too long for the parsing buffer or repeated string options and commands.
+      <li>storing leases in <a href="https://man.openbsd.org/dhclient.conf.5">
+	  dhclient.conf(5)</a> is no longer supported.
+      <li>'DENY' is no longer valid in  <a href="https://man.openbsd.org/dhclient.conf.5">
+	  dhclient.conf(5)</a>.
+      <li><a href="https://man.openbsd.org/dhclient.conf.5">
+	  dhclient.conf(5)</a> and
+	<a href="https://man.openbsd.org/dhclient.leases.5">
+	  dhclient.leases(5)</a>
+	parsing error messages have been simplified and clarified, with
+	improved behaviour in the presence of unexpected semicolons.
+      <li>more care is taken to only use configuration information that was
+	successfully parsed.
+      <li> the '-n' command line option has been added to
+	<a href="https://man.openbsd.org/dhclient.8">
+	  dhclient(8)</a>, which causes
+	<a href="https://man.openbsd.org/dhclient.8">
+	  dhclient(8)</a> to parse
+	<a href="https://man.openbsd.org/dhclient.conf.5">
+	  dhclient.conf(5)</a> and immediately exit without taking
+	charge of the interface.
     <li>...
     </ul>
 <p>
 
 <li>Assorted improvements:
     <ul>
+    <li>Code reorganization and other improvements to
+        <a href="https://man.openbsd.org/malloc.3">malloc(3)</a>
+	and friends to make them more efficient.
+    <li>When performing suspend or hibernate operations, ensure all filesystems
+        are properly syncronized and marked clean, or if they cannot be
+        put into perfectly clean state on disk (due to open+unlinked files)
+        then mark them dirty, so that a failed resume/unhinbernate is gauranteed
+	to perform fsck.
+    <li><a href="https://man.openbsd.org/acme-client.1">acme-client(1)</a>
+        autodetects the agreement url and follows 30x http redirects.
+    <li>Added __cxa_thread_atexit() to support modern C++ tool chains
+    <li>Added EVFILT_DEVICE support to
+	<a href="https://man.openbsd.org/kqueue.2">kqueue(2)</a> for
+	monitoring changes to drm devices.
+    <li><a href="https://man.openbsd.org/ldexp.3">ldexp(3)</a> now handles
+      the sign of denormal numbers correctly on mips64.
+    <li><a href="https://man.openbsd.org/fdisk.8">fdisk(8)</a> now ensures the
+      validity of MBR partition offsets entered while editing.
+    <li><a href="https://man.openbsd.org/fdisk.8">fdisk(8)</a> now ensures that
+      default values lie within the valid range.
+    <li><a href="https://man.openbsd.org/less.1">less(1)</a> now splits only
+      the environment variable LESS on '$'.
+    <li><a href="https://man.openbsd.org/less.1">less(1)</a> no longer creates
+      a spurious file when encountering '$' in the initial command.
+    <li><a href="https://man.openbsd.org/softraid.4">softraid(4)</a> now validates
+      the number of chunks when assembling a volume, ensuring the on-disk
+      and in-memory metadata are in sync.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
+      always offers to edit an FFS partition's fragment size before offering to
+      edit the blocksize.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
+      allows editing the cylinders/group (cpg) attribute whenever the partition
+      blocksize can be edited.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
+      detects ^D and invalid input during (R)esize commands.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
+      detects underflows and overflows when -/+ operators are used.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
+      avoids an off-by-one when calculating the number of cylinders in a free
+      chunk.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
+      validates the requested partition size against the size of the largest free
+      chunk instead of the total free space.
     <li>...
     </ul>
 <p>
 
-<li>OpenSMTPD 6.0.0
+<li>OpenSMTPD 6.0.4
     <ul>
     <li>...
     </ul>
 <p>
 
-<li>OpenSSH 7.6
+<li>OpenSSH 7.7
     <ul>
     <li>Security:
       <ul>
@@ -157,12 +319,41 @@ to 6.3.
     </ul>
 <p>
 
-<li>LibreSSL 2.6.3
-    <ul>
-    <li>...
-    </ul>
+<li>LibreSSL 2.7.2
+   <ul>
+   <li> Fixed a bug in int_x509_param_set_hosts, calling strlen() if name
+   length provided is 0 to match the OpenSSL behaviour. Issue noticed
+   by Christian Heimes <christian@python.org>
+   <li> Added support for many OpenSSL 1.0.2 and 1.1 APIs, based on
+   observations of real-world usage in applications. These are
+   implemented in parallel with existing OpenSSL 1.0.1 APIs - visibility
+   changes have not been made to existing structs, allowing code written
+   for older OpenSSL APIs to continue working.
+   <li> Extensive corrections, improvements, and additions to the
+   API documentation, including new public APIs from OpenSSL that had
+   no pre-existing documentation.
+   <li> Added support for automatic library initialization in libcrypto,
+   libssl, and libtls. Support for pthread_once or a compatible
+   equivalent is now required of the target operating system. As a
+   side-effect, minimum Windows support is Vista or higher.
+   <li> Converted more packet handling methods to CBB, which improves
+   resiliency when generating TLS messages.
+   <li> Completed TLS extension handling rewrite, improving consistency of
+   checks for malformed and duplicate extensions.
+   <li>Rewrote ASN1_TYPE_{get,set}_octetstring() using templated ASN.1.
+   This removes the last remaining use of the old M_ASN1_* macros
+   (asn1_mac.h) from API that needs to continue to exist.
+   <li> Added support for client-side session resumption in libtls.
+   A libtls client can specify a session file descriptor (a regular
+   file with appropriate ownership and permissions) and libtls will
+   manage reading and writing of session data across TLS handshakes.
+   <li> Improved support for strict alignment on ARMv7 architectures,
+   conditionally enabling assembly in those cases.
+   <li> Fixed a memory leak in libtls when reusing a tls_config.
+   <li> Merged more DTLS support into the regular TLS code path, removing
+   duplicated code.
+   </ul>
 <p>
-
 <li>mandoc 1.14.3
     <ul>
     <li>...
@@ -200,7 +391,7 @@ to 6.3.
     <td valign="top" width="50%"><ul>
 	<li>AFL 2.52b
 	<li>CMake 3.10.2
-	<li>Chromium 65.0.3325.162
+	<li>Chromium 65.0.3325.181
 	<li>Emacs 21.4 and 25.3
 	<li>GCC 4.9.4
 	<li>GHC 8.2.2
@@ -214,7 +405,7 @@ to 6.3.
 	<li>LibreOffice 6.0.2.1
 	<li>Lua 5.1.5, 5.2.4 and 5.3.4
 	<li>MariaDB 10.0.34
-	<li>Mozilla Firefox 52.7.0esr and 59.0
+	<li>Mozilla Firefox 52.7.2esr and 59.0.1
 	<li>Mozilla Thunderbird 52.6.0
     </ul></td><td valign=top width="50%"><ul>
 	<li>Mutt 1.9.4 and NeoMutt 20180223
@@ -229,7 +420,7 @@ to 6.3.
 	<li>Ruby 2.3.6, 2.4.3 and 2.5.0
 	<li>Rust 1.24.0
 	<li>Sendmail 8.16.0.21
-	<li>SQLite3 3.21.0
+	<li>SQLite3 3.22.0
 	<li>Sudo 1.8.22
 	<li>Tcl/Tk 8.5.19 and 8.6.8
 	<li>TeX Live 2017
