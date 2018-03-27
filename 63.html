@@ -108,10 +108,10 @@ to 6.3.
     <li>Support for Allwinner A33, GR8 and R40/V40 SoCs has been
         added to the
 	<a href="https://man.openbsd.org/sxipio.4">sxipio(4)</a> driver.
-    <li>support for SAS3.5 MegaRAIDs was added to the
+    <li>Support for SAS3.5 MegaRAIDs has been added to the
         <a href="https://man.openbsd.org/mfii.4">mfii(4)</a> driver.
-    <li>support for Intel Cannon Lake and Ice Lake integrated Ethernet
-        was added to the
+    <li>Support for Intel Cannon Lake and Ice Lake integrated Ethernet
+        has been added to the
         <a href="https://man.openbsd.org/em.4">em(4)</a> driver.
     <li><a href="https://man.openbsd.org/cnmac.4">cnmac(4)</a> ports are now
         assigned to different CPU cores for distributed interrupt processing.
@@ -119,6 +119,10 @@ to 6.3.
         detects and handles reset announcements.
     <li>On amd64 Intel CPU microcode is loaded on boot and installed/updated by
         <a href="https://man.openbsd.org/fw_update.1">fw_update(1)</a>.
+    <li>Support the sun4v hypervisor interrupt cookie API, adding support
+        for SPARC T7-1/2/4 machines.
+    <li>Hibernate support has been added for SD/MMC storage attached to
+        <a href="https://man.openbsd.org/sdhc.4">sdhc(4)</a> controllers.
     </ul>
 
 <p>
@@ -130,37 +134,79 @@ to 6.3.
 	href="https://man.openbsd.org/vioscsi.4">vioscsi(4)</a>.
     <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> no longer
 	creates an underlying bridge interface for virtual switches defined in
-	<a href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
+	<a href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>.
     <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> receives
 	switch information (rdomain, etc) from underlying switch interface in
 	conjunction of settings in <a
-	href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>
-    <li>TSC (time stamp counter) support in guest VMs
+	href="https://man.openbsd.org/amd64/vm.conf.5">vm.conf(5)</a>.
+    <li>Time Stamp Counter (TSC) support in guest VMs.
     <li>Support ukvm/Solo5 unikernels in
-        <a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>
-    <li>Handle valid (but uncommon) instruction encodings better
-    <li>Better PAE paging support for 32-bit Linux guest VMs
+        <a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>.
+    <li>Handle valid (but uncommon) instruction encodings better.
+    <li>Better PAE paging support for 32-bit Linux guest VMs.
     <li><a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> now allows up
-        to 4 network interfaces in each VM
+        to four network interfaces in each VM.
     <li>Add paused migration and snapshotting support to <a
         href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a> for AMD SVM/RVI
         hosts.
+    <li>BREAK commands sent over a
+     <a href="https://man.openbsd.org/pty.4">pty(4)</a> are now understood by
+     <a href="https://man.openbsd.org/vmd.8">vmd(8)</a>.
     <li>Many fixes to <a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a>
-        and <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> error handling
+        and <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> error handling.
     </ul>
 <p>
 
 <li>IEEE 802.11 wireless stack improvements:
     <ul>
-    <li>...
+    <li>The <a href="https://man.openbsd.org/iwm.4">iwm(4)</a> and
+	<a href="https://man.openbsd.org/iwn.4">iwn(4)</a> drivers will
+	automatically roam between access points which share an ESSID.
+        Forcing a particular AP's MAC address with ifconfig's <b>bssid</b>
+        command disables roaming.
+    <li>Automatically clear configured WEP/WPA keys when a new network ESSID
+	is configured.
+    <li>Removed the ability for userland to read configured WEP/WPA keys back
+	from the kernel.
+    <li>The <a href="https://man.openbsd.org/iwm.4">iwm(4)</a> driver can now
+	connect to networks with a hidden SSID.
+    <li>USB devices supported by the
+	<a href="https://man.openbsd.org/athn.4">athn(4)</a> driver
+        now use an open source firmware, and hostap mode now works with
+	these devices.
     </ul>
 <p>
 
 <li>Generic network stack improvements:
     <ul>
-    <li> Cleanup and removal of code in sys/netinet6 since autoconfiguration
-         runs in userland now.
-    <li>...
+    <li>The network stack no longer runs with the KERNEL_LOCK() when IPsec is
+        enabled.
+    <li>Processing of incoming TCP/UDP packets is now done without
+        KERNEL_LOCK().
+    <li>The socket splicing task runs without KERNEL_LOCK().
+    <li>Cleanup and removal of code in sys/netinet6 since autoconfiguration
+        runs in userland now.
+    <li><a href="https://man.openbsd.org/bridge.4">bridge(4)</a> members can
+        now be prevented to talk to each others with the new <b>protected</b>
+        option.
+    <li>The pf divert-packet feature has been simplified.
+	The IP_DIVERTFL socket option has been removed from <a
+	href="https://man.openbsd.org/divert.4">divert(4)</a>.
+    <li>Various corner cases of pf divert-to and divert-reply are
+	more consistent now.
+    <li>Enforce in <a href="https://man.openbsd.org/pf.4">pf(4)</a>
+	that all neighbor discovery packets have 255 in their IPv6
+	header hop limit field.
+    <li>Support for GRE over IPv6.
+    <li>New <a href="https://man.openbsd.org/egre.4">egre(4)</a>
+        driver for Ethernet over GRE tunnels.
+    <li>Support for the optional GRE key header and GRE key entropy in 
+        <a href="https://man.openbsd.org/gre.4">gre(4)</a> and
+        <a href="https://man.openbsd.org/egre.4">egre(4)</a>.
+    <li>New <a href="https://man.openbsd.org/nvgre.4">nvgre(4)</a>
+        driver for Network Virtualization Using Generic Routing Encapsulation.
+    <li>Support for configuring the Don't Fragment flag packets encapsulated
+        by tunnel interfaces.
     </ul>
 <p>
 
@@ -173,7 +219,7 @@ to 6.3.
 <li>Routing daemons and other userland network improvements:
     <ul>
     <li><a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a> has a new
-        <b>ssv</b> option which outputs rib entries as a single semicolon-seperated
+        <b>ssv</b> option which outputs rib entries as a single semicolon-separated
         like for selection before output.
     <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> generates
         random but stable IPv6 stateless autoconfiguration addresses according
@@ -184,7 +230,14 @@ to 6.3.
         autoconfiguration addresses on non-/64 prefixes.
     <li><a href="https://man.openbsd.org/ospfd.8">ospfd(8)</a> can now set the
         metric for a route depending on the status of an interface.
-    <li>...
+    <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a> has a new
+        <b>staticarp</b> option to make interfaces reply to ARP requests only.
+    <li><a href="https://man.openbsd.org/ipsecctl.8">ipsecctl(8)</a> can now
+        collapse flow outputs having the same source or destination.
+    <li>The <tt>-n</tt> option in the
+        <a href="https://man.openbsd.org/netstart.8">netstart(8)</a> no longer
+        messes with the default route.
+        It is now documented as well.
     </ul>
 <p>
 
@@ -201,29 +254,24 @@ to 6.3.
         number generator as entropy at startup.
     <li>Put a small random gap at the top of thread stacks, so that attackers
         have yet another calculation to perform for their ROP work.
-    <li>Mitigation for Meltdown vulnerability for Intel brand amd64 CPUs
+    <li>Mitigation for Meltdown vulnerability for Intel brand amd64 CPUs.
     <li>OpenBSD/arm64 now uses kernel page table isolation to mitigate
         Spectre variant 3 (Meltdown) attacks.
-    <li>OpenBSD/armv7 and OpenBSD/arm64 now flush the branch target
-        cache (BTB) on processors that do speculative execution to
+    <li>OpenBSD/armv7 and OpenBSD/arm64 now flush the Branch Target Buffer
+        (BTB) on processors that do speculative execution to
         mitigate Spectre variant 2 attacks.
-    <li>...
+    <li><a href="https://man.openbsd.org/pool_get.9">pool_get(9)</a> perturbs
+        the order of items on newly allocated pages, making the kernel heap
+        layout harder to predict.
     </ul>
 <p>
 
-<li><a href="https://man.openbsd.org/dhcpd.8">dhcpd(8)</a>/
-    <a href="https://man.openbsd.org/dhcrelay.8">dhcrelay(8)</a> improvements:
-    <ul>
-    <li>...
-    </ul>
-<p>
-    
 <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a> improvements:
     <ul>
-      <li>parsing <a href="https://man.openbsd.org/dhclient.conf.5">
+      <li>Parsing <a href="https://man.openbsd.org/dhclient.conf.5">
 	dhclient.conf(5)</a> no longer leaks SSID strings, strings that are
 	too long for the parsing buffer or repeated string options and commands.
-      <li>storing leases in <a href="https://man.openbsd.org/dhclient.conf.5">
+      <li>Storing leases in <a href="https://man.openbsd.org/dhclient.conf.5">
 	  dhclient.conf(5)</a> is no longer supported.
       <li>'DENY' is no longer valid in  <a href="https://man.openbsd.org/dhclient.conf.5">
 	  dhclient.conf(5)</a>.
@@ -233,17 +281,45 @@ to 6.3.
 	  dhclient.leases(5)</a>
 	parsing error messages have been simplified and clarified, with
 	improved behaviour in the presence of unexpected semicolons.
-      <li>more care is taken to only use configuration information that was
+      <li>More care is taken to only use configuration information that was
 	successfully parsed.
-      <li> the '-n' command line option has been added to
+      <li>'-n' has been added, which causes
 	<a href="https://man.openbsd.org/dhclient.8">
-	  dhclient(8)</a>, which causes
-	<a href="https://man.openbsd.org/dhclient.8">
-	  dhclient(8)</a> to parse
+	  dhclient(8)</a> to exit after parsing
 	<a href="https://man.openbsd.org/dhclient.conf.5">
-	  dhclient.conf(5)</a> and immediately exit without taking
-	charge of the interface.
-    <li>...
+	  dhclient.conf(5)</a>.
+      <li>Default routes in options classless-static-routes (121) and
+	classless-ms-static-routes (249) are now correctly represented in
+	<a href="https://man.openbsd.org/dhclient.leases.5">
+	  dhclient.leases(5)</a> files.
+    <li>Overwrite the file specified with '-L' rather than appending to it.
+    <li>Leases in <a href="https://man.openbsd.org/dhclient.leases.5">
+	dhclient.leases(5)</a> now contain an 'epoch' attribute recording
+      the time the lease was accepted, which is used to calculate correct
+      renewal, rebinding and expiry times.
+    <li>No longer nag about underscores in names violating RFC 952.
+    <li>Unconditionally send host-name information when
+      requesting a lease, eliminating the need for
+	<a href="https://man.openbsd.org/dhclient.conf.5">
+	  dhclient.conf(5)</a> in the default installation.
+    <li>Be quiet by default. '-q' has been removed and '-v' added to
+      enable verbose logging.
+    <li>Decline duplicate offers for the requested address.
+    <li>Unconditionally go into the background after link-timeout seconds.
+    <li>Significantly reduce logging when being quiet, but make '-v' log
+      all debug information without needing to compile a custom executable.
+    <li>Ignore 'interface' statements in
+	<a href="https://man.openbsd.org/dhclient.leases.5">
+	  dhclient.leases(5)</a> and assume all leases in the file are
+	for the interface being configured.
+    <li>Display the source of the lease bound to the interface.
+    <li>'ignore', 'request' and 'require' declarations in
+	<a href="https://man.openbsd.org/dhclient.conf.5">
+	  dhclient.conf(5)</a> now add the specified options to the relevant
+	list rather than replacing the list.
+    <li>Eliminate a startup race that could result in
+      	<a href="https://man.openbsd.org/dhclient.8">
+	  dhclient(8)</a> exiting without configuring the interface.
     </ul>
 <p>
 
@@ -253,16 +329,17 @@ to 6.3.
         <a href="https://man.openbsd.org/malloc.3">malloc(3)</a>
 	and friends to make them more efficient.
     <li>When performing suspend or hibernate operations, ensure all filesystems
-        are properly syncronized and marked clean, or if they cannot be
+        are properly synchronized and marked clean, or if they cannot be
         put into perfectly clean state on disk (due to open+unlinked files)
-        then mark them dirty, so that a failed resume/unhinbernate is gauranteed
-	to perform fsck.
+        then mark them dirty, so that a failed resume/unhibernate is guaranteed
+	to perform <a href="https://man.openbsd.org/fsck.8">fsck(8)</a>.
     <li><a href="https://man.openbsd.org/acme-client.1">acme-client(1)</a>
-        autodetects the agreement url and follows 30x http redirects.
-    <li>Added __cxa_thread_atexit() to support modern C++ tool chains
+        autodetects the agreement URL and follows 30x HTTP redirects.
+    <li>Added __cxa_thread_atexit() to support modern C++ tool chains.
     <li>Added EVFILT_DEVICE support to
 	<a href="https://man.openbsd.org/kqueue.2">kqueue(2)</a> for
-	monitoring changes to drm devices.
+	monitoring changes to
+	<a href="https://man.openbsd.org/drm.4">drm(4)</a> devices.
     <li><a href="https://man.openbsd.org/ldexp.3">ldexp(3)</a> now handles
       the sign of denormal numbers correctly on mips64.
     <li><a href="https://man.openbsd.org/fdisk.8">fdisk(8)</a> now ensures the
@@ -292,29 +369,161 @@ to 6.3.
     <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a> now
       validates the requested partition size against the size of the largest free
       chunk instead of the total free space.
-    <li>...
+    <li>Support for dumping USB transfers via
+        <a href="https://man.openbsd.org/bpf.4">bpf(4)</a>.
+    <li><a href="https://man.openbsd.org/tcpdump.8">tcpdump(8)</a> can now
+        understand dumps of USB transfers in the
+        <a href="http://desowin.org/usbpcap/captureformat.html">USBPcap</a>
+        format.
+    <li>The default prompts of <a href="https://man.openbsd.org/csh.1">csh(1)</a>,
+        <a href="https://man.openbsd.org/ksh.1">ksh(1)</a> and
+        <a href="https://man.openbsd.org/sh.1">sh(1)</a> now include the hostname.
+    <li>Memory allocation in
+        <a href="https://man.openbsd.org/ksh.1">ksh(1)</a> was switched from
+        <a href="https://man.openbsd.org/calloc.3">calloc(3)</a> back to
+        <a href="https://man.openbsd.org/malloc.3">malloc(3)</a>,
+        making it easier to recognize uninitialized memory.
+        As a result, a history-related bug in emacs editing mode was discovered
+        and fixed.
+    <li>The <a href="https://man.openbsd.org/printf.3">printf(3)</a> format
+        string is no longer validated when looking for <tt>%</tt> formats.
+        Based on a commit by android and following most other operating systems.
+    <li>Improved error checking in
+        <a href="https://man.openbsd.org/vfwprintf.3">vfwprintf(3)</a>.
+    <li>Many base programs have been audited and fixed for stale file descriptors,
+        including
+        <a href="https://man.openbsd.org/cron.8">cron(8)</a>,
+        <a href="https://man.openbsd.org/ftp.1">ftp(1)</a>,
+        <a href="https://man.openbsd.org/mandoc.1">mandoc(1)</a>,
+        <a href="https://man.openbsd.org/openssl.1">openssl(1)</a>,
+        <a href="https://man.openbsd.org/ssh.1">ssh(1)</a> and
+        <a href="https://man.openbsd.org/sshd.8">sshd(8)</a>.
+    <li>Various bug fixes and improvements in
+        <a href="https://man.openbsd.org/jot.1">jot(1)</a>:
+        <ul>
+          <li>Arbitrary length limits for the arguments for the
+              <tt>-b</tt>, <tt>-s</tt>, <tt>-w</tt> options were removed.
+          <li>The <tt>%F</tt> format specifier is now supported and a bug
+              in the <tt>%D</tt> format was fixed.
+          <li>Better code coverage in regression tests.
+          <li>Several buffer overruns were fixed.
+        </ul>
+    <li>The <a href="https://man.openbsd.org/patch.1">patch(1)</a> utility now
+        copes better with git diffs that create or delete files.
+    <li>The elfrdsetroot utility used to build ramdisks is now pledged.
+    <li><a href="https://man.openbsd.org/pkg_add.1">pkg_add(1)</a>
+	now has improved support for HTTP(S) redirectors such as
+	<i>cdn.openbsd.org</i>.
+    <li><a href="https://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	logs if there were warnings during startup.
+    <li><a href="https://man.openbsd.org/syslogd.8">syslogd(8)</a>
+	stopped logging to files in a full filesystem.  Now it
+	writes a warning and continues after space has been made
+	available.
+    <li><a href="https://man.openbsd.org/vmt.4">vmt(4)</a> now allows cloning and
+      taking disk-only snapshots of running guests.
     </ul>
 <p>
 
 <li>OpenSMTPD 6.0.4
     <ul>
-    <li>...
+    <li>Add <b>spf walk</b> option to
+        <a href="https://man.openbsd.org/smtpctl.8">smtpctl(8)</a>.
     </ul>
 <p>
 
 <li>OpenSSH 7.7
     <ul>
-    <li>Security:
-      <ul>
-      <li>...
-      </ul>
     <li>New/changed features:
       <ul>
-      <li>...
+      <li>All: Add experimental support for PQC XMSS keys (Extended Hash-
+          Based Signatures) based on the algorithm described in
+          https://tools.ietf.org/html/draft-irtf-cfrg-xmss-hash-based-signatures-12
+          The XMSS signature code is experimental and not compiled in by
+          default.
+      <li>sshd(8): Add a "rdomain" criteria for the sshd_config Match keyword
+          to allow conditional configuration that depends on which routing
+          domain a connection was received on (currently supported on OpenBSD
+          and Linux).
+      <li>sshd_config(5): Add an optional rdomain qualifier to the
+          ListenAddress directive to allow listening on different routing
+          domains. This is supported only on OpenBSD and Linux at present.
+      <li>sshd_config(5): Add RDomain directive to allow the authenticated
+          session to be placed in an explicit routing domain. This is only
+          supported on OpenBSD at present.
+      <li>sshd(8): Add "expiry-time" option for authorized_keys files to
+          allow for expiring keys.
+      <li>ssh(1): Add a BindInterface option to allow binding the outgoing
+          connection to an interface's address (basically a more usable
+          BindAddress).
+      <li>ssh(1): Expose device allocated for tun/tap forwarding via a new
+          %T expansion for LocalCommand. This allows LocalCommand to be used
+          to prepare the interface.
+      <li>sshd(8): Expose the device allocated for tun/tap forwarding via a
+          new SSH_TUNNEL environment variable. This allows automatic setup of
+          the interface and surrounding network configuration automatically on
+          the server.
+      <li>ssh(1)/scp(1)/sftp(1): Add URI support to ssh, sftp and scp, e.g.
+          ssh://user@host or sftp://user@host/path.  Additional connection
+          parameters described in draft-ietf-secsh-scp-sftp-ssh-uri-04 are not
+          implemented since the ssh fingerprint format in the draft uses the
+          deprecated MD5 hash with no way to specify the any other algorithm.
+      <li>ssh-keygen(1): Allow certificate validity intervals that specify
+          only a start or stop time (instead of both or neither).
+      <li>sftp(1): Allow "cd" and "lcd" commands with no explicit path
+          argument. lcd will change to the local user's home directory as
+          usual. cd will change to the starting directory for session (because
+          the protocol offers no way to obtain the remote user's home
+          directory). bz#2760
+      <li>sshd(8): When doing a config test with sshd -T, only require the
+          attributes that are actually used in Match criteria rather than (an
+          incomplete list of) all criteria.
       </ul>
     <li>The following significant bugs have been fixed in this release:
       <ul>
-      <li>...
+      <li>ssh(1)/sshd(8): More strictly check signature types during key
+          exchange against what was negotiated. Prevents downgrade of RSA
+          signatures made with SHA-256/512 to SHA-1.
+      <li>sshd(8): Fix support for client that advertise a protocol version
+          of "1.99" (indicating that they are prepared to accept both SSHv1 and
+          SSHv2). This was broken in OpenSSH 7.6 during the removal of SSHv1
+          support. bz#2810
+      <li>ssh(1): Warn when the agent returns a ssh-rsa (SHA1) signature when
+          a rsa-sha2-256/512 signature was requested. This condition is possible
+          when an old or non-OpenSSH agent is in use. bz#2799
+      <li>ssh-agent(1): Fix regression introduce in 7.6 that caused ssh-agent
+          to fatally exit if presented an invalid signature request message.
+      <li>sshd_config(5): Accept yes/no flag options case-insensitively, as
+          has been the case in ssh_config(5) for a long time. bz#2664
+      <li>ssh(1): Improve error reporting for failures during connection.
+          Under some circumstances misleading errors were being shows. bz#2814
+      <li>ssh-keyscan(1): Add -D option to allow printing of results directly
+          in SSHFP format. bz#2821
+      <li>regress tests: fix PuTTY interop test broken in last release's SSHv1
+          removal. bz#2823
+      <li>ssh(1): Compatibility fix for some servers that erroneously drop the
+          connection when the IUTF8 (RFC8160) option is sent.
+      <li>scp(1): Disable RemoteCommand and RequestTTY in the ssh session
+          started by scp (sftp was already doing this.)
+      <li>ssh-keygen(1): Refuse to create a certificate with an unusable
+          number of principals.
+      <li>ssh-keygen(1): Fatally exit if ssh-keygen is unable to write all the
+          public key during key generation. Previously it would silently
+          ignore errors writing the comment and terminating newline.
+      <li>ssh(1): Do not modify hostname arguments that are addresses by
+          automatically forcing them to lower-case. Instead canonicalise them
+          to resolve ambiguities (e.g. ::0001 => ::1) before they are matched
+          against known_hosts. bz#2763
+      <li>ssh(1): Don't accept junk after "yes" or "no" responses to hostkey
+          prompts. bz#2803
+      <li>sftp(1): Have sftp print a warning about shell cleanliness when
+          decoding the first packet fails, which is usually caused by shells
+          polluting stdout of non-interactive startups. bz#2800
+      <li>ssh(1)/sshd(8): Switch timers in packet code from using wall-clock
+          time to monotonic time, allowing the packet layer to better function
+          over a clock step and avoiding possible integer overflows during
+          steps.
+      <li>Numerous manual page fixes and improvements.
       </ul>
     </ul>
 <p>
@@ -323,7 +532,7 @@ to 6.3.
    <ul>
    <li> Fixed a bug in int_x509_param_set_hosts, calling strlen() if name
    length provided is 0 to match the OpenSSL behaviour. Issue noticed
-   by Christian Heimes <christian@python.org>
+   by Christian Heimes &lt;christian@python.org&gt;.
    <li> Added support for many OpenSSL 1.0.2 and 1.1 APIs, based on
    observations of real-world usage in applications. These are
    implemented in parallel with existing OpenSSL 1.0.1 APIs - visibility
@@ -354,6 +563,7 @@ to 6.3.
    duplicated code.
    </ul>
 <p>
+
 <li>mandoc 1.14.3
     <ul>
     <li>...
@@ -405,8 +615,8 @@ to 6.3.
 	<li>LibreOffice 6.0.2.1
 	<li>Lua 5.1.5, 5.2.4 and 5.3.4
 	<li>MariaDB 10.0.34
-	<li>Mozilla Firefox 52.7.2esr and 59.0.1
-	<li>Mozilla Thunderbird 52.6.0
+	<li>Mozilla Firefox 52.7.3esr and 59.0.2
+	<li>Mozilla Thunderbird 52.7.0
     </ul></td><td valign=top width="50%"><ul>
 	<li>Mutt 1.9.4 and NeoMutt 20180223
 	<li>Node.js 8.9.4
