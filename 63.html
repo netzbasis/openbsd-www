@@ -76,7 +76,7 @@ to 6.3.
     <li>New <a href="https://man.openbsd.org/bgw.4">bgw(4)</a> driver
        for Bosch motion sensor.
     <li>New <a href="https://man.openbsd.org/bwfm.4">bwfm(4)</a> driver
-       for Broadcom and Cypress FullMAC 802.11 devices.
+       for Broadcom and Cypress FullMAC 802.11 devices (still experimental and not compiled into the kernel by default)
     <li>New <a href="https://man.openbsd.org/efi.4">efi(4)</a> driver
        for EFI runtime services.
     <li>New <a href="https://man.openbsd.org/imxanatop.4">imxanatop(4)</a> driver
@@ -93,13 +93,13 @@ to 6.3.
        for two-wire bus found on several Allwinner SoCs.
     <li>New <a href="https://man.openbsd.org/sypwr.4">sypwr(4)</a> driver
        for the Silergy SY8106A regulator.
-    <li>Support for Rockchip RK3328 SoCs has been added to the 
+    <li>Support for Rockchip RK3328 SoCs has been added to the
         <a href="https://man.openbsd.org/dwge.4">dwge(4)</a>,
         <a href="https://man.openbsd.org/rkgrf.4">rkgrf(4)</a>,
 	<a href="https://man.openbsd.org/rkclock.4">rkclock(4)</a> and
 	<a href="https://man.openbsd.org/rkpinctrl.4">rkpinctrl(4)</a>
 	drivers.
-    <li>Support for Rockchip RK3228/3328 SoCs has been added to the 
+    <li>Support for Rockchip RK3288/RK3328 SoCs has been added to the
         <a href="https://man.openbsd.org/rktemp.4">rktemp(4)</a>
 	driver.
     <li>Support for Allwinner A10/A20, A23/A33, A80 and R40/V40
@@ -123,6 +123,9 @@ to 6.3.
         for SPARC T7-1/2/4 machines.
     <li>Hibernate support has been added for SD/MMC storage attached to
         <a href="https://man.openbsd.org/sdhc.4">sdhc(4)</a> controllers.
+    <li><a href="https://man.openbsd.org/clang.1">clang(1)</a>
+        is now used as the system compiler on armv7,
+        and it is also provided on sparc64.
     </ul>
 
 <p>
@@ -197,14 +200,16 @@ to 6.3.
     <li>Enforce in <a href="https://man.openbsd.org/pf.4">pf(4)</a>
 	that all neighbor discovery packets have 255 in their IPv6
 	header hop limit field.
+    <li>New <code>set syncookies</code> option in
+        <a href="https://man.openbsd.org/pf.conf.5">pf.conf(5)</a>.
     <li>Support for GRE over IPv6.
     <li>New <a href="https://man.openbsd.org/egre.4">egre(4)</a>
         driver for Ethernet over GRE tunnels.
-    <li>Support for the optional GRE key header and GRE key entropy in 
+    <li>Support for the optional GRE key header and GRE key entropy in
         <a href="https://man.openbsd.org/gre.4">gre(4)</a> and
         <a href="https://man.openbsd.org/egre.4">egre(4)</a>.
     <li>New <a href="https://man.openbsd.org/nvgre.4">nvgre(4)</a>
-        driver for Network Virtualization Using Generic Routing Encapsulation.
+        driver for Network Virtualization using Generic Routing Encapsulation.
     <li>Support for configuring the Don't Fragment flag packets encapsulated
         by tunnel interfaces.
     </ul>
@@ -212,7 +217,26 @@ to 6.3.
 
 <li>Installer improvements:
     <ul>
-    <li>...
+    <li>if install.site or upgrade.site fails, notify the user and error out
+      after storing rand.seed.
+    <li>allow CIDR notation when entering IPv4 and IPv6 addresses.
+    <li>repair selection of a HTTP mirror from the list of mirrors.
+    <li>allow '-' in usernames.
+    <li>ask a question at the end of the install/upgrade process so
+      carriage return causes the appropriate action, e.g. reboot.
+    <li>display the mode (install or upgrade) shell prompts as
+      long as no hostname is known.
+    <li>correctly detect which interface has the default route and if it was
+      configured via DHCP.
+    <li>ensure sets can be read from the prefetch area.
+    <li>ensure URL redirection is effective for entire install/upgrade.
+    <li>add the HTTP proxy used when fetching sets to rc.firsttime, where
+      fw_update and syspatch can find and use it.
+    <li>add logic to support RFC 7217 with SLAAC.
+    <li>ensure that IPv6 is configured for dynamically created network
+      interfaces like <a href="https://man.openbsd.org/vlan.4">vlan(4)</a>.
+    <li>create correct hostname when both domain-name and
+      domain-search options are provided in the DHCP lease.
     </ul>
 <p>
 
@@ -225,16 +249,17 @@ to 6.3.
         random but stable IPv6 stateless autoconfiguration addresses according
         to RFC 7217.
         These are enabled per default in accordance with RFC 8064.
-    <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> can generate
-        RFC 7217 (random but stable) and RFC 4941 (privacy) style stateless
-        autoconfiguration addresses on non-/64 prefixes.
+    <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> follows
+        RFC 4862 by removing an artificial limitation on /64 sized prefixes
+        using RFC 7217 (random but stable) and RFC 4941 (privacy) style
+        stateless autoconfiguration addresses.
     <li><a href="https://man.openbsd.org/ospfd.8">ospfd(8)</a> can now set the
         metric for a route depending on the status of an interface.
     <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a> has a new
         <b>staticarp</b> option to make interfaces reply to ARP requests only.
     <li><a href="https://man.openbsd.org/ipsecctl.8">ipsecctl(8)</a> can now
         collapse flow outputs having the same source or destination.
-    <li>The <tt>-n</tt> option in the
+    <li>The <tt>-n</tt> option in
         <a href="https://man.openbsd.org/netstart.8">netstart(8)</a> no longer
         messes with the default route.
         It is now documented as well.
@@ -248,7 +273,11 @@ to 6.3.
     <li>Stop using x86 "repz ret" in dusty corners of the tree.
     <li>Introduce "execpromises" in
         <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
-    <li>Prepare for the introduction of <b>MAP_STACK</b> to 
+    <li>The elfrdsetroot utility used to build ramdisks and the
+        <a href="https://man.openbsd.org/rebound">rebound(8)</a>
+        monitoring process now use
+        <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
+    <li>Prepare for the introduction of <b>MAP_STACK</b> to
         <a href="https://man.openbsd.org/mmap.2">mmap(2)</a> after 6.3.
     <li>Push a small piece of KARL-linked kernel text into the random
         number generator as entropy at startup.
@@ -263,6 +292,9 @@ to 6.3.
     <li><a href="https://man.openbsd.org/pool_get.9">pool_get(9)</a> perturbs
         the order of items on newly allocated pages, making the kernel heap
         layout harder to predict.
+    <li>The
+        <a href="https://man.openbsd.org/OpenBSD-6.2/ktrace.2">fktrace(2)</a>
+        system call was deleted.
     </ul>
 <p>
 
@@ -342,6 +374,8 @@ to 6.3.
 	<a href="https://man.openbsd.org/drm.4">drm(4)</a> devices.
     <li><a href="https://man.openbsd.org/ldexp.3">ldexp(3)</a> now handles
       the sign of denormal numbers correctly on mips64.
+    <li>New <a href="https://man.openbsd.org/sincos.3">sincos(3)</a>
+        functions in libm.
     <li><a href="https://man.openbsd.org/fdisk.8">fdisk(8)</a> now ensures the
       validity of MBR partition offsets entered while editing.
     <li><a href="https://man.openbsd.org/fdisk.8">fdisk(8)</a> now ensures that
@@ -385,6 +419,12 @@ to 6.3.
         making it easier to recognize uninitialized memory.
         As a result, a history-related bug in emacs editing mode was discovered
         and fixed.
+    <li>New <a href="https://man.openbsd.org/script.1">script(1)</a>
+        <code>-c</code> option to run a command instead of a shell.
+    <li>New <a href="https://man.openbsd.org/grep.1">grep(1)</a>
+        <code>-m</code> option to limit the number of matches.
+    <li>New <a href="https://man.openbsd.org/uniq.1">uniq(1)</a>
+        <code>-i</code> option for case-insensitive comparison.
     <li>The <a href="https://man.openbsd.org/printf.3">printf(3)</a> format
         string is no longer validated when looking for <tt>%</tt> formats.
         Based on a commit by android and following most other operating systems.
@@ -410,10 +450,14 @@ to 6.3.
         </ul>
     <li>The <a href="https://man.openbsd.org/patch.1">patch(1)</a> utility now
         copes better with git diffs that create or delete files.
-    <li>The elfrdsetroot utility used to build ramdisks is now pledged.
     <li><a href="https://man.openbsd.org/pkg_add.1">pkg_add(1)</a>
 	now has improved support for HTTP(S) redirectors such as
 	<i>cdn.openbsd.org</i>.
+    <li><a href="https://man.openbsd.org/ftp.1">ftp(1)</a> and
+    	<a href="https://man.openbsd.org/pkg_add.1">pkg_add(1)</a>
+	now support HTTPS session resumption for improved speed.
+    <li><a href="https://man.openbsd.org/mandoc.1">mandoc(1)</a>
+        <code>-T ps</code> output file size reduced by more than 50%.
     <li><a href="https://man.openbsd.org/syslogd.8">syslogd(8)</a>
 	logs if there were warnings during startup.
     <li><a href="https://man.openbsd.org/syslogd.8">syslogd(8)</a>
@@ -428,7 +472,9 @@ to 6.3.
 <li>OpenSMTPD 6.0.4
     <ul>
     <li>Add <b>spf walk</b> option to
-        <a href="https://man.openbsd.org/smtpctl.8">smtpctl(8)</a>.
+      <a href="https://man.openbsd.org/smtpctl.8">smtpctl(8)</a>.
+    <li>Assorted cleanups and improvements.
+    <li>Numerous manual page fixes and improvements.
     </ul>
 <p>
 
@@ -530,9 +576,6 @@ to 6.3.
 
 <li>LibreSSL 2.7.2
    <ul>
-   <li> Fixed a bug in int_x509_param_set_hosts, calling strlen() if name
-   length provided is 0 to match the OpenSSL behaviour. Issue noticed
-   by Christian Heimes &lt;christian@python.org&gt;.
    <li> Added support for many OpenSSL 1.0.2 and 1.1 APIs, based on
    observations of real-world usage in applications. These are
    implemented in parallel with existing OpenSSL 1.0.1 APIs - visibility
@@ -564,13 +607,13 @@ to 6.3.
    </ul>
 <p>
 
-<li>mandoc 1.14.3
-    <ul>
-    <li>...
-    </ul>
-<p>
-
 <li>Ports and packages:
+    <ul>
+      <li><a href="https://man.openbsd.org/dpb.1">dpb(1)</a> and normal 
+	  <a href="https://man.openbsd.org/ports.7">ports(7)</a> can
+	  now enjoy the same privilege separated model by setting
+	  <tt>PORTS_PRIVSEP=Yes</tt>
+    </ul>
     <dl>
     <dt>Many pre-built packages for each architecture:
     </dl>
