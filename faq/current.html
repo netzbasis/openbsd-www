@@ -128,8 +128,8 @@ The programs are not option-compatible, so any scripts using &quot;smtp&quot;
 command require adjustment.
 
 
-<h3 id="r20180503">2018/05/22 - [packages] PHP default version changed</h3>
-
+<h3 id="r20180522">2018/05/22 - [packages] PHP default version changed</h3>
+<!-- XXX 6.4: merge with r20180527 -->
 With a few exceptions, most packages using PHP have switched to
 using PHP 7.0 dependencies by default.
 Because extension modules (now including PECL modules) are packaged
@@ -138,22 +138,25 @@ but to avoid confusion and benefit from improvements to PHP you should
 switch your system across:
 
 <ol>
-<li>Merge local configuration changes from /etc/php-5.6.ini
-to /etc/php-7.0.ini.
-It may be useful to diff(1) against the original file in
-/usr/local/share/examples/php-5.6/php.ini-production.
+  <li>Merge local configuration changes from <tt>/etc/php-5.6.ini</tt> to
+  <tt>/etc/php-7.0.ini</tt>.
+  It may be useful to <a href="https://man.openbsd.org/diff">diff(1)</a>
+  against the original file in
+  <tt>/usr/local/share/examples/php-5.6/php.ini-production</tt>.
 
-<li>Create new symlinks for extension modules as described in
-the "extension modules" section of /usr/local/share/doc/pkg-readmes/php-7.0*.
+  <li>Create new symlinks for extension modules as described in
+  the "extension modules" section of
+  <tt>/usr/local/share/doc/pkg-readmes/php-7.0*</tt>.
 
-<li>Switch to running the new version. If using php-fpm:
-<blockquote><pre>
-$ <b>rcctl disable php56_fpm; rcctl enable php70_fpm</b>
-$ <b>rcctl stop php56_fpm; rcctl start php70_fpm</b>
-</blockquote>
-If using the module for Apache httpd, update the symlink for
-/var/www/conf/modules/php.conf as shown in the pkg-readme.
+  <li>Switch to running the new version. If using php-fpm:
+  <blockquote><pre>
+  # <b>rcctl disable php56_fpm; rcctl enable php70_fpm</b>
+  # <b>rcctl stop php56_fpm; rcctl start php70_fpm</b><!--
+  --></pre></blockquote>
+  If using the module for Apache httpd, update the symlink for
+  <tt>/var/www/conf/modules/php.conf</tt> as shown in the pkg-readme.
 </ol>
+
 
 <h3 id="r20180524">2018/05/24 - smtpd.conf(5) grammar has changed in smtpd(8)</h3>
 
@@ -171,9 +174,9 @@ an explicit rule must be written to match these.
 
 <p>
 <a href="https://man.openbsd.org/smtpd.8">smtpd(8)</a> supported LMTP both as a
-relaying protocol and as a local delivery method. The local delivery method was
-implemented within the daemon and not as an MDA, it no longer does and must be
-used through the 'mda' action:
+relaying protocol and as a local delivery method.
+The local delivery method was implemented within the daemon and not as an MDA,
+it no longer does and must be used through the 'mda' action:
 
 <blockquote><pre>
 action lmtp-local mda "/usr/libexec/mail.lmtp [...]
@@ -184,8 +187,16 @@ all the features that used to be supported interally by
 <a href="https://man.openbsd.org/smtpd.8">smtpd(8)</a>.
 
 
+<h3 id="r20180527">2018/05/27 - [packages] PHP packaging changes</h3>
+
+The PHP module for Apache HTTPD has moved from the main PHP package
+into a separate "php-apache" package.
+If you use this module, install the relevant version (<tt>pkg_add php-apache%7.0</tt>
+or <tt>pkg_add php-apache%5.6</tt>).
+FPM and CLI remain in the main PHP package.
+
 <hr id="end">
-<small>$OpenBSD: current.html,v 1.899 2018/05/26 06:09:43 gilles Exp $</small>
+<small>$OpenBSD: current.html,v 1.902 2018/05/27 19:54:58 sthen Exp $</small>
 
 </body>
 </html>
