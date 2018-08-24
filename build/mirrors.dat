@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.550 2018/06/28 12:01:21 benno Exp $
+# $OpenBSD: mirrors.dat,v 1.553 2018/08/23 16:44:50 jca Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -372,15 +372,6 @@ S2	MD5:10:80:7f:b7:76:03:7a:51:10:23:fb:1e:05:5b:93:74
 GC	France
 GZ	fr
 GT	Paris
-ME	ftpmaint@lip6.fr
-UF	ftp://ftp2.fr.openbsd.org/pub/OpenBSD/
-UH	http://ftp2.fr.openbsd.org/pub/OpenBSD/
-UR	rsync://ftp2.fr.openbsd.org/OpenBSD/
-
-0
-GC	France
-GZ	fr
-GT	Paris
 ME	mirrormaster@ircam.fr
 FE	12
 FF	ftp.fr.openbsd.org
@@ -682,6 +673,20 @@ FE	12
 MN	Hiroyuki Shinbo
 ME	admin@ftp.ne.jp
 
+0
+GC	Japan
+GZ	jp
+GT	Wako-City
+GS	Saitama
+UF	ftp://ftp.riken.jp/pub/OpenBSD/
+UH	http://ftp.riken.jp/pub/OpenBSD/
+#UHS	not yet, considering
+UR	rsync://ftp.riken.jp/openbsd/
+FF	ftp3.usa.openbsd.org
+FE	12
+MN	Takashi Ichihara
+ME	ftp-admin@ftp.riken.jp
+
 ##	Start of Lithuania
 
 0
@@ -942,18 +947,6 @@ SR	MD5:98:e6:80:5d:95:bb:e2:15:5e:19:4d:a3:e4:d0:bc:2c
 SD	MD5:55:cd:a7:a9:e3:bc:a5:5c:81:5e:98:c0:60:a2:67:52
 SE	MD5:a4:c1:8f:64:55:87:35:d6:82:8b:ba:cb:48:3f:be:96
 S2	MD5:05:f8:b4:39:ae:5b:55:1d:a9:9c:d4:82:2b:ec:fb:2f
-
-##	Start of Switzerland
-
-0
-GC	Switzerland
-GZ	ch
-GT	Zurich
-ME	SWITCHmirror@switch.ch
-FE	4
-# will not implement https
-UF	ftp://mirror.switch.ch/pub/OpenBSD/
-UH	http://mirror.switch.ch/ftp/pub/OpenBSD/
 
 ##	Start of Taiwan
 
