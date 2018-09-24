@@ -118,6 +118,9 @@
 /eurobsdcon2017-schedisnot.pdf/1.1/Tue Sep 26 08:25:29 2017//
 /eurobsdcon2017-syslog-slides.pdf/1.1/Mon Sep 25 07:03:01 2017//
 /eurobsdcon2017_seven_years_of_maintaining_firefox.md/1.1/Mon Sep 25 16:04:49 2017//
+/eurobsdcon2018-mandoc.pdf/1.1/Sun Sep 23 07:13:07 2018//
+/eurobsdcon2018-mandoc.roff/1.1/Sun Sep 23 07:13:07 2018//
+/eurobsdcon2018-rop.pdf/1.1/Sun Sep 23 12:29:50 2018//
 /eurobsdcon_2013_sosplice-slides.pdf/1.1/Sun Sep 29 17:17:01 2013/-kb/
 /eurobsdcon_2018_https.pdf/1.1/Sat Sep 22 11:02:58 2018//
 /florian_slaacd_bsdcan2018.pdf/1.1/Fri Jun  8 20:37:28 2018//
@@ -242,6 +245,7 @@ D/eurobsdcon2014_arc4random////
 D/eurobsdcon2014_iscsi////
 D/eurobsdcon2014_securelazy////
 D/eurobsdcon2015-raceless-network////
+D/eurobsdcon2018-unveil////
 D/eurobsdcon_2010_dpb////
 D/eurobsdcon_2010_pkg_add////
 D/eurobsdcon_2012_ipsec////
