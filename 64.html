@@ -65,6 +65,8 @@ to 6.4.
     <ul>
     <li>New <a href="https://man.openbsd.org/umt.4">umt(4)</a> driver
        for USB Windows Precision Touchpad devices.
+    <li>New <a href="https://man.openbsd.org/octcrypto.4">octcrypto(4)</a>
+       driver for hardware-accelerated cryptography on octeon.
     <li>Support for some HID-over-I<sup>2</sup>C touchscreen devices in
        <a href="https://man.openbsd.org/imt.4">imt(4)</a>.
     </ul>
@@ -104,6 +106,17 @@ to 6.4.
         now pledged.
     <li>Prevent ospfd(8) and ospf6d(8) to be started more than once
         (in the same routing domain).
+    <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> is now fully
+        pledged.
+    <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> is informed by
+        the kernel when Duplicate Address Detection (DAD) fails and generates
+        different addresses when possible.
+    <li>When <a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> detects
+        roaming between networks it deprecates all configured IPs. IPs from
+        newly advertised prefixes will the preferred.
+    <li>A new daemon, <a href="https://man.openbsd.org/rad.8">rad(8)</a> sends
+        IPv6 Router Advertisement messages and replaces the old rtadvd(8)
+        daemon from KAME.
     </ul>
 <p>
 
@@ -139,6 +152,18 @@ to 6.4.
         <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a> and
         <a href="https://man.openbsd.org/efifb.4">efifb(4)</a> now support
         scrollback.
+    <li><a href="https://man.openbsd.org/rebound.8">rebound(8)</a>
+        gained support for permanent A records, similiar to
+        <tt>local-data</tt>
+        supported by
+        <a href="https://man.openbsd.org/unbound.8">unbound(8)</a>.
+    <li>New
+        <a href="https://man.openbsd.org/kcov.4">kcov(4)</a>
+        driver used for collection of code coverage inside the kernel.
+        It's used in an ongoing effort to fuzz the kernel.
+    <li>A bug in
+        <a href="https://man.openbsd.org/ksh.1">ksh(1)</a>
+        related to variable expansion of read-only varibles has been fixed.
     </ul>
 <p>
 
@@ -199,40 +224,41 @@ to 6.4.
     <td valign="top" width="50%"><ul>
 	<li>AFL 2.52b
 	<li>CMake 3.10.2
-	<li>Chromium 65.0.3325.181
-	<li>Emacs 21.4 and 25.3
+	<li>Chromium 69.0.3497.100
+	<li>Emacs 21.4 and 26.1
 	<li>GCC 4.9.4
 	<li>GHC 8.2.2
 	<li>Gimp 2.8.22
-	<li>GNOME 3.26.2
-	<li>Go 1.10
+	<li>GNOME 3.28.1
+	<li>Go 1.11
 	<li>Groff 1.22.3
-	<li>JDK 8u144
+	<li>JDK 8u172
 	<li>KDE 3.5.10 and 4.14.3 (plus KDE4 core updates)
-	<li>LLVM/Clang 5.0.1
-	<li>LibreOffice 6.0.2.1
-	<li>Lua 5.1.5, 5.2.4 and 5.3.4
-	<li>MariaDB 10.0.34
-	<li>Mozilla Firefox 52.7.3esr and 59.0.2
-	<li>Mozilla Thunderbird 52.7.0
+	<li>LLVM/Clang 6.0.1
+	<li>LibreOffice 6.1.1.2
+	<li>Lua 5.1.5, 5.2.4 and 5.3.5
+	<li>MariaDB 10.0.36
+	<li>Mono 5.12.0.226
+	<li>Mozilla Firefox 60.2.1esr and 62.0.2
+	<li>Mozilla Thunderbird 52.9.1
     </ul></td><td valign=top width="50%"><ul>
-	<li>Mutt 1.9.4 and NeoMutt 20180223
-	<li>Node.js 8.9.4
+	<li>Mutt 1.10.1 and NeoMutt 20180716
+	<li>Node.js 8.12.0
 	<li>Ocaml 4.03.0
-	<li>OpenLDAP 2.3.43 and 2.4.45
-	<li>PHP 5.6.34 and 7.0.28
-	<li>Postfix 3.3.0 and 3.4-20180203
-	<li>PostgreSQL 10.3
-	<li>Python 2.7.14 and 3.6.4
-	<li>R 3.4.4
-	<li>Ruby 2.3.6, 2.4.3 and 2.5.0
-	<li>Rust 1.24.0
-	<li>Sendmail 8.16.0.21
-	<li>SQLite3 3.22.0
-	<li>Sudo 1.8.22
+	<li>OpenLDAP 2.3.43 and 2.4.46
+	<li>PHP 5.6.38, 7.0.32, 7.1.22 and 7.2.10
+	<li>Postfix 3.3.1 and 3.4-20180904
+	<li>PostgreSQL 10.5
+	<li>Python 2.7.15 and 3.6.6
+	<li>R 3.5.1
+	<li>Ruby 2.3.7, 2.4.4 and 2.5.1
+	<li>Rust 1.29.1
+	<li>Sendmail 8.16.0.29
+	<li>SQLite3 3.24.0
+	<li>Sudo 1.8.25
 	<li>Tcl/Tk 8.5.19 and 8.6.8
 	<li>TeX Live 2017
-	<li>Vim 8.0.1589
+	<li>Vim 8.1.438
 	<li>Xfce 4.12
     </ul></td></tr></table>
 <p>
@@ -243,18 +269,18 @@ to 6.4.
 <li>The system includes the following major components from outside suppliers:<span style="color:red;">version numbers need updates</span>
     <ul>
     <li>Xenocara (based on X.Org 7.7 with xserver 1.19.6 + patches,
-      freetype 2.8.1, fontconfig 2.12.4, Mesa 13.0.6, xterm 330,
+      freetype 2.9.1, fontconfig 2.12.4, Mesa 13.0.6, xterm 331,
       xkeyboard-config 2.20 and more)
-    <li>LLVM/Clang 5.0.1 (+ patches)
+    <li>LLVM/Clang 6.0.0 (+ patches)
     <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
     <li>Perl 5.24.3 (+ patches)
-    <li>NSD 4.1.20
-    <li>Unbound 1.6.8
+    <li>NSD 4.1.25
+    <li>Unbound 1.8.0
     <li>Ncurses 5.7
     <li>Binutils 2.17 (+ patches)
     <li>Gdb 6.3 (+ patches)
     <li>Awk Aug 10, 2011 version
-    <li>Expat 2.2.5
+    <li>Expat 2.2.6
     </ul>
 </ul>
 
