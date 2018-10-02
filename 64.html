@@ -65,10 +65,54 @@ to 6.4.
     <ul>
     <li>New <a href="https://man.openbsd.org/umt.4">umt(4)</a> driver
        for USB Windows Precision Touchpad devices.
-    <li>New <a href="https://man.openbsd.org/octcrypto.4">octcrypto(4)</a>
-       driver for hardware-accelerated cryptography on octeon.
     <li>Support for some HID-over-I<sup>2</sup>C touchscreen devices in
        <a href="https://man.openbsd.org/imt.4">imt(4)</a>.
+    <li>New <a href="https://man.openbsd.org/bnxt.4">bnxt(4)</a>
+       driver for Broadcom NetXtreme-C/E PCI Express Ethernet
+       adapters based on the Broadcom BCM573xx and BCM574xx chipsets. Enabled
+       on amd64 and arm64 platforms.
+    <li>New <a href="https://man.openbsd.org/mue.4">mue(4)</a>
+       driver for Microchip LAN7500/LAN7505/LAN7515/LAN7850 USB 2.0
+       and LAN7800/LAN7801 USB 3.0 Gigabit Ethernet devices.
+    <li>New <a href="https://man.openbsd.org/acpisurface.4">acpisurface(4)</a>
+       driver providing ACPI support for Microsoft Surface Book laptops.
+    <li>New <a href="https://man.openbsd.org/dwpcie.4">dwpcie(4)</a>
+       driver for the Synopsys Designware PCIe controller,
+       which is built into various SoCs.
+    <li>New <a href="https://man.openbsd.org/acpipci.4">acpipci(4/arm64)</a>
+       driver providing support for PCI host bridges
+       based on information provided by ACPI.
+    <li>New 
+       <a href="https://man.openbsd.org/mvclock.4">mvclock(4)</a>,
+       <a href="https://man.openbsd.org/mvgpio.4">mvgpio(4)</a>,
+       <a href="https://man.openbsd.org/mvicu.4">mvicu(4)</a>,
+       <a href="https://man.openbsd.org/mvrng.4">mvrng(4)</a>,
+       <a href="https://man.openbsd.org/mvrtc.4">mvrtc(4)</a>, and
+       <a href="https://man.openbsd.org/mvtemp.4">mvtemp(4)</a>
+       drivers for various components of the Marvell Armada SoCs.
+    <li>New
+       <a href="https://man.openbsd.org/hiclock.4">hiclock(4)</a>,
+       <a href="https://man.openbsd.org/hidwusb.4">hidwusb(4)</a>,
+       <a href="https://man.openbsd.org/hireset.4">hireset(4)</a>, and
+       <a href="https://man.openbsd.org/hitemp.4">hitemp(4)</a>
+       drivers for various components of the HiSilicon SoCs.
+    <li>New <a href="https://man.openbsd.org/ccp.4">ccp(4)</a> and
+       <a href="https://man.openbsd.org/octcrypto.4">octcrypto(4/octeon)</a>
+       drivers for hardware-accelerated cryptography.
+    <li>New <a href="https://man.openbsd.org/ccpmic.4">ccpmic(4)</a> and
+       <a href="https://man.openbsd.org/tipmic.4">tipmic(4)</a>
+       drivers for Intel Crystal Cove and Dollar Cove
+       TI Power Management ICs.
+    <li>New <a href="https://man.openbsd.org/imxrtc.4">imxrtc(4)</a>
+       driver for the RTC integrated in Freescale i.MX7 and i.MX8 processors.
+    <li>New <a href="https://man.openbsd.org/fanpwr.4">fanpwr(4)</a>
+       driver for the Fairchild FAN53555 and Silergy SYR827/828
+       voltage regulators.
+    <li>New <a href="https://man.openbsd.org/pinctrl.4">pinctrl(4)</a>
+       driver for generic pin multiplexing.
+    <li>New <a href="https://man.openbsd.org/plgpio.4">plgpio(4)</a>
+       driver for the ARM PrimeCell PL061 GPIO controller.
+    <li>PIE support for the m88k platform.
     </ul>
 
 <p>
@@ -76,6 +120,9 @@ to 6.4.
     <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
     <ul>
     <li>Support for qcow2 disk images.
+    <li>Added initial <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
+       support to <a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a>
+       along with general cleanups.
     </ul>
 <p>
 
@@ -88,7 +135,14 @@ to 6.4.
 
 <li>Generic network stack improvements:
     <ul>
-    <li>The bridge(4) runs without KERNEL_LOCK().
+    <li>The <a href="https://man.openbsd.org/amd64/bridge.4">bridge(4)</a>
+       runs without KERNEL_LOCK().
+    <li><a href="https://man.openbsd.org/amd64/trunk.4">trunk(4)</a>
+       now has LACP administrative knobs for: mode, timeout, system priority,
+       port priority, and ifq priority.
+    <li><a href="https://man.openbsd.org/amd64/ifconfig.8">ifconfig(8)</a>
+       now has the ability to adjust LACP administrative knobs:
+       <code>lacpmode</code> and <code>lacptimeout</code>.
     </ul>
 <p>
 
@@ -117,12 +171,34 @@ to 6.4.
     <li>A new daemon, <a href="https://man.openbsd.org/rad.8">rad(8)</a> sends
         IPv6 Router Advertisement messages and replaces the old rtadvd(8)
         daemon from KAME.
+    <li>The anachronistic
+      <a href="https://man.openbsd.org/OpenBSD-6.3/networks.5">networks(5)</a>
+      configuration file is no longer supported.
+    <li>More robust <a href="https://man.openbsd.org/pfctl.8">pfctl(8)</a>
+        parsing routines and corner case fixes around table and anchor
+        handling.
+    <li><a href="https://man.openbsd.org/route.8">route(8)</a> now errors out
+        on bad <tt>-netmask/-prefixlen</tt> usage instead of configuring
+        ambigious routes.
     </ul>
 <p>
 
 <li>Security improvements:
     <ul>
-    <li>
+    <li>New <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
+        system call to restrict file system access of the calling
+        process to the specified files and directories.  It is most
+        powerful when properly combined with privilege separation
+        and <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
+    <li>New "retguard" security mechanism on amd64 and arm64:
+        use per-function random cookies to protect access to function
+        return instructions, making them harder to use in ROP gadgets.
+    <li>Simultaneous multithreading (SMT) is now disabled by default
+        and can be enabled with the new <code>hw.smt</code>
+        <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
+    <li>Audio recording is now disabled by default and can be enabled
+        with the new <code>kern.audio.record</code>
+        <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
     </ul>
 <p>
 
@@ -130,7 +206,7 @@ to 6.4.
     <ul>
       <li>Fast prefix-sets
       <li>Support for BGP Origin Validation <a href="https://tools.ietf.org/html/rfc6811">
-      RFC 6811</a> through the <pre>roa-set</pre> directive.
+      RFC 6811</a> through the <code>roa-set</code> directive.
       <li>Some syntax cleanups; newlines are optional inside expansion
       lists (previously newlines needed to be escaped), but in neighbor,
       group and rdomain blocks multiple statements have to be on new lines.
@@ -161,15 +237,40 @@ to 6.4.
         <a href="https://man.openbsd.org/kcov.4">kcov(4)</a>
         driver used for collection of code coverage inside the kernel.
         It's used in an ongoing effort to fuzz the kernel.
+    <li><a href="https://man.openbsd.org/uid_from_user.3">uid_from_user(3)</a>
+        and
+        <a href="https://man.openbsd.org/gid_from_group.3">gid_from_group(3)</a>
+        were added to the C library and are now used in several programs,
+        to speed up repeated lookups.
+    <li>New semaphore implementation making
+        <a href="https://man.openbsd.org/sem_post.3">sem_post(3)</a>
+        async-safe.
+    <li><a href="https://man.openbsd.org/pcap_set_immediate_mode.3"
+        >pcap_set_immediate_mode(3)</a> was imported from mainline libpcap,
+        allowing programs to process packets as soon as they arrive.
+    <li><a href="https://man.openbsd.org/ksh.1">ksh(1)</a> now supports
+        64 bit integers on all architectures.
     <li>A bug in
         <a href="https://man.openbsd.org/ksh.1">ksh(1)</a>
         related to variable expansion of read-only varibles has been fixed.
+    <li><a href="https://man.openbsd.org/lam.1">lam(1)</a>
+        now provides UTF-8 support.
+    <li>Enable <a href="https://man.openbsd.org/trunk.4">trunk(4)</a> and
+       <a href="https://man.openbsd.org/vlan.4">vlan(4)</a> on arm64 RAMDISK.
     </ul>
 <p>
 
 <li>OpenSMTPD x.x.x
     <ul>
-    <li>
+    <li>Incompatible change to the
+        <a href="https://man.openbsd.org/smtpd.conf.5">smtpd.conf(5)</a>
+        grammar: separate envelope matching, which happens during the
+        SMTP dialogue while receiving a message and merely results
+        in assigning an action name, from delivery actions, which do
+        not take effect until the queue runner makes a delivery attempt.
+        This gets rid of several different roadblocks in OpenSMTPD
+        development.
+    <li> ...
     </ul>
 <p>
 
@@ -185,6 +286,25 @@ to 6.4.
 <li>LibreSSL 2.x.x
    <ul>
    <li>
+   </ul>
+<p>
+
+<li>Mandoc 1.14.4
+   <ul>
+   <li>In HTML output, many
+     <a href="https://man.openbsd.org/mdoc.7">mdoc(7)</a> macros
+     now use more fitting HTML elements.
+   <li>In HTML output, almost all "style" attributes and a number of
+     redundant "class" attributes were removed.
+   <li>Baby steps towards responsive design: use a @media query in
+     mandoc.css, use the HTML meta viewport element, and remove all
+     hard-coded widths and heights from the generated HTML code.
+   <li>Many style improvements in
+     <a href="https://man.openbsd.org/mandoc.css">mandoc.css</a>.
+   <li>More than 15 new low level
+     <a href="https://man.openbsd.org/roff.7">roff(7)</a>
+     and GNU man-ext features.
+     Mandoc can now format the manuals of the groff port.
    </ul>
 <p>
 
@@ -217,7 +337,7 @@ to 6.4.
     <p>
 
     <dl>
-    <dt>Some highlights: <span style="color:red;">version numbers need updates</span>
+    <dt>Some highlights:
     </dl>
     <table border=0 cellspacing=0 cellpadding=2 width="95%">
     <tr>
@@ -229,7 +349,7 @@ to 6.4.
 	<li>GCC 4.9.4
 	<li>GHC 8.2.2
 	<li>Gimp 2.8.22
-	<li>GNOME 3.28.1
+	<li>GNOME 3.28.2
 	<li>Go 1.11
 	<li>Groff 1.22.3
 	<li>JDK 8u172
@@ -266,7 +386,7 @@ to 6.4.
 <li>As usual, steady improvements in manual pages and other documentation.
 <p>
 
-<li>The system includes the following major components from outside suppliers:<span style="color:red;">version numbers need updates</span>
+<li>The system includes the following major components from outside suppliers:
     <ul>
     <li>Xenocara (based on X.Org 7.7 with xserver 1.19.6 + patches,
       freetype 2.9.1, fontconfig 2.12.4, Mesa 13.0.6, xterm 331,
