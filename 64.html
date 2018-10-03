@@ -65,8 +65,6 @@ to 6.4.
     <ul>
     <li>New <a href="https://man.openbsd.org/umt.4">umt(4)</a> driver
        for USB Windows Precision Touchpad devices.
-    <li>Support for some HID-over-I<sup>2</sup>C touchscreen devices in
-       <a href="https://man.openbsd.org/imt.4">imt(4)</a>.
     <li>New <a href="https://man.openbsd.org/bnxt.4">bnxt(4)</a>
        driver for Broadcom NetXtreme-C/E PCI Express Ethernet
        adapters based on the Broadcom BCM573xx and BCM574xx chipsets. Enabled
@@ -113,6 +111,14 @@ to 6.4.
     <li>New <a href="https://man.openbsd.org/plgpio.4">plgpio(4)</a>
        driver for the ARM PrimeCell PL061 GPIO controller.
     <li>PIE support for the m88k platform.
+    <li>Support for some HID-over-I<sup>2</sup>C touchscreen devices in
+       <a href="https://man.openbsd.org/imt.4">imt(4)</a>.
+    <li>Support for RTL8188EE and RTL8723AE in
+       <a href="https://man.openbsd.org/rtwn.4">rtwn(4)</a>.
+    <li>Support for SAS 3.5 controllers (SAS34xx and SAS35xx) in
+       <a href="https://man.openbsd.org/mpii.4">mpii(4)</a>.
+    <li>Support for drive and battery status sensors and bio in
+       <a href="https://man.openbsd.org/mfii.4">mfii(4)</a>.
     </ul>
 
 <p>
@@ -135,8 +141,6 @@ to 6.4.
 
 <li>Generic network stack improvements:
     <ul>
-    <li>The <a href="https://man.openbsd.org/amd64/bridge.4">bridge(4)</a>
-       runs without KERNEL_LOCK().
     <li><a href="https://man.openbsd.org/amd64/trunk.4">trunk(4)</a>
        now has LACP administrative knobs for: mode, timeout, system priority,
        port priority, and ifq priority.
@@ -223,7 +227,7 @@ to 6.4.
 
 <li>Assorted improvements:
     <ul>
-    <li><a href="https://man.openbsd.org/rasops.4">rasops(4)</a>-backed
+    <li><a href="https://man.openbsd.org/rasops.9">rasops(9)</a>-backed
         framebuffer consoles such as
         <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a> and
         <a href="https://man.openbsd.org/efifb.4">efifb(4)</a> now support
@@ -353,12 +357,11 @@ to 6.4.
 	<li>Go 1.11
 	<li>Groff 1.22.3
 	<li>JDK 8u172
-	<li>KDE 3.5.10 and 4.14.3 (plus KDE4 core updates)
 	<li>LLVM/Clang 6.0.1
 	<li>LibreOffice 6.1.1.2
 	<li>Lua 5.1.5, 5.2.4 and 5.3.5
 	<li>MariaDB 10.0.36
-	<li>Mono 5.12.0.226
+	<li>Mono 5.14.0.177
 	<li>Mozilla Firefox 60.2.1esr and 62.0.2
 	<li>Mozilla Thunderbird 52.9.1
     </ul></td><td valign=top width="50%"><ul>
