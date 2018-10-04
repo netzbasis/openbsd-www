@@ -115,6 +115,8 @@ to 6.4.
        <a href="https://man.openbsd.org/imt.4">imt(4)</a>.
     <li>Support for RTL8188EE and RTL8723AE in
        <a href="https://man.openbsd.org/rtwn.4">rtwn(4)</a>.
+    <li>Support for RT3290 in
+       <a href="https://man.openbsd.org/ral.4">ral(4)</a>.
     <li>Support for SAS 3.5 controllers (SAS34xx and SAS35xx) in
        <a href="https://man.openbsd.org/mpii.4">mpii(4)</a>.
     <li>Support for drive and battery status sensors and bio in
@@ -156,6 +158,25 @@ to 6.4.
     </ul>
 <p>
 
+<li>Security improvements:
+    <ul>
+    <li>New <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
+        system call to restrict file system access of the calling
+        process to the specified files and directories.  It is most
+        powerful when properly combined with privilege separation
+        and <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
+    <li>New "retguard" security mechanism on amd64 and arm64:
+        use per-function random cookies to protect access to function
+        return instructions, making them harder to use in ROP gadgets.
+    <li>Simultaneous multithreading (SMT) is now disabled by default
+        and can be enabled with the new <code>hw.smt</code>
+        <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
+    <li>Audio recording is now disabled by default and can be enabled
+        with the new <code>kern.audio.record</code>
+        <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
+    </ul>
+<p>
+
 <li>Routing daemons and other userland network improvements:
     <ul>
     <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> can now
@@ -187,41 +208,25 @@ to 6.4.
     </ul>
 <p>
 
-<li>Security improvements:
-    <ul>
-    <li>New <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
-        system call to restrict file system access of the calling
-        process to the specified files and directories.  It is most
-        powerful when properly combined with privilege separation
-        and <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
-    <li>New "retguard" security mechanism on amd64 and arm64:
-        use per-function random cookies to protect access to function
-        return instructions, making them harder to use in ROP gadgets.
-    <li>Simultaneous multithreading (SMT) is now disabled by default
-        and can be enabled with the new <code>hw.smt</code>
-        <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
-    <li>Audio recording is now disabled by default and can be enabled
-        with the new <code>kern.audio.record</code>
-        <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
-    </ul>
-<p>
-
 <li><a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a> improvements:
     <ul>
-      <li>Fast prefix-sets
-      <li>Support for BGP Origin Validation <a href="https://tools.ietf.org/html/rfc6811">
-      RFC 6811</a> through the <code>roa-set</code> directive.
-      <li>Some syntax cleanups; newlines are optional inside expansion
-      lists (previously newlines needed to be escaped), but in neighbor,
-      group and rdomain blocks multiple statements have to be on new lines.
-      <li>Make the event loop more reponsive while softreconfig is running.
-      <li>Reduce the amount of work done during a configuration reload.
-      <li>Make config reload not block other event handling in the
-      route decision engine.
-      <li>Better support and bugfixes for multiple bgpd processes
-      running in different rdomains
-      <li>The config option 'announce (all|self|none|default-route)'
-      has been deprecated and superseded by filter configuration.
+    <li>The default filter actions was changed from allow to deny.
+    <li>The config option 'announce (all|self|none|default-route)'
+        has been deprecated and superseded by filter configuration.
+    <li>Improved prefix-sets both in speed and user experience.
+    <li>Introduced as-sets to match ASPATH against large lists of AS numbers.
+    <li>Support for BGP Origin Validation
+        <a href="https://tools.ietf.org/html/rfc6811">RFC 6811</a>
+        through the <code>roa-set</code> directive.
+    <li>Added origin-sets for matching prefix / origin AS pairs efficently.
+    <li>Some syntax cleanups; newlines are optional inside expansion
+        lists (previously newlines needed to be escaped), but in neighbor,
+        group and rdomain blocks multiple statements have to be on new lines.
+    <li>Reduce the amount of work done during a configuration reload.
+    <li>Make config reload not block other event handling in the
+        route decision engine.
+    <li>Better support and bugfixes for multiple bgpd processes
+        running in different rdomains
     </ul>
 <p>
 
@@ -362,8 +367,8 @@ to 6.4.
 	<li>Lua 5.1.5, 5.2.4 and 5.3.5
 	<li>MariaDB 10.0.36
 	<li>Mono 5.14.0.177
-	<li>Mozilla Firefox 60.2.1esr and 62.0.2
-	<li>Mozilla Thunderbird 52.9.1
+	<li>Mozilla Firefox 60.2.2esr and 62.0.3
+	<li>Mozilla Thunderbird 60.2.1
     </ul></td><td valign=top width="50%"><ul>
 	<li>Mutt 1.10.1 and NeoMutt 20180716
 	<li>Node.js 8.12.0
