@@ -63,6 +63,10 @@ to 6.4.
 
 <li>Improved hardware support, including:
     <ul>
+    <li>ACPI support on OpenBSD/arm64 platforms.
+    <li>Support for
+       <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a>
+       on OpenBSD/arm64 platforms.
     <li>New <a href="https://man.openbsd.org/umt.4">umt(4)</a> driver
        for USB Windows Precision Touchpad devices.
     <li>New <a href="https://man.openbsd.org/bnxt.4">bnxt(4)</a>
@@ -74,6 +78,9 @@ to 6.4.
        and LAN7800/LAN7801 USB 3.0 Gigabit Ethernet devices.
     <li>New <a href="https://man.openbsd.org/acpisurface.4">acpisurface(4)</a>
        driver providing ACPI support for Microsoft Surface Book laptops.
+    <li>New
+       <a href="https://man.openbsd.org/agintcmsi.4">agintcmsi(4/arm64)</a>
+       driver for the ITS component of the ARM GIC.
     <li>New <a href="https://man.openbsd.org/dwpcie.4">dwpcie(4)</a>
        driver for the Synopsys Designware PCIe controller,
        which is built into various SoCs.
@@ -124,13 +131,17 @@ to 6.4.
     </ul>
 
 <p>
-<li><a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a>/
+<li><a href="https://man.openbsd.org/amd64/vmm.4">vmm(4)</a> and
     <a href="https://man.openbsd.org/amd64/vmd.8">vmd(8)</a> improvements:
     <ul>
-    <li>Support for qcow2 disk images.
+    <li>Support for qcow2 disk and snapshot images.
+    <li>Support for VM templates and derived instances in
+       <a href="https://man.openbsd.org/vm.conf.5#VM_INSTANCES">vm.conf(5)</a> and
+       <a href="https://man.openbsd.org/vmctl.8">vmctl(8)</a>.
     <li>Added initial <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
-       support to <a href="https://man.openbsd.org/amd64/vmctl.8">vmctl(8)</a>
+       support to <a href="https://man.openbsd.org/vmctl.8">vmctl(8)</a>
        along with general cleanups.
+    <li>Various bug fixes and improvements.
     </ul>
 <p>
 
@@ -383,7 +394,7 @@ to 6.4.
 	<li>Python 2.7.15 and 3.6.6
 	<li>R 3.5.1
 	<li>Ruby 2.3.7, 2.4.4 and 2.5.1
-	<li>Rust 1.29.1
+	<li>Rust 1.29.2
 	<li>Sendmail 8.16.0.29
 	<li>SQLite3 3.24.0
 	<li>Sudo 1.8.25
@@ -406,7 +417,7 @@ to 6.4.
     <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
     <li>Perl 5.24.3 (+ patches)
     <li>NSD 4.1.25
-    <li>Unbound 1.8.0
+    <li>Unbound 1.8.1
     <li>Ncurses 5.7
     <li>Binutils 2.17 (+ patches)
     <li>Gdb 6.3 (+ patches)
