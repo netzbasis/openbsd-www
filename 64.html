@@ -133,6 +133,16 @@ to 6.4.
     <li>Support for drive and battery status sensors and bio in
        <a href="https://man.openbsd.org/mfii.4">mfii(4)</a>.
     <li>On i386 Intel CPU microcode is loaded on boot.
+    <li>On sparc64 <a href="https://man.openbsd.org/ldomctl.8">ldomctl(8)</a>
+       now supports more modern firmwares found on SPARC T2+ and T3 machines in
+       particular such as T1000, T5120 and T5240.
+       NVRAM variables can now be set per logical domain.
+    <li><a href="https://man.openbsd.org/com.4">com(4)</a>
+       better supports Synopsys Designware UARTs.
+    <li>New <a href="https://man.openbsd.org/islrtc.4">islrtc</a>
+       driver for Intersil ISL1208 Real Time Clock.
+    <li>Support for the Huawei k3772 in
+       <a href="https://man.openbsd.org/umsm.4">umsm</a>.
     </ul>
 
 <p>
@@ -152,8 +162,10 @@ to 6.4.
 
 <li>IEEE 802.11 wireless stack improvements:
     <ul>
-    <li>With the new 'auto-join' feature, the kernel manages automatic switching
-	between	different wifi networks.
+    <li>With the new 'join' feature (managed with <a
+       href="http://man.openbsd.org/ifconfig#IEEE_802.11_(WIRELESS_DEVICES)">
+       ifconfig(8)</a>), the kernel manages automatic switching between
+       different wifi networks.
     </ul>
 <p>
 
@@ -170,7 +182,15 @@ to 6.4.
 
 <li>Installer improvements:
     <ul>
-    <li>
+    <li><a href="https://man.openbsd.org/installurl.5">installurl(5)</a> now
+        defaults to
+        <a href="https://cdn.openbsd.org/pub/OpenBSD">cdn.openbsd.org</a> if it
+        does not exist and no official mirror was used to get working
+        <a href="https://man.openbsd.org/pkg_add.1">pkg_add(1)</a> and
+        <a href="https://man.openbsd.org/syspatch.8">syspatch(8)</a> experience
+        out of the box.
+    <li>DUID can be used to answer the "Which disk is the root disk?"
+        question during upgrade.
     </ul>
 <p>
 
@@ -181,22 +201,39 @@ to 6.4.
         process to the specified files and directories.  It is most
         powerful when properly combined with privilege separation
         and <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>.
-    <li>New "retguard" security mechanism on amd64 and arm64:
+    <li>Implemented MAP_STACK option for
+        <a href="https://man.openbsd.org/mmap.2">mmap(2)</a>.
+        At pagefaults and syscalls the kernel will check that the
+        stack pointer points to MAP_STACK memory, which mitigates
+        against attacks using stack pivots.
+    <li>New RETGUARD security mechanism on amd64 and arm64:
         use per-function random cookies to protect access to function
         return instructions, making them harder to use in ROP gadgets.
+    <li><a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
+        includes a pass which identifies common instructions which
+        may be useful in ROP gadgets and replaces them with safe
+        alternatives on amd64 and i386.
+    <li>The Retpoline mitigation against Spectre Variant 2 has been
+        enabled in <a href="https://man.openbsd.org/clang.1">clang(1)</a>
+        and in assembly files on amd64.
+    <li>Meltdown mitigation was added to i386.
     <li>Simultaneous multithreading (SMT) is now disabled by default
         and can be enabled with the new <code>hw.smt</code>
         <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
     <li>Audio recording is now disabled by default and can be enabled
         with the new <code>kern.audio.record</code>
         <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
+    <li><a href="https://man.openbsd.org/sshd.8">sshd</a> includes
+        improved defence against user enumeration attacks.
     </ul>
 <p>
 
 <li>Routing daemons and other userland network improvements:
     <ul>
-    <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> can now
-        redistribute routes depending on carp(4) interface states.
+    <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> can now set
+        the metric for a route depending on the status of an interface.
+    <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> can now be
+        bound into an alternate routing domain.
     <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> is
         now pledged.
     <li>Prevent ospfd(8) and ospf6d(8) to be started more than once
@@ -250,7 +287,8 @@ to 6.4.
     <ul>
     <li><a href="https://man.openbsd.org/rasops.9">rasops(9)</a>-backed
         framebuffer consoles such as
-        <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a> and
+        <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a>,
+        <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a> and
         <a href="https://man.openbsd.org/efifb.4">efifb(4)</a> now support
         scrollback.
     <li><a href="https://man.openbsd.org/rebound.8">rebound(8)</a>
@@ -287,10 +325,18 @@ to 6.4.
 	denial of service attacks.
     <li>New <a href="https://man.openbsd.org/ldap.1">ldap(1)</a>
         tool implementing a simple ldap search client.
+    <li>A bug in <a href="https://man.openbsd.org/init.8">init(8)</a>
+        that caused hangs on i386 under VMware has been fixed.
+    <li>TFTP boot support was added for U-Boot based arm64 and armv7 platforms
+        via EFI Simple Network protocol.
+    <li>Support was added for the EFI Random Number Generator Protocol
+        to insert additional entropy into the kernel at boot.
+    <li>Support for RFC 3430 (TCP connections) was added to
+        <a href="https://man.openbsd.org/snmpd.8">snmpd</a>.
     </ul>
 <p>
 
-<li>OpenSMTPD x.x.x
+<li>OpenSMTPD
     <ul>
     <li>Incompatible change to the
         <a href="https://man.openbsd.org/smtpd.conf.5">smtpd.conf(5)</a>
@@ -300,22 +346,83 @@ to 6.4.
         not take effect until the queue runner makes a delivery attempt.
         This gets rid of several different roadblocks in OpenSMTPD
         development.
-    <li> ...
     </ul>
 <p>
 
-<li>OpenSSH 7.8
+<li><a href="https://www.openssh.com/releasenotes.html#7.8">OpenSSH 7.8</a>
     <ul>
-    <li>New/changed features:
+    <li>New features:
       <ul>
-      <li>
+      <li>In most places
+         in <a href="http://man.openbsd.org/ssh.1">ssh(1)</a>
+         and <a href="http://man.openbsd.org/sshd.8">sshd(8)</a> where
+         port numbers are used, service names (from /etc/services) can
+         now be used.
+      <li>The <a href="http://man.openbsd.org/ssh.1">ssh(1)</a>
+         IdentityAgent configuration directive now accepts environment
+         variable names. This supports the use of multiple agent
+         sockets without needing to use fixed paths.
+      <li>Support signalling sessions via the SSH protocol in
+         <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>.
+      <li>"ssh -Q sig" can be used to list supported signature
+         options.  Also "ssh -Q help" will show the full set of
+         supported queries.
+      <li>The new CASignatureAlgorithms option
+         in <a href="http://man.openbsd.org/ssh.1">ssh(1)</a>
+         and <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>
+         controlls the allowed signature formats for CAs to sign
+         certificates with. For example, this allows banning CAs that
+         sign certificates using the RSA-SHA1 signature algorithm.
+      <li>Key revocation lists (KRLs) can now contain keys specified
+         by SHA256 hash. These lists are managed
+         by <a href="http://man.openbsd.org/ssh-keygen.8">ssh-keygen(8)</a>. In
+         addition, KRLs can now be created from base64-encoded SHA256
+         fingerprints, i.e. from only the information contained
+         in <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>
+         authentication log messages.
+      </ul>
+    <li>Non-exhaustive list of Bugfixes:
+      <ul>
+	
+      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>ssh(1),
+	<a href="http://man.openbsd.org/ssh-keygen.1">ssh-keygen(1)</a>:
+	avoid spurious "invalid format" errors when attempting to load
+	PEM private keys while using an incorrect passphrase.
+      <li><a href="http://man.openbsd.org/sshd.8">sshd(8)</a>: when a
+	channel closed message is received from a client, close the
+	stderr file descriptor at the same time stdout is closed. This
+	avoids stuck processes if they were waiting for stderr to
+	close and were insensitive to stdin/out closing.
+      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>: allow
+	ForwardX11Timeout=0 to disable the untrusted X11 forwarding
+	timeout and support X11 forwarding indefinitely.  Previously
+	the behaviour of ForwardX11Timeout=0 was undefined.
+      <li><a href="http://man.openbsd.org/sshd.8">sshd(8)</a>: do not
+         fail closed when configured with a text key revocation list
+         that contains a too-short key.
+      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>:treat
+	connections with ProxyJump specified the same as ones with a
+	ProxyCommand set with regards to hostname canonicalisation
+	(i.e. don't try to canonicalise the hostname unless
+	CanonicalizeHostname is set to 'always').
+      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>: fix
+        regression in OpenSSH 7.8 that could prevent public-key
+        authentication using certificates hosted in
+        a <a href="http://man.openbsd.org/ssh-agent.1">ssh-agent(1)</a> or
+        against <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>
+        from OpenSSH <7.8.
       </ul>
     </ul>
+	
 <p>
 
-<li>LibreSSL 2.x.x
+<li>LibreSSL 2.8.2
    <ul>
-   <li>
+   <li>X509 verification was made more strict so
+     <a href="https://man.openbsd.org/X509_VERIFY_PARAM_set_flags.3">X509_VERIFY_PARAM</a>
+     host, ip or email failure will cause future
+     <a href="https://man.openbsd.org/X509_verify_cert.3">X509_verify_cert</a>
+     calls to fail.
    </ul>
 <p>
 
@@ -340,7 +447,12 @@ to 6.4.
 
 <li>Ports and packages:
     <ul>
-      <li>
+      <li><a href="https://man.openbsd.org/update-plist.1">update-plist(1)</a>
+        has been entirely rewritten and now figures out MULTI_PACKAGES and
+	variable substitution almost 100%.
+      <li>New packages now run maintenance database tools like 
+        update-desktop-database  just once instead of after 
+	every package addition/removal.
     </ul>
     <dl>
     <dt>Many pre-built packages for each architecture:
@@ -352,17 +464,14 @@ to 6.4.
     <ul>
       <li>aarch64:    
       <li>alpha:      
-      <li>amd64:      
+      <li>amd64:      10304
     </ul></td><td valign=top width="25%"><ul>
       <li>arm:        
-      <li>i386:       
+      <li>i386:       10230
       <li>mips64:     
     </ul></td><td valign=top width="25%"><ul>
       <li>mips64el:   
       <li>powerpc:    
-      <li>sh:         
-    </ul></td><td valign=top width="25%"><ul>
-      <li>sparc64:    
     </ul></td></tr></table>
     <p>
 
