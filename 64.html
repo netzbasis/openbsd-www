@@ -65,7 +65,7 @@ to 6.4.
     <ul>
     <li>ACPI support on OpenBSD/arm64 platforms.
     <li>The <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a>
-        driver was updated to code based on Linux 4.4.155 adding modesetting
+        driver was updated to code based on Linux 4.4.155, adding modesetting
         support for KAVERI/KABINI/MULLINS APUs and
         OLAND/BONAIRE/HAINAN/HAWAII GPUs.
     <li>Support for
@@ -134,7 +134,7 @@ to 6.4.
        <a href="https://man.openbsd.org/mfii.4">mfii(4)</a>.
     <li>On i386 Intel CPU microcode is loaded on boot.
     <li>On sparc64 <a href="https://man.openbsd.org/ldomctl.8">ldomctl(8)</a>
-       now supports more modern firmwares found on SPARC T2+ and T3 machines in
+       now supports more modern firmware found on SPARC T2+ and T3 machines in
        particular such as T1000, T5120 and T5240.
        NVRAM variables can now be set per logical domain.
     <li><a href="https://man.openbsd.org/com.4">com(4)</a>
@@ -142,7 +142,19 @@ to 6.4.
     <li>New <a href="https://man.openbsd.org/islrtc.4">islrtc</a>
        driver for Intersil ISL1208 Real Time Clock.
     <li>Support for the Huawei k3772 in
-       <a href="https://man.openbsd.org/umsm.4">umsm</a>.
+       <a href="https://man.openbsd.org/umsm.4">umsm(4)</a>.
+    <li>Support for the VIA VX900 chipset in
+        <a href="https://man.openbsd.org/viapm.4">viapm(4)</a>.
+    <li>Support for GNSS networks other than GPS in
+        <a href="https://man.openbsd.org/nmea.4">nmea(4)</a>.
+    <li>Support for Elantech trackpoints in
+        <a href="https://man.openbsd.org/pms.4">pms(4)</a>.
+    <li>Added a sensor for port replicatior status to
+        <a href="https://man.openbsd.org/acpithinkpad.4">acpithinkpad(4)</a>.
+    <li>Support for monitor mode in
+        <a href="https://man.openbsd.org/iwm.4">iwm(4)</a>.
+    <li>Support for Allwinner H3 and A64 SoC in
+        <a href="https://man.openbsd.org/sxitemp.4">scitemp(4)</a>.
     </ul>
 
 <p>
@@ -166,17 +178,29 @@ to 6.4.
        href="http://man.openbsd.org/ifconfig#IEEE_802.11_(WIRELESS_DEVICES)">
        ifconfig(8)</a>), the kernel manages automatic switching between
        different wifi networks.
+    <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
+       scan performance has been improved for many devices.
     </ul>
 <p>
 
 <li>Generic network stack improvements:
     <ul>
-    <li><a href="https://man.openbsd.org/amd64/trunk.4">trunk(4)</a>
-       now has LACP administrative knobs for: mode, timeout, system priority,
+    <li><a href="https://man.openbsd.org/trunk.4">trunk(4)</a>
+       now has LACP administrative knobs for mode, timeout, system priority,
        port priority, and ifq priority.
-    <li><a href="https://man.openbsd.org/amd64/ifconfig.8">ifconfig(8)</a>
-       now has the ability to adjust LACP administrative knobs:
+    <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
+       now has the ability to adjust LACP administrative knobs
        <code>lacpmode</code> and <code>lacptimeout</code>.
+    <li><a href="https://man.openbsd.org/sendmsg.2">sendmsg(2)</a>,
+        <a href="https://man.openbsd.org/sendto.2">sendto(2)</a>,
+        <a href="https://man.openbsd.org/recvfrom.2">recvfrom(2)</a> and
+        <a href="https://man.openbsd.org/recvmsg.2">recvmsg(2)</a> are
+        run without KERNEL_LOCK.
+    <li>New global IPsec counters are available via
+        <a href="https://man.openbsd.org/netstat.1">netstat(1)</a>.
+    <li>New <a href="https://man.openbsd.org/eoip.4">eoip(4)</a>
+        interface for the MikroTik Ethernet over IP (EoIP)
+        encapsulation protocol.
     </ul>
 <p>
 
@@ -184,13 +208,17 @@ to 6.4.
     <ul>
     <li><a href="https://man.openbsd.org/installurl.5">installurl(5)</a> now
         defaults to
-        <a href="https://cdn.openbsd.org/pub/OpenBSD">cdn.openbsd.org</a> if it
-        does not exist and no official mirror was used to get working
+        <a href="ftp.html">cdn.openbsd.org</a> if
+        no mirror was chosen during installation.
         <a href="https://man.openbsd.org/pkg_add.1">pkg_add(1)</a> and
-        <a href="https://man.openbsd.org/syspatch.8">syspatch(8)</a> experience
-        out of the box.
+        <a href="https://man.openbsd.org/syspatch.8">syspatch(8)</a>
+        will thus work out of the box.
     <li>DUID can be used to answer the "Which disk is the root disk?"
         question during upgrade.
+    <li>Installing a
+      <a href="https://man.openbsd.org/diskless.8">diskless(8)</a>
+      setup can be done over interfaces configured with
+      <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>.
     </ul>
 <p>
 
@@ -210,20 +238,27 @@ to 6.4.
         use per-function random cookies to protect access to function
         return instructions, making them harder to use in ROP gadgets.
     <li><a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
-        includes a pass which identifies common instructions which
+        includes a pass that identifies common instructions which
         may be useful in ROP gadgets and replaces them with safe
         alternatives on amd64 and i386.
     <li>The Retpoline mitigation against Spectre Variant 2 has been
         enabled in <a href="https://man.openbsd.org/clang.1">clang(1)</a>
-        and in assembly files on amd64.
+        and in assembly files on amd64 and i386.
     <li>Meltdown mitigation was added to i386.
-    <li>Simultaneous multithreading (SMT) is now disabled by default
-        and can be enabled with the new <code>hw.smt</code>
+    <li>amd64 now uses eager-FPU switching to prevent FPU state
+        information speculatively leaking across protection boundaries.
+    <li>Because Simultaneous MultiThreading (SMT) uses core resources in
+        a shared and unsafe manner, it is now disabled by default.
+        It and can be enabled with the new <code>hw.smt</code>
         <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
     <li>Audio recording is now disabled by default and can be enabled
         with the new <code>kern.audio.record</code>
         <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
-    <li><a href="https://man.openbsd.org/sshd.8">sshd</a> includes
+    <li><a href="https://man.openbsd.org/getpwnam.3">getpwnam(3)</a> and
+        <a href="https://man.openbsd.org/getpwnam.3">getpwuid(3)</a> no
+	longer return a pointer to static storage but a managed allocation
+	which gets unmapped.  This allows detection of access to stale entries.
+    <li><a href="https://man.openbsd.org/sshd.8">sshd(8)</a> includes
         improved defence against user enumeration attacks.
     </ul>
 <p>
@@ -236,7 +271,7 @@ to 6.4.
         bound into an alternate routing domain.
     <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> is
         now pledged.
-    <li>Prevent ospfd(8) and ospf6d(8) to be started more than once
+    <li>Prevent ospfd(8) and ospf6d(8) from being started more than once
         (in the same routing domain).
     <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> is now fully
         pledged.
@@ -244,9 +279,9 @@ to 6.4.
         the kernel when Duplicate Address Detection (DAD) fails and generates
         different addresses when possible.
     <li>When <a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> detects
-        roaming between networks it deprecates all configured IPs. IPs from
-        newly advertised prefixes will the preferred.
-    <li>A new daemon, <a href="https://man.openbsd.org/rad.8">rad(8)</a> sends
+        roaming between networks, it deprecates all configured IPs. IPs from
+        newly advertised prefixes will be preferred.
+    <li>A new daemon, <a href="https://man.openbsd.org/rad.8">rad(8)</a>, sends
         IPv6 Router Advertisement messages and replaces the old rtadvd(8)
         daemon from KAME.
     <li>The anachronistic
@@ -258,12 +293,41 @@ to 6.4.
     <li><a href="https://man.openbsd.org/route.8">route(8)</a> now errors out
         on bad <tt>-netmask/-prefixlen</tt> usage instead of configuring
         ambiguous routes.
+    <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+        now adds a direct route to the default route gateway when the
+        gateway is not reachable via the address/netmask provided by the
+        lease.
+    <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+        now updates
+        <a href="https://man.openbsd.org/dhclient.leases.5">dhclient.leases(5)</a>,
+        <a href="https://man.openbsd.org/resolv.conf.5">resolv.conf(5)</a>,
+        and any '-L'
+	file before daemonizing and returning control
+	to invoking scripts.
+    <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>'s
+        '-i' option now discards any previously defined values for the options
+        to be ignored.
+    <li>Any change to any interface now causes
+        <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+        to appropriately update
+        <a href="https://man.openbsd.org/resolv.conf.5">resolv.conf(5)</a>.
+    <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+        now always records the client identifier used to obtain a lease,
+        enabling better conformance to RFC 6842.
+    <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+        now has the '-r' option to release the current lease and exit.
+    <li><a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+        now avoids inappropriate changes to
+        <a href="https://man.openbsd.org/resolv.conf.5">resolv.conf(5)</a>
+        by ignoring
+        <a href="https://man.openbsd.org/dhclient.leases.5">dhclient.leases(5)</a>
+        for interfaces that cannot report their link status.
     </ul>
 <p>
 
 <li><a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a> improvements:
     <ul>
-    <li>The default filter actions was changed from allow to deny.
+    <li>The default filter action was changed from allow to deny.
     <li>The config option 'announce (all|self|none|default-route)'
         has been deprecated and superseded by filter configuration.
     <li>Improved prefix-sets both in speed and user experience.
@@ -272,14 +336,14 @@ to 6.4.
         <a href="https://tools.ietf.org/html/rfc6811">RFC 6811</a>
         through the <code>roa-set</code> directive.
     <li>Added origin-sets for matching prefix / origin AS pairs efficently.
-    <li>Some syntax cleanups; newlines are optional inside expansion
-        lists (previously newlines needed to be escaped), but in neighbor,
+    <li>Some syntax cleanups: newlines are optional inside expansion
+        lists (previously newlines needed to be escaped) but, in neighbor,
         group and rdomain blocks multiple statements have to be on new lines.
     <li>Reduce the amount of work done during a configuration reload.
-    <li>Make config reload not block other event handling in the
+    <li>Config reloading no longer blocks other event handling in the
         route decision engine.
     <li>Better support and bugfixes for multiple bgpd processes
-        running in different rdomains
+        running in different rdomains.
     </ul>
 <p>
 
@@ -303,7 +367,7 @@ to 6.4.
     <li><a href="https://man.openbsd.org/uid_from_user.3">uid_from_user(3)</a>
         and
         <a href="https://man.openbsd.org/gid_from_group.3">gid_from_group(3)</a>
-        were added to the C library and are now used in several programs,
+        were added to the C library and are now used in several programs
         to speed up repeated lookups.
     <li>New semaphore implementation making
         <a href="https://man.openbsd.org/sem_post.3">sem_post(3)</a>
@@ -315,7 +379,7 @@ to 6.4.
         64 bit integers on all architectures.
     <li>A bug in
         <a href="https://man.openbsd.org/ksh.1">ksh(1)</a>
-        related to variable expansion of read-only varibles has been fixed.
+        related to variable expansion of read-only variables has been fixed.
     <li><a href="https://man.openbsd.org/lam.1">lam(1)</a>
         now provides UTF-8 support.
     <li>Enable <a href="https://man.openbsd.org/trunk.4">trunk(4)</a> and
@@ -333,6 +397,40 @@ to 6.4.
         to insert additional entropy into the kernel at boot.
     <li>Support for RFC 3430 (TCP connections) was added to
         <a href="https://man.openbsd.org/snmpd.8">snmpd</a>.
+    <li>Enable <a href="https://man.openbsd.org/bwfm.4">bwfm(4)</a>
+        on amd64, arm64 and armv7. Also enabled on loongson for USB devices.
+    <li>New "Spleen 5x8" font added to wsfont, targetted at small OLED displays.
+    <li><a href="https://man.openbsd.org/usbdevs.8">usbdevs(8)</a> now reports
+        USB port statuses.
+    <li><a href="https://man.openbsd.org/top.1">top(1)</a> and
+        <a href="https://man.openbsd.org/systat.1">systat(1)</a> now report
+        the time spent by each CPU waiting on spinning locks.
+    <li>Improved read speed on MSDOSFS via clustering.
+    <li>Access to NFS nodes is now serialized.
+    <li><a href="https://man.openbsd.org/systat.1">systat(1)</a>
+        has a new uvm view that displays statistics relevant to the UVM subsystem.
+    <li><a href="https://man.openbsd.org/mg.1">mg(1)</a>
+        now handles carriage returns during incremental search by setting the
+        mark and exiting the search, as modern emacsen do.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a>
+         improved the rounding of partition offsets and
+         sizes to cylinder boundaries.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a>
+        now range checks all user input. 
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a>
+         no longer allows FS_RAID partitions to be given a mount point.
+    <li><a href="https://man.openbsd.org/disklabel.8">disklabel(8)</a>
+        now changes partition information only when all user
+        input is valid.
+    <li><a href="https://man.openbsd.org/relayd.8">relayd(8)</a> has
+        improved log directives in its configuration file for finer
+        grained control of what gets logged.
+    <li><a href="https://man.openbsd.org/tmux.1">tmux(1)</a>
+        now handles terminfo colors greater than 256 correctly.
+    <li><a href="https://man.openbsd.org/httpd.8">httpd(8)</a>
+        now supports client certificate authentication.
+    <li>Numerous improvements to the 
+        <a href="https://man.openbsd.org/fuse.4">fuse(4)</a> subsystem.
     </ul>
 <p>
 
@@ -346,9 +444,21 @@ to 6.4.
         not take effect until the queue runner makes a delivery attempt.
         This gets rid of several different roadblocks in OpenSMTPD
         development.
+    <li>Improve SMTP server engine with a new RFC 5322 message parser.
+    <li>Remove limitations preventing
+      <a href="https://man.openbsd.org/smtpd.8">smtpd(8)</a>
+      from dealing with clients submitting long lines.
+    <li>Improve security by moving expansion of .forward file variables
+      into the users' MDA process.
+    <li>Introduce MDA wrappers allowing recipient MDA commands to be
+      transparently wrapped inside global commands.
+    <li>A new <a href="https://man.openbsd.org/smtp.1">smtp(1)</a>
+      command line client has been added.
+    <li>Assorted documentation improvements, cleanups and minor bug fixes.
     </ul>
 <p>
 
+<!-- XXX should be 7.9 -->
 <li><a href="https://www.openssh.com/releasenotes.html#7.8">OpenSSH 7.8</a>
     <ul>
     <li>New features:
@@ -370,7 +480,7 @@ to 6.4.
       <li>The new CASignatureAlgorithms option
          in <a href="http://man.openbsd.org/ssh.1">ssh(1)</a>
          and <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>
-         controlls the allowed signature formats for CAs to sign
+         controls the allowed signature formats for CAs to sign
          certificates with. For example, this allows banning CAs that
          sign certificates using the RSA-SHA1 signature algorithm.
       <li>Key revocation lists (KRLs) can now contain keys specified
@@ -381,10 +491,9 @@ to 6.4.
          in <a href="http://man.openbsd.org/sshd.8">sshd(8)</a>
          authentication log messages.
       </ul>
-    <li>Non-exhaustive list of Bugfixes:
-      <ul>
-	
-      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>ssh(1),
+    <li>Non-exhaustive list of bug fixes:
+      <ul>	
+      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>:
 	<a href="http://man.openbsd.org/ssh-keygen.1">ssh-keygen(1)</a>:
 	avoid spurious "invalid format" errors when attempting to load
 	PEM private keys while using an incorrect passphrase.
@@ -400,7 +509,7 @@ to 6.4.
       <li><a href="http://man.openbsd.org/sshd.8">sshd(8)</a>: do not
          fail closed when configured with a text key revocation list
          that contains a too-short key.
-      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>:treat
+      <li><a href="http://man.openbsd.org/ssh.1">ssh(1)</a>: treat
 	connections with ProxyJump specified the same as ones with a
 	ProxyCommand set with regards to hostname canonicalisation
 	(i.e. don't try to canonicalise the hostname unless
@@ -423,6 +532,7 @@ to 6.4.
      host, ip or email failure will cause future
      <a href="https://man.openbsd.org/X509_verify_cert.3">X509_verify_cert</a>
      calls to fail.
+   <li>Support for single DES cipher suites has been removed.
    </ul>
 <p>
 
@@ -451,7 +561,7 @@ to 6.4.
         has been entirely rewritten and now figures out MULTI_PACKAGES and
 	variable substitution almost 100%.
       <li>New packages now run maintenance database tools like 
-        update-desktop-database  just once instead of after 
+        update-desktop-database just once instead of after 
 	every package addition/removal.
     </ul>
     <dl>
@@ -462,16 +572,16 @@ to 6.4.
     <tr>
     <td valign="top" width="25%">
     <ul>
-      <li>aarch64:    
-      <li>alpha:      
+      <li>aarch64:     8319
       <li>amd64:      10304
-    </ul></td><td valign=top width="25%"><ul>
       <li>arm:        
+    </ul></td><td valign=top width="25%"><ul>
       <li>i386:       10230
       <li>mips64:     
-    </ul></td><td valign=top width="25%"><ul>
       <li>mips64el:   
+    </ul></td><td valign=top width="25%"><ul>
       <li>powerpc:    
+      <li>sparc64:
     </ul></td></tr></table>
     <p>
 
