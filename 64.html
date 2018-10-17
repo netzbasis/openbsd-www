@@ -133,13 +133,17 @@ to 6.4.
     <li>Support for drive and battery status sensors and bio in
        <a href="https://man.openbsd.org/mfii.4">mfii(4)</a>.
     <li>On i386 Intel CPU microcode is loaded on boot.
+    <li>On i386 reduce the size of the area reserved for
+	<a href="https://man.openbsd.org/brk.2">brk(2)</a>
+	to make more memory available to anonymous
+       <a href="https://man.openbsd.org/mmap.2">mmap(2)</a> calls.
     <li>On sparc64 <a href="https://man.openbsd.org/ldomctl.8">ldomctl(8)</a>
        now supports more modern firmware found on SPARC T2+ and T3 machines in
        particular such as T1000, T5120 and T5240.
        NVRAM variables can now be set per logical domain.
     <li><a href="https://man.openbsd.org/com.4">com(4)</a>
        better supports Synopsys Designware UARTs.
-    <li>New <a href="https://man.openbsd.org/islrtc.4">islrtc</a>
+    <li>New <a href="https://man.openbsd.org/islrtc.4">islrtc(4)</a>
        driver for Intersil ISL1208 Real Time Clock.
     <li>Support for the Huawei k3772 in
        <a href="https://man.openbsd.org/umsm.4">umsm(4)</a>.
@@ -151,8 +155,6 @@ to 6.4.
         <a href="https://man.openbsd.org/pms.4">pms(4)</a>.
     <li>Added a sensor for port replicatior status to
         <a href="https://man.openbsd.org/acpithinkpad.4">acpithinkpad(4)</a>.
-    <li>Support for monitor mode in
-        <a href="https://man.openbsd.org/iwm.4">iwm(4)</a>.
     <li>Support for Allwinner H3 and A64 SoC in
         <a href="https://man.openbsd.org/sxitemp.4">scitemp(4)</a>.
     </ul>
@@ -177,7 +179,7 @@ to 6.4.
     <li>With the new 'join' feature (managed with <a
        href="http://man.openbsd.org/ifconfig#IEEE_802.11_(WIRELESS_DEVICES)">
        ifconfig(8)</a>), the kernel manages automatic switching between
-       different wifi networks.
+       different WiFi networks.
     <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
        scan performance has been improved for many devices.
     </ul>
@@ -244,12 +246,16 @@ to 6.4.
     <li>The Retpoline mitigation against Spectre Variant 2 has been
         enabled in <a href="https://man.openbsd.org/clang.1">clang(1)</a>
         and in assembly files on amd64 and i386.
+    <li>Added SpectreRSB mitigation on amd64.
+    <li>Added Intel L1 Terminal Fault mitigation on amd64.
+    <li>When available, PCIDs are used on amd64 to separate user 
+        and kernel thread TLB entries.
     <li>Meltdown mitigation was added to i386.
     <li>amd64 now uses eager-FPU switching to prevent FPU state
         information speculatively leaking across protection boundaries.
     <li>Because Simultaneous MultiThreading (SMT) uses core resources in
         a shared and unsafe manner, it is now disabled by default.
-        It and can be enabled with the new <code>hw.smt</code>
+        It can be enabled with the new <code>hw.smt</code>
         <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> variable.
     <li>Audio recording is now disabled by default and can be enabled
         with the new <code>kern.audio.record</code>
@@ -271,8 +277,9 @@ to 6.4.
         bound into an alternate routing domain.
     <li><a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> is
         now pledged.
-    <li>Prevent ospfd(8) and ospf6d(8) from being started more than once
-        (in the same routing domain).
+    <li>Prevent <a href="https://man.openbsd.org/ospfd.8">ospfd(8)</a> and 
+        <a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> from being 
+        started more than once (in the same routing domain).
     <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> is now fully
         pledged.
     <li><a href="https://man.openbsd.org/slaacd.8">slaacd(8)</a> is informed by
@@ -376,7 +383,7 @@ to 6.4.
         >pcap_set_immediate_mode(3)</a> was imported from mainline libpcap,
         allowing programs to process packets as soon as they arrive.
     <li><a href="https://man.openbsd.org/ksh.1">ksh(1)</a> now supports
-        64 bit integers on all architectures.
+        64-bit integers on all architectures.
     <li>A bug in
         <a href="https://man.openbsd.org/ksh.1">ksh(1)</a>
         related to variable expansion of read-only variables has been fixed.
@@ -388,7 +395,7 @@ to 6.4.
 	reassembly uses a better algorithm to make it robust against
 	denial of service attacks.
     <li>New <a href="https://man.openbsd.org/ldap.1">ldap(1)</a>
-        tool implementing a simple ldap search client.
+        tool implementing a simple LDAP search client.
     <li>A bug in <a href="https://man.openbsd.org/init.8">init(8)</a>
         that caused hangs on i386 under VMware has been fixed.
     <li>TFTP boot support was added for U-Boot based arm64 and armv7 platforms
@@ -396,9 +403,9 @@ to 6.4.
     <li>Support was added for the EFI Random Number Generator Protocol
         to insert additional entropy into the kernel at boot.
     <li>Support for RFC 3430 (TCP connections) was added to
-        <a href="https://man.openbsd.org/snmpd.8">snmpd</a>.
+        <a href="https://man.openbsd.org/snmpd.8">snmpd(8)</a>.
     <li>Enable <a href="https://man.openbsd.org/bwfm.4">bwfm(4)</a>
-        on amd64, arm64 and armv7. Also enabled on loongson for USB devices.
+        on amd64, arm64 and armv7. Also on loongson and macppc for USB devices.
     <li>New "Spleen 5x8" font added to wsfont, targetted at small OLED displays.
     <li><a href="https://man.openbsd.org/usbdevs.8">usbdevs(8)</a> now reports
         USB port statuses.
@@ -431,6 +438,13 @@ to 6.4.
         now supports client certificate authentication.
     <li>Numerous improvements to the 
         <a href="https://man.openbsd.org/fuse.4">fuse(4)</a> subsystem.
+    <li>Improvements to the way the kernel searches for available
+	memory to satisfy anonymous
+	<a href="https://man.openbsd.org/mmap.2">mmap(2)</a>
+	calls.
+    <li><a href="https://man.openbsd.org/efifb.4">efifb(4)</a> now remaps
+        the EFI framebuffer early to use a write combining mapping, speeding
+        things up considerably.
     </ul>
 <p>
 
@@ -533,6 +547,8 @@ to 6.4.
      <a href="https://man.openbsd.org/X509_verify_cert.3">X509_verify_cert</a>
      calls to fail.
    <li>Support for single DES cipher suites has been removed.
+   <li>Support for RSASSA-PKCS1-v1_5 (RFC 8017) was added to
+     <a href="https://man.openbsd.org/man3/RSA_sign.3">RSA_sign(3)</a>
    </ul>
 <p>
 
@@ -612,7 +628,7 @@ to 6.4.
     </ul></td><td valign=top width="50%"><ul>
 	<li>Mutt 1.10.1 and NeoMutt 20180716
 	<li>Node.js 8.12.0
-	<li>Ocaml 4.03.0
+	<li>OCaml 4.03.0
 	<li>OpenLDAP 2.3.43 and 2.4.46
 	<li>PHP 5.6.38, 7.0.32, 7.1.22 and 7.2.10
 	<li>Postfix 3.3.1 and 3.4-20180904
