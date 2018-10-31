@@ -62,7 +62,7 @@ The following features are available:
 <ul>
   <li>serial console access to the virtual machines
   <li><a href="https://man.openbsd.org/tap">tap(4)</a> interfaces
-  <li>per-system user/group ownership
+  <li>per-VM user/group ownership
   <li>privilege separation
   <li>raw, qcow2 and qcow2-derived images
   <li>dumping and restoring of guest system memory
@@ -89,12 +89,26 @@ As there is no VGA support yet, the guest OS must support serial console.
 
 A CPU with nested paging support is required to use
 <a href="https://man.openbsd.org/vmm">vmm(4)</a>.
-Support can be checked by looking at the processor features flags: SLAT for
+Support can be checked by looking at the processor feature flags: SLAT for
 AMD or EPT for Intel.
+In some cases, virtualization capabilities must be manually enabled in the
+system's BIOS.
+Be sure to run the <a href="https://man.openbsd.org/fw_update">fw_update(1)</a>
+command after doing so to get the required <code>vmm-firmware</code> package.
+
+<p>
 Processor compatibility can be checked with the following command:
 
 <pre class="cmdbox">
 $ <b>dmesg | egrep '(VMX/EPT|SVM/RVI)'</b>
+</pre>
+
+Before going further, enable and start the
+<a href="https://man.openbsd.org/vmd">vmd(8)</a> service.
+
+<pre class="cmdbox">
+# <b>rcctl enable vmd</b>
+# <b>rcctl start vmd</b>
 </pre>
 
 <h2 id="StartVm">Starting a VM</h2>
@@ -105,22 +119,23 @@ It will boot from the <code>installXX.iso</code> image file.
 
 <pre class="cmdbox">
 # <b>vmctl create disk.qcow2 -s 50G</b>
+vmctl: qcow2 imagefile created
 # <b>vmctl start "example" -m 1G -L -i 1 -r installXX.iso -d disk.qcow2</b>
+vmctl: started vm 1 successfully, tty /dev/ttyp8
 # <b>vmctl show</b>
    ID   PID VCPUS  MAXMEM  CURMEM     TTY        OWNER NAME
     1 72118     1    1.0G   88.1M   ttyp8         root example
 </pre>
 
-To view the console of the newly created VM,
-attach to its serial console:
+To view the console of the newly created VM, attach to its serial console:
 
 <pre class="cmdbox">
-# <b>vmctl console 1</b>
+# <b>vmctl console example</b>
 Connected to /dev/ttyp8 (speed 115200)
 </pre>
 
-The escape sequence <code>~.</code> is needed to leave the serial
-console.
+The escape sequence <code>~.</code> is needed to leave the serial console.
+See the <a href="https://man.openbsd.org/cu">cu(1)</a> man page for more info.
 When using a <code>vmctl</code> serial console over SSH, the ~ (tilde)
 character must be escaped to prevent
 <a href="https://man.openbsd.org/ssh">ssh(1)</a> from dropping the connection.
@@ -130,7 +145,8 @@ To exit a serial console over SSH, use <code>~~.</code> instead.
 The VM can be stopped using <a href="https://man.openbsd.org/vmctl">vmctl(8)</a>.
 
 <pre class="cmdbox">
-# <b>vmctl stop 1</b>
+# <b>vmctl stop example</b>
+stopping vm: requested to shutdown vm 1
 </pre>
 
 Virtual machines can be started with or without a
@@ -146,18 +162,6 @@ vm "example" {
     local interface
 }
 </pre>
-
-When <a href="https://man.openbsd.org/vmd">vmd(8)</a> starts, virtual machines
-with the keyword <code>enable</code> are started.
-
-<pre class="cmdbox">
-# <b>rcctl enable vmd</b>
-# <b>rcctl start vmd</b>
-vmd(ok)
-# <b>vmctl show</b>
-   ID   PID VCPUS  MAXMEM  CURMEM     TTY        OWNER NAME
-    1 72118     1    1.0G   88.1M   ttyp8         root example
-</pre>  
 
 Some configuration properties in
 <a href="https://man.openbsd.org/vm.conf">vm.conf(5)</a>
@@ -180,7 +184,7 @@ different use cases:
   <li><b>Private Addresses</b>
       (<a href="https://tools.ietf.org/html/rfc1918">RFC1918</a>) are those
       reserved for private networks such as <code>10.0.0.0/8</code>,
-      <code>172.16.0.0/12</code>, and <code>192.168.0.0/24</code> are not
+      <code>172.16.0.0/12</code>, and <code>192.168.0.0/16</code> are not
       globally routable.
   <li><b>Shared Addresses</b>
       (<a href="https://tools.ietf.org/html/rfc6598">RFC6598</a>) are similar
