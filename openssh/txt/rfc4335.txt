@@ -223,7 +223,9 @@ RFC 4335                  SSH Break Extension               January 2006
 
 
 
-Galbraith & Remaker         Standards Track                     [Page 4ÖúÀRFC 4335                  SSH Break Extension               January 2006
+Galbraith & Remaker         Standards Track                     [Page 4]
+
+RFC 4335                  SSH Break Extension               January 2006
 
 
    [6]  Lehtinen, S. and C. Lonvick, Ed., "The Secure Shell (SSH)
