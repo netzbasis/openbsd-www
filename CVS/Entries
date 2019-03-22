@@ -109,8 +109,8 @@
 /errata60.html/1.45/Tue Oct  9 15:12:03 2018//
 /errata61.html/1.37/Tue Oct  9 15:12:03 2018//
 /errata62.html/1.27/Thu Oct 18 03:15:12 2018//
-/errata63.html/1.29/Thu Feb 28 18:28:43 2019//
-/errata64.html/1.12/Thu Feb 28 18:28:43 2019//
+/errata63.html/1.30/Thu Mar 21 14:10:26 2019//
+/errata64.html/1.13/Thu Mar 21 14:10:26 2019//
 /events.html/1.1148/Wed Mar 20 14:33:22 2019//
 /favicon.ico/1.2/Tue Jul  9 02:54:02 2002/-kb/
 /ftp.html/1.783/Fri Feb 22 17:39:39 2019//
@@ -125,7 +125,7 @@
 /httpd.conf/1.5/Mon Jun 26 17:18:57 2017//
 /httpslist/1.47/Tue Jan 29 18:38:56 2019//
 /i386.html/1.751/Thu Oct 18 03:15:12 2018//
-/index.html/1.729/Mon Mar 11 21:53:05 2019//
+/index.html/1.730/Thu Mar 21 22:08:23 2019//
 /innovations.html/1.69/Tue Aug 14 00:25:35 2018//
 /landisk.html/1.80/Thu Oct 18 03:15:12 2018//
 /loongson.html/1.62/Thu Oct 18 03:15:12 2018//
@@ -141,7 +141,7 @@
 /palm.html/1.17/Mon Jun 26 17:18:57 2017//
 /pegasos.html/1.25/Mon Aug 15 02:22:07 2016//
 /plat.html/1.147/Thu Dec  7 19:00:12 2017//
-/plus.html/1.1422/Wed Mar 13 19:47:51 2019//
+/plus.html/1.1423/Thu Mar 21 16:03:07 2019//
 /plus20.html/1.63/Tue Oct  9 15:12:03 2018//
 /plus21.html/1.63/Tue Oct  9 15:12:03 2018//
 /plus22.html/1.64/Tue Oct  9 15:12:03 2018//
@@ -207,7 +207,7 @@
 /testimonials.html/1.24/Wed Oct 26 20:57:07 2016//
 /tshirts.html/1.118/Tue Jun 12 15:20:28 2018//
 /vax.html/1.105/Mon Jun 26 17:18:58 2017//
-/want.html/1.1063/Wed Jan 16 14:13:44 2019//
+/want.html/1.1064/Thu Mar 21 14:04:27 2019//
 /zaurus.html/1.132/Mon Jun 26 17:18:58 2017//
 D/advisories////
 D/build////
@@ -217,6 +217,7 @@ D/libressl////
 D/openbgpd////
 D/opencvs////
 D/openntpd////
+D/openrsync////
 D/opensmtpd////
 D/openssh////
 D/papers////
