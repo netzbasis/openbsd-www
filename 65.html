@@ -67,11 +67,30 @@ to 6.5.
         is now provided on mips64.
     <li>The default linker has been switched from the binutils bfd-based linker
         to lld on amd64 and i386.
+    <li>The radeonsi Mesa driver is now included for hardware acceleration
+        on Southern Islands and Sea Islands
+        <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a> devices.
     <li>octeon: Now the system automatically detects the number of available
         cores. However, manual setting of the numcores, or coremask,
         boot parameter is still needed to enable secondary cores.
     <li>octeon: It is now possible to use the root disk's DUID as the value
         of the rootdev boot parameter.
+    <li>New <a href="https://man.openbsd.org/octeon/octgpio.4">octgpio(4)</a>
+        driver for the OCTEON GPIO controller.
+    <li>New <a href="https://man.openbsd.org/pvclock.4">pvclock(4)</a>
+        driver for KVM paravirtual clock.
+    <li>New <a href="https://man.openbsd.org/ixl.4">ixl(4)</a>
+        driver for Intel Ethernet 700 series controller devices.
+    <li>New <a href="https://man.openbsd.org/abcrtc.4">abcrtc(4)</a>
+        driver for Abracon AB1805 real-time clock.
+    <li>New <a href="https://man.openbsd.org/imxsrc.4">imxsrc(4)</a>
+        driver for i.MX system reset controller.
+    <li>Support for QCA AR816x/AR817x in
+        <a href="https://man.openbsd.org/alc.4">alc(4)</a>.
+    <li>Support for isochronous transfers in
+        <a href="https://man.openbsd.org/xhci.4">xhci(4)</a>.
+    <li><a href="https://man.openbsd.org/uaudio.4">uaudio(4)</a> has
+        been replaced by a new driver which supports USB audio class v2.0.
     </ul>
 
 <p>
@@ -80,12 +99,32 @@ to 6.5.
 <p>
 
 <li>Generic network stack improvements:
+    <ul>
+    <li>New <a href="https://man.openbsd.org/bpe.4">bpe(4)</a>
+        Backbone Provider Edge pseudo-device.
+    <li>New <a href="https://man.openbsd.org/mpip.4">mpip(4)</a>
+        MPLS IP layer 2 pseudowire.
+    </ul>
 <p>
 
 <li>Installer improvements:
 <p>
 
 <li>Security improvements:
+  <ul>
+      <li>
+        <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> has been
+        improved to understand and find covering unveil matches above the
+        working directory of the running process for relative path accesses.
+        As a result many programs now can use unveil in broad ways such as
+        unveil("/", "r");
+      <li>
+        <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> no longer
+        silently allows
+        <a href="https://man.openbsd.org/stat.2">stat(2)</a> and
+        <a href="https://man.openbsd.org/access.2">access(2)</a> to work on any
+        unveiled path component.
+  </ul>
 <p>
 
 <li>Routing daemons and other userland network improvements:
@@ -256,23 +295,23 @@ to 6.5.
 	<li>AFL 2.52b
 	<li>Asterisk 16.2.1
 	<li>CMake 3.10.2
-	<li>Chromium 72.0.3626.121
+	<li>Chromium 73.0.3683.86
 	<li>Emacs 26.1
-	<li>FFmpeg 4.1.1
+	<li>FFmpeg 4.1.2
 	<li>GCC 4.9.4 and 8.2.0
 	<li>GHC 8.2.2
 	<li>GNOME 3.30.2.1
-	<li>Go 1.11.5
+	<li>Go 1.12.1
 	<li>Groff 1.22.4
-	<li>JDK 8u202
+	<li>JDK 8u202<!-- hopefully soon: "and 11.0.2+9-2" -->
     </ul></td><td valign=top width="25%"><ul>
 	<li>LLVM/Clang 7.0.1
-	<li>LibreOffice 6.2.1.2
+	<li>LibreOffice 6.2.2.2
 	<li>Lua 5.1.5, 5.2.4 and 5.3.5
 	<li>MariaDB 10.0.38
 	<li>Mono 5.14.0.177
-	<li>Mozilla Firefox 60.5.2esr and 65.0.1
-	<li>Mozilla Thunderbird 60.5.2
+	<li>Mozilla Firefox 60.6.1esr and 66.0.1
+	<li>Mozilla Thunderbird 60.6.0
 	<li>Mutt 1.11.4 and NeoMutt 20180716
 	<li>Node.js 10.15.0
 	<li>OCaml 4.07.1
@@ -282,16 +321,16 @@ to 6.5.
     </ul></td><td valign=top width="25%"><ul>
 	<li>PostgreSQL 11.2
 	<li>Python 2.7.15 and 3.6.8
-	<li>R 3.5.2
-	<li>Ruby 2.4.5, 2.5.3 and 2.6.1
+	<li>R 3.5.3
+	<li>Ruby 2.4.5, 2.5.5 and 2.6.2
 	<li>Rust 1.33.0
 	<li>Sendmail 8.16.0.41
-	<li>SQLite3 3.26.0
+	<li>SQLite3 3.27.2
 	<li>Sudo 1.8.27
-	<li>Suricata 4.1.2
+	<li>Suricata 4.1.3
 	<li>Tcl/Tk 8.5.19 and 8.6.8
 	<li>TeX Live 2018
-	<li>Vim 8.1.1007, Neovim 0.3.1
+	<li>Vim 8.1.1048, Neovim 0.3.4
 	<li>Xfce 4.12
     </ul></td></tr></table>
 <p>
@@ -300,8 +339,21 @@ to 6.5.
 <p>
 
 <li>The system includes the following major components from outside suppliers:
-<p>
-
+    <ul>
+    <li>Xenocara (based on X.Org 7.7 with xserver 1.19.7 + patches,
+      freetype 2.9.1, fontconfig 2.12.4, Mesa 18.3.5, xterm 334,
+      xkeyboard-config 2.20 and more)
+    <li>LLVM/Clang 7.0.1 (+ patches)
+    <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
+    <li>Perl 5.28.1 (+ patches)
+    <li>NSD 4.1.26
+    <li>Unbound 1.9.0
+    <li>Ncurses 5.7
+    <li>Binutils 2.17 (+ patches)
+    <li>Gdb 6.3 (+ patches)
+    <li>Awk Aug 10, 2011 version
+    <li>Expat 2.2.6
+    </ul>
 </ul>
 
 <hr>
