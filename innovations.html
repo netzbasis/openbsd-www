@@ -159,9 +159,9 @@
     <li>
         <strong>SROP</strong>
         (<a href="https://man.openbsd.org/sigreturn.2">sigreturn(2)</a>
-        oriented programming) mitigation: Researched by
+        oriented programming) mitigation: attacks researched by
         <a href="http://www.cs.vu.nl/~herbertb/papers/srop_sp14.pdf">Eric Bosman</a>
-        and Herbert Bos in 2014, implemented by Theo de Raadt in May 2016, 
+        and Herbert Bos in 2014, solution implemented by Theo de Raadt in May 2016, 
         enabled by default since OpenBSD 6.0.
     </li>
     <li>
@@ -223,6 +223,12 @@
 	Todd Mortimer, November 20, 2017.
     </li>
     <li>
+	Reencoding of i386/amd64 instruction sequences to avoid
+	embedded polymorphic RET instructions.  Enhancements to
+	<a href="https://man.openbsd.org/clang.1">clang(1)</a>
+	Todd Mortimer, April 28, 2018 and onwards.
+    </li>
+    <li>
 	<b>MAP_STACK</b> addition to 
 	<a href="https://man.openbsd.org/mmap.2">mmap(2)</a>
 	allows opportunistic verification that the stack-register
@@ -232,8 +238,8 @@
     </li>
     <li>
         <b>RETGUARD</b> is a replacement for the <b>stack-protector</b>
-        which uses a per-function random cookie (located in the ELF
-        <b>.openbsd.randomdata</b> section) to consistency check the
+        which uses a per-function random cookie (located in the read-only ELF
+        <b>.openbsd.randomdata</b> section) to consistency-check the
         return address on the stack.  Implemented for AMD64 and ARM64
         by Todd Mortimer in OpenBSD 6.4.
     </li>
