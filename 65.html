@@ -19,12 +19,12 @@
 </h2>
 
 <a href="images/notyet.jpg">
-<img align="left" width="227" height="343" hspace="24" src="images/Puffoil.gif"></a>
+<img align="left" width="227" height="343" hspace="24" src="images/notyet.jpg"></a>
 Released XXX XX, 2019<br>
 Copyright 1997-2019, Theo de Raadt.<br>
 <br>
 <br>
-
+Artwork by Hans Tseng, Efrain Farias, and Natasha Allegri.
 <br>
 <ul>
 <li>See the information on <a href="ftp.html">the FTP page</a> for
@@ -67,9 +67,6 @@ to 6.5.
         is now provided on mips64.
     <li>The default linker has been switched from the binutils bfd-based linker
         to lld on amd64 and i386.
-    <li>The radeonsi Mesa driver is now included for hardware acceleration
-        on Southern Islands and Sea Islands
-        <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a> devices.
     <li>octeon: Now the system automatically detects the number of available
         cores. However, manual setting of the numcores, or coremask,
         boot parameter is still needed to enable secondary cores.
@@ -117,7 +114,8 @@ to 6.5.
   <li>If an auto-join list is configured, wireless interfaces will no longer
       connect to unknown open networks by default. This behaviour must
       now be explicitly enabled by adding the empty network name to the
-      auto-join list, e.g. ifconfig iwm0 join ""
+      auto-join list, e.g. <b>ifconfig iwm0 join ""</b>, or <b>join ""</b>
+      in hostname.if files.
   <li>The <a href="https://man.openbsd.org/iwn.4">iwn(4)</a> and
       <a href="https://man.openbsd.org/iwm.4">iwm(4)</a> drivers will now
       automatically try to connect to a network if the radio kill switch is
@@ -137,22 +135,53 @@ to 6.5.
 <p>
 
 <li>Installer improvements:
+    <ul>
+    <li><a href="https://man.openbsd.org/rdsetroot.8">rdsetroot(8)</a>
+	(a build-time tool) is now available for general use.
+    <li>During upgrades, some components of old releases are deleted.
+    </ul>
 <p>
 
 <li>Security improvements:
   <ul>
-      <li>
-        <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> has been
-        improved to understand and find covering unveil matches above the
-        working directory of the running process for relative path accesses.
-        As a result many programs now can use unveil in broad ways such as
-        unveil("/", "r");
-      <li>
-        <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> no longer
-        silently allows
-        <a href="https://man.openbsd.org/stat.2">stat(2)</a> and
-        <a href="https://man.openbsd.org/access.2">access(2)</a> to work on any
-        unveiled path component.
+  <li><a href="https://man.openbsd.org/unveil.2">unveil(2)</a> has been
+    improved to understand and find covering unveil matches above the
+    working directory of the running process for relative path accesses.
+    As a result many programs now can use unveil in broad ways such as
+    unveil("/", "r").
+  <li><a href="https://man.openbsd.org/unveil.2">unveil(2)</a> no longer
+    silently allows
+    <a href="https://man.openbsd.org/stat.2">stat(2)</a> and
+    <a href="https://man.openbsd.org/access.2">access(2)</a> to work on any
+    unveiled path component.
+  <li>Now using <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> in
+    <a href="https://man.openbsd.org/ospfd">ospfd(8)</a>,
+    <a href="https://man.openbsd.org/ospf6d">ospf6d(8)</a>,
+    <a href="https://man.openbsd.org/rebound">rebound(8)</a>,
+    <a href="https://man.openbsd.org/getconf">getconf(1)</a>,
+    <a href="https://man.openbsd.org/kvm_mkdb">kvm_mkdb(8)</a>,
+    <a href="https://man.openbsd.org/bdftopcf">bdftopcf(1)</a>,
+    <a href="https://man.openbsd.org/Xserver">Xserver(1)</a>,
+    <a href="https://man.openbsd.org/passwd">passwd(1)</a>,
+    <a href="https://man.openbsd.org/spamlogd">spamlogd(8)</a>,
+    <a href="https://man.openbsd.org/spamd">spamd(8)</a>,
+    <a href="https://man.openbsd.org/sensorsd">sensorsd(8)</a>,
+    <a href="https://man.openbsd.org/snmpd">snmpd(8)</a>,
+    <a href="https://man.openbsd.org/htpasswd">htpasswd(1)</a>,
+    <a href="https://man.openbsd.org/ifstated">ifstated(8)</a>.
+    Some <a href="https://man.openbsd.org/pledge.2">pledge(2)</a>
+    changes were required to accommodate unveil.
+  <li>ROP mitigations in <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
+    have been improved, resulting in a significant decrease in the number
+    of polymorphic ROP gadgets in binaries on i386/amd64.
+  <li>RETGUARD performance and security has been improved in
+    <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
+    by keeping data on registers instead of on the stack when possible,
+    and lengthing the epilogue trapsled on amd64 to consume the rest
+    of the cache line before the return.
+  <li>RETGUARD replaces the stack protector on amd64 and arm64,
+    since RETGUARD instruments every function that returns and provides
+    better security properties than the traditional stack protector.
   </ul>
 <p>
 
@@ -166,10 +195,6 @@ to 6.5.
         <a href="https://man.openbsd.org/ripd.8">ripd(8)</a>
         is now configurable.
     <li><a href="https://man.openbsd.org/ripd.8">ripd(8)</a> is now pledged.
-    <li><a href="https://man.openbsd.org/ospfd.8">ospfd(8)</a>,
-        <a href="https://man.openbsd.org/ospf6d.8">ospf6d(8)</a> and
-        <a href="https://man.openbsd.org/ripd.8">ripd(8)</a> now use unveil(2)
-        to limit file system access of the parent process to read only.
     <li>First release of
         <a href="https://man.openbsd.org/unwind.8">unwind(8)</a>, a validating,
         recursive nameserver for 127.0.0.1. It is particularly suitable for
@@ -191,18 +216,18 @@ to 6.5.
         differ only by filter sets.
     <li>First release of OpenBGPD-portable. There is currently no FIB support
         in the portable version and some other features are also disabled.
-    <li>The configuration of BGP MPLS VPN changes and the config needs to be
+    <li>The configuration of BGP MPLS VPN changed and the config needs to be
         adjusted if VPNs are used.
     <li>Added support for IPv6 BGP MPLS VPNs.
-    <li>Implemented as-override in <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>,
+    <li>Implemented <b>as-override</b> in <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>,
         a feature where the neighbor AS is replaced by the local AS in AS paths.
     <li>It is now possible to match multiple communities, ext-communities or
         large-communities per filter rule.
-    <li>Added support for <i>'*'</i>, <i>local-as</i> and <i>neighbor-as</i>
+    <li>Added support for <b>*</b>, <b>local-as</b> and <b>neighbor-as</b>
         for ext-community matching and addition or removal.
     <li>Prevent <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>
         from being started more than once with the same config.
-    <li><i>announce inet none</i> no longer clears announce settings of
+    <li><b>announce inet none</b> no longer clears announce settings of
         other address families.
     <li>Removed potential for a spurious End-of-RIB marker being sent.
     <li>Fixed mrt table dumps and the route collector mode.
@@ -212,7 +237,7 @@ to 6.5.
         terminates early.
     <li>Improved handling of communities, large-communities and ext-communities
         in <a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a>
-    <li>It is now possible to use <i>neighbor group &lt;name&gt;</i> to run
+    <li>It is now possible to use <b>neighbor group &lt;name&gt;</b> to run
         <a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a> commands
         against the specified group of neighbors:
 	<div style="margin-left: 45px"><code>
@@ -221,8 +246,8 @@ to 6.5.
             bgpctl show rib neighbor group <name> ...<br>
 	</code></div>
     <li><a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a> can now
-        add networks into BGP VPN tables by specifying the route desinguisher
-        <i>rd</i> on the <i>network</i> command.
+        add networks into BGP VPN tables by specifying the route distinguisher
+        <b>rd</b> on the <b>network</b> command.
     <li><a href="https://man.openbsd.org/bgplg.8">bgplg(8)</a> and
         <a href="https://man.openbsd.org/bgplgsh.8">bgplgsh(8)</a> can
         now filter on Origin Validation State and Extended Communities.
@@ -256,8 +281,10 @@ to 6.5.
       always copies files safely (as with -S), avoiding race conditions.
     <li><a href="https://man.openbsd.org/syslog.conf.5">syslog.conf(5)</a>
       now supports program names containing dots and underscores.
-    <li><a href="https://man.openbsd.org/tcpdump.8">tcpdump(8)</a> now
-      drops root privileges completely at runtime.
+    <li><a href="https://man.openbsd.org/tcpdump.8">tcpdump(8)</a> already used
+      privsep, <a href="https://man.openbsd.org/pledge.2">pledge(2)</a> and
+      <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> containment.
+      Now also drop root privileges completely (switching to a reserved uid).
     <li>The multi-threaded performance of
       <a href="https://man.openbsd.org/malloc.3">malloc(3)</a> has been improved.
     <li><a href="https://man.openbsd.org/malloc.3">malloc(3)</a> now uses
@@ -265,11 +292,25 @@ to 6.5.
       settings, making it respect the system-wide settings in chroots as well.
     <li>Various improvements to the 
       <a href="https://man.openbsd.org/join.1">join</a> command.
+    <li>Work has started on a ISC-licensed rsync-compatible program called
+      <a href="https://www.openrsync.org">OpenRSYNC</a>.
   </ul>
 <p>
 
-<li>OpenSMTPD
-<p>
+<li>OpenSMTPD 6.5.0
+  <ul>
+  <li>New Features
+    <ul>
+      <li>Added the new matching criteria "from rdns" to
+	<a href="https://man.openbsd.org/smtpd.conf.5">smtpd.conf(5)</a>
+	to allow matching of sessions based on the reverse DNS of the client.
+      <li>Added
+	<a href="https://man.openbsd.org/regex.3">regex(3)</a>
+	support to table lookups in
+	<a href="https://man.openbsd.org/smtpd.conf.5">smtpd.conf(5)</a>.
+    </ul>
+  </ul>
+  <p>
 
 <li>LibreSSL 2.9.X
   <ul>
@@ -528,6 +569,10 @@ to 6.5.
        X window server, is no longer installed setuid.
        <a href="https://man.openbsd.org/xenodm.1">xenodm(1)</a> should be
        used to start X.
+     <li>
+       The radeonsi Mesa driver is now included for hardware acceleration
+       on Southern Islands and Sea Islands
+       <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a> devices.
   </ul>
   <p>
    
@@ -588,7 +633,7 @@ to 6.5.
 	<li>Node.js 10.15.0
 	<li>OCaml 4.07.1
 	<li>OpenLDAP 2.3.43 and 2.4.47
-	<li>PHP 7.1.28, 7.1.28 and 7.3.4
+	<li>PHP 7.1.28, 7.2.17 and 7.3.4
 	<li>Postfix 3.3.3 and 3.4.20190106
     </ul></td><td valign=top width="25%"><ul>
 	<li>PostgreSQL 11.2
