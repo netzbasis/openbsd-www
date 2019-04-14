@@ -114,7 +114,7 @@ to 6.5.
   <li>If an auto-join list is configured, wireless interfaces will no longer
       connect to unknown open networks by default. This behaviour must
       now be explicitly enabled by adding the empty network name to the
-      auto-join list, e.g. <b>ifconfig iwm0 join ""</b>, or <b>join ""</b>
+      auto-join list, e.g. <tt>ifconfig iwm0 join ""</tt>, or <tt>join ""</tt>
       in hostname.if files.
   <li>The <a href="https://man.openbsd.org/iwn.4">iwn(4)</a> and
       <a href="https://man.openbsd.org/iwm.4">iwm(4)</a> drivers will now
@@ -128,9 +128,26 @@ to 6.5.
     <li>New <a href="https://man.openbsd.org/bpe.4">bpe(4)</a>
         Backbone Provider Edge pseudo-device.
     <li>New <a href="https://man.openbsd.org/mpip.4">mpip(4)</a>
-        MPLS IP layer 2 pseudowire.
+        MPLS IP layer 2 pseudowire driver.
+    <li>MPLS encapsulation interfaces support configuration of
+        alternative MPLS route domains.
+    <li>The <a href="https://man.openbsd.org/vlan.4">vlan(4)</a>
+        driver bypasses queue processing and outputs directly to the
+        parent interface.
     <li>New per SAD counters visible via
         <a href="https://man.openbsd.org/ipsecctl.8">ipsecctl(8)</a>.
+    <li>The <a href="https://man.openbsd.org/bpf.4">bpf(4)</a>
+	filter drop mechanism has been extended to allow dropping
+	without capturing packets, and use of the mechanism with
+	<a href="https://man.openbsd.org/tcpdump.8">tcpdump(8)</a> as
+	a filtering mechanism early in the device receive path.
+    <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a> gains
+       <tt>txprio</tt> for controlling the encoding of priority in
+       tunnel headers, and support in drivers including
+        <a href="https://man.openbsd.org/vlan.4">vlan(4)</a>,
+        <a href="https://man.openbsd.org/gre.4">gre(4)</a>,
+        <a href="https://man.openbsd.org/gif.4">gif(4)</a>, and
+        <a href="https://man.openbsd.org/etherip.4">etherip(4)</a>.
     </ul>
 <p>
 
@@ -205,6 +222,9 @@ to 6.5.
 	Currently
         <a href="https://man.openbsd.org/ix.4">ix(4)</a> and
         <a href="https://man.openbsd.org/ixl.4">ixl(4)</a> are supported.
+    <li><a href="https://man.openbsd.org/ldpd.8">ldpd(8)</a> now
+        supports <a href="https://man.openbsd.org/ldpd.conf.5">configuration
+        of TCP MD5</a> for networks, not just specific neighbors.
     </ul>
 <p>
 
@@ -219,15 +239,15 @@ to 6.5.
     <li>The configuration of BGP MPLS VPN changed and the config needs to be
         adjusted if VPNs are used.
     <li>Added support for IPv6 BGP MPLS VPNs.
-    <li>Implemented <b>as-override</b> in <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>,
+    <li>Implemented <tt>as-override</tt> in <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>,
         a feature where the neighbor AS is replaced by the local AS in AS paths.
     <li>It is now possible to match multiple communities, ext-communities or
         large-communities per filter rule.
-    <li>Added support for <b>*</b>, <b>local-as</b> and <b>neighbor-as</b>
+    <li>Added support for <tt>*</tt>, <tt>local-as</tt> and <tt>neighbor-as</tt>
         for ext-community matching and addition or removal.
     <li>Prevent <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>
         from being started more than once with the same config.
-    <li><b>announce inet none</b> no longer clears announce settings of
+    <li><tt>announce inet none</tt> no longer clears announce settings of
         other address families.
     <li>Removed potential for a spurious End-of-RIB marker being sent.
     <li>Fixed mrt table dumps and the route collector mode.
@@ -237,7 +257,7 @@ to 6.5.
         terminates early.
     <li>Improved handling of communities, large-communities and ext-communities
         in <a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a>
-    <li>It is now possible to use <b>neighbor group &lt;name&gt;</b> to run
+    <li>It is now possible to use <tt>neighbor group &lt;name&gt;</tt> to run
         <a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a> commands
         against the specified group of neighbors:
 	<div style="margin-left: 45px"><code>
@@ -247,7 +267,7 @@ to 6.5.
 	</code></div>
     <li><a href="https://man.openbsd.org/bgpctl.8">bgpctl(8)</a> can now
         add networks into BGP VPN tables by specifying the route distinguisher
-        <b>rd</b> on the <b>network</b> command.
+        <tt>rd</tt> on the <tt>network</tt> command.
     <li><a href="https://man.openbsd.org/bgplg.8">bgplg(8)</a> and
         <a href="https://man.openbsd.org/bgplgsh.8">bgplgsh(8)</a> can
         now filter on Origin Validation State and Extended Communities.
@@ -290,10 +310,12 @@ to 6.5.
     <li><a href="https://man.openbsd.org/malloc.3">malloc(3)</a> now uses
       <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> to get its
       settings, making it respect the system-wide settings in chroots as well.
-    <li>Various improvements to the 
+    <li>Various improvements to the
       <a href="https://man.openbsd.org/join.1">join</a> command.
     <li>Work has started on a ISC-licensed rsync-compatible program called
-      <a href="https://www.openrsync.org">OpenRSYNC</a>.
+      <a href="https://www.openrsync.org">OpenRSYNC</a>.  In this release it
+      has basic functionality such as <b>-a</b>, <b>--delete</b>, but lacks
+      <b>--exclude</b>.  Work will continue.
   </ul>
 <p>
 
@@ -312,7 +334,7 @@ to 6.5.
   </ul>
   <p>
 
-<li>LibreSSL 2.9.X
+<li>LibreSSL 2.9.1
   <ul>
     <li>API and Documentation Enhancements
     <ul>
@@ -395,6 +417,10 @@ to 6.5.
     <ul>
       <li>
         Added support for assembly optimizations on 32-bit ARM ELF targets.
+      <li>
+        Added support for assembly optimizations on Mingw-w64 targets.
+      <li>
+        Improved Android compatibility
     </ul>
 
     <li>Bug Fixes
@@ -514,7 +540,7 @@ to 6.5.
     key eschange. It shouldn't be sent in subsequent ones, but if it
     is present we should ignore it. This prevents sshd from sending a
     SSH_MSG_EXT_INFO for REKEX for buggy these clients. bz#2929
-    <li>ssh-keygen(1): Clarify manual that ssh-keygen -F (find host in 
+    <li>ssh-keygen(1): Clarify manual that ssh-keygen -F (find host in
     authorized_keys) and -R (remove host from authorized_keys) options
     may accept either a bare hostname or a [hostname]:port combo.
     bz#2935
@@ -575,10 +601,11 @@ to 6.5.
        <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a> devices.
   </ul>
   <p>
-   
+
 <li>Ports and packages:
     <ul>
-      <li>...
+      <li>C++ ports for non clang architectures are now compiled with
+      ports gcc, so that more packages can be provided.
     </ul>
     <p>
     <dl>
