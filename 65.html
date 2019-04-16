@@ -194,7 +194,7 @@ to 6.5.
   <li>RETGUARD performance and security has been improved in
     <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
     by keeping data on registers instead of on the stack when possible,
-    and lengthing the epilogue trapsled on amd64 to consume the rest
+    and lengthening the epilogue trapsled on amd64 to consume the rest
     of the cache line before the return.
   <li>RETGUARD replaces the stack protector on amd64 and arm64,
     since RETGUARD instruments every function that returns and provides
@@ -304,7 +304,7 @@ to 6.5.
     <li><a href="https://man.openbsd.org/tcpdump.8">tcpdump(8)</a> already used
       privsep, <a href="https://man.openbsd.org/pledge.2">pledge(2)</a> and
       <a href="https://man.openbsd.org/unveil.2">unveil(2)</a> containment.
-      Now also drop root privileges completely (switching to a reserved uid).
+      It now also drops root privileges completely (switching to a reserved uid).
     <li>The multi-threaded performance of
       <a href="https://man.openbsd.org/malloc.3">malloc(3)</a> has been improved.
     <li><a href="https://man.openbsd.org/malloc.3">malloc(3)</a> now uses
@@ -316,6 +316,10 @@ to 6.5.
       <a href="https://www.openrsync.org">OpenRSYNC</a>.  In this release it
       has basic functionality such as <b>-a</b>, <b>--delete</b>, but lacks
       <b>--exclude</b>.  Work will continue.
+    <li>New Spleen font 8x16, 12x24, 16x32 and 32x64 variants added and
+      enabled in wsfont, along with font selection logic to allow selecting
+      larger fonts when available at runtime in
+      <a href="https://man.openbsd.org/rasops.9">rasops(9)</a>.
   </ul>
 <p>
 
@@ -604,7 +608,7 @@ to 6.5.
 
 <li>Ports and packages:
     <ul>
-      <li>C++ ports for non clang architectures are now compiled with
+      <li>C++ ports for non-clang architectures are now compiled with
       ports gcc, so that more packages can be provided.
     </ul>
     <p>
@@ -616,11 +620,11 @@ to 6.5.
     <tr>
     <td valign="top" width="25%">
     <ul>
-      <li>aarch64:     XXXX
-      <li>amd64:      XXXXX
+      <li>aarch64:     8565
+      <li>amd64:      10602
       <li>arm:         XXXX
     </ul></td><td valign=top width="25%"><ul>
-      <li>i386:       XXXXX
+      <li>i386:       10535
       <li>mips64:      XXXX
       <li>mips64el:    XXXX
     </ul></td><td valign=top width="25%"><ul>
