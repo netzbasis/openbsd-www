@@ -82,6 +82,9 @@
 /bsdcan2016-xen.pdf/1.1/Sat Jun 11 17:22:07 2016/-kb/
 /bsdcan2018-mininet.pdf/1.1/Tue Jun 12 04:42:16 2018//
 /bsdcan2019-accessible-openbsd-laptop.pdf/1.1/Fri May 17 19:14:36 2019//
+/bsdcan2019-perform-slides.pdf/1.1/Sat May 18 15:15:09 2019//
+/bsdcan2019-syspatch.pdf/1.1/Sat May 18 18:54:31 2019//
+/bsdcan2019-tls13.pdf/1.1/Sat May 18 20:12:31 2019/-ko/
 /bsdcan2019_unwind.pdf/1.1/Fri May 17 17:45:55 2019//
 /bsdtw.pdf/1.1/Sun Nov 12 08:33:37 2017//
 /cebit2003.tgz/1.1/Sun Mar 23 17:56:20 2003/-kb/
@@ -239,6 +242,7 @@ D/bsdcan07-cvs////
 D/bsdcan13-buf////
 D/bsdcan14-libressl////
 D/bsdcan2016-osr////
+D/bsdcan2019-unveil////
 D/bsdcon_2002////
 D/capbug200712////
 D/cebit2003////
