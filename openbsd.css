@@ -1,20 +1,20 @@
-/* $OpenBSD: openbsd.css,v 1.14 2019/05/29 14:41:58 bentley Exp $ */
+/* $OpenBSD: openbsd.css,v 1.16 2019/06/01 22:09:27 tj Exp $ */
 
 :root {
-	--red:   #e00000;
+	--red:   #E00000;
 	--green: #008100;
-	--blue:  #0000e0;
-	--buildhead: #e0e0e0;
+	--blue:  #0000E0;
+	--buildhead: #E0E0E0;
 }
 
 :link {
-	color: #23238e;
+	color: #23238E;
 }
 
 body {
+	background-color: #FFFFFF;
+	color: #111111;
 	margin: 15px auto;
-	color: #111;
-	background-color: #fff;
 	padding: 0 10px;
 }
 
@@ -33,18 +33,18 @@ tt {
 }
 
 .cmdbox {
-	background: #f5f5f5;
-	border: 1px solid #aaa;
+	background: #F5F5F5;
+	border: 1px solid #AAAAAA;
 	overflow: auto;
 	padding: 10px;
 }
 
 #OpenBSD {
-	color: #e00000;
+	color: #E00000;
 }
 
 #OpenBSD :link i, #OpenBSD :visited i {
-	color: #0000ff;
+	color: #0000FF;
 }
 
 #OpenBSD :link b, #OpenBSD :visited b {
@@ -56,8 +56,7 @@ tt {
 	float: right;
 }
 
-
-/* Project "sidebar" layout */
+/* sidebar layout */
 
 #project-main {
 	height: 100%;
@@ -78,13 +77,13 @@ tt {
 }
 
 #project-main tr td:first-child {
-	background-color: #6bbdd6;
-	border-color: #007b9c;
+	background-color: #6BBDD6;
+	border-color: #007B9C;
 }
 
 #project-main.not-openbsd tr td:first-child {
-	background-color: #99cced;
-	border-color: #0000cc;
+	background-color: #99CCED;
+	border-color: #0000CC;
 }
 
 #project-main tr td:first-child h1 {
@@ -111,16 +110,13 @@ tt {
 }
 
 #callout {
+	color: #E00000;
+	font-weight: bold;
 	text-align: center;
 }
 
-#callout {
-	color: #e00000;
-	font-weight: bold;
-}
-
 .not-openbsd #callout {
-	color: #0000a0;
+	color: #0000A0;
 	font-weight: normal;
 }
 
@@ -252,18 +248,65 @@ tt {
 	color: var(--blue);
 }
 
+/* redefine colors for dark mode */
+
 @media (prefers-color-scheme: dark) {
+	:root {
+		--red:   #E05434;
+		--green: #20B700;
+		--blue:  #A7C1E5;
+		--buildhead: #474749;
+	}
+
+	:link {
+		color: #BAD7FF;
+	}
+
+	body {
+		background-color: #1E1F21;
+		color: #EEEFF1;
+	}
+
+	.cmdbox {
+		background: #000000;
+		color: #FFFFFFF;
+	}
+
 	#OpenBSD :link {
-		text-decoration-color: #cf4229;
-		-webkit-text-stroke: 1px black;
-		font-weight: 1000;
+		text-decoration-color: #CF4229;
 	}
 
 	#OpenBSD :link i, #OpenBSD :visited i {
-		color: #f2ca30;
+		color: #F2CA30;
 	}
 
 	#OpenBSD :link b, #OpenBSD :visited b {
-		color: #cf4229;
+		color: #CF4229;
+	}
+
+	#OpenBSD {
+		color: #EEEFF1;
+	}
+
+	#faq #OpenBSD small :link {
+		text-decoration-color: #BAD7FF;
+	}
+
+	#project-main tr td:first-child {
+		background-color: #202F51;
+		border-color: #97BADB;
+	}
+
+	#project-main.not-openbsd tr td:first-child {
+		background-color: #202F51;
+		border-color: #97BADB;
+	}
+
+	#callout {
+		color: #E05434;
+	}
+
+	.not-openbsd #callout {
+		color: #E05434;
 	}
 }
