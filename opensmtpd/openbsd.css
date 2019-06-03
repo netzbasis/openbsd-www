@@ -1,4 +1,4 @@
-/* $OpenBSD: openbsd.css,v 1.6 2019/06/01 22:09:28 tj Exp $ */
+/* $OpenBSD: openbsd.css,v 1.9 2019/06/03 02:43:04 deraadt Exp $ */
 
 :root {
 	--red:   #E00000;
@@ -9,6 +9,10 @@
 
 :link {
 	color: #23238E;
+}
+
+:visited {
+	color: #008088;
 }
 
 body {
@@ -82,8 +86,8 @@ tt {
 }
 
 #project-main.not-openbsd tr td:first-child {
-	background-color: #99CCED;
-	border-color: #0000CC;
+	background-color: #6BBDD6;
+	border-color: #007B9C;
 }
 
 #project-main tr td:first-child h1 {
@@ -260,6 +264,10 @@ tt {
 
 	:link {
 		color: #BAD7FF;
+	}
+
+	:visited {
+		color: #F6BAFF;
 	}
 
 	body {
