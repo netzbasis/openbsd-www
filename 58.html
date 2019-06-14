@@ -61,7 +61,7 @@ RWRlkI2aFHvL/XGqD+lFerD/xUi/jnAXKwdFQwZDekYwDrEPSpSWgpI9
 <p>
 All applicable copyrights and credits are in the src.tar.gz,
 sys.tar.gz, xenocara.tar.gz, ports.tar.gz files, or in the
-files fetched via ports.tar.gz.
+files fetched via <code>ports.tar.gz</code>.
 </table>
 
 <p>
@@ -818,7 +818,6 @@ Refer to the instructions in INSTALL.socppc for more details.
 <p>
 Boot from one of the provided install ISO images, using one of the two
 commands listed below, depending on the version of your ROM.
-<p>
 
 <blockquote><pre>
 ok <kbd>boot cdrom 5.8/sparc/bsd.rd</kbd>
@@ -832,7 +831,7 @@ To do so you need to write <i>floppy58.fs</i> to a floppy.
 For more information see <a href="faq/faq4.html#MkFlop">this page</a>.
 To boot from the floppy use one of the two commands listed below,
 depending on the version of your ROM.
-<p>
+
 <blockquote><pre>
 ok <kbd>boot floppy</kbd>
 or
@@ -876,8 +875,8 @@ upgrade instructions and advice can be found in the
 <section id=sourcecode>
 <h3>Notes about the source code</h3>
 <p>
-src.tar.gz contains a source archive starting at /usr/src.  This file
-contains everything you need except for the kernel sources, which are
+<code>src.tar.gz</code> contains a source archive starting at <code>/usr/src</code>.
+This file contains everything you need except for the kernel sources, which are
 in a separate archive.  To extract:
 <blockquote><pre>
 # <kbd>mkdir -p /usr/src</kbd>
@@ -885,7 +884,7 @@ in a separate archive.  To extract:
 # <kbd>tar xvfz /tmp/src.tar.gz</kbd>
 </pre></blockquote>
 <p>
-sys.tar.gz contains a source archive starting at /usr/src/sys.
+<code>sys.tar.gz</code> contains a source archive starting at <code>/usr/src/sys</code>.
 This file contains all the kernel sources you need to rebuild kernels.
 To extract:
 <blockquote><pre>
@@ -920,8 +919,7 @@ Rather, it is a set of notes meant to kickstart the user on the
 OpenBSD ports system.
 <p>
 The <i>ports/</i> directory represents a CVS (see the manpage for
-<a href="https://man.openbsd.org/i386/cvs.1">
-cvs(1)</a> if
+<a href="https://man.openbsd.org/cvs.1">cvs(1)</a> if
 you aren't familiar with CVS) checkout of our ports.  As with our complete
 source tree, our ports tree is available via
 <a href="anoncvs.html">AnonCVS</a>.

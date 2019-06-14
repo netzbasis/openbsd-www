@@ -59,7 +59,7 @@ RWTJ1iHLn/zcvJJSbxJIEU9ChlfAlU16XoLLxmxciliOFWfTLyOv0vQs
 <p>
 All applicable copyrights and credits are in the src.tar.gz,
 sys.tar.gz, xenocara.tar.gz, ports.tar.gz files, or in the
-files fetched via ports.tar.gz.
+files fetched via <code>ports.tar.gz</code>.
 </table>
 
 <hr>
@@ -946,20 +946,18 @@ upgrade instructions and advice can be found in the
 <section id=sourcecode>
 <h3>Notes about the source code</h3>
 <p>
-src.tar.gz contains a source archive starting at /usr/src.  This file
-contains everything you need except for the kernel sources, which are
+<code>src.tar.gz</code> contains a source archive starting at <code>/usr/src</code>.
+This file contains everything you need except for the kernel sources, which are
 in a separate archive.  To extract:
-<p>
 <blockquote><pre>
 # <kbd>mkdir -p /usr/src</kbd>
 # <kbd>cd /usr/src</kbd>
 # <kbd>tar xvfz /tmp/src.tar.gz</kbd>
 </pre></blockquote>
 <p>
-sys.tar.gz contains a source archive starting at /usr/src/sys.
+<code>sys.tar.gz</code> contains a source archive starting at <code>/usr/src/sys</code>.
 This file contains all the kernel sources you need to rebuild kernels.
 To extract:
-<p>
 <blockquote><pre>
 # <kbd>mkdir -p /usr/src/sys</kbd>
 # <kbd>cd /usr/src</kbd>
@@ -980,7 +978,6 @@ a fresh checkout of the full OpenBSD source tree.
 <h3>Ports Tree</h3>
 <p>
 A ports tree archive is also provided.  To extract:
-<p>
 <blockquote><pre>
 # <kbd>cd /usr</kbd>
 # <kbd>tar xvfz /tmp/ports.tar.gz</kbd>
@@ -993,15 +990,13 @@ Rather, it is a set of notes meant to kickstart the user on the
 OpenBSD ports system.
 <p>
 The <i>ports/</i> directory represents a CVS (see the manpage for
-<a href="https://man.openbsd.org/i386/cvs.1">
-cvs(1)</a> if
+<a href="https://man.openbsd.org/cvs.1">cvs(1)</a> if
 you aren't familiar with CVS) checkout of our ports.  As with our complete
 source tree, our ports tree is available via
 <a href="anoncvs.html">AnonCVS</a>.
 So, in order to keep up to date with the -stable branch, you must make
 the <i>ports/</i> tree available on a read-write medium and update the tree
 with a command like:
-<p>
 <blockquote><pre>
 # <kbd>cd /usr/ports</kbd>
 # <kbd>cvs -d anoncvs@server.openbsd.org:/cvs update -Pd -rOPENBSD_5_7</kbd>
