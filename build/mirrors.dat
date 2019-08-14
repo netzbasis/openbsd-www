@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.578 2019/06/03 19:14:04 sthen Exp $
+# $OpenBSD: mirrors.dat,v 1.581 2019/08/13 15:54:11 sthen Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -71,7 +71,14 @@ GC	Anycast
 GI	LeaseWeb
 GZ	net
 FF	ftp.eu.openbsd.org
-#	EU nodes sync from ftp.eu, US nodes from ftp3.usa
+#	known nodes:				upstream:
+#	http://mirror.fra10.de.leaseweb.net/	ftp.eu
+#	http://mirror.ams1.nl.leaseweb.net/	ftp.eu
+#	http://mirror.dal10.us.leaseweb.net/	ftp3.usa
+#	http://mirror.mia11.us.leaseweb.net/	ftp3.usa
+#	http://mirror.sfo12.us.leaseweb.net/	ftp3.usa
+#	http://mirror.wdc1.us.leaseweb.net/	ftp3.usa
+#	upstreams shown on "mirrored projects" list on homepage for each node
 UH	http://mirror.leaseweb.com/pub/OpenBSD/
 UHS	https://mirror.leaseweb.com/pub/OpenBSD/
 UR	rsync://mirror.leaseweb.com/openbsd/
@@ -166,16 +173,16 @@ UR	rsync://openbsd.c3sl.ufpr.br/openbsd/
 FF	openbsd.cs.toronto.edu
 FE	4
 
-0
-GC	Brazil
-GZ	br
-GT	Brasilia
-ME	fbscarel@unb.br
-MN	Felipe Scarel
-UF	ftp://mirrors.unb.br/pub/OpenBSD/
-UH	http://mirrors.unb.br/pub/OpenBSD/
-FF	mirror.esc7.net
-FE	24
+# 20190813 404, have reported to maintainer
+#0
+#GC	Brazil
+#GZ	br
+#GT	Brasilia
+#ME	fbscarel@unb.br
+#MN	Felipe Scarel
+#UH	http://mirrors.unb.br/pub/OpenBSD/
+#FF	mirror.esc7.net
+#FE	24
 
 ##	Start of Canada
 
@@ -1095,6 +1102,7 @@ FF	ftp.ch.openbsd.org
 UF	ftp://mirror.ox.ac.uk/pub/OpenBSD/
 UH	http://mirror.ox.ac.uk/pub/OpenBSD/
 
+# 20190813 https cert expired, have emailed maintainer
 0
 GC	United Kingdom
 GZ	uk
@@ -1106,7 +1114,7 @@ FE	24
 FF	ftp.fr.openbsd.org
 UF	ftp://mirror.exonetric.net/pub/OpenBSD/
 UH	http://mirror.exonetric.net/pub/OpenBSD/
-UHS	https://mirror.exonetric.net/pub/OpenBSD/
+#UHS	https://mirror.exonetric.net/pub/OpenBSD/
 UR	rsync://mirror.exonetric.net/OpenBSD/
 
 ##	Start of USA
@@ -1179,6 +1187,7 @@ UH	http://ftp.usa.openbsd.org/pub/OpenBSD/
 UHS	https://ftp.usa.openbsd.org/pub/OpenBSD/
 UF	ftp://ftp.usa.openbsd.org/pub/OpenBSD/
 UR	rsync://ftp.usa.openbsd.org/ftp/
+LF	2
 CE	1
 AU	anoncvs
 AH	anoncvs2.usa.openbsd.org
@@ -1220,6 +1229,7 @@ FE	2
 UH	http://mirrors.mit.edu/pub/OpenBSD/
 UF	ftp://mirrors.mit.edu/pub/OpenBSD/
 
+# 20190813 https cert expired, maintainer email bounces
 0
 GC	USA
 GZ	us
@@ -1231,7 +1241,7 @@ ME	mirrors@syringanetworks.net
 MN	Derek Denk
 UF	ftp://mirrors.syringanetworks.net/pub/OpenBSD/
 UH	http://mirrors.syringanetworks.net/pub/OpenBSD/
-UHS	https://mirrors.syringanetworks.net/pub/OpenBSD/
+#UHS	https://mirrors.syringanetworks.net/pub/OpenBSD/
 UR	rsync://mirrors.syringanetworks.net/OpenBSD/
 
 0
