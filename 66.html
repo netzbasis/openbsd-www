@@ -81,11 +81,14 @@ to 6.6.
     <li>Fixed support for amd64 machines with greater than 1023GB
       physical memory.
     <li><a href="https://man.openbsd.org/drm.4">drm(4)</a> updates.
-    <li>The powerpc and octeon architectures are now build with
+    <li>The octeon platform is now using
+      <a href="https://man.openbsd.org/clang-local.1">clang(1)</a>
+      as the base system compiler.
+    <li>The powerpc architecture is now provided with
       <a href="https://man.openbsd.org/clang.1">clang(1)</a>, in
       addition to aarch64, amd64, arm, i386, mips64el, sparc64.
     <li>Disabled <a href="https://man.openbsd.org/gcc.1">gcc</a> in
-      base on armv7 and i386.      
+      base on armv7 and i386.
     <li>Prevented <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
       from repeatedly obtaining a new lease when the mtu is given in a
       lease.
@@ -105,7 +108,7 @@ to 6.6.
       <a href="https://man.openbsd.org/tmux.1">tmux(1)</a>.
       Introduced the command "display-menu" to show a menu bound to
       the mouse on status line by default, and added menus in tree,
-      client and buffer modes.      
+      client and buffer modes.
     <li>Changed the behavior of swap-window -d in
       <a href="https://man.openbsd.org/tmux.1">tmux(1)</a> to match
       swap-pane.
@@ -124,18 +127,21 @@ to 6.6.
   <ul>
     <li>Unlocked <a href="https://man.openbsd.org/getrlimit.2">getrlimit(2)</a>
       and <a href="https://man.openbsd.org/setrlimit.2">setrlimit(2)</a>
-      syscalls.      
+      syscalls.
     <li>Unlocked <a href="https://man.openbsd.org/read.2">read(2)</a> and
       <a href="https://man.openbsd.org/write.2">write(2)</a> syscalls.
     <li>Removed the KERNEL_LOCK from
       the <a href="https://man.openbsd.org/bridge.4">bridge(4)</a>
-      output fast-path.      
+      output fast-path.
     <li>Made resource limit access MP-safe.
+    <li>Made
+      <a href="https://man.openbsd.org/file.9">file(9)</a>
+      offset access MP-safe.
   </ul>
 
 <li>Improved hardware support, including:
   <ul>
-    <li>Added support for ethernet on Lenovo USB-C docks.
+    <li>Added support for Ethernet on Lenovo USB-C docks.
     <li>Implemented Linux compatibility
       <a href="https://man.openbsd.org/acpi.4">acpi(4)</a>
       interfaces and enabled the ACPI support code in
@@ -147,7 +153,7 @@ to 6.6.
       <a href="https://man.openbsd.org/wsconsctl.8">wsconsctl(8)</a>.
     <li>Speakers now work on the ThinkPad X1C7.
     <li>Added <a href="https://man.openbsd.org/amdgpu.4">amdgpu(4)</a>, an AMD
-      RADEON GPU video driver.
+      Radeon GPU video driver.
     <li>Added TSC synchronization for multiprocessor machines and re-enabled TSC
       as the default amd64 time source.
     <li>Added support of Realtek ALC285 in
@@ -190,7 +196,7 @@ to 6.6.
     <li>Added support for more Intel 300 Series PCH devices to
       <a href="https://man.openbsd.org/ichiic.4">ichiic(4)</a>.
     <li>Added <a href="https://man.openbsd.org/mcx.4">mcx(4)</a> driver for
-      Mellanox ConnectX-4 (and later) Ethernet controllers.      
+      Mellanox ConnectX-4 (and later) Ethernet controllers.
     <li>Added support for the cryptographic coprocessor found on newer
       AMD Ryzen CPUs/APUs.
     <li>Improved the <a href="https://man.openbsd.org/envy.4">envy(4)</a> codec
@@ -203,9 +209,9 @@ to 6.6.
     <li>Updated shared drm code,
       <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a>
       and <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a>
-      to linux 4.19.34. This adds support for Intel Broxton/Apollo
-      Lake, Amber Lake, Gemini Lake, Coffee Lake, Whiskey Lake, Cannon
-      Lake and Ice Lake hardware.      
+      to linux 4.19.74. This adds support for Intel Broxton/Apollo
+      Lake, Amber Lake, Gemini Lake, Coffee Lake, Whiskey Lake,
+      and Comet Lake hardware.
     <li>Made <a href="https://man.openbsd.org/startx.1">startx(1)</a> and
       <a href="https://man.openbsd.org/xinit.1">xinit(1)</a> work again on
       modern systems using
@@ -219,14 +225,12 @@ to 6.6.
     <li>Added support for MSI-X to <a href="https://man.openbsd.org/bnx.4">
 	bnxt(4)</a>.
     <li>Added <a href="https://man.openbsd.org/octpip.4">octpip(4)</a>, a driver
-      for the Octeon packet input processing unit.      
+      for the Octeon packet input processing unit.
     <li>Added the <a href="https://man.openbsd.org/octiic.4">octiic(4)</a>
       driver for OCTEON two-wire serial interfaces.
     <li>Enabled <a href="https://man.openbsd.org/nvme.4">nvme(4)</a> on octeon.
     <li>Added <a href="https://man.openbsd.org/octpcie.4">octpcie(4)</a>, a
       driver for the PCIe controller found on OCTEON II and OCTEON III.
-    <li>Added the <a href="https://man.openbsd.org/octiic.4">octiic(4)</a>
-      driver for OCTEON two-wire serial interfaces.
     <li>Fixed random kernel hangs on
       some <a href="https://www.openbsd.org/sparc64.html">sparc64</a>
       machines by blocking interrupts while sending an IPI on sunv4
@@ -235,7 +239,7 @@ to 6.6.
 
 <li>Improved <a href="https://www.openbsd.org/arm64.html">arm64</a> hardware
   support, including:
-  <ul>      
+  <ul>
     <li>Added support for Ampere eMAG CPU based systems.
     <li>Added support to <a href="https://man.openbsd.org/amlclock.4">amlclock(4)</a>
       for obtaining CPU clock frequency.
@@ -248,7 +252,7 @@ to 6.6.
       <a href="https://man.openbsd.org/amlpciephy.4">amlpciephy(4)</a>, drivers
       for the USB controller and PHYs on the Amlogic G12A/B SoCs.
     <li>Added <a href="https://man.openbsd.org/imxtmu.4">imxtmu(4)</a>, a driver
-      to upport the temperature sensors on i.MX8M SoCs.
+      to support the temperature sensors on i.MX8M SoCs.
     <li>Added <a href="https://man.openbsd.org/amlrng.4">amlrng(4)</a>, a simple
       random number generator driver for Amlogic SoCs.
     <li>Added <a href="https://man.openbsd.org/amclock.4">amclock(4)</a>,
@@ -256,7 +260,7 @@ to 6.6.
     <li>Added <a href="https://man.openbsd.org/amluart.4">amluart(4)</a>, a
       driver for the UARTs found on various Amlogic SoCs.
     <li>Added support for the SMBus System Interfaces (SSIF) to
-      <a href="https://man.openbsd.org/ipmi.4">ipmi(4)</a>. 
+      <a href="https://man.openbsd.org/ipmi.4">ipmi(4)</a>.
     <li>PXE booting using U-Boot works now.
     <li>Added clock support
       to <a href="https://man.openbsd.org/sxisyscon.4">sxisyscon(4)</a>,
@@ -270,27 +274,23 @@ to 6.6.
       <a href="https://man.openbsd.org/mvneta.4">mvneta(4)</a> on arm64.
     <li>Added <a href="https://man.openbsd.org/pinctrl.4">pinctrl(4)</a>
       support for 'pinconf-single' devices and support for
-      bias and drive-strength properties, needed for HiSilicon SoCs.	
-    <li>Added <a href="https://man.openbsd.org/mvdog.4">mvdog(4), a driver</a>
+      bias and drive-strength properties, needed for HiSilicon SoCs.
+    <li>Added <a href="https://man.openbsd.org/mvdog.4">mvdog(4)</a>, a driver
       to support the watchdog on the Armada 3700 SoC.
     <li>Added support for the Allwinner H6 to
       <a href="https://man.openbsd.org/sxipio.4">sxipio(4)</a> and
       <a href="https://man.openbsd.org/sxiccmu.4">sxiccmu(4)</a>.
-    <li>Enabled <a href="https://man.openbsd.org/amlmmc.4">amlmmc(4)</a>, a
-      driverfor the SD/MMC controller found on various Amlogic SoCs.
     <li>Added <a href="https://man.openbsd.org/mviic.4">mviic(4)</a>, a driver
       to support the I2C controller on the Armada 3700 SoC.
     <li>Added <a href="https://man.openbsd.org/mvuart.4">mvuart(4)</a> to
-      support the Armada 3720's serial console.      
+      support the Armada 3720's serial console.
     <li>Added support for the Armada 3720 clocks to
-      <a href="https://man.openbsd.org/mvclock.4">mvclock(4)</a>
-      and added <a href="https://man.openbsd.org/mvuart.4">mvuart(4) to</a>
-      support the serial console.      
+      <a href="https://man.openbsd.org/mvclock.4">mvclock(4)</a>.
     <li>Added support for the Armada 3720 pinctrl controller to
       <a href="https://man.openbsd.org/mvpinctrl.4">mvpinctrl(4)</a>. This
       controller also includes GPIO controller functionality.
     <li>Added the RK3328 and RK3399 GMAC clocks to
-      <a href="https://man.openbsd.org/rkclock.4">rkclock(4)</a>. 
+      <a href="https://man.openbsd.org/rkclock.4">rkclock(4)</a>.
     <li>Increased MAXCPUs to 32 in arm64, allowing use of all cores on the Ampere
       eMAG.
     <li>Added support for the Cortex-A65 CPU.
@@ -307,7 +307,7 @@ to 6.6.
       <a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
       display them in "scan" output and on the
       <a href="https://man.openbsd.org/ieee80211.9">ieee80211(9)</a>
-      status line.      
+      status line.
     <li><a href="https://man.openbsd.org/ure.4">ure(4)</a> now supports
       RTL8153B devices.
     <li>Added support for 802.11n Tx aggregation to net80211 and
@@ -322,13 +322,13 @@ to 6.6.
     <li>Added <a href="https://man.openbsd.org/tpmr.4">tpmr(4)</a>, a 802.1Q
       two-port MAC relay implementation.
     <li>Added <a href="https://man.openbsd.org/iavf.4">iavf(4)</a> driver for
-      Intel SR-IOV Virtual Functions of Intel 700 series ethernet controllers. 
+      Intel SR-IOV Virtual Functions of Intel 700 series Ethernet controllers.
     <li>Added <a href="https://man.openbsd.org/aggr.4">aggr(4)</a>, a
       dedicated driver to implement 802.1AX link aggregration.
     <li>Added port protection support
       to <a href="https://man.openbsd.org/switch.4">switch(4)</a>. Domain
       membership is checked for unicast, flooded (broadcast) and local
-      (host-network-bound, e.g. trunk) traffic.      
+      (host-network-bound, e.g. trunk) traffic.
     <li>Disabled <a href="https://man.openbsd.org/mobileip.4">mobileip(4)</a>.
     <li>Added support
       to <a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
@@ -340,7 +340,7 @@ to 6.6.
       <a href="https://man.openbsd.org/mpe.4">mpe(4)</a>,
       <a href="https://man.openbsd.org/mpip.4">mpip(4)</a>,
       <a href="https://man.openbsd.org/etherip.4">etherip(4)</a>
-      and <a href="https://man.openbsd.org/bpe.4">bpe(4)</a> .      
+      and <a href="https://man.openbsd.org/bpe.4">bpe(4)</a>.
     <li>Implemented tx mitigation by calling the hardware transmit
       routine per several packets rather than for individual
       packets. Defers calls to the transmit routine to a network taskq,
@@ -348,10 +348,7 @@ to 6.6.
     <li>Stopped using <a href="https://man.openbsd.org/splnet.9">splnet(9)</a> when
 	running the network stack now
 	that it is using the NET_LOCK for protection, reducing latency spikes.
-    <li>Added <a href="https://man.openbsd.org/sfp.4">sfp(4), a driver</a>
-      allowing communication with SFPs connected over
-      an I2C bus and reading pages over the SFP framework.
-    <li>Added SFP and I2C ofw frameworks.
+    <li>Added support for reading SFPs to some ethernet cards.
   </ul>
 
 <li>Installer improvements:
@@ -360,10 +357,10 @@ to 6.6.
       those containing whitespace.
     <li>Introduced <a href="https://man.openbsd.org/sysupgrade.8">sysupgrade(8)</a>
       that can be used to upgrade OpenBSD from one release to the next
-      or from snapshot to snapshot without user input.      
-    <li>Added octeon bootloader to files copied to the boot partition.
-      To use the bootloader, the firmware must be configured to load file "boot"
-      instead of "bsd."
+      or from snapshot to snapshot without user input.
+    <li>Created an <a href="https://www.openbsd.org/octeon.html">octeon</a>
+      bootloader which is a modified kernel. To use this bootloader, the
+      firmware must be configured to load file "boot" instead of "bsd".
     <li>Included <a href="https://man.openbsd.org/mount_nfs.8">mount_nfs(8)</a>
       on the amd64 CD ramdisk.
     <li>Added <a href="https://man.openbsd.org/tee.1">tee(1)</a> to the ramdisk, and
@@ -378,25 +375,23 @@ to 6.6.
       partition during upgrades. This defaults to the correct disk
       when full disk encryption is in use, and will be useful for
       future unattended upgrades.
-    <li>Added <a href="https://www.openbsd.org/octeon.html">octeon</a>
-      bootloader to files copied to the boot partition. To use the
-      bootloader, the firmware must be configured to load file "boot"
-      instead of "bsd."
   </ul>
 
 <li>Security improvements:
   <ul>
     <li><a href="https://man.openbsd.org/unveil.2">unveil(2)</a> is
-      now used in 77 userland programs to restrict filesystem
-      access.
+      now used in 77 userland programs to redact filesystem access.
     <li>Various changes
       in <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
-      to improve application behaiviour when encountering hidden
+      to improve application behavior when encountering hidden
       filesystem paths.
-    <li><a href="https://man.openbsd.org/ps.1">ps(1)</a> can now show
-      which processes have called unveil(2) to run with a restricted
-      filesystem view.
-    <li>Further and improved mittigations against Spectre side-channel
+    <li><a href="https://man.openbsd.org/ps.1">ps(1)</a> can show which
+      processes have called <a href="https://man.openbsd.org/unveil.2">unveil(2)</a>
+      with the <b>u</b> and <b>U</b> flags in STATE field.
+    <li><a href="https://man.openbsd.org/ps.1">ps(1)</a> can show the list
+      of <a href="https://man.openbsd.org/pledge.2">pledge(2)</a> options
+      processes use with the <b>-o pledge</b> option.
+    <li>Further and improved mitigations against Spectre side-channel
       vulnerability in Intel CPUs built since 2012.
     <li>Mitigations for Intel's Microarchitectural Data Sampling
       vulnerability, using the new CPU VERW behavior if available or
@@ -408,9 +403,9 @@ to 6.6.
     <li>Rewrote <a href="https://man.openbsd.org/doas.1">doas(1)</a>
       environment inheritance not to inherit, and instead reset to the
       target user's values by default.
-    <li>Make
+    <li>Prepare
       the <a href="https://www.openbsd.org/amd64.htmp">amd64</a> BIOS
-      bootloader load a kernel at a random virtual address.
+      bootloader for loading the kernel at a random virtual address (future work).
     <li>Introduced
       <a href="https://man.openbsd.org/malloc_conceal.3">malloc_conceal(3)</a>
       and <a href="https://man.openbsd.org/calloc_conceal.3">calloc_conceal(3)</a>,
@@ -423,7 +418,7 @@ to 6.6.
       using it to XOR random data into the buffer we feed the kernel for
       <a href="https://www.openbsd.org/amd64.html">amd64</a>.
     <li>Added information about system call memory write protection
-      and stack mappion violations to system
+      and stack mapping violations to system
       accounting. Now <a href="https://man.openbsd.org/daily.8">daily(8)</a>
       will print a list of affected processes
       and <a href="https://man.openbsd.org/lastcom.1">lastcomm(1)</a>
@@ -439,13 +434,14 @@ to 6.6.
       removes IPv6 addresses when it detects a link-state change but
       no new router advertisement is received.
     <li><a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
-    now reports SFP, SFP+ and QSFP module information.
+        now reports SFP, SFP+ and QSFP module information when using
+	the <b>sff</b> option.
     <li>Imported <a href="https://man.openbsd.org/snmp.1">snmp(1)</a>,
       a new snmp client which aims to be netsnmp-compatible for
       supported features, and
       removed <a href="https://man.openbsd.org/snmpctl.8">snmpctl(8)</a>.
     <li>Improvements
-      in <a href="https://man.openbsd.org/ntpd.8">ntpd(8)</a>s dns
+      in <a href="https://man.openbsd.org/ntpd.8">ntpd(8)</a> dns
       resoving and constraints checking, especially during
       startup. Unreliable ntp peers are removed them from the pool and
       dns resolving is repeated to add replacements.
@@ -480,10 +476,6 @@ to 6.6.
       always check for namespace collisions on table
       commands. Introduced 'pfctl -FR' to reset pfctl(8) settings to
       defaults.
-    <li>Added support
-      to <a href="https://man.openbsd.org/ifconfig.8">ifconfig(8)</a>
-      and various network drivers to display SFP+, XFP, and d QSFP+
-      tranceiver information.
     <li>Imported Kristaps Dzonsons' RPKI
       validator, <a href="https://man.openbsd.org/rpki-client.8">rpki-client(8)</a>.
     <li> <a href="https://man.openbsd.org/relayd.8">relayd(8)</a> now supports
@@ -531,14 +523,14 @@ to 6.6.
     <li>Enabled switching between wireless and wired interfaces in
       dhclient(8), setting the default route with the interface
       address and allowing two default routes in the routing table. A
-      wired interface will be preferred when connected.      
+      wired interface will be preferred when connected.
     <li>Added consistent use of 'ifconfig $_if [-inet| -inet6]' to clear existing
       configurations completely after restarting an install.
     <li>Added 'forwarded' log format extending the 'combined' log
     format in <a href="https://man.openbsd.org/httpd.8">httpd(8)</a>.
   </ul>
-      
-<li>Assorted improvements:      
+
+<li>Assorted improvements:
   <ul>
     <li> The filesystem buffer cache now more aggressively uses memory
       outside the DMA region, to improve cache performance on amd64
@@ -550,8 +542,6 @@ to 6.6.
       <a href="https://man.openbsd.org/snmpd.8">snmpd(8)</a> has been moved into
       libutil.
       See <a href="https://man.openbsd.org/ber_read_elements.3">ber_read_elements(3)</a>.
-    <li>Support for specifying boot device in
-      <a href="https://man.openbsd.org/vm.conf#boot_device">vm.conf(5)</a>.
     <li>Removed the old
       userland <a href="https://man.openbsd.org/realpath.3">realpath(3)</a>
       and replaced it with __realpath(2), a kernel
@@ -568,7 +558,7 @@ to 6.6.
 <li>VMM/VMD improvements ... <!-- XXX -->
   <ul>
     <li>Added support for 'boot device'
-      to <a href="https://man.openbsd.org/vm.conf.5">vm.conf(5)</a>
+      to <a href="https://man.openbsd.org/vm.conf.5#boot_device">vm.conf(5)</a>
       grammar, the '-B device' counterpart
       from <a href="https://man.openbsd.org/vmctl.8">vmctl(8)</a>.
     <li>Emulated kvm pvclock
@@ -691,7 +681,7 @@ to 6.6.
 	  and memory sidechannel attacks like Spectre, Meltdown,
 	  Rowhammer and Rambleed.
 	<li>Adjusted <a href="https://man.openbsd.org/ssh.1">ssh(1)</a>
-	  to default to using the rsa-sha2-512 signature algorith when
+	  to default to using the rsa-sha2-512 signature algorithm when
 	  signing certificates with an RSA key. This will render these
 	  certificates incompatible with OpenSSH 7.1 and earlier,
 	  unless the default is overridden by use of the (1) -t flag.
@@ -755,14 +745,19 @@ to 6.6.
 
 <li>The system includes the following major components from outside suppliers:
   <ul>
-    <li>ibexpat to 2.2.7
-    <li>unbound 1.9.3
+    <li>Xenocara (based on X.Org 7.7 with xserver 1.20.5 + patches,
+        freetype 2.10.1, fontconfig 2.12.4, Mesa 19.0.8, xterm 344,
+        xkeyboard-config 2.20 and more)
+    <li>LLVM/Clang 8.0.1 (+ patches)
+    <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
+    <li>Perl 5.28.2 (+ patches)
     <li>NSD 4.2.2.
-    <li>LLVM 8.0.0
-    <li>perl 5.28.2.
-    <li>Mesa 19.0.5.
-    <li>libdrm 2.4.98
-    <li>LLVM 8.0.1
+    <li>Unbound 1.9.3
+    <li>Ncurses 5.7
+    <li>Binutils 2.17 (+ patches)
+    <li>Gdb 6.3 (+ patches)
+    <li>Awk Aug 10, 2011 version
+    <li>Expat 2.2.8
   </ul>
 </ul>
 </section>
@@ -798,8 +793,6 @@ extensive details on how to install OpenBSD 6.6 on your machine:
 	.../OpenBSD/6.6/macppc/INSTALL.macppc</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.6/octeon/INSTALL.octeon">
 	.../OpenBSD/6.6/octeon/INSTALL.octeon</a>
-<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.6/sgi/INSTALL.sgi">
-	.../OpenBSD/6.6/sgi/INSTALL.sgi</a>
 <li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.6/sparc64/INSTALL.sparc64">
 	.../OpenBSD/6.6/sparc64/INSTALL.sparc64</a>
 </ul>
@@ -919,20 +912,6 @@ Alternatively, at the Open Firmware prompt, enter <i>boot cd:,ofwboot
 <p>
 After connecting a serial port, boot bsd.rd over the network via DHCP/tftp.
 Refer to the instructions in INSTALL.octeon for more details.
-
-<h3>OpenBSD/sgi:</h3>
-
-<p>
-To install, burn cd66.iso on a CD-R, put it in the CD drive of your
-machine and select <i>Install System Software</i> from the System Maintenance
-menu. Indigo/Indy/Indigo2 (R4000) systems will not boot automatically from
-CD-ROM, and need a proper invocation from the PROM prompt.
-Refer to the instructions in INSTALL.sgi for more details.
-
-<p>
-If your machine doesn't have a CD drive, you can setup a DHCP/tftp network
-server, and boot using "bootp()/bsd.rd.IP##" using the kernel matching your
-system type. Refer to the instructions in INSTALL.sgi for more details.
 
 <h3>OpenBSD/sparc64:</h3>
 
