@@ -86,7 +86,7 @@ to 6.6.
       as the base system compiler.
     <li>The powerpc architecture is now provided with
       <a href="https://man.openbsd.org/clang.1">clang(1)</a>, in
-      addition to aarch64, amd64, arm, i386, mips64el, sparc64.
+      addition to aarch64, amd64, armv7, i386, mips64el, sparc64.
     <li>Disabled <a href="https://man.openbsd.org/gcc.1">gcc</a> in
       base on armv7 and i386.
     <li>Prevented <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
@@ -161,7 +161,7 @@ to 6.6.
     <li>Added <a href="https://man.openbsd.org/uvideo.4">uvideo(4)</a> support
       for the KSMedia 8-bit IR format and for dual functions on integrated USB
       cameras.
-    <li>Added the <a href="https://man.openbsd.org/aplgpi.4">aplgpio(4)</a>
+    <li>Added the <a href="https://man.openbsd.org/aplgpio.4">aplgpio(4)</a>
       driver for the gpio controllers on Intel's Apollo Lake SoC.
     <li>Implemented MSI-X support on sparc64.
     <li>Skipped PCI host bridges and devices not present with
@@ -169,7 +169,8 @@ to 6.6.
       the mapping between ACPI device nodes and PCI devices.
     <li>Added the <a href="https://man.openbsd.org/ukspan.4">ukspan(4)</a>
       driver for the Keyspan USA19HS USB serial adapter.
-    <li>Supported 64BIT DMA for io in
+    <li>Improved support for SAS3 controllers, made device enumeration during
+      boot more reliable, and enabled 64bit DMA for io in
       <a href="https://man.openbsd.org/mpii.4">mpii(4)</a>.
     <li>Fixed MSI/MSI-X on arm64 machines with
       <a href="https://man.openbsd.org/agintc.4">agintc(4)</a>.
@@ -209,7 +210,7 @@ to 6.6.
     <li>Updated shared drm code,
       <a href="https://man.openbsd.org/inteldrm.4">inteldrm(4)</a>
       and <a href="https://man.openbsd.org/radeondrm.4">radeondrm(4)</a>
-      to linux 4.19.74. This adds support for Intel Broxton/Apollo
+      to linux 4.19.76. This adds support for Intel Broxton/Apollo
       Lake, Amber Lake, Gemini Lake, Coffee Lake, Whiskey Lake,
       and Comet Lake hardware.
     <li>Made <a href="https://man.openbsd.org/startx.1">startx(1)</a> and
@@ -222,7 +223,7 @@ to 6.6.
       for the Microchip MCP79400 RTC and similar.
     <li>Added I2C clock gates to <a href="https://man.openbsd.org/mvclock.4">
 	mvclock(4)</a>.
-    <li>Added support for MSI-X to <a href="https://man.openbsd.org/bnx.4">
+    <li>Added support for MSI-X to <a href="https://man.openbsd.org/bnxt.4">
 	bnxt(4)</a>.
     <li>Added <a href="https://man.openbsd.org/octpip.4">octpip(4)</a>, a driver
       for the Octeon packet input processing unit.
@@ -235,6 +236,8 @@ to 6.6.
       some <a href="https://www.openbsd.org/sparc64.html">sparc64</a>
       machines by blocking interrupts while sending an IPI on sunv4
       (as on sun4u).
+    <li><a href="https://man.openbsd.org/ure.4">ure(4)</a> now supports
+      RTL8153B devices.
   </ul>
 
 <li>Improved <a href="https://www.openbsd.org/arm64.html">arm64</a> hardware
@@ -308,8 +311,6 @@ to 6.6.
       display them in "scan" output and on the
       <a href="https://man.openbsd.org/ieee80211.9">ieee80211(9)</a>
       status line.
-    <li><a href="https://man.openbsd.org/ure.4">ure(4)</a> now supports
-      RTL8153B devices.
     <li>Added support for 802.11n Tx aggregation to net80211 and
       <a href="https://man.openbsd.org/iwm.4">iwm(4)</a>.
     <li>... <!-- XXX -->
@@ -321,7 +322,7 @@ to 6.6.
       <a href="https://man.openbsd.org/ix.4">ix(4)</a>.
     <li>Added <a href="https://man.openbsd.org/tpmr.4">tpmr(4)</a>, a 802.1Q
       two-port MAC relay implementation.
-    <li>Added <a href="https://man.openbsd.org/iavf.4">iavf(4)</a> driver for
+    <li>Added <a href="https://man.openbsd.org/iavf.4">iavf(4)</a>, a driver for
       Intel SR-IOV Virtual Functions of Intel 700 series Ethernet controllers.
     <li>Added <a href="https://man.openbsd.org/aggr.4">aggr(4)</a>, a
       dedicated driver to implement 802.1AX link aggregration.
@@ -404,7 +405,7 @@ to 6.6.
       environment inheritance not to inherit, and instead reset to the
       target user's values by default.
     <li>Prepare
-      the <a href="https://www.openbsd.org/amd64.htmp">amd64</a> BIOS
+      the <a href="https://www.openbsd.org/amd64.html">amd64</a> BIOS
       bootloader for loading the kernel at a random virtual address (future work).
     <li>Introduced
       <a href="https://man.openbsd.org/malloc_conceal.3">malloc_conceal(3)</a>
@@ -421,7 +422,7 @@ to 6.6.
       and stack mapping violations to system
       accounting. Now <a href="https://man.openbsd.org/daily.8">daily(8)</a>
       will print a list of affected processes
-      and <a href="https://man.openbsd.org/lastcom.1">lastcomm(1)</a>
+      and <a href="https://man.openbsd.org/lastcomm.1">lastcomm(1)</a>
       will flag violations with 'M'.
   </ul>
 
@@ -443,7 +444,7 @@ to 6.6.
     <li>Improvements
       in <a href="https://man.openbsd.org/ntpd.8">ntpd(8)</a> dns
       resoving and constraints checking, especially during
-      startup. Unreliable ntp peers are removed them from the pool and
+      startup. Unreliable ntp peers are removed from the pool and
       dns resolving is repeated to add replacements.
     <li>Changed the <a href="https://man.openbsd.org/bgpd.8">bgpd(8)</a>
     Adj-RIB-Out to a per-peer set of RB trees, improving speed.
@@ -723,7 +724,7 @@ to 6.6.
     <ul style="column-count: 3">
       <li>aarch64:     XXXX
       <li>amd64:       XXXX
-      <li>arm:         XXXX
+      <li>armv7:       XXXX
       <li>i386:        XXXX
       <li>mips64:      XXXX
       <li>mips64el:    XXXX
