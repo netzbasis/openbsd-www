@@ -36,21 +36,32 @@ local system first.
 
 Start by performing the <a href="#BeforeUpdate">pre-upgrade steps</a>.
 Next, boot from the install kernel, <a href="faq4.html#bsd.rd">bsd.rd</a>:
-use <a href="faq4.html#MkInsMedia">bootable install media</a>, or place the 6.6
-version of <code>bsd.rd</code> in the root of your filesystem and instruct the boot
-loader to boot this kernel.
-Once this kernel is booted, choose the <code>(U)pgrade</code> option and follow the
-prompts.
-Apply the <a href="#ConfigChanges">configuration changes</a> and
-<a href="#RmFiles">remove the old files</a>.
+use <a href="faq4.html#MkInsMedia">bootable install media</a>, or place the 
+6.6 version of <code>bsd.rd</code> in the root of your filesystem and 
+instruct the boot loader to boot this kernel.
+Once this kernel is booted, choose the <code>(U)pgrade</code> option and 
+follow the prompts.
+
+<p>
+Alternatively, a new unattended upgrade method has been introduced.
+The <a href="https://man.openbsd.org/sysupgrade.8">sysupgrade(8)</a> program
+is available as a
+<a href="https://man.openbsd.org/syspatch.8">syspatch(8)</a> for OpenBSD 6.5
+on the i386, amd64, and arm64 plarforms.  Once installed, the upgrade can be
+performed by running <code>sysupgrade</code>.
+
+<p>
+Finally, you can use the <a href="#NoInstKern">manual upgrade process</a>
+(although this is not recommended).
+
+<p>
+After upgrading the sets, apply the <a href="#ConfigChanges">configuration
+changes</a> and <a href="#RmFiles">remove the old files</a>.
 Finish up by upgrading the packages: <code><b>pkg_add -u</b></code>.
 
 <p>
-Alternatively, you can use the <a href="#NoInstKern">manual upgrade process</a>.
-
-<p>
-You may wish to check the <a href="../errata66.html">errata page</a> or upgrade
-to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
+You may wish to check the <a href="../errata66.html">errata page</a> for
+any post-release fixes.
 
 <hr>
 
@@ -125,8 +136,8 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
   <li><b>acme-client(1).</b>
 
   <a href="https://man.openbsd.org/OpenBSD-6.6/acme-client.1">acme-client(1)</a>
-  has been updated to implement the recently published RFC 8555. Users must 
-  change the api url in 
+  has been updated to implement the recently published RFC&nbsp;8555. Users 
+  must change the api url in
   <a href="https://man.openbsd.org/OpenBSD-6.6/acme-client.5">
   <code>/etc/acme-client.conf</code></a> from
   <pre class="cmdbox">
@@ -149,7 +160,7 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
 
   The <a href="https://man.openbsd.org/OpenBSD-6.6/bgpctl">
   <code>bgpctl(8)</code></a> <code>irrfilter</code> command has
-  been removed.  People interested in generating prefix- and 
+  been removed.  People interested in generating prefix- and
   as-sets from IRR data should use bgpq3 from ports.
 
 
@@ -158,8 +169,8 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
 
   The config keyword <code>route-collector</code> is deprecated and will cause
   <a href="https://man.openbsd.org/OpenBSD-6.6/bgpd">bgpd(8)</a>
-  to fail parsing the config. Instead disable the route evaluation process 
-  on the Loc-RIB with 
+  to fail parsing the config. Instead disable the route evaluation process
+  on the Loc-RIB with
   <pre class="cmdbox">
   rde rib Loc-RIB no evaluate<!--
   --></pre>
@@ -179,7 +190,7 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
 
   It has been discovered that some hosting providers route customer IPv6
   prefixes to link-local addresses derived from Ethernet MAC addresses
-  (RFC 2464).
+  (RFC&nbsp;2464).
   This leads to hard to debug IPv6 connectivity issues with the
   RFC&nbsp;7217-style random but stable link-local addresses that OpenBSD used.
   Link-local addresses are again formed from Ethernet MAC addresses.
@@ -190,7 +201,7 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
 
   The order of the arguments in the <code>create</code>,
   <code>start</code>, and <code>stop</code> commands of
-  <a href="https://man.openbsd.org/OpenBSD-6.6/vmctl.8">vmctl(8)</a> has 
+  <a href="https://man.openbsd.org/OpenBSD-6.6/vmctl.8">vmctl(8)</a> has
   been changed to match a commonly expected style.
   Manual usage or scripting with vmctl must be adjusted to use the new
   syntax.
@@ -380,9 +391,9 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
   MariaDB was upgraded to the 10.3 branch.
   Due to changes in redo logs, <b>ensure that your previous version was
   shut down cleanly before upgrading</b>.
-  The <code>/etc/my.cnf</code> option 
+  The <code>/etc/my.cnf</code> option
   <code>innodb_additional_mem_pool_size</code>,
-  found in some old default configurations, is no longer supported 
+  found in some old default configurations, is no longer supported
   &mdash; remove it if present. If the new version fails to start,
   review <code>/var/mysql/(hostname).err</code>.
   As usual, run mysql_upgrade(1) after the update.
@@ -400,15 +411,15 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
   <pre class="cmdbox">
   daemon_flags="-D /var/postgresql/data -w -l /var/postgresql/logfile"<!--
   --></pre>
-  If you defined <code>postgresql_flags</code> in 
-  <code>/etc/rc.conf.local</code> make sure that your entry includes 
+  If you defined <code>postgresql_flags</code> in
+  <code>/etc/rc.conf.local</code> make sure that your entry includes
   <code>-D /var/postgresql/data</code>.
 
 
   <p>
   <li><b>games/gzdoom.</b>
 
-  gzdoom was updated to 4.1.2 which is incompatible with previously saved 
+  gzdoom was updated to 4.1.2 which is incompatible with previously saved
   games. There is no upstream solution.
 
 
@@ -417,7 +428,7 @@ to the <a href="../stable.html">stable branch</a> to get any post-release fixes.
 
   Full UTF-8 support has been enabled for courier-imap.
   If you are using imap folders with UTF-8 names you should check and/or
-  convert them using the maildirmake(1) <code>--checkutf8</code> and 
+  convert them using the maildirmake(1) <code>--checkutf8</code> and
   <code>--convutf8</code> options.
 
   <p>
@@ -597,4 +608,4 @@ access to the system console.
 -->
 
 <hr>
-<small>$OpenBSD: upgrade66.html,v 1.3 2019/10/03 16:37:14 benno Exp $</small>
+<small>$OpenBSD: upgrade66.html,v 1.5 2019/10/07 04:07:41 kmos Exp $</small>
