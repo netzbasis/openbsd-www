@@ -13,6 +13,10 @@ my $bzurl = "https://bugzilla.mindrot.org/show_bug.cgi?id=";
 my $manurl = "https://man.openbsd.org/";
 my $dlurl = "https://cdn.openbsd.org/pub/OpenBSD/OpenSSH";
 
+# All datestamps are relative to UTC for consistency regardless of whose
+# timezone the script gets run in.
+$ENV{'TZ'} = 'UTC';
+
 # These days we commit the release notes on the day of release.  For those,
 # we use the date the release notes were first committed.
 # Releases before that are listed in this hash which is checked before we
@@ -109,10 +113,13 @@ while (readdir $dh) {
 		warn "cached $rel $date\n";
 	} else {
 		$_ = `cd $txtdir && cvs log -r1.1 $file | grep date:`;
-		/date: (\S+)/;
-		$date = $1;
-		$date =~ s|/|-|g;
-		warn "looked up $rel $date\n";
+		if (/date: (\S+)/) {
+			$date = $1;
+			$date =~ s|/|-|g;
+			warn "looked up $rel $date\n";
+		} else {
+			die "failed to look up date for $file";
+		}
 	}
 	$releases{$rel} = $date;
 }
