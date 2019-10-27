@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf-8>
+
+<title>OpenIKED Goals</title>
+<meta name="description" content="OpenIKED Goals">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="openbsd.css">
+<link rel="canonical" href="https://www.openiked.org/goals.html">
+
+<h2 id=OpenBSD>
+<a href="/">
+<i>Open</i><b>IKED</b></a>
+Goals
+</h2>
+<hr>
+
+<ul>
+<li><strong>Lean:</strong>
+    Provide a small and monolithic architecture that supports
+    the main standards and most important features of IKEv2.
+    Monolithic means that we do not even try to put lots of features in
+    lots of dynamic libraries.
+<li><strong>Clean:</strong>
+    Write readable and clean code following strict coding
+    <a href="https://man.openbsd.org/style.9">style(9)</a>
+    guidelines.
+<li><strong>Secure:</strong>
+    Implement secure code with strict validity checking, bounded buffer
+    operations, and privilege separation to mitigate the security risks of
+    possible bugs. Use strong cryptography with sane but secure defaults.
+<li><strong>Interoperable:</strong>
+    Provide good interoperability with other IKEv2 implementations, support
+    non-standard extensions if it is required to interoperate with other
+    major implementations.
+<li><strong>Configurable:</strong>
+    Make the configuration easy and nice with sane defaults, minimalistic
+    configuration files and good documentation in the manual pages. Avoid
+    the headaches of past and other IKE implementations.
+</ul>
