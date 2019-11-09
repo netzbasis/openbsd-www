@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.584 2019/09/22 16:32:01 sthen Exp $
+# $OpenBSD: mirrors.dat,v 1.588 2019/11/08 21:57:16 sthen Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -7,10 +7,10 @@
 # - edit this file as needed
 # - for version updates, edit Makefile with the version number
 # - edit templates in www/build/mirrors/ as needed
-# - "make ftp", "make anoncvs", or "make cvsync" as necessary
+# - "make ftp" or "make anoncvs" as necessary
 # - commit whichever files have content changes; one or all of these sets:
 #   {,openbgpd/,openssh/}ftp.html open{ntpd,ssh}/portable.html ftplist httpslist
-#   anoncvs.html cvsync.html
+#   anoncvs.html
 #
 # to generate host key fingerprints:
 # 
@@ -534,7 +534,7 @@ ME	mirror@hostserver.de
 MN	Sebastian Benoit, Peter Hessler
 CE	1
 CF	anoncvs1.ca.openbsd.org
-CR	rsync://ftp.hostserver.de/cvsync/
+CR	rsync://ftp.hostserver.de/cvs/
 LC	2
 # also has ftp.ch CNAME
 UH	http://ftp.hostserver.de/pub/OpenBSD/
@@ -1094,7 +1094,7 @@ GT	Plymouth
 ME	sthen@openbsd.org
 MN	Stuart Henderson
 CE	1
-CR	rsync://anoncvs.spacehopper.org/OpenBSD-CVS/
+CR	-l anoncvs rsync://anoncvs.spacehopper.org/cvs/
 LC	2
 AU	anoncvs
 AH	anoncvs.spacehopper.org
@@ -1154,6 +1154,7 @@ LC	2
 CE	1
 AU	anoncvs
 AH	anoncvs1.usa.openbsd.org
+CR	-l anoncvs rsync://anoncvs1.usa.openbsd.org/cvs/
 AR	/cvs
 AP	ssh, pserver
 VH	anoncvs1.usa.openbsd.org
@@ -1185,6 +1186,7 @@ AU	anoncvs
 AH	anoncvs4.usa.openbsd.org
 AR	/cvs
 AP	ssh, ssh port 2022
+CR	-l anoncvs rsync://anoncvs4.usa.openbsd.org/cvs/
 VH	anoncvs4.usa.openbsd.org
 SR	SHA256:RT7vVXrvmKgZ7VkrVZ0lgugDFCBPVT6iSwMh+m1vZTA
 SD	SHA256:b6otnjswIwZwcMsic6cEFKBwUcwzu0mJNLRE3CrIr/Y
@@ -1213,6 +1215,7 @@ LF	2
 CE	1
 AU	anoncvs
 AH	anoncvs2.usa.openbsd.org
+CR	-l anoncvs rsync://anoncvs2.usa.openbsd.org/cvs/
 AR	/cvs
 AP	ssh, ssh port 2022
 VH	anoncvs2.usa.openbsd.org
