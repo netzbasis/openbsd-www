@@ -1,4 +1,4 @@
-# $OpenBSD: mirrors.dat,v 1.589 2019/11/09 21:50:35 benno Exp $
+# $OpenBSD: mirrors.dat,v 1.595 2019/11/11 17:31:48 sthen Exp $
 # Comprehensive mirror database for generation of ftplist and HTML files
 # See mirrors.tmpl for description of file format
 #
@@ -119,6 +119,8 @@ AU	anoncvs
 AH	anoncvs.au.openbsd.org
 AR	/cvs
 AP	ssh
+# ssh-forwarded only
+CR	rsync://anoncvs.au.openbsd.org/cvs/
 SR	SHA256:pPcBY4E33vwreETbz5KJUIzZpWWzaZPhrpnLaFa7WuQ
 SR	MD5:19:4c:e2:a8:9e:42:b2:91:f3:d5:04:cf:b5:61:5e:ea
 SD	SHA256:3rmKP03KsE0j1dLc91828CCJWUL58+PxBUmIlF7sPDs
@@ -238,7 +240,6 @@ AU	anoncvs
 AH	anoncvs.comstyle.com
 AR	/cvs
 AP	ssh, ssh port 2022
-VH	anoncvs.comstyle.com
 SR	SHA256:vYSNKOoCHReBzmdJy3SiULg7YyEZVoib3X3jGJShezA
 SD	SHA256:e5aEzE3eGY5QLU1TXuFc+iD+hdRr46rM5dtBN9oH83Y
 SE	SHA256:W2WEQDka4xicJzeQY0Nm0iCv3h2xZLzfp+TT1UvtBTw
@@ -269,7 +270,6 @@ AU	anoncvs
 AH	obsdacvs.cs.toronto.edu
 AR	/cvs
 AP	ssh
-VH	obsdacvs.cs.toronto.edu
 SR	SHA256:BosSX+gUL/17cUdppQlmXht1S5GGHrHNrL6+U3hyG+o
 SD	SHA256:/wH3qgWOjC1iXh8PxWFl3Mv+IdgXHoPdLmFxJ0vAGgo
 SE	SHA256:4I5R4/tGayGG0KDEsj6CY1eCqt2sbcYtA3nqnhUaD04
@@ -368,7 +368,6 @@ GT	Paris
 ME	openbsd-mirror@bsdfrog.org
 MN	Landry Breuil, Antoine Jacoutot
 CE	2
-CF	anoncvs1.ca.openbsd.org
 CR	rsync://anoncvs.fr.openbsd.org/openbsd-cvs/
 LC	2
 UH	http://ftp.fr.openbsd.org/pub/OpenBSD/
@@ -376,7 +375,6 @@ UHS	https://ftp.fr.openbsd.org/pub/OpenBSD/
 UR	rsync://ftp.fr.openbsd.org/OpenBSD/
 FE	2
 LF	2
-VH	anoncvs.fr.openbsd.org
 AH	anoncvs.fr.openbsd.org
 AU	anoncvs
 AR	/cvs
@@ -477,13 +475,11 @@ GT	N&uuml;rnberg
 ME	aw@osn.de
 MN	Armin Wolfermann
 CE	3
-CR	rsync://mirror.osn.de/openbsd-all/
+CR	-p rsync://mirror.osn.de/openbsd-all/
 AU	anoncvs
 AH	mirror.osn.de
 AR	/cvs
 AP	ssh
-VH	mirror.osn.de
-VU	https://mirror.osn.de/
 SR	SHA256:fQGY+UhLdbB3oDI4frFtSKF2BjQIkSY0lnSA6lVv8+o
 SD	SHA256:1IELSVD8Tf5HYyZNGJAKyyKd6BmihpwG5wGE96W+rV0
 SE	SHA256:plj+1CPTaKi0AIId/aDMCGgZZnkxc1ow+ffBNMvYW4A
@@ -531,9 +527,9 @@ GC	Germany
 GZ	de
 GT	Frankfurt
 ME	mirror@hostserver.de
-MN	Sebastian Benoit, Peter Hessler
+MN	Sebastian Benoit, Florian Obser
 CE	1
-CR	-l anoncvs rsync://ftp.hostserver.de/cvs/
+CR	rsync://ftp.hostserver.de/cvs/
 LC	2
 # also has ftp.ch CNAME
 UH	http://ftp.hostserver.de/pub/OpenBSD/
@@ -541,7 +537,6 @@ UHS	https://ftp.hostserver.de/pub/OpenBSD/
 UR	rsync://ftp.hostserver.de/OpenBSD/
 FE	2
 LF	2
-VH	ftp.hostserver.de
 AH	ftp.hostserver.de
 AU	anoncvs
 AR	/cvs
@@ -681,15 +676,23 @@ GI	Nagasaki University, Faculty of Economics
 ME	sigh@nagasaki-u.ac.jp
 MN	SUZUKI Hitoshi
 HA	kankoromochi.econ.nagasaki-u.ac.jp
-CE	3
+CE	2
+LC	3
+CR	rsync://anoncvs.jp.openbsd.org/cvs/
 AU	anoncvs
 AH	anoncvs.jp.openbsd.org
 AR	/cvs
-AP	ssh, pserver
-SR	MD5:80:6d:6b:9e:2b:5e:a3:fa:cc:bb:f7:fe:46:9f:ce:be
-SD	MD5:f3:8e:b4:d0:00:26:f1:1b:5b:98:50:ad:d4:94:23:98
-SE	MD5:dc:8b:b9:2f:4d:20:73:62:a9:3b:f8:ce:09:10:dc:b8
-S2	MD5:af:b8:2d:3c:0a:a0:89:15:cb:8f:c0:ad:e7:95:08:df
+AP	ssh
+SR      SHA256:3XcKWDBEcB5XE4shCmRfh0LmSOyDcp4vcSQp8NK62Gk
+SD      SHA256:tFs4zlStRFKHJdvC0p7DsLW3GWQ7py/W6KkDBSaUW10
+SE      SHA256:aXpmw11DuXXLm8PsJ37L65jEXbu8JF2cnVfQptSkoyQ
+S2      SHA256:vLLJFhJCzzmXd7FwgQ+vJpnAQiDibSS2aZOgeuVZmjQ
+SR      MD5:80:6d:6b:9e:2b:5e:a3:fa:cc:bb:f7:fe:46:9f:ce:be
+SD      MD5:f3:8e:b4:d0:00:26:f1:1b:5b:98:50:ad:d4:94:23:98
+SE      MD5:dc:8b:b9:2f:4d:20:73:62:a9:3b:f8:ce:09:10:dc:b8
+S2      MD5:af:b8:2d:3c:0a:a0:89:15:cb:8f:c0:ad:e7:95:08:df
+
+
 
 0
 GC	Japan
@@ -983,12 +986,11 @@ LC	2
 MN	Janne Johansson
 ME	jj@deadzoft.org
 CE	2
-CR	rsync://anoncvs.eu.openbsd.org/OpenBSD-cvs/
+CR	-p rsync://anoncvs.eu.openbsd.org/OpenBSD-cvs/
 AU	anoncvs
 AH	anoncvs.eu.openbsd.org
 AR	/cvs
 AP	ssh
-VH	anoncvs.eu.openbsd.org
 SR	SHA256:4gXNO1FcLP8Swdm759TMDI/73hCCO5kQr3vqi9o/r64
 SD	SHA256:blisb6OUx83i2AEo44Y9eoAVRgRHsLtiWeZF05rsmHM
 SE	SHA256:uz1m+x471U/+3dGsDgvYI/o+pmobQhuILMcr/fZcr6E
@@ -1093,13 +1095,12 @@ GT	Plymouth
 ME	sthen@openbsd.org
 MN	Stuart Henderson
 CE	1
-CR	-l anoncvs rsync://anoncvs.spacehopper.org/cvs/
+CR	rsync://anoncvs.spacehopper.org/cvs/
 LC	2
 AU	anoncvs
 AH	anoncvs.spacehopper.org
 AR	/cvs
 AP	ssh, ssh port 2022, ssh port 443
-VH	anoncvs.spacehopper.org (rsync only, no cvsync)
 SR	SHA256:orTIOu6IKP7Ndz317tyCaz8LJnJWz4jmzSuG+FK7jwM
 SD	SHA256:0t4AQyR4Ci5hICZwPQ+l4b5l9evisj+wtry70ZWivZM
 SE	SHA256:p+VCx2KynGtiFFaaiF010SIQu6gJgmJb//yokW2sGBE
@@ -1153,10 +1154,9 @@ LC	2
 CE	1
 AU	anoncvs
 AH	anoncvs1.usa.openbsd.org
-CR	-l anoncvs rsync://anoncvs1.usa.openbsd.org/cvs/
+CR	rsync://anoncvs1.usa.openbsd.org/cvs/
 AR	/cvs
 AP	ssh, pserver
-VH	anoncvs1.usa.openbsd.org
 SR	SHA256:PFKE28DFbJLmqoLkq9xfBuiYl9GN2LABsvUpzNk+LlE
 SD	SHA256:KgFHf4YO6nVgCxEEPzgT/jT7QEqSWr56HC2P/PkOKa0
 SE	SHA256:Ofstc7xq/W+73vBMUpb3A4ZqLNhKI3u2FdzbOkJpOHI
@@ -1185,8 +1185,7 @@ AU	anoncvs
 AH	anoncvs4.usa.openbsd.org
 AR	/cvs
 AP	ssh, ssh port 2022
-CR	-l anoncvs rsync://anoncvs4.usa.openbsd.org/cvs/
-VH	anoncvs4.usa.openbsd.org
+CR	rsync://anoncvs4.usa.openbsd.org/cvs/
 SR	SHA256:RT7vVXrvmKgZ7VkrVZ0lgugDFCBPVT6iSwMh+m1vZTA
 SD	SHA256:b6otnjswIwZwcMsic6cEFKBwUcwzu0mJNLRE3CrIr/Y
 SE	SHA256:JreaFNTlm2Uhlk3iaMs4Rweq27KPSVYUgj9sZUsOxCc
@@ -1214,10 +1213,9 @@ LF	2
 CE	1
 AU	anoncvs
 AH	anoncvs2.usa.openbsd.org
-CR	-l anoncvs rsync://anoncvs2.usa.openbsd.org/cvs/
+CR	rsync://anoncvs2.usa.openbsd.org/cvs/
 AR	/cvs
 AP	ssh, ssh port 2022
-VH	anoncvs2.usa.openbsd.org
 SR	SHA256:O/qRkEam5QXBxAcHA8qEEHXp9D2Ad1RMS43crbP+PDE
 SD	SHA256:+sNBHW4fy9/cb0CJLGAe/wBkmwXI7C/vU81rdFVs3mE
 SE	SHA256:Bt9zXfPRYnP8DDBEXhH0SwCs3fU8EX/UA1Q5ypzkRdg
