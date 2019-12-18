@@ -81,6 +81,35 @@ If you do not delete them before upgrading,
 <a href="https://man.openbsd.org/sysmerge">sysmerge(8)</a>
 will fail and will need to be re-run manually after deleting them.
 
+
+<h3 id="r20191127">2019/11/27 - unwind(8) no longer uses http to detect captive portals</h3>
+<a href="https://man.openbsd.org/unwind">unwind(8)</a> uses a DNS based
+heuristic to detect captive portals.
+Existing <code>captive portal</code> sections must be removed from
+<code>/etc/unwind.conf</code>.
+
+
+<h3 id="r20191217b">2019/12/17 - usb(4) and uhid(4) changes</h3>
+
+The default permissions of the
+<a href="https://man.openbsd.org/usb.4">usb(4)</a> and
+<a href="https://man.openbsd.org/uhid.4">uhid(4)</a> 
+device nodes have been changed by restricting read-write access to the
+root user.  Run <code>MAKEDEV</code> to update the device nodes manually:
+
+<pre class="cmdbox">
+# <b>cd /dev</b>
+# <b>sh MAKEDEV all</b><!--
+--></pre>
+
+<p>
+Access to FIDO/U2F security keys is now provided by the 
+<a href="https://man.openbsd.org/fido.4">fido(4)</a> driver instead of
+<a href="https://man.openbsd.org/uhid.4">uhid(4)</a>.
+Programs have to use <code>/dev/fido/N</code> instead of
+<code>/dev/uhidN</code> for U2F/FIDO.
+
+
 <!--
      Two blank lines before new sections.
      New sentences start on new lines.
@@ -88,4 +117,4 @@ will fail and will need to be re-run manually after deleting them.
 -->
 
 <hr id="end">
-<small>$OpenBSD: current.html,v 1.1014 2019/11/15 13:34:25 benno Exp $</small>
+<small>$OpenBSD: current.html,v 1.1016 2019/12/17 19:27:39 reyk Exp $</small>
