@@ -175,6 +175,35 @@ to 6.7.
 	href="https://man.openbsd.org/unbound">unbound(8)</a> by default.
     <li><a href="https://man.openbsd.org/ntpd">ntpd(8)</a> now does
 	constraint validation against 9.9.9.9 and 2620:fe::fe by default.
+    <li>Fixed <a href="https://man.openbsd.org/arp.4">arp(4)</a>
+	issues created by <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	modifying existing routes.
+    <li>Fixed <a href="https://man.openbsd.org/resolv.conf.5">route.conf(5)</a>
+	handling by <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	when an interface loses link.
+    <li>Restored previous <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	behaviour of rejecting leases that lack a subnet mask.
+    <li>Enabled <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	to configure <a href="https://man.openbsd.org/carp.4">carp(4)</a>
+	interfaces.
+    <li>Fixed <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	releasing leases without a server identifier.
+    <li>Improved <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	NAK handling in various corner cases.
+    <li>Fixed <a href="https://man.openbsd.org/dhclient.8">dhclient(8)</a>
+	endlessly sending REQUEST messages when an ACK is never received.
+    <li>Prevented
+	<a href="https://man.openbsd.org/dhcpd.8">dhcpd(8)</a>
+	from referencing freed memory when releasing a lease with
+	an unusually long uid.
+    <li>Corrected parsing of classless static default route "0/0" in
+	<a href="https://man.openbsd.org/dhcpd.conf.5">dhcpd.conf(5)</a>.
+    <li>Increased to 15 the number of
+	<a href="https://man.openbsd.org/softraid.4">softraid(4)</a>
+	CONCAT volumes that can be created on a single disk.
+    <li>Fixed
+	<a href="https://man.openbsd.org/softraid.4">softraid(4)</a>
+	CRYPTO volumes on 4K-sector disks.
   </ul>
 
 <!-- FFS2 -->
@@ -196,42 +225,33 @@ to 6.7.
     <li>Allowed arm64 and armv7 efiboot(8) to read from an ffs2 filesystem.
   </ul>
 
-<li>SMP-Improvements, System call unlocking:
+<li>SMP-Improvements:
   <ul>
-    <li>Fixed absolute timeout checking in <a
-	href="https://man.openbsd.org/__thrsleep">__thrsleep(2)</a>.
-    <li>Introduced <a
-	href="https://man.openbsd.org/tsleep_nsec">*sleep_nsec(9)</a> to allow
-	sleeping for a specified minimum duration, allowing use at the syscall
-	layer and elsewhere within the kernel where this minimum duration is
-	required.
-    <li>Added the MAXTSLP macro, the maximum sleep duration, to <a
-	href="https://man.openbsd.org/tsleep_nsec">tsleep_nsec(9)</a>.
-    <li>Unlocked the <a href="https://man.openbsd.org/flock">flock(2)</a>
-	system call.
-    <li>Reworked AMD smt/core/package detection, helping prevent cores
-	being misidentified as threads.
-    <li>Unlocked the <a href="https://man.openbsd.org/fcntl">fnctl(2)</a> system call.
-    <li>Unlocked the <a
-	href="https://man.openbsd.org/ioctl">ioctl(2)</a> system call.
-    <li>Pushed the KERNEL_LOCK() inside pgsigio() and selwakeup(),
-	allowing separate addressing of the three subsystems: signal,
-	poll/select and kqueue.
-    <li>Unlocked the <a href="https://man.openbsd.org/close">close(2)</a>
-	and <a href="https://man.openbsd.org/dup">dup(2)</a> system calls.
-    <li>Made <a
-	href="https://man.openbsd.org/__thrsleep">__thrsleep(2)</a> and <a
-	href="https://man.openbsd.org/__thrwakeup">__thrwakeup(2)</a> MP-safe.
-    <li>Unlocked <a href="https://man.openbsd.org/kqueue">kqueue(2)</a>.
-    <li>Unlocked <a href="https://man.openbsd.org/pipe">pipe(2)</a>
-	and <a href="https://man.openbsd.org/pipe2">pipe2(2)</a>.
-    <li>Avoided false positives in <a
-	href="https://man.openbsd.org/witness">witness(4)</a> when detecting
-	lock order reversals by using separate rwlock initializations for
-	userland and kernel maps.
-    <li>Reintroduced socket locking inside socket event filters.
+    <li>
+    <a href="https://man.openbsd.org/__thrsleep">__thrsleep(2)</a>,
+    <a href="https://man.openbsd.org/__thrwakeup">__thrwakeup(2)</a>,
+    <a href="https://man.openbsd.org/close">close(2)</a>,
+    <a href="https://man.openbsd.org/closefrom">closefrom(2)</a>,
+    <a href="https://man.openbsd.org/dup">dup(2)</a>,
+    <a href="https://man.openbsd.org/dup2">dup2(2)</a>,
+    <a href="https://man.openbsd.org/dup3">dup3(2)</a>,
+    <a href="https://man.openbsd.org/flock">flock(2)</a>,
+    <a href="https://man.openbsd.org/fcntl">fcntl(2)</a>,
+    <a href="https://man.openbsd.org/kqueue">kqueue(2)</a>,
+    <a href="https://man.openbsd.org/pipe">pipe(2)</a>,
+    <a href="https://man.openbsd.org/pipe2">pipe2(2)</a> and
+    <a href="https://man.openbsd.org/nanosleep">nanosleep(2)</a>
+    are run without KERNEL_LOCK.
+    <li>The generic part of <a href="https://man.openbsd.org/ioctl">ioctl(2)</a>
+    is run without KERNEL_LOCK.
+    <li>Reworked AMD smt/core/package detection, helping prevent cores being
+    misidentified as threads.
+    <li>Avoided false positives in
+    <a href="https://man.openbsd.org/witness">witness(4)</a> when detecting
+    lock order reversals by using separate rwlock initializations for
+    userland and kernel maps.
     <li>Allowed sleeping inside kqueue event filters.
-    <li>Made <a href="https://man.openbsd.org/vmx">vmx(4)</a> transmit mp-safe.
+    <li>Made <a href="https://man.openbsd.org/vmx">vmx(4)</a> transmit MP-safe.
   </ul>
 
 <li>Improved hardware support, including:
@@ -239,7 +259,6 @@ to 6.7.
     <li>Improvements in the <a href="https://man.openbsd.org/em">em(4)</a> driver.
     <li>Added <a href="https://man.openbsd.org/dsxrtc">dsxrtc(4)</a>,
 	a driver for the Maxim DS3231/DS3232 I2C RTC.
-    <li>Enabled use of <a href="https://man.openbsd.org/em">em(4)</a> with MSI-X.
     <li>Added <a href="https://man.openbsd.org/ure">ure(4)</a> support
 	for Lenovo OneLine Plus Dock Ethernet.
     <li>Improved <a href="https://man.openbsd.org/ucom">ucom(4)</a> to
@@ -263,12 +282,8 @@ to 6.7.
     <li>Added <a href="https://man.openbsd.org/rge">rge(4)</a>, a driver
 	for the Realtek 8125 PCI Express 2.5Gb Ethernet devices.
     <li>Fixed cursor issues and suspend/resume on <a
-	href="https://man.openbsd.org/amdgpu">amdgpu(4)</a> due to incomplete
-	unmapping. This may help <a
-	href="https://man.openbsd.org/radeondrm">radeondrm(4)</a> issues as
-	well.
-    <li>Enabled mmhub power gating on picasso within <a
-	href="https://man.openbsd.org/amdgpu">amdgpu(4)</a>.
+	href="https://man.openbsd.org/amdgpu">amdgpu(4)</a> and
+	<a href="https://man.openbsd.org/radeondrm">radeondrm(4)</a>.
     <li>Fixed support for additional I2C busses in <a
 	href="https://man.openbsd.org/piixpm">piixpm(4)</a> for older SB800
 	SMBus controllers. Prevented sensors from attaching four times on old
@@ -283,13 +298,9 @@ to 6.7.
 
     <li>Prevented <a href="https://man.openbsd.org/mcx">mcx(4)</a>
 	interface lockups due to completion queue overflow.
-    <li>Fixed brightness keys on the x395 and other thinkpads with AMD graphics.
-    <li>Fixed brightness controls on certain machines where the
+    <li>Fixed brightness keys on various laptops with AMD graphics.
+    <li>Fixed brightness controls on machines where the
 	initial brightness values are returned out of range.
-    <li>Made <a
-	href="https://man.openbsd.org/acpivout">acpivout(4)</a> stop calling
-	ACPI methods directly to allow changing brightness other ways on
-	certain machines, including the x395.
     <li>Set the default brightness level on attachment for <a
 	href="https://man.openbsd.org/pwmbl">pwmbl(4)</a>.
     <li>Fixed <a
@@ -300,8 +311,6 @@ to 6.7.
 	href="https://man.openbsd.org/acpivout">acpivout(4)</a> to increment
 	and decrement screen brightness based only on brightness level changes
 	of 5% or higher.
-    <li>Added <a href="https://man.openbsd.org/amlsm">amlsm(4)</a>, a
-	driver for the "secure monitor" firmware interface.
     <li>Fixed Etron EJ168 USB 3.0 Host Controllers via USB 2 devices.
     <li>Added support for the SIERRA MC7700 to <a
 	href="https://man.openbsd.org/umsm">umsm(4)</a> UMTS and LTE modem device.
@@ -312,9 +321,6 @@ to 6.7.
 	the volume as the root device and boot off hardware RAID.
     <li>Populated logical disk port WWNs with their RAID volume's WWID
 	in <a href="https://man.openbsd.org/mpii">mpii(4)</a>.
-    <li>Added <a
-	href="https://man.openbsd.org/amdgpio">amdgpio(4)</a>, a driver for
-	the GPIO controller found on newer AMD SoC/chipsets.
     <li>Added <a href="https://man.openbsd.org/fido">fido(4)</a>, an
 	HID driver for FIDO/U2F security keys.
     <li>Added parsing of DDR4 and LPDDDR3/4 SPD memories to <a
@@ -322,8 +328,6 @@ to 6.7.
     <li>Added support to <a
 	href="https://man.openbsd.org/lm">lm(4)</a> for NCT6775F, NCT5104D,
 	NCT6779D and NCT679[1235]D sensors.
-    <li>Added AMD FCH (KERNCZ) to the list of supported devices in <a
-	href="https://man.openbsd.org/piixpm">piixpm(4)</a>.
     <li>Updated <a href="https://man.openbsd.org/piixpm">piixpm(4)</a>
 	to support newer AMD chips like Hudson-2 and KERNCZ and implemented
 	multi-bus support for SB800, Hudson-2 and KERNCZ.
@@ -335,6 +339,9 @@ to 6.7.
     <li>Faked disk info to match expected boot disk when EFI
 	bootloader has been received via TFTP, fixing a hang during HP
 	Elitebook UEFI boot.
+    <li>Implemented a hexdump command in the bootloader, helping to
+	inspect the memory layout created by the firmware and useful for UEFI
+	debugging.
     <li>Improved <a href="https://man.openbsd.org/ksmn">ksmn(4)</a>
 	temperature conversion precision.
     <li>Added a quirk to handle Apollo Lake, Gemini Lake and 100
@@ -351,14 +358,6 @@ to 6.7.
     <li>Fixed endian swapping in <a
 	href="https://man.openbsd.org/xhci">xhci(4)</a>, allowing it to work
 	again on octeon and other big endian architectures.
-    <li>Added <a href="https://man.openbsd.org/sxisid">sxisid(4)</a>,
-	a driver to read the on-chip eFuses.
-    <li>On newer ThinkPads reporting HKEY version > 1, allowed <a
-	href="https://man.openbsd.org/acpivout">acpivout(4)</a> to claim
-	backlight controls rather than <a
-	href="https://man.openbsd.org/wscons">wscons(4)</a>, allowing use of
-	the fine-grained backlight BCL steps defined in <a
-	href="https://man.openbsd.org/acpi">acpi(4)</a>.
     <li>Implemented the "parallel boot" feature on compatible sparc64 firmware.
     <li>Introduced <a href="https://man.openbsd.org/iwx">iwx(4)</a>, a
 	driver for Intel AX200 WiFi devices.
@@ -372,57 +371,65 @@ to 6.7.
 	href="https://man.openbsd.org/urtwn">urtwn(4)</a> driver.
     <li>The <a href="https://man.openbsd.org/athn">athn(4)</a> driver
 	now offloads CCMP (WPA2) encryption and decryption to hardware.
+    <li>Prevented an overflow due to <a
+	href="https://man.openbsd.org/xen">xen(4)</a> failing to release the
+	interrupt source when unmasking the interrupt.
+    <li>Fixed <a href="https://man.openbsd.org/usb.4">usb(4)</a>
+	handling USB 2.0 devices on various USB 3.0 controllers.
+    <li>Fixed <a href="https://man.openbsd.org/usb.4">usb(4)</a>
+	handling of controllers that STALL to indicate a short read.
+    <li>Fixed <a href="https://man.openbsd.org/xhci.4">xhci(4)</a>
+	handling of i/o's that are exact multiples of the max packet size.
+    <li>Bumped <a href="https://man.openbsd.org/nvme.4">nvme(4)</a>
+	maximum physio i/o size to 128K.
+    <li>Fixed probing of modern <a href="https://man.openbsd.org/scsi.4">scsi(4)</a>
+	devices to ignore the SYNC and WIDE flags used by parallel SCSI.
   </ul>
 
 <li>Removed hardware support
   <ul>
-	<li>Removed sitaracm(4), for the Sitara ARM control module device integrated in AM335X SoCs.
 	<li>Removed the rtfps(4) driver, a multiplexing serial communications interface for IBM RT PC boards 
-	<li>Removed the sli(4), the Emulex LightPulse Fibre Channel SCSI interface driver.
 	<li>Removed the dpt(4) driver for DPT EATA SCSI RAID.
 	<li>Removed gpr(4), a driver for GemPlus GPR400 PCMCIA smartcard readers.
+	<li>Removed mesh(4), a driver for old world Apple Power Macintosh SCSI cards.
   </ul>
 
 <li>Improvements in audio drivers and the
 	<a href="https://man.openbsd.org/sndio">sndio(7)</a> framework:
   <ul>
     <li>Introduced the <a
-	href="https://man.openbsd.org/sndioctl">sndioctl(1)</a> utility to
-	control audio parameters exposed by <a
+	href="https://man.openbsd.org/sioctl_open">sioctl_open(3)</a>
+	API to manipulate audio controls exposed by <a
 	href="https://man.openbsd.org/sndiod">sndiod(8)</a>.
-    <li>Increased the default number of audio devices to 4.
-    <li>Disabled access for regular users to /dev/audio* and
-	/dev/rmidi*, creating these devices owned by root:_sndiod.
-    <li>Added the <a href="https://man.openbsd.org/sndioctl">
-	sndioctl(1)</a> -n option to suppress variable names in output and the
-	-q option to suppress output when setting variables, as in <a
-	href="https://man.openbsd.org/mixerctl">mixerctl(1)</a>.
     <li>Modified <a
-	href="https://man.openbsd.org/mixerctl">mixerctl(1)</a> to use
-	/dev/audioctlN instead of /dev/mixerN.
-    <li>Made libossaudio use <a
+	href="https://man.openbsd.org/sndiod">sndiod(8)</a> to
+	use and expose hardware volume controls if available.
+    <li>Modified all ports manipulating audio controls to use <a
 	href="https://man.openbsd.org/sndio">sndio(7)</a> instead of the
 	kernel <a href="https://man.openbsd.org/mixer">mixer(4)</a> interface.
-    <li>Exposed the first 8 <a
-	href="https://man.openbsd.org/midi">midi(4)</a> devices to <a
-	href="https://man.openbsd.org/sndiod">sndiod(8)</a> clients if no -q
-	options are used.
-    <li>Corrected inappropriate rate selection in <a
-	href="https://man.openbsd.org/uaudio">uaudio(4)</a> preventing
-	recording on devices supporting fewer rates for recording than
-	playback.
     <li>Introduced the <a
 	href="https://man.openbsd.org/sndioctl">sndioctl(1)</a> utility to
-	control audio parameters exposed by <a
+	manipulate audio controls exposed by <a
 	href="https://man.openbsd.org/sndiod">sndiod(8)</a>.
+    <li>Exposed the first 4 <a
+	href="https://man.openbsd.org/audio">audio(4)</a> devices
+	and the first 8 <a
+	href="https://man.openbsd.org/midi">midi(4)</a> devices through <a
+	href="https://man.openbsd.org/sndiod">sndiod(8)</a> by default.
+    <li>Disabled access for regular users to /dev/audio* and
+	/dev/rmidi*, for improved security.
+    <li>Modified <a
+	href="https://man.openbsd.org/mixerctl">mixerctl(1)</a> to use
+	/dev/audioctl* instead of /dev/mixer*.
+    <li>Removed /dev/mixer*
+    <li>Fixed support for <a
+	href="https://man.openbsd.org/uaudio">uaudio(4)</a>
+	devices with different recording and playback rate sets.
+    <li>Fixed volume control of many <a
+	href="https://man.openbsd.org/uaudio">uaudio(4)</a>
+	devices.
     <li>Fixed channel duplication (-j option) in <a
 	href="https://man.openbsd.org/sndiod">sndiod(8)</a>.
-    <li>Prevented an overflow due to <a
-	href="https://man.openbsd.org/xen">xen(4)</a> failing to release the
-	interrupt source when unmasking the interrupt.
-    <li>Implemented a hexdump command in the bootloader, helping to
-	inspect the memory layout created by the firmware and useful for UEFI
-	debugging.
     <li>Allowed <a href="https://man.openbsd.org/rc.d">rc.d(8)</a>
 	script to reload <a
 	href="https://man.openbsd.org/sndiod">sndiod(8)</a>.
@@ -437,13 +444,12 @@ to 6.7.
 and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, including:
   <ul>
     <li>Better hardware support for the i.MX8MM platform.
-    <li>Better support for Raspbery Pi 3 and 4
+    <li>Support for the Raspberry Pi 4 on arm64.
+    <li>Better support for the Raspbery Pi 3 on arm64.
+    <li>Proper support for the Raspberry Pi 2 and 3 on armv7.
     <li>Better support for Rockchip based systems, especially the Pinebook Pro.
-    <li>Added arm64 support for lldb.
     <li>Switched USB to use non-coherent buffers for data transfers, dramatically improving performance on some ARM SoCs where the USB controller is not coherent with the caches.
-    <li>Resolved syscall speculation in armv7 cpus as in arm64, changing the system call ABI to skip two instructions and inserting speculation-blocking sequences.
-    <li>Added /dev/drm[0-3] on arm64.
-    <li>Allowed switching to framebuffer "glass" console on armv7, mirroring previous changes to arm64.
+    <li>Allowed switching to framebuffer "glass" console on armv7 in the bootloader, mirroring previous changes to arm64.
     <li>Corrected cache flush operations on arm64 which were being incorrectly treated as write operations. This fixes a bug where cache flushing caused Firefox to abort.
     <li>Added the capability for armv7 boot from another block device than the one from which efiboot was loaded.
     <li>Enabled <a href="https://man.openbsd.org/umt">umt(4)</a> (USB HID multitouch touchpad devices) on arm64.
@@ -460,59 +466,38 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Added <a href="https://man.openbsd.org/bcmclock">bcmclock(4)</a>, a driver for the BCM283X CPRMAN clock controller.
     <li>Added <a href="https://man.openbsd.org/bcmmbox">bcmmbox(4)</a>, a driver for the VideoCore messagebox interface on BCM283X.
     <li>Added <a href="https://man.openbsd.org/bcmpcie">bcmpcie(4)</a>, a driver for the PCIe controller found on the Raspberry Pi 4.
-
-
     <li>Added <a href="https://man.openbsd.org/bse">bse(4)</a>, a driver for the Broadcom GENET v5 network interface found on the Raspberry Pi 4.
     <li>Added <a href="https://man.openbsd.org/brgphy">brgphy(4)</a> support for the Broadcom BCM54210E.
     <li>Added support for the Armada 3720 CPU clock to <a href="https://man.openbsd.org/mvclock">mvclock(4)</a>.
-    <li>Fixed <a href="https://man.openbsd.org/mvneta">mvneta(4)</a> on arm64.
+    <li>Fixed address filter in <a href="https://man.openbsd.org/mvneta">mvneta(4)</a>.
     <li>Added <a href="https://man.openbsd.org/omcm">omcm(4)</a>, <a href="https://man.openbsd.org/omclock">omclock(4)</a> and <a href="https://man.openbsd.org/omsysc">omsysc(4)</a> drivers that support the new bus structure used in current mainline Linux device trees.
     <li>Added <a href="https://man.openbsd.org/omrng">omrng(4)</a>, a driver for the random number generator found on TI OMAP SoCs.
     <li>Fixed the MAC address on Pandaboard-ES by increasing <a href="https://man.openbsd.org/smsc">smsc(4)</a> buffer size used to fetch device tree properties.
     <li>Added support for additional Allwinner A80 clocks and resets in <a href="https://man.openbsd.org/sxiccmu">sxiccmu(4)</a>.
     <li>Fixed <a href="https://man.openbsd.org/amlpciephy">amlpciephy(4)</a> USB3 support when USB has not been initialized by U-Boot.
-    <li>Fixed a crash when no device ports have been registered in ofw.
     <li>Added clock support for i.MX8MM.
     <li>Fixed CPU frequency scaling support on the Librem5 Devkit.
     <li>Added <a href="https://man.openbsd.org/imxpwm">imxpwm(4)</a>, a driver for the PWM controller found on various NXP i.MX SoCs.
     <li>Added support for reading the i.MX8MM temperature sensors to <a href="https://man.openbsd.org/imxtmu">imxtmu(4)</a>.
     <li>Added <a href="https://man.openbsd.org/bdpmic">bdpmic(4)</a>, a driver for the ROHM BD71837 and BD71847 Power Management IC.
-    <li>Fixed "ipmi0: sendcmd fails" errors when there is an <a href="https://man.openbsd.org/ipmi">ipmi(4)</a> sensor which is enumerated but has failed to be read.
     <li>Allowed <a href="https://man.openbsd.org/ipmi">ipmi(4)</a> to attach using mmio.
-
     <li>Added <a href="https://man.openbsd.org/rkrng">rkrng(4)</a>, a driver for the random number generator found on various Rockchip SoCs.
-    <li>Added glass console support to <a href="https://man.openbsd.org/rkdrm">rkdrm(4)</a> in Rockchip SoCs.
+    <li>Added glass console support to <a href="https://man.openbsd.org/rkdrm">rkdrm(4)</a> in Rockchip SoCs, including kernel modesetting support.
     <li>Added <a href="https://man.openbsd.org/rkdrm">rkdrm(4)</a>, a driver providing kernel mode setting (KMS) functionality for the graphics hardware integrated on Rockchip SoCs.
-    <li>Added support for RK3328 Crypto/RNG clocks.
-    <li>Implemented the page fault handler for CMA GEM buffers and made <a href="https://man.openbsd.org/drm">drm(4)</a> attach to <a href="https://man.openbsd.org/rkdrm">rkdrm(4)</a>, making KMS work on the RK3399 SoC.
     <li>Added <a href="https://man.openbsd.org/rkdwhdmi">rkdwhdmi(4)</a>, a driver for the HDMI transmitter found on the Rockchip RK3399 SoC.
-    <li>Added <a href="https://man.openbsd.org/rkanxdp">rkanxdp(4)</a>, an attachment driver for the Analogix Display Port on the RK3399.
+    <li>Added <a href="https://man.openbsd.org/rkanxdp">rkanxdp(4)</a>, a driver for the Analogix Display Port controller on the RK3399.
     <li>Added <a href="https://man.openbsd.org/rkvop">rkvop(4)</a>, a driver for the RK3399's Video Output Processors.
-    <li>Added support for the RK3399's VOP clocks to <a href="https://man.openbsd.org/rkclock">rkclock(4)</a>.
     <li>Added <a href="https://man.openbsd.org/rkpwm">rkpwm(4)</a>, a driver for the RK3399's PWM controller.
-    <li>Added support for the RK3399's PWM clock to <a href="https://man.openbsd.org/rkclock">rkclock(4)</a>.
     <li>Added <a href="https://man.openbsd.org/rkemmcphy">rkemmcphy(4)</a>, a driver for the RK3399's eMMC PHY.
-    <li>Added support for the RK3399's eMMC clock to <a href="https://man.openbsd.org/rkclock">rkclock(4)</a>.
     <li>Added support for gen2 negotiation to <a href="https://man.openbsd.org/rkpcie">rkpcie(4)</a> and enabled gen2 link state training when the dtb is configured with max-link-speed = 2.
-    <li>Added panel support to <a href="https://man.openbsd.org/rkanxdp">rkanxdp(4)</a>.
-    <li>Introduced VPLL clock frequency setting to <a href="https://man.openbsd.org/rkclock">rkclock(4)</a>.
-    <li>Implemented support for read transfers larger than 32 bytes for <a href="https://man.openbsd.org/rkiic">rkiic(4)</a> controllers and registered the i2c bus, allowing future HDMI support.
-    <li>Restored enabling and setting the output tap delay in <a href="https://man.openbsd.org/rkemmcphy">rkemmcphy(4)</a>, fixing the eMMC module on the rockpro64.
-
     <li>Enabled backlight control use on the Pinebook Pro via <a href="https://man.openbsd.org/wsconsctl">wsconsctl(8)</a>.
     <li>Fixed the Pinebook Pro's trackpad by ensuring only hid_input items are accepted when walking the HID descriptor.
     <li>Fixed <a href="https://man.openbsd.org/pwmbl">pwmbl(4)</a> attachment on the Pinebook Pro.
-    <li>Added <a href="https://man.openbsd.org/simplepanel">simplepanel(4)</a>, a driver for simple display panels. This allows enabling of the Pinebook Pro display panel.
+    <li>Added <a href="https://man.openbsd.org/simplepanel">simplepanel(4)</a>, a driver for simple display panels such as the one found on the Pinebook Pro.
     <li>Recognized BCM4345 rev 9 as shipped with the Pinebook Pro as an AMPAK AP6256 module in <a href="https://man.openbsd.org/bwfm">bwfm(4)</a>.
     <li>Improved <a href="https://man.openbsd.org/bwfm">bwfm(4)</a> on the Pinebook Pro by acking SDIO interrupts earlier on <a href="https://man.openbsd.org/dwmmc">dwmmc(4)</a>.
-    <li>Added <a href="https://man.openbsd.org/sxipwm">sxipwm(4)</a> and <a href="https://man.openbsd.org/pwmbl">pwmbl(4)</a>, drivers which jointly add support for the backlight controller on the Pinebook.
-
-    <li>Added <a href="https://man.openbsd.org/anxdp">anxdp(4)</a>, a driver for the Analogix Display Port controller.
     <li>Added <a href="https://man.openbsd.org/amltemp">amltemp(4)</a>, a driver for the temperature sensors on various Amlogic SoCs.
-    <li>Added thermal sensor clocks to <a href="https://man.openbsd.org/amlclock">amlclock(4)</a>.
     <li>Added <a href="https://man.openbsd.org/pwmfan">pwmfan(4)</a>, a driver for PWM-regulated fans.
-
-
   </ul>
 
 <li>IEEE 802.11 wireless stack improvements and bugfixes:
@@ -667,8 +652,8 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 	environment at shell initialization time.
     <li>Ensured the first 2MB page of the amd64 kernel is correctly
 	mapped read-only in the direct map.
-    <li>Addressed an arm64 speculative execution issue by changing the
-	arm64 system call ABI to skip two instructions and inserting a barrier
+    <li>Addressed an armv7/arm64 speculative execution issue by changing the
+	system call ABI to skip two instructions and inserting a barrier
 	after each system call.
     <li>Fixed arm64 speculative execution of instructions after ERET,
 	which had led to spectre-like effects on some processors.
@@ -733,52 +718,9 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Added point-to-point <a
 	href="https://man.openbsd.org/ospf6d">ospf6d(8)</a> support for
 	broadcast interfaces.
-<!-- iked -->
-    <li>Added <a href="https://man.openbsd.org/iked">iked(8)</a>
-	support for switching rdomain on <a
-	href="https://man.openbsd.org/ipsec">ipsec(4)</a>
-	encryption/decryption, configurable per policy with the new 'rdomain'
-	option in <a
-	href="https://man.openbsd.org/iked.conf">iked.conf(5)</a>.
-    <li>Added support for automatically moving traffic between
-	rdomains on <a href="https://man.openbsd.org/ipsec">ipsec(4)</a>
-	encryption or decryption, reducing the attack surface for network
-	sidechannel attacks.
-    <li>Modified <a href="https://man.openbsd.org/iked">iked(8)</a> to
-	always prefer generic signature authentication.
-    <li>Fixed an <a href="https://man.openbsd.org/iked">iked(8)</a>
-	pubkey leak in the CA process for ASN-DN IDs.
+<!-- other daemons -->
     <li>Reduced temporary address valid lifetime to 2 days in <a
 	href="https://man.openbsd.org/slaacd">slaacd(8)</a>.
-    <li>Fixed user database corruption resulting from use of the <a
-	href="https://man.openbsd.org/ikectl">ikectl(8)</a> reload command.
-    <li>Added the <a
-	href="https://man.openbsd.org/ikectl">ikectl(8)</a> "show sa" command
-	to print information about the state of negotiated IKE SAs, their
-	Child SAs and the resulting IPsec flows.
-    <li>Added an <a
-	href="https://man.openbsd.org/ikectl">ikectl(8)</a> "reset id" command
-	to reset all SAs from policies with matching destination IDs.
-    <li>Corrected <a href="https://man.openbsd.org/iked">iked(8)</a>
-	calculation of IPv6 address leases from small address pools.
-    <li>Added a policy relookup to <a
-	href="https://man.openbsd.org/iked">iked(8)</a> to replace the default
-	policy based on a received cryptographic parameter proposal.
-    <li>Added transport mode for child SAs to <a
-	href="https://man.openbsd.org/iked.conf">iked.conf(5)</a>.
-    <li>Extended the <a
-	href="https://man.openbsd.org/ipsecctl">ipsecctl(8)</a> parser to set
-	the udpencap flag and port number of an SA.
-    <li>Added a -p command line option to <a
-	href="https://man.openbsd.org/iked">iked(8)</a> allowing configuration
-	of the UDP encapsulation port.
-    <li>Removed IPsec flow blocking unencrypted IPv6 traffic in <a
-	href="https://man.openbsd.org/iked">iked(8)</a>.
-    <li>Fixed <a href="https://man.openbsd.org/isakmpd">isakmpd(8)</a>
-	IKE pcap file creation.
-    <li>Enabled ESP UDP-encapsulation with the <a
-	href="https://man.openbsd.org/iked">iked(8)</a> -t flag.
-<!-- other daemons -->
     <li>Validated authentication lengths in <a
 	href="https://man.openbsd.org/ripd">ripd(8)</a> before use to prevent
 	crashes.
@@ -903,9 +845,10 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Added <a
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> output
 	formats for bird and CSV.
+  </ul>
 
-<!-- unwind -->
-
+<li><a href="https://man.openbsd.org/unwind">unwind(8)</a> improvements:
+  <ul>
     <li>Implemented <a
 	href="https://man.openbsd.org/unwindctl">unwindctl(8)</a> status
 	memory to show cache memory usage.
@@ -913,31 +856,97 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 	resolvers in <a
 	href="https://man.openbsd.org/unwind.conf">unwind.conf(5)</a>,
 	handling typical split-horizon setups.
-    <li>Decayed the <a
-	href="https://man.openbsd.org/unwind">unwind(8)</a> resolver histogram
-	data over time to reflect strategy performance.
     <li>Measured performance of resolving strategies in <a
 	href="https://man.openbsd.org/unwind">unwind(8)</a>, sorting them and
-	choosing the next best strategy when one fails.
-    <li>Removed captive portal detection from <a
-	href="https://man.openbsd.org/unwind">unwind(8)</a>.
-    <li>Added tracking of which interfaces have learned nameservers to
-	<a href="https://man.openbsd.org/unwind">unwind(8)</a>.
-    <li>Began resolving captive portal hosts internally in <a
+        choosing the next best strategy when one fails.
+        Performance data decays over time.
+    <li>Switched captive portal detection from HTTP probing to DNS probing in <a
 	href="https://man.openbsd.org/unwind">unwind(8)</a>.
     <li>Implemented DNS proposals in <a
 	href="https://man.openbsd.org/unwind">unwind(8)</a> to learn
 	nameservers from network autoconfiguration daemons.
-    <li>Moved /usr and var remounting earlier to allow <a
-	href="https://man.openbsd.org/unwind">unwind(8)</a> to start before <a
-	href="https://man.openbsd.org/pf">pf(4)</a> is configured.
     <li>Added opportunistic DoT support to <a
 	href="https://man.openbsd.org/unwind">unwind(8)</a>.
     <li>Added an ASR resolver type to <a
 	href="https://man.openbsd.org/unwind">unwind(8)</a>, using the libc
-	asynchronous resolver directly with DHCP-provided nameservers.
-	Switched to the ASR resolver rather than DHCP when behind a captive
-	portal.
+        asynchronous resolver directly with DHCP-provided nameservers to work
+        around broken middle boxes.
+  </ul>
+
+<li><a href="https://man.openbsd.org/ipsec">ipsec(4)</a> improvements and
+    bugfixes:
+  <ul>
+    <li>Added support for automatically moving traffic between
+	rdomains on <a href="https://man.openbsd.org/ipsec">ipsec(4)</a>
+	encryption or decryption, reducing the attack surface for network
+	sidechannel attacks.
+    <li>Added <a href="https://man.openbsd.org/iked">iked(8)</a>
+	support for switching rdomain on <a
+	href="https://man.openbsd.org/ipsec">ipsec(4)</a>
+	encryption/decryption, configurable per policy with the new
+	'rdomain' option in <a
+	href="https://man.openbsd.org/iked.conf">iked.conf(5)</a>.
+    <li>Changed the default ipsec level set by <a
+	href="https://man.openbsd.org/iked">iked(8)</a> and <a
+	href="https://man.openbsd.org/isakmpd">isakmpd(8)</a> to
+	IPSEC_LEVEL_REQUIRE. Unencrypted packets matching incoming
+	ipsec flows are no longer accepted by default.
+    <li>Added curve25519, ecp256, ecp384, ecp521, modp3072 and modp4096 to
+	the default Diffie-Hellman group configuration for IKE SAs in
+	<a href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Removed support for the insecure EC2N Diffie-Hellman groups in <a
+	href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Changed the default authentication method in <a
+	href="https://man.openbsd.org/iked">iked(8)</a> to
+	generic signature authentication (RFC 7427).
+    <li>Added ESN configuration options for ikesa in <a
+	href="https://man.openbsd.org/iked.conf">iked.conf(5)</a>.
+    <li>Added transport mode for child SAs to <a
+	href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Added active probing for lost connection in <a
+	href="https://man.openbsd.org/iked">iked(8)</a> resulting in a
+	faster connection reset.
+    <li>Added a -p command line option to <a
+	href="https://man.openbsd.org/iked">iked(8)</a> allow configuration
+	of a non-standard UDP encapsulation port.
+    <li>Added support for multiple x509 extensions and multiple
+	subjectAltName fields in certificates used with <a
+	href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Added support for certificates with uppercase subjectAltNames
+	in <a href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Removed automatically installed <a
+	href="https://man.openbsd.org/ipsec">ipsec(4)</a> flow blocking
+	unencrypted IPv6 traffic in <a
+	href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Reduced size of IKE_AUTH message by eliminating duplicate traffic
+	selectors in <a href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Added an <a
+	href="https://man.openbsd.org/ikectl">ikectl(8)</a> "show sa"
+	command to print information about the state of negotiated IKE SAs,
+	their child SAs and the resulting IPsec flows.
+    <li>Added an <a
+	href="https://man.openbsd.org/ikectl">ikectl(8)</a> "reset id"
+	command to reset all SAs from policies with matching destination IDs.
+    <li>Added support for UDP encapsulation in manual SAs set up with <a
+	href="https://man.openbsd.org/ipsec.conf">ipsec.conf(5)</a>.
+    <li>Fixed an <a href="https://man.openbsd.org/iked">iked(8)</a>
+	bug that lead to connection loss after simultaneous rekeying.
+    <li>Fixed an <a href="https://man.openbsd.org/iked">iked(8)</a>
+	public key leak in the CA process for ASN-DN IDs.
+    <li>Fixed  a bug that lead to a lost EAP ID after rekeying in <a
+	href="https://man.openbsd.org/iked">iked(8)</a>.
+    <li>Fixed EAP user database corruption resulting from use of the <a
+	href="https://man.openbsd.org/ikectl">ikectl(8)</a> reload command.
+    <li>Corrected <a href="https://man.openbsd.org/iked">iked(8)</a>
+	calculation of IPv6 address leases from small address pools.
+    <li>Fixed several bugs that could lead to <a
+	href="https://man.openbsd.org/iked">iked(8)</a> selecting a false policy
+	for incoming requests, resulting in a failed handshake.
+    <li>Fixed a bug that broke PSK authentication against Strongswan.
+    <li>Enabled UDP-encapsulation in Child SAs if <a
+	href="https://man.openbsd.org/iked">iked(8)</a> was started with -t.
+    <li>Fixed <a href="https://man.openbsd.org/isakmpd">isakmpd(8)</a>
+	IKE pcap file creation.
   </ul>
 
 <li><a href="https://man.openbsd.org/tmux">tmux(1)</a> improvements and bug fixes:
@@ -1127,27 +1136,30 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 
 <li>LibreSSL 3.1.1
   <ul>
-    <li>API and Documentation Enhancements
+    <li>New Features
     <ul>
 	<li>Completed initial TLS 1.3 implementation with a completely new state
 	    machine and record layer. TLS 1.3 is now enabled by default for the
 	    client side, with the server side to be enabled in a future release.
 	    Note that the OpenSSL TLS 1.3 API is not yet visible/available.
-	<li>Improved SSL_CTX_set_cipher_list(3) and SSL_set_cipher_list(3) to
-	    include TLSv1.3 cipher suites even if cipher string does not
-	    indicate it.
-	<li>Improved to handle TLSv1.3 HelloRetryRequest.
+	<li>Improved cipher suite handling to automatically include TLSv1.3
+            cipher suites when they are not explicitly referred to in the
+            cipher string.
 	<li>Provided TLSv1.3 cipher suite aliases to match the names used
 	    in RFC 8446.
-	<li>Improved to allow using any of the groups in our NID list to
-	    generate a client key share.
-	<li>Added RSA-PSS and RSA-OAEP methods from OpenSSL 1.1.1.
-	<li>Ported Cryptographic Message Syntax (CMS) implementation from OpenSSL
-	    1.1.1 and enabled by default.
+	<li>Improved TLSv1.3 client key share handling to allow the use of
+	    any groups in our configured NID list.
 	<li>Added cms subcommand to openssl(1).
 	<li>Added -addext option to openssl(1) req subcommand.
 	<li>Added -groups option to openssl(1) s_server subcommand.
-	<li>Fixed to show TLSv1.3 extension type with openssl(1) -tlsextdebug.
+	<li>Added TLSv1.3 extension types to openssl(1) -tlsextdebug.
+    </ul>
+
+    <li>API and Documentation Enhancements
+    <ul>
+	<li>Added RSA-PSS and RSA-OAEP methods from OpenSSL 1.1.1.
+	<li>Ported Cryptographic Message Syntax (CMS) implementation from OpenSSL
+	    1.1.1 and enabled by default.
     </ul>
 
     <li>Compatibility Changes
@@ -1160,7 +1172,7 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Testing and Proactive Security
     <ul>
 	<li>Added many new additional crypto test vectors.
-	<li>Fixed to disallow setting the AES-GCM IV length to zero.
+	<li>Fix to disallow setting the AES-GCM IV length to zero.
     </ul>
 
     <li>Internal Improvements
@@ -1274,19 +1286,33 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 	</ul>
   </ul>
 
-<li>Mandoc
+<li>Mandoc 1.14.6
   <ul>
-    <li>Introduced <a
-	href="https://man.openbsd.org/mandoc">mandoc(1)</a> nodes which are
-	semantically transparent, skipped when looking for previous or
-	following high-level macros.
     <li>Introduced a new <a
 	href="https://man.openbsd.org/mdoc">mdoc(7)</a> macro .Tg ("tag") to
-	explicitly mark a place as defining a term.
+	explicitly mark a place as defining a term, and improved automatic
+	tagging in various ways.
+    <li>Print the manpath when the <a
+	href="https://man.openbsd.org/man.1#w">man(1) -w</a> option
+	is given without an argument, for compatibility with the man-1.6
+	and man-db implementations.
+    <li>Deleted support for the <a
+	href="https://man.openbsd.org/OpenBSD-6.6/man.conf.5#_whatdb"
+	>_whatdb</a> configuration directive from
+	<a href="https://man.openbsd.org/man.conf.5">man.conf(5)</a>
+	five years after it was declared obsolete; use <a
+	href="https://man.openbsd.org/man.conf.5#manpath">manpath</a> instead.
     <li>Added a Content-Security-Policy HTTP header to <a
-	href="https://man.openbsd.org/mandoc">mandoc(1)</a> that allows only
-	CSS.
-
+	href="https://man.openbsd.org/man.cgi.8">man.cgi(8)</a>
+	that allows only CSS.
+    <li>Provide a STYLE message when <a
+	href="https://man.openbsd.org/mandoc.1">mandoc(1)</a> knows the
+	filename and the extension disagrees with the section number
+	given in the .Dt or .TH macro.
+    <li>When the <a href="https://man.openbsd.org/mdoc.7">mdoc(7)</a> .Dd
+	macro lacks an argument, use the empty string, and always
+	concatenate all arguments, no matter their number.
+	The same change was applied to groff.
   </ul>
 
 <li>Ports and packages:
@@ -1515,7 +1541,7 @@ If nothing works, you can boot over the network as described in INSTALL.sparc64.
 <section id=upgrade>
 <h3>How to upgrade</h3>
 <p>
-If you already have an OpenBSD 6.6<!-- XXX -1 --> system, and do not want to reinstall,
+If you already have an OpenBSD 6.6 system, and do not want to reinstall,
 upgrade instructions and advice can be found in the
 <a href="faq/upgrade67.html">Upgrade Guide</a>.
 </section>
