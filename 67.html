@@ -216,7 +216,7 @@ to 6.7.
     <li>Enabled FFS2 on the landisk ramdisk.
     <li>Taught i386 boot(8), cdboot(8) and pxeboot(8) about ffs2.
     <li>Taught macppc boot(8) about ffs2.
-    <li>Taught sparc64 boot(8) (but not the sparc64 bootblocks) about ffs2.
+    <li>Taught sparc64 boot(8) about ffs2.
     <li>Allowed hppa <a href="https://man.openbsd.org/man8/hppa/boot.8">boot(8)</a>  to read from an ffs2 filesystem.
     <li>Allowed alpha boot(8) to read from an ffs2 filesystem and adapted its custom installboot to deal with ffs2. Also fixed the partition read code to deal with offsets greater than 2G.
     <li>Adapted <a href="https://man.openbsd.org/biosboot">biosboot(8)</a> so that it can read <a href="https://man.openbsd.org/boot.8">boot(8)</a> from an ffs2 filesystem.
@@ -1147,8 +1147,6 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
             cipher string.
 	<li>Provided TLSv1.3 cipher suite aliases to match the names used
 	    in RFC 8446.
-	<li>Improved TLSv1.3 client key share handling to allow the use of
-	    any groups in our configured NID list.
 	<li>Added cms subcommand to openssl(1).
 	<li>Added -addext option to openssl(1) req subcommand.
 	<li>Added -groups option to openssl(1) s_server subcommand.
