@@ -445,7 +445,7 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
   <ul>
     <li>Better hardware support for the i.MX8MM platform.
     <li>Support for the Raspberry Pi 4 on arm64.
-    <li>Better support for the Raspbery Pi 3 on arm64.
+    <li>Better support for the Raspberry Pi 3 on arm64.
     <li>Proper support for the Raspberry Pi 2 and 3 on armv7.
     <li>Better support for Rockchip based systems, especially the Pinebook Pro.
     <li>Switched USB to use non-coherent buffers for data transfers, dramatically improving performance on some ARM SoCs where the USB controller is not coherent with the caches.
@@ -727,20 +727,6 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Fixed empty response packages sent out by <a
 	href="https://man.openbsd.org/ripd">ripd(8)</a> when entries are
 	skipped due to split-horizon simple.
-    <li>Correctly parse "0/0" as the default route when specifying
-	the classless-[ms-]static-routes options in <a
-	href="https://man.openbsd.org/dhcpd.conf">dhcpd.conf(5)</a>.
-    <li>Allowed <a
-	href="https://man.openbsd.org/dhclient">dhclient(8)</a> configuration
-	of <a href="https://man.openbsd.org/carp">carp(4)</a> interfaces.
-    <li>Rejected leases in <a
-	href="https://man.openbsd.org/dhclient">dhclient(8)</a> not providing
-	a subnet mask for the address being provided.
-    <li>Constrained and corrected the routes being deleted when
-	applying a new lease in <a
-	href="https://man.openbsd.org/dhclient">dhclient(8)</a> and corrected
-	route comparison. This corrects a network failure with "arpresolve:
-	... route contains no information".
     <li>Made <a href="https://man.openbsd.org/slaacd">slaacd(8)</a>
 	honor the rdomain in which it runs when configuring the default route.
     <li>Withdrew all proposals on <a
