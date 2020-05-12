@@ -92,7 +92,7 @@ to 6.7.
 	to the command field, indicating that only a single instance of the
 	job should run concurrently.
     <li>Added <a href="https://man.openbsd.org/cron">cron(8)</a>
-	support for random values using the ~ operator.
+	support for random time values using the ~ operator.
     <li>Allowed <a href="https://man.openbsd.org/cwm">cwm(1)</a>
 	configuration of window size based on percentage of the master window
 	during horizontal and vertical tiling actions.
@@ -451,7 +451,6 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Allowed switching to framebuffer "glass" console on armv7 in the bootloader, mirroring previous changes to arm64.
     <li>Corrected cache flush operations on arm64 which were being incorrectly treated as write operations. This fixes a bug where cache flushing caused Firefox to abort.
     <li>Added the capability for armv7 boot from another block device than the one from which efiboot was loaded.
-    <li>Enabled <a href="https://man.openbsd.org/umt">umt(4)</a> (USB HID multitouch touchpad devices) on arm64.
     <br><br>
     Specifically the following device drivers were added or fixed:
     <li>Added <a href="https://man.openbsd.org/bcmbsc">bcmbsc(4)</a>, a driver for the Broadcom Serial Control (BSC) controller.
@@ -497,6 +496,7 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
     <li>Improved <a href="https://man.openbsd.org/bwfm">bwfm(4)</a> on the Pinebook Pro by acking SDIO interrupts earlier on <a href="https://man.openbsd.org/dwmmc">dwmmc(4)</a>.
     <li>Added <a href="https://man.openbsd.org/amltemp">amltemp(4)</a>, a driver for the temperature sensors on various Amlogic SoCs.
     <li>Added <a href="https://man.openbsd.org/pwmfan">pwmfan(4)</a>, a driver for PWM-regulated fans.
+    <li>Enabled <a href="https://man.openbsd.org/umt">umt(4)</a> (USB HID multitouch touchpad devices) on arm64.
   </ul>
 
 <li>IEEE 802.11 wireless stack improvements and bugfixes:
@@ -624,11 +624,12 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 	href="https://man.openbsd.org/systat">systat(1)</a>.
 
 <!-- dig -->
+
     <li>Extracted <a href="https://man.openbsd.org/dig">dig(1)</a>, <a
 	href="https://man.openbsd.org/host">host(1)</a> and <a
 	href="https://man.openbsd.org/nslookup">nslookup(1)</a> from the
-	bind(8) source code, cleanup the source code by removing not needed
-	features and auditing it. The kernel API accessible to these
+	bind(8) source code and cleaned up the source code by removing not
+	needed features and auditing it. The kernel API accessible to these
 	programs is now restricted through <a
 	href="https://man.openbsd.org/pledge">pledge(2)</a>.
     <li>System calls may now only be performed from selected code regions:
@@ -718,14 +719,14 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 	href="https://man.openbsd.org/ospf6d">ospf6d(8)</a> support for
 	broadcast interfaces.
 <!-- other daemons -->
-    <li>Reduced temporary address valid lifetime to 2 days in <a
-	href="https://man.openbsd.org/slaacd">slaacd(8)</a>.
     <li>Validated authentication lengths in <a
 	href="https://man.openbsd.org/ripd">ripd(8)</a> before use to prevent
 	crashes.
     <li>Fixed empty response packages sent out by <a
 	href="https://man.openbsd.org/ripd">ripd(8)</a> when entries are
 	skipped due to split-horizon simple.
+    <li>Reduced temporary address valid lifetime to 2 days in <a
+	href="https://man.openbsd.org/slaacd">slaacd(8)</a>.
     <li>Made <a href="https://man.openbsd.org/slaacd">slaacd(8)</a>
 	honor the rdomain in which it runs when configuring the default route.
     <li>Withdrew all proposals on <a
@@ -790,8 +791,9 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 
     <li>Allowed <a href="https://man.openbsd.org/pfctl">pfctl(8)</a>
 	to recursively flush rules and tables.
-    <li>Ensured rdr-to with loopback destination will work even when
-	IP forwarding is disabled.
+    <li>In <a href="https://man.openbsd.org/pf">pf(4)</a>, ensured
+	rdr-to with loopback destination will work even when IP forwarding is
+	disabled.
 
 <!-- rpki-client -->
 
@@ -808,25 +810,26 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> and
 	reload <a href="https://man.openbsd.org/bgpd">bgpd(8)</a>
 	configuration, enabling RPKI ROA filtering.
-    <li>Stopped hardcoding the cache directory for <a
+    <li>Stopped hardcoding the cache directory in <a
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a>. Cache
 	and output directory will use defaults for root users and must be
 	specified by non-root users.
     <li>Made <a
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> use
-	with the existing cache and not exit if rsync(1) exits non-zero.
+	the existing cache and not exit if rsync(1) exits non-zero.
     <li>Fixed <a
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> -j
 	option, which had not been producing any output.
-    <li>Generated three different BIRD outputs with <a
-	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> -B: v1
-	with IPv4 and IPv6 routes, and v2.
     <li>Rewrote the time validity check for mtfs in <a
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> to
 	correctly account for the timezone.
     <li>Added <a
 	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> output
-	formats for bird and CSV.
+	formats for the BIRD routing daemon and CSV.
+    <li>For BIRD <a
+	href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> can
+	generate three different output formats with the option
+	<code>-B</code>: v1 with IPv4 and IPv6 routes, and v2.
   </ul>
 
 <li><a href="https://man.openbsd.org/unwind">unwind(8)</a> improvements:
@@ -1314,14 +1317,14 @@ and <a href="https://www.openbsd.org/armv7.html">armv7</a> hardware support, inc
   <p>Many pre-built packages for each architecture:
   <!-- number of FTP packages minus SHA256, SHA256.sig, index.txt -->
   <ul style="column-count: 3">
-    <li>aarch64:      XXXX
-    <li>amd64:        XXXX
+    <li>aarch64:     10848
+    <li>amd64:       11268
     <li>arm:          XXXX
-    <li>i386:         XXXX
+    <li>i386:        10715
     <li>mips64:       XXXX
     <li>mips64el:     XXXX
     <li>powerpc:      XXXX
-    <li>sparc64:      XXXX
+    <li>sparc64:      9850
   </ul>
 
 <li>As usual, steady improvements in manual pages and other documentation.
