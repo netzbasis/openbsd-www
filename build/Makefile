@@ -1,7 +1,8 @@
 # Makefile for WWW subdirectory.
 
-STABLE_VERSION=	6.6
-PREV_VERSION=	6.5
+# XXXrelease: 6.8 .fs files renamed to .img
+STABLE_VERSION=	6.7
+PREV_VERSION=	6.6
 
 # also update mirrors/openbgpd-ftp.html.head
 OPENBGPD_VERSION=		6.6p0
@@ -10,7 +11,7 @@ OPENBGPD_VERSION=		6.6p0
 OPENNTPD_PORTABLE_VERSION=	6.2p3
 
 # also update mirrors/rpki-client-portable.html.head
-RPKI_CLIENT_PORTABLE_VERSION=	6.6p2
+RPKI_CLIENT_PORTABLE_VERSION=	6.7p0
 
 OPENSSH_VERSION=		8.2
 OPENSSH_PORTABLE_VERSION=	8.2p1

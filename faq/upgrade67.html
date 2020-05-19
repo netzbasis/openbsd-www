@@ -21,7 +21,7 @@ Upgrade Guide: 6.6 to 6.7
 <p>
 <a href="index.html">[FAQ Index]</a> |
 <a href="upgrade66.html">[6.5 -> 6.6]</a>
-<!-- XXXrelease uncomment link to upgrade67.html
+<!-- XXXrelease uncomment link to upgrade68.html
 <a href="upgrade68.html">[6.7 -> 6.8]</a>
 -->
 <p>
@@ -53,7 +53,7 @@ download and verification of <code>bsd.rd</code> for you.
 
 <p>
 Another option is using the <a href="#NoInstKern">manual upgrade process</a>
-(although this is not recommended and the most error-prone method).
+(although this is not recommended and is the most error-prone method).
 
 <p>
 After upgrading the sets, apply the <a href="#ConfigChanges">configuration
@@ -188,7 +188,6 @@ any post-release fixes.
   <p>
   Accordingly, the <code>/dev/mixer*</code> devices are no longer used.
 
-
   <p>
   <li><b>iked(8).</b>
 
@@ -221,14 +220,41 @@ any post-release fixes.
   <code>
   <a href="https://man.openbsd.org/OpenBSD-6.7/rc.conf.local.8">
   /etc/rc.conf.local</a></code> if used.
+  
+  <p>
+  <li><b>iked(8)/isakmpd(8).</b>
+  The type of incoming
+  <a href="https://man.openbsd.org/OpenBSD-6.7/ipsec.4">ipsec(4)</a>
+  flows installed by
+  <a href="https://man.openbsd.org/OpenBSD-6.7/iked.8">iked(8)</a> or
+  <a href="https://man.openbsd.org/OpenBSD-6.7/isakmpd.8">isakmpd(8)</a>
+  was changed from "use" to "require". This means unencrypted traffic
+  matching the flows will no longer be accepted.
+  Flows of type "use" can still be set up manually in
+  <a href="https://man.openbsd.org/OpenBSD-6.7/ipsec.conf">ipsec.conf(5)</a>.
 
+  <p>
+  <li><b>ip(4)/ip6(4).</b>
+  Packets with a destination address not matching an IP address of
+  the receiving interface will now be dropped unless IP forwarding is enabled.
+  IP forwarding can be enabled via
+  <a href="https://man.openbsd.org/OpenBSD-6.7/sysctl.conf.5">
+  sysctl.conf(5)</a>:
+  
+  <pre class="cmdbox">
+  <b>net.inet.ip.forwarding=1</b>
+  <b>net.inet.ip6.forwarding=1</b><!--
+  --></pre>
+
+  Note that when forwarding is enabled, all local IP addresses can be
+  reached from outside unless explicitly filtered with
+  <a href="https://man.openbsd.org/OpenBSD-6.7/pf.4"> pf(4)</a>.
 
   <p>
   <li><b>man.conf(5).</b>
 
   The <a href="https://man.openbsd.org/OpenBSD-6.7/man.conf.5">man.conf(5)</a>
   <code>_whatdb</code> directive is no longer supported.
-
   If you have an <code>/etc/man.conf</code> file, change lines of the form:
 
   <pre class="cmdbox">
@@ -242,7 +268,6 @@ any post-release fixes.
   --></pre>
 
   The <code>_whatdb</code> directive has been obsolete since 2015.
-
 
   <p>
   <li><b>npppd(8).</b>
@@ -258,14 +283,12 @@ any post-release fixes.
   <a href="https://man.openbsd.org/OpenBSD-6.7/npppd.conf.5">npppd.conf(5)</a>
   with pppac.
 
-
   <p>
   <li><b>rebound(8).</b>
 
   <a href="https://man.openbsd.org/OpenBSD-6.6/rebound.8">rebound(8)</a>
   has been removed.  Users are advised to consider alternatives such as
   <a href="https://man.openbsd.org/OpenBSD-6.7/unwind.8">unwind(8)</a>.
-
 
   <p>
   <li><b>unwind(8).</b>
@@ -281,19 +304,14 @@ any post-release fixes.
   <a href="https://man.openbsd.org/OpenBSD-6.7/unwind.conf.5">
   unwind.conf(5)</a>
 
-
   <p>
   <li><b>usb(4)/uhid(4).</b>
   The default permissions of the
   <a href="https://man.openbsd.org/OpenBSD-6.7/usb.4">usb(4)</a> and
   <a href="https://man.openbsd.org/OpenBSD-6.7/uhid.4">uhid(4)</a>
   device nodes have been changed by restricting read-write access to the
-  root user.  Run <code>MAKEDEV</code> to update the device nodes manually:
+  root user.
 
-  <pre class="cmdbox">
-  # <b>cd /dev</b>
-  # <b>sh MAKEDEV all</b><!--
-  --></pre>
 
   <p>
   Access to FIDO/U2F security keys is now provided by the
@@ -302,7 +320,6 @@ any post-release fixes.
   <a href="https://man.openbsd.org/OpenBSD-6.7/uhid.4">uhid(4)</a>.
   Programs must use <code>/dev/fido/N</code> instead of
   <code>/dev/uhidN</code> for U2F/FIDO.
-
 
   <p>
   <li><b>weekly(8).</b>
@@ -313,9 +330,7 @@ any post-release fixes.
   root crontab or <code>/etc/weekly.local</code> should be moved into
   <code>/etc/locate.rc</code>.
 
-
 </ul>
-
 
 <h3 id="RmFiles">Files to remove</h3>
 
@@ -334,8 +349,7 @@ any post-release fixes.
        /usr/libdata/perl5/unicore/lib/GCB/EB.pl \
        /usr/libdata/perl5/unicore/lib/GCB/GAZ.pl \
        /usr/share/man/man3p/B::Debug.3p \
-       /usr/share/man/man3p/Locale::{Codes*,Country,Currency,Language,Script}.3p
- \
+       /usr/share/man/man3p/Locale::{Codes*,Country,Currency,Language,Script}.3p \
        /usr/share/man/man3p/Math::BigInt::CalcEmu.3p \
        /usr/share/man/man3p/arybase.3p</b><!--
   --></pre>
@@ -364,7 +378,6 @@ any post-release fixes.
   Use <code>pg_upgrade</code> as described in the
   pkg-readme file or do a dump/restore.
 
-
   <p>
   <li><b>databases/redis.</b>
 
@@ -376,13 +389,11 @@ any post-release fixes.
   on first run and cannot be read by older versions - take a backup first if 
   you are concerned about compatibility.
 
-
   <p>
   <li><b>devel/ipython.</b>
 
   Python 2 support has been retired. <code>/usr/local/bin/ipython-3</code> has
   been renamed to <code>/usr/local/bin/ipython</code>.
-
 
   <p>
   <li><b>net/powerdns.</b>
@@ -393,7 +404,6 @@ any post-release fixes.
   the upgrade notes</a>
   and <code>/usr/local/share/doc/pdns</code>.
 
-
   <p>
   <li><b>www/jupyter-notebook.</b>
 
@@ -402,7 +412,6 @@ any post-release fixes.
   Please note that tools supplied by this package have been renamed, e.g.
   <code>jupyter-notebook-3</code> has been renamed to
   <code>jupyter-notebook</code>.
-
 
   <p>
   <li><b>www/mozilla-firefox.</b>
@@ -414,9 +423,7 @@ any post-release fixes.
   To grant access to additional paths or disable unveil, see the pkg-readme 
   file.
 
-
 </ul>
-
 
 <hr>
 <h2 id="NoInstKern">Upgrade without the install kernel</h2>
@@ -573,9 +580,9 @@ access to the system console.
 <p>
 <a href="index.html">[FAQ Index]</a> |
 <a href="upgrade66.html">[6.5 -> 6.6]</a>
-<!-- XXXrelease uncomment link to upgrade67.html
+<!-- XXXrelease uncomment link to upgrade68.html
 <a href="upgrade68.html">[6.7 -> 6.8]</a>
 -->
 
 <hr>
-<small>$OpenBSD: upgrade67.html,v 1.2 2020/05/17 15:14:29 kmos Exp $</small>
+<small>$OpenBSD: upgrade67.html,v 1.7 2020/05/19 01:52:26 kmos Exp $</small>
