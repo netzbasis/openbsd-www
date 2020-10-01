@@ -2,9 +2,9 @@ https://cdn.openbsd.org/pub/OpenBSD                              Fastly (CDN)
 https://cloudflare.cdn.openbsd.org/pub/OpenBSD               Cloudflare (CDN)
 https://mirror.vdms.com/pub/OpenBSD      Verizon Digital Media Services (CDN)
 https://mirror.leaseweb.com/pub/OpenBSD                        LeaseWeb (CDN)
+https://mirror.planetunix.net/pub/OpenBSD                    PlanetUnix (CDN)
 https://mirror.aarnet.edu.au/pub/OpenBSD                  Canberra, Australia
 https://ftp2.eu.openbsd.org/pub/OpenBSD                       Vienna, Austria
-https://openbsd.c3sl.ufpr.br/pub/OpenBSD                     Curitiba, Brazil
 https://openbsd.ipacct.com/pub/OpenBSD                        Sofia, Bulgaria
 https://ftp.OpenBSD.org/pub/OpenBSD                           Alberta, Canada
 https://openbsd.cs.toronto.edu/pub/OpenBSD                Toronto, ON, Canada
@@ -17,7 +17,6 @@ https://ftp.eenet.ee/pub/OpenBSD                                      Estonia
 https://ftp.fr.openbsd.org/pub/OpenBSD                          Paris, France
 https://ftp.spline.de/pub/OpenBSD                             Berlin, Germany
 https://mirror.hs-esslingen.de/pub/OpenBSD                 Esslingen, Germany
-https://ftp.bytemine.net/pub/OpenBSD                       Oldenburg, Germany
 https://ftp.halifax.rwth-aachen.de/pub/OpenBSD                Aachen, Germany
 https://artfiles.org/openbsd                                 Hamburg, Germany
 https://ftp.hostserver.de/pub/OpenBSD                      Frankfurt, Germany
@@ -27,28 +26,25 @@ https://openbsd.hk/pub/OpenBSD                                      Hong Kong
 https://ftp.fsn.hu/pub/OpenBSD                              Budapest, Hungary
 https://mirror.labkom.id/pub/OpenBSD                                Indonesia
 https://ftp.heanet.ie/pub/OpenBSD                             Dublin, Ireland
-https://openbsd.mirror.garr.it/pub/OpenBSD                        Rome, Italy
+https://ftp.jaist.ac.jp/pub/OpenBSD                     Nomi, Ishikawa, Japan
+https://www.ftp.ne.jp/pub/OpenBSD                              Saitama, Japan
 https://ftp.riken.jp/pub/OpenBSD                    Wako-City, Saitama, Japan
 https://mirror.litnet.lt/pub/OpenBSD                        Kaunas, Lithuania
 https://ftp.nluug.nl/pub/OpenBSD                     Utrecht, The Netherlands
 https://ftp.bit.nl/pub/OpenBSD                           Ede, The Netherlands
-https://mirrors.dalenys.com/pub/OpenBSD            Amsterdam, The Netherlands
 https://mirror.fsmg.org.nz/pub/OpenBSD         Anycast within NZ, New Zealand
 https://ftp.eu.openbsd.org/pub/OpenBSD                           Oslo, Norway
 https://ftp.icm.edu.pl/pub/OpenBSD                             Warsaw, Poland
 https://ftp.rnl.tecnico.ulisboa.pt/pub/OpenBSD               Lisbon, Portugal
-https://mirrors.nav.ro/pub/OpenBSD                         Bucharest, Romania
 https://mirrors.pidginhost.com/pub/OpenBSD                 Bucharest, Romania
 https://mirror.yandex.ru/pub/OpenBSD                           Moscow, Russia
-https://mirror.linux.pizza/pub/OpenBSD                         Skovde, Sweden
 https://mirror.ungleich.ch/pub/OpenBSD               Linthal, GL, Switzerland
-https://ftp.yzu.edu.tw/pub/OpenBSD                            Taoyuan, Taiwan
 https://www.mirrorservice.org/pub/OpenBSD                Kent, United Kingdom
 https://mirror.bytemark.co.uk/pub/OpenBSD          Manchester, United Kingdom
 https://mirror.exonetric.net/pub/OpenBSD               London, United Kingdom
 https://mirrors.sonic.net/pub/OpenBSD                  San Francisco, CA, USA
+https://mirrors.syringanetworks.net/pub/OpenBSD                Boise, ID, USA
 https://mirrors.gigenet.com/pub/OpenBSD            Arlington Heights, IL, USA
-https://mirror.planetunix.net/pub/OpenBSD                    Chicago, IL, USA
 https://plug-mirror.rcac.purdue.edu/pub/OpenBSD       West Lafayette, IN, USA
 https://mirrors.mit.edu/pub/OpenBSD                        Cambridge, MA, USA
 https://openbsd.mirror.constant.com/pub/OpenBSD           Piscataway, NJ, USA

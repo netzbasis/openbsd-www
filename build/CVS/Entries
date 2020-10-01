@@ -1,15 +1,15 @@
-/Makefile/1.105/Wed May 27 05:48:13 2020//
+/Makefile/1.107/Sun Sep 27 09:35:47 2020//
 /groups.awk/1.13/Mon May 27 22:55:27 2019//
 /groups.dat/1.148/Fri Apr 17 01:11:04 2020//
 /groups.skel/1.29/Thu Jun 13 17:46:01 2019//
 /mirrorcheck.sh/1.1/Sun Jan 27 19:51:14 2019//
-/mirrors.dat/1.609/Mon May 18 19:06:24 2020//
+/mirrors.dat/1.615/Wed Sep 16 08:17:43 2020//
 /mirrors.pl/1.51/Fri Apr 10 21:45:17 2020//
 /mirrors.tmpl/1.21/Fri Nov 15 14:31:30 2019//
 /mkcountries/1.2/Wed Mar 26 19:36:07 2003//
 /support.awk/1.15/Mon May 27 22:55:27 2019//
-/support.dat/1.365/Sat Apr 18 15:55:49 2020//
+/support.dat/1.366/Thu Oct  1 08:37:42 2020//
 /support.skel/1.41/Mon May 27 22:55:27 2019//
-/versionup/1.5/Wed Sep 25 14:30:13 2019//
+/versionup/1.6/Mon Jul 20 15:54:19 2020//
 D/mirrors////
 D/openssh////
