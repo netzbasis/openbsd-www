@@ -96,7 +96,110 @@ after release.
 
 <ul>
 
-None yet.
+<li id="p001_bgpd">
+<strong>001: RELIABILITY FIX: October 29, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+In bgpd, the roa-set parser could leak memory.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/001_bgpd.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p002_icmp6">
+<strong>002: SECURITY FIX: October 29, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+When generating the ICMP6 response to an IPv6 packet, the kernel
+could use mbuf memory after freeing it.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/002_icmp6.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p003_tmux">
+<strong>003: SECURITY FIX: October 29, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+tmux has a stack overflow in CSI parsing.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/003_tmux.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p004_wg">
+<strong>004: RELIABILITY FIX: November 05, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+wg(4) could panic the kernel by releasing the wrong lock.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/004_wg.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p005_unwind">
+<strong>005: RELIABILITY FIX: November 10, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+unwind fails to process large DNS replies.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/005_unwind.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p006_rpki">
+<strong>006: RELIABILITY FIX: November 10, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+rpki-client incorrectly checks the manifest validity interval.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/006_rpki.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p007_xmaplen">
+<strong>007: SECURITY FIX: December 1, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+Multiple input validation failures in the X server XKB extension can lead
+to out of bounds memory accesses for authorized clients.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/007_xmaplen.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p008_xmaplen">
+<strong>008: SECURITY FIX: December 8, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+Malformed ASN.1 in a certificate revocation list or a timestamp
+response token can lead to a NULL pointer dereference.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/008_asn1.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p009_exit">
+<strong>009: RELIABILITY FIX: December 8, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+Process exit in multithreaded programs could result in the wrong exit
+code being reported.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/009_exit.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
+
+<li id="p010_smtpd">
+<strong>010: RELIABILITY FIX: December 24, 2020</strong>
+&nbsp; <i>All architectures</i>
+<br>
+smtpd's filter state machine can prematurely release resources
+leading to a crash.
+<br>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/patches/6.8/common/010_smtpd.patch.sig">
+A source code patch exists which remedies this problem.</a>
+<p>
 
 </ul>
 

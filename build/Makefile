@@ -1,17 +1,16 @@
 # Makefile for WWW subdirectory.
 
-# XXXrelease: 6.8 .fs files renamed to .img
-STABLE_VERSION=	6.7
-PREV_VERSION=	6.6
+STABLE_VERSION=	6.8
+PREV_VERSION=	6.7
 
 # also update mirrors/openbgpd-ftp.html.head
-OPENBGPD_VERSION=		6.7p0
+OPENBGPD_VERSION=		6.8p1
 
 # also update mirrors/openntpd-ftp.html.head
 OPENNTPD_PORTABLE_VERSION=	6.2p3
 
 # also update mirrors/rpki-client-portable.html.head
-RPKI_CLIENT_PORTABLE_VERSION=	6.7p1
+RPKI_CLIENT_PORTABLE_VERSION=	6.8p1
 
 OPENSSH_VERSION=		8.4
 OPENSSH_PORTABLE_VERSION=	8.4p1
@@ -33,10 +32,13 @@ all: ../groups.html ../support.html ../ftp.html
 		@rm -f support-tbl.html support.countries
 
 # Build the FTP/HTTP/RSYNC mirrors page.
-../ftp.html ftp: mirrors.pl mirrors.dat mirrors/ftp.html.{end,head,mid1,mid2} \
+../ftp.html ftp: mirrors.pl mirrors.dat \
+     mirrors/ftp.html.{head,end,mid0,mid1,mid2} \
+     mirrors/openbgpd-ftp.html.{head,end} \
      mirrors/openntpd-portable.html.{head,end} \
-     mirrors/rpki-client-portable.html.{head,end} \
-     mirrors/openbgpd-ftp.html.{end,head}
+     mirrors/openssh-ftp.html.{head,end} \
+     mirrors/openssh-portable.html.{head,end,mid1} \
+     mirrors/rpki-client-portable.html.{head,end}
 	perl mirrors.pl openbsd-ftp ${STABLE_VERSION}
 	perl mirrors.pl openbgpd-ftp ${OPENBGPD_VERSION}
 	perl mirrors.pl openntpd-portable ${OPENNTPD_PORTABLE_VERSION}

@@ -5,6 +5,7 @@ https://mirror.leaseweb.com/pub/OpenBSD                        LeaseWeb (CDN)
 https://mirror.planetunix.net/pub/OpenBSD                    PlanetUnix (CDN)
 https://mirror.aarnet.edu.au/pub/OpenBSD                  Canberra, Australia
 https://ftp2.eu.openbsd.org/pub/OpenBSD                       Vienna, Austria
+https://openbsd.c3sl.ufpr.br/pub/OpenBSD                     Curitiba, Brazil
 https://openbsd.ipacct.com/pub/OpenBSD                        Sofia, Bulgaria
 https://ftp.OpenBSD.org/pub/OpenBSD                           Alberta, Canada
 https://openbsd.cs.toronto.edu/pub/OpenBSD                Toronto, ON, Canada
@@ -15,12 +16,14 @@ https://mirrors.dotsrc.org/pub/OpenBSD                       Aalborg, Denmark
 https://mirror.one.com/pub/OpenBSD                        Copenhagen, Denmark
 https://ftp.eenet.ee/pub/OpenBSD                                      Estonia
 https://ftp.fr.openbsd.org/pub/OpenBSD                          Paris, France
+https://ftp.lip6.fr/pub/OpenBSD                                 Paris, France
 https://ftp.spline.de/pub/OpenBSD                             Berlin, Germany
 https://mirror.hs-esslingen.de/pub/OpenBSD                 Esslingen, Germany
 https://ftp.halifax.rwth-aachen.de/pub/OpenBSD                Aachen, Germany
 https://artfiles.org/openbsd                                 Hamburg, Germany
 https://ftp.hostserver.de/pub/OpenBSD                      Frankfurt, Germany
 https://ftp.fau.de/pub/OpenBSD                              Erlangen, Germany
+https://mirror.fsrv.services/pub/OpenBSD                              Germany
 https://ftp.cc.uoc.gr/pub/OpenBSD                           Heraklion, Greece
 https://openbsd.hk/pub/OpenBSD                                      Hong Kong
 https://ftp.fsn.hu/pub/OpenBSD                              Budapest, Hungary
@@ -32,6 +35,7 @@ https://ftp.riken.jp/pub/OpenBSD                    Wako-City, Saitama, Japan
 https://mirror.litnet.lt/pub/OpenBSD                        Kaunas, Lithuania
 https://ftp.nluug.nl/pub/OpenBSD                     Utrecht, The Netherlands
 https://ftp.bit.nl/pub/OpenBSD                           Ede, The Netherlands
+https://mirror.serverion.com/pub/OpenBSD           The Hague, The Netherlands
 https://mirror.fsmg.org.nz/pub/OpenBSD         Anycast within NZ, New Zealand
 https://ftp.eu.openbsd.org/pub/OpenBSD                           Oslo, Norway
 https://ftp.icm.edu.pl/pub/OpenBSD                             Warsaw, Poland

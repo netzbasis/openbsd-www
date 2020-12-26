@@ -18,7 +18,7 @@ Portable Release
 <hr>
 
 <p>
-rpki-client 6.7p1 portable: released July 27, 2020
+rpki-client 6.8p1 portable: released Nov. 12, 2020
 
 <p>
 The portable version of rpki-client adds support for other Unix flavors by adding
@@ -37,7 +37,7 @@ At the time of writing, rpki-client portable is known to build and work on:
 
 <ul>
 	<li>OpenBSD
-	<li>Linux (Debian 9, Debian 10)
+	<li>Linux (Alpine 3.12, Debian 9, Debian 10, Fedora 31, Fedora 32, Fedora 33, RHEL/CentOS 7, RHEL/CentOS 8)
 	<li>...
 </ul>
 

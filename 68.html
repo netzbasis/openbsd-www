@@ -1,0 +1,1049 @@
+<!doctype html>
+<html lang=en id=release>
+<meta charset=utf-8>
+
+<title>OpenBSD 6.8</title>
+<meta name="description" content="OpenBSD 6.8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="openbsd.css">
+<link rel="canonical" href="https://www.openbsd.org/68.html">
+
+<h2 id=OpenBSD>
+<a href="index.html">
+<i>Open</i><b>BSD</b></a>
+6.8
+</h2>
+
+<table>
+<tr>
+<td>
+<a href="images/PuffyOverride.png">
+<img width="227" height="303" src="images/PuffyOverride-s.gif" alt="Fun &amp; Friends"></a>
+<td>
+Released Oct 18, 2020. (OpenBSD's 25th anniversary)<br>
+Copyright 1997-2020, Theo de Raadt.<br>
+<br>
+6.8 Song:
+<a href="lyrics.html#68">"Hacker People"</a>.
+<br>
+Artwork by Siah Files.
+<br>
+<ul>
+<li>See the information on <a href="ftp.html">the FTP page</a> for
+    a list of mirror machines.
+<li>Go to the <code class=reldir>pub/OpenBSD/6.8/</code> directory on
+    one of the mirror sites.
+<li>Have a look at <a href="errata68.html">the 6.8 errata page</a> for a list
+    of bugs and workarounds.
+<li>See a <a href="plus68.html">detailed log of changes</a> between the
+    6.7 and 6.8 releases.
+<p>
+<li><a href="https://man.openbsd.org/signify.1">signify(1)</a>
+    pubkeys for this release:<p>
+
+<table class=signify>
+<tr><td>
+openbsd-68-base.pub:
+<td>
+<a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/openbsd-68-base.pub">
+RWQZj25CSG5R2oLo5735Hh6C48kkjFsj5rJDjW+fGZwyY+BkD5/zps8f</a>
+<tr><td>
+openbsd-68-fw.pub:
+<td>
+RWSYx4htNi/zavF8ZToMBDFz2xymRfFnnR1MEKV9csYbvnrTBwdkXhdy
+<tr><td>
+openbsd-68-pkg.pub:
+<td>
+RWQlDXyHx5KlPoEiz4yWRK/Gt/rvPwI8KEAt3utge/dBS7R+EscdzA5K
+<tr><td>
+openbsd-68-syspatch.pub:
+<td>
+RWRWuHkSV0U8PUX24vGa3ywrvKNQY6llV3PLvKEzDTiTVPfIRaXPfvzR
+</table>
+</ul>
+<p>
+All applicable copyrights and credits are in the src.tar.gz,
+sys.tar.gz, xenocara.tar.gz, ports.tar.gz files, or in the
+files fetched via <code>ports.tar.gz</code>.
+</table>
+
+<hr>
+
+<section id=new>
+<h3>What's New</h3>
+<p>
+This is a partial list of new features and systems included in OpenBSD 6.8.
+For a comprehensive list, see the <a href="plus68.html">changelog</a> leading
+to 6.8.
+
+<ul>
+
+<li>New/extended platforms:
+  <ul>
+	<li>New <a href="https://www.openbsd.org/powerpc64.html">powerpc64</a>
+        platform, supporting PowerNV (non-virtualized) systems with
+        POWER8 and POWER9 CPUs, such as Raptor Computing Systems Talos
+        II and Blackbird systems.  POWER8 support has not been tested
+        on real hardware yet.
+  </ul>
+
+<li>Improvements to time measurements, mostly in the kernel:
+  <ul>
+	<li>Added support in the kernel and libc for timecounting in
+	userland, eliminating the need for a context switch everytime a
+	process requests the current time, thereby improving speed and
+	responsiveness in programs which make many <a
+	href="https://man.openbsd.org/gettimeofday">gettimeofday(2)</a> calls,
+	especially browsers and office software.<br>The userland timecounters
+	are enabled on the amd64, arm64, macppc, octeon and sparc64
+	architectures.
+	<li>Added a <a href="https://man.openbsd.org/ktrace">ktrace(1)</a> -T option to make time-related system calls more prominent.
+	<li>Added tsc_delay(), a <a href="https://man.openbsd.org/delay">delay(9)</a> implementation based on the TSC, to amd64.
+	<li>Used an LFENCE instruction everywhere RDTSC is used for a time measurement, reducing the jitter in TSC skew measurements.
+	<li>Introduced <a href="https://man.openbsd.org/gettime">gettime(9)</a> and <a href="https://man.openbsd.org/getuptime">getuptime(9)</a> and substituted these for time_second(9) and time_uptime(9) throughout the kernel to prevent split-read problems on 32-bit platforms.
+	<li>Synchronized each core's CP0 cycle counter using the IO clock counter on mips64 and octeon, making the cycle counter usable as timecounter.
+	<li>Improved CPU frequency scaling in automatic performance mode by removing accounting for offline CPUs.
+  </ul>
+
+<li>Various kernel improvements:
+  <ul>
+	<li>Added <a href="https://man.openbsd.org/intrmap_create">intrmap</a>, an interrupt to CPU mapping API that is used by hardware drivers to use multiple CPUs for interrupt handling.
+	<li>Added an ioctl PCIOCGETVPD allowing userland to access read-only support information about pci devices via the vpd register.
+	<li>Set <a href="https://man.openbsd.org/ddb">ddb(4)</a> "/t" to show a trace via TID on all architectures.
+	<li>Introduced <a href="https://man.openbsd.org/kstat">kstat(1)</a>, a subsystem to allow the kernel to expose statistics to userland.
+	<li>Added kstat to <a href="https://man.openbsd.org/cnmac">cnmac(4)</a>.
+	<li>Added support for remote coverage to <a href="https://man.openbsd.org/kcov">kcov(4)</a>.
+	<li>Moved <a href="https://man.openbsd.org/sysctl.2">sysctl(2)</a> CTL_DEBUG from DEBUG to the new DEBUG_SYSCTL.
+	<li>Prevented creation of bogus <a href="https://man.openbsd.org/sd">sd(4)</a> devices for <a href="https://man.openbsd.org/nvme">nvme(4)</a> namespaces which are configured but have size 0.
+	<li>Added READ(12)/WRITE(12) support to <a href="https://man.openbsd.org/cd">cd(4)</a>.
+	<li>Used READ(16)/WRITE(16) commands for disks large enough to require them to access the last sectors, fixing large 512E devices plugged into USB to ATA/ATAPI bridges which mistakenly use 4K sector addresses/sizes.
+	<li>Restored VGA fonts on VT switch, preventing an unusable screen when switching to a VT with a custom VGA font from X.
+	<li>Ensured only pseudo-terminal devices use reprint delays.
+	<li>Prevented improper disabling of the backlight in <a href="https://man.openbsd.org/umstc">umstc(4)</a> when brightness is adjusted to 0.
+	<li>Provided an optimized implementation of <a href="https://man.openbsd.org/ffs">ffs(3)</a> in the kernel on arm64/powerpc/powerpc64.
+	<li>Rewrote m88k mutex code as a slight variation of the MI mutex code, potentially improving stability and rendering mutex spinning time visible in <a href="https://man.openbsd.org/top">top(1)</a>.
+	<li>Reworked kernel loading with octboot, the OpenBSD/octeon bootloader, which now does not rely on a mounted filesystem.
+	<li>Ensured <a href="https://man.openbsd.org/scsi.4">scsi(4)</a> devices do not attempt to process bogus MODE SENSE data.
+  </ul>
+
+<li>Various new userland features:
+  <ul>
+	<li>Imported <a href="https://man.openbsd.org/login_ldap">login_ldap(8)</a>, using <a href="https://man.openbsd.org/ldap">ldap(1)</a> rather than openldap.
+	<li>Added support for set -o pipefail to <a href="https://man.openbsd.org/ksh">ksh(1)</a>, potentially helping error checking.
+	<li>Cleared the screen in <a href="https://man.openbsd.org/ksh">ksh(1)</a>'s vi mode before redrawing the line with ^L.
+	<li>Implemented the gensub(), systime() and strftime() functions for <a href="https://man.openbsd.org/awk">awk(1)</a>.
+	<li>Allowed specification of supported TLS protocols in <a href="https://man.openbsd.org/ftp">ftp(1)</a> "-S protocols".
+	<li>Switched the default <a href="https://man.openbsd.org/man.1">man(1)</a> pager from "<a href="https://man.openbsd.org/more.1">more(1)</a> -s" to <a href="https://man.openbsd.org/less.1">less(1)</a>.
+	<li>Supported -T html -O tag in <a href="https://man.openbsd.org/man.1">man(1)</a> by passing a file:// URI to the pager.
+	<li>Added <a href="https://man.openbsd.org/fstat">fstat(1)</a> support for looking up unix domain sockets by file name.
+	<li>Added / as an alias for g (grep) in <a href="https://man.openbsd.org/top">top(1)</a>.
+	<li>Provided a naptime variable for userspace via <a href="https://man.openbsd.org/kvm_read">kvm_read(3)</a>, usable by <a href="https://man.openbsd.org/vmstat">vmstat(8)</a>.
+	<li>Allowed switching between alternate devices (-F) with <a href="https://man.openbsd.org/sndioctl">sndioctl(1)</a>.
+	<li>Added the ability to set and display <a href="https://man.openbsd.org/video">video(1)</a> control values directly on the CLI.
+	<li>Allowed the combination of <a href="https://man.openbsd.org/video">video(1)</a> "-dc" options, reset and display control values.
+	<li>Added <a href="https://man.openbsd.org/video">video(1)</a> white balance temperature control through w/W keys.
+	<li>Added control for backlight compensation to <a href="https://man.openbsd.org/video.4">video(4)</a>.
+	<li>Initialized v4l2_requestbuffers for libv4l compatibility, allowing view of video encodings not directly supported by <a href="https://man.openbsd.org/video">video(1)</a>.
+	<li>Added a new column to <a href="https://man.openbsd.org/wsfontload">wsfontload(8)</a> -l output to report the number of characters contained in a loaded font.
+	<li>Relaxed filename checks in <a href="https://man.openbsd.org/syspatch">syspatch(8)</a> to allow use of hyphens.
+	<li>Enabled <a href="https://man.openbsd.org/btrace">btrace(8)</a> (<a href="https://man.openbsd.org/dt">dt(4)</a> not yet enabled in GENERIC, though).
+	<li>Added <a href="https://man.openbsd.org/btrace">btrace(8)</a> -p flag to filter all actions by PID.
+	<li>Implemented linear and power-of-two histograms in bt(5).
+	<li>Added support for "&" and "|" operators in btrace scripts.
+  </ul>
+
+<li>Various bugfixes and tweaks in userland:
+  <ul>
+	<li>Fixed the <a href="https://man.openbsd.org/ksh">ksh(1)</a> exit code when evaluating a || compound list to prevent termination of the shell when running under -e.
+	<li>Fixed "$@" splitting with empty IFS in <a href="https://man.openbsd.org/ksh">ksh(1)</a>.
+	<li>Stopped incrementing openclass for a literal "[" in <a href="https://man.openbsd.org/awk">awk(1)</a>, allowing parsing of expressions such as "/[[/[]/".
+	<li>Fixed <a href="https://man.openbsd.org/make">make(1)</a> :S with anchors and replacement.
+	<li>Prevented <a href="https://man.openbsd.org/mg">mg(1)</a> from running out of memory or segfaulting with <code>query-replace-regex ^</code>.
+	<li>Fixed <a href="https://man.openbsd.org/ls">ls(1)</a> -R mode to not display subdirectories of a directory beginning with '.' and ensure directory names are always displayed.
+	<li>Prevented a core dump in <a href="https://man.openbsd.org/ftp">ftp(1)</a> during fetch abort.
+	<li>Taught <a href="https://man.openbsd.org/su">su(1)</a> -l -f to start a regular shell for non-csh shells rather than a login shell.
+	<li>Used <a href="https://man.openbsd.org/su">su(1)</a> -fl to avoid sourcing the target user's .profile in <a href="https://man.openbsd.org/rc.d">rc.d(8)</a>/<a href="https://man.openbsd.org/rcctl">rcctl(8)</a>.
+	<li>Fixed merging of files that lack newlines for <a href="https://man.openbsd.org/diff3">diff3(1)</a>, OpenRCS and OpenCVS.
+	<li>Prevented <a href="https://man.openbsd.org/rcs">rcs(1)</a> removal of locked revisions with rcs -orange, avoiding leaving behind a lock for a revision which no longer exists.
+	<li>Fixed <a href="https://man.openbsd.org/sndiod">sndiod(8)</a> crashes when USB devices are disconnected.
+	<li>Fixed the initial <a href="https://man.openbsd.org/sndiod">sndiod(8)</a> alternate device number, preventing device number 1 from being skipped on first use.
+	<li>Switched the default CDDB database for <a href="https://man.openbsd.org/cdio">cdio(1)</a> to gnudb.gnudb.org:8880.
+	<li>Stopped <a href="https://man.openbsd.org/syslogd">syslogd(8)</a> from closing UDP sockets for sending messages when DNS lookup of a UDP loghost fails, allowing them to be used to send if DNS is working during the next SIGHUP.
+	<li>Prevented established TCP and TLS sockets of <a href="https://man.openbsd.org/syslogd">syslogd(8)</a> from staying open forever if a client aborted the connection silently.
+	<li>Avoided reading one byte before the path buffer in <a href="https://man.openbsd.org/mountd">mountd(8)</a>.
+	<li>Made <a href="https://man.openbsd.org/apmd">apmd(8)</a> always ask the kernel about current hw.perfpolicy rather than maintaining state.
+	<li>Prevented an <a href="https://man.openbsd.org/unveil">unveil(2)</a> failure with chdir / on <a href="https://man.openbsd.org/sensorsd">sensorsd(8)</a>.
+	<li>Fixed a segmentation fault in <a href="https://man.openbsd.org/pstat">pstat(8)</a>'s printing of active vnodes.
+	<li>Corrected <a href="https://man.openbsd.org/getopt_long">getopt_long(3)</a> parsing of a trailing dash in an option group, which was being incorrectly returned as an argument.
+	<li>Prevented callers inspecting unrelated fields in the libc resolver function asr_run().
+	<li>Introduced a darker <a href="https://man.openbsd.org/xenodm">xenodm(1)</a> login widget and a lower contrast default background.
+	<li>Fixed an <a href="https://man.openbsd.org/xconsole">xconsole(1)</a> crash by starting it after setting the background.
+  </ul>
+
+<li>Improved hardware support and driver bugfixes, including:
+  <ul>
+	<li>Enabled scrollback in <a href="https://man.openbsd.org/simplefb">simplefb(4)</a>.
+	<li>Fixed display glitches on smaller screens or with larger fonts in <a href="https://man.openbsd.org/efifb">efifb(4)</a> associated with remapping and attaching.
+	<li>Improved reporting of remaining power with batteries of different capacities in <a href="https://man.openbsd.org/acpi">acpi(4)</a>.
+	<li>Fixed bogus frame sizes being returned by <a href="https://man.openbsd.org/xhci">xhci(4)</a>.
+	<li>Added <a href="https://man.openbsd.org/wsmoused">wsmoused(8)</a> support to <a href="https://man.openbsd.org/efifb">efifb(4)</a>.
+	<li>Added <a href="https://man.openbsd.org/umstc">umstc(4)</a>, a driver for Microsoft Surface Type Cover keyboards.
+	<li>Introduced <a href="https://man.openbsd.org/acpihid">acpihid(4)</a> for ACPI HID event and 5-button array devices.
+	<li>Moved Powerbook5,4 audio from <a href="https://man.openbsd.org/aoa">aoa(4)</a> to <a href="https://man.openbsd.org/snapper">snapper(4)</a>, adding the missing TAS3004 volume control.
+	<li>Fixed broken HID descriptors of Elecom trackballs with 6 or 8 buttons.
+	<li>Added RK3328 PWM, also found in the RK3308, to <a href="https://man.openbsd.org/rkpwm">rkpwm(4)</a>.
+	<li>Added RK3308 temperature sensors to <a href="https://man.openbsd.org/rktemp">rktemp(4)</a>.
+	<li>Added <a href="https://man.openbsd.org/pcamux">pcamux(4)</a>, a driver for the PCA9548 I2C switch.
+	<li>Introduced a framework for digital audio interfaces, and added <a href="https://man.openbsd.org/simpleaudio">simpleaudio(4)</a>, a driver for "simple audio cards." This is a wrapper connecting the I2S controller, the codec and some aux devices, and <a href="https://man.openbsd.org/simpleamp">simpleamp(4)</a>, a driver for "simple audio amplifier," one of the aux devices for <a href="https://man.openbsd.org/simpleaudio">simpleaudio(4)</a>.
+	<li>Enabled <a href="https://man.openbsd.org/nvme">nvme(4)</a> on i386.
+	<li>Added support for the Ericsson F5521gw Mobile Broadband Modem.
+	<li>Ensured the STOP command sent by <a href="https://man.openbsd.org/sd">sd(4)</a> on powerdown will not result in hanging the machine if commands to the USB mass storage fail.
+	<li>Fixed intermittent failing <a href="https://man.openbsd.org/pms">pms(4)</a> device initialization seen on some Synaptics devices.
+	<li>Corrected trackstick/button attachment of Windows Precision Touchpad <a href="https://man.openbsd.org/imt">imt(4)</a> devices, fixing behavior on certain Dell Latitude laptops.
+	<li>Improved speed of scrolling by optimizing <a href="https://man.openbsd.org/rasops">rasops(9)</a> write-only framebuffer console.
+	<li>Modified <a href="https://man.openbsd.org/uvideo">uvideo(4)</a> to fix webcam detection in Firefox 78.
+	<li>Added a SENSOR_ENERGY sensor type to the <a href="https://man.openbsd.org/sensor_attach">sensors framework API</a> which uses microjoules.
+	<li>Added support for the AMDI0010 touchpad on the Inspiron 5505.
+	<li>Avoided nvram lock timeout on sparc64 systems with onboard BCM5704 <a href="https://man.openbsd.org/bge">bge(4)</a> instances that come without a fitted EEPROM/NVRAM.
+	<li>Added <a href="https://man.openbsd.org/pms">pms(4)</a> support for the Elantech v1 touchpad with firmware version 0x20022.
+	<li>Added <a href="https://man.openbsd.org/sdmmc">sdmmc(4)</a> support for eMMC HS200 mode.
+	<li>Added Exar XR17V35x serial port support.
+	<li>Properly implemented <a href="https://man.openbsd.org/amlmmc">amlmmc(4)</a> setting of signal voltage.
+	<li>Implemented UHS-I support in the <a href="https://man.openbsd.org/sdmmc">sdmmc(4)</a> midlayer and enabled it in <a href="https://man.openbsd.org/amlmmc">amlmmc(4)</a>.
+	<li>Introduced <a href="https://man.openbsd.org/abl">abl(4)</a>, a new driver to control the backlight brightness on Intel-based Apple machines, and allowed it to be controlled through <a href="https://man.openbsd.org/wsconsctl">wsconsctl(8)</a>.
+	<li>Disabled <a href="https://man.openbsd.org/acpivout">acpivout(4)</a> brightness control on machines aware of Windows 8, enabling inteldrm to handle brightness ioctls.
+	<li>Fixed <a href="https://man.openbsd.org/eeprom">eeprom(8)</a> error when setting variables on macppc.
+	<li>Updated <a href="https://man.openbsd.org/drm.4">drm(4)</a> to Linux 5.7.19.
+  </ul>
+<li>New or improved network hardware support:
+  <ul>
+	  <li>Enabled multiple tx/rx queues with Toeplitz RSS hashing in <a href="https://man.openbsd.org/vmx">vmx(4)</a>, <a href="https://man.openbsd.org/ix">ix(4)</a> and <a href="https://man.openbsd.org/ixl">ixl(4)</a>.
+	  <li>Added support for hardware VLAN tagging and checksumming to <a href="https://man.openbsd.org/mcx">mcx(4)</a> and <a href="https://man.openbsd.org/bnxt">bnxt(4)</a>.
+	  <li>Fixed a crash in <a href="https://man.openbsd.org/re">re(4)</a>.
+	  <li>Added <a href="https://man.openbsd.org/bge">bge(4)</a> support for the BCM5719 A1 Ethernet controller.
+	  <li>Handled AGL interfaces on octeon, making management network ports usable on some machines.
+	  <li>Added support for the <a href="https://man.openbsd.org/mcx">mcx(4)</a> ConnectX-6 Dx.
+	  <li>Fixed a potential crash when bringing down an <a href="https://man.openbsd.org/mcx">mcx(4)</a> interface.
+	  <li>Increased the <a href="https://man.openbsd.org/mcx">mcx(4)</a> event queue size, preventing a potential interrupt storm on the ConnectX-4.
+	  <li>Fixed outbound <a href="https://man.openbsd.org/bpf">bpf(4)</a> tap on <a href="https://man.openbsd.org/ogx">ogx(4)</a> interfaces.
+	  <li>Improved <a href="https://man.openbsd.org/ure">ure(4)</a> performance by combining multiple sent packets into one transfer.
+	  <li>Added support for RK3308 Ethernet to <a href="https://man.openbsd.org/dwge">dwge(4)</a>.
+	  <li>Added <a href="https://man.openbsd.org/rge">rge(4)</a> support for newer RTL8125 chipset (RTL8125B).
+  </ul>
+<li>Added or improved wireless network drivers:
+  <ul>
+	  <li>Added support to <a href="https://man.openbsd.org/urtwn">urtwn(4)</a> for TP-Link TL-WN822N-EU v5 (and v4).
+	  <li>Added WPA2 (CCMP) crypto offload support to <a href="https://man.openbsd.org/iwm">iwm(4)</a> and
+	  <a href="https://man.openbsd.org/iwx">iwx(4)</a>,
+	    reducing CPU load during traffic bursts.
+	  <li>Fixed causes of several fatal firmware errors on <a href="https://man.openbsd.org/iwx">iwx(4)</a> devices.
+	  <li>Added <a href="https://man.openbsd.org/bwfm">bwfm(4)</a> support for BCM4359 SDIO variants such as the AP6359SA module found on the RockPro64 WiFi module.
+	  <li>Enabled critical temperature detection in <a href="https://man.openbsd.org/iwx">iwx(4)</a> firmware.
+	  <li>Fixed mbuf leak in <a href="https://man.openbsd.org/urtwn">urtwn(4)</a> with frames CCMP-encrypted by hardware.
+	  <li>Added support for the D-Link DWA-121 rev B1 <a href="https://man.openbsd.org/urtwn">urtwn(4)</a> device.
+	  <li>Repaired <a href="https://man.openbsd.org/athn">athn(4)</a> in client mode against WPA2 access points.
+	  <li>Prevented a panic where <a href="https://man.openbsd.org/athn">athn(4)</a> attempted to transmit old, unencryptable frames after switching to a new group key in hostap mode.
+	  <li>Switched <a href="https://man.openbsd.org/iwx">iwx(4)</a> from -46 to -48 firmware.
+	  <li>Enabled background scanning on <a href="https://man.openbsd.org/iwx">iwx(4)</a> devices.
+	  <li>Fixed gain calibration for some <a href="https://man.openbsd.org/iwn">iwn(4)</a> devices (5000 and up).
+	  <li>Added support for AX201 devices to <a href="https://man.openbsd.org/iwx">iwx(4)</a>.
+  </ul>
+
+<li>New <a href="https://www.openbsd.org/arm64.html">arm64</a> and <a
+	href="https://www.openbsd.org/armv7.html">armv7</a> hardware support
+	and bugfixes, including:
+  <ul>
+	<li>Added <a href="https://man.openbsd.org/amlpwrc">amlpwrc(4)</a>, a driver for the power domain controller found on Amlogic SoCs.
+	<li>Made OpenBSD boot on the ODROID-C4 with power domain in <a href="https://man.openbsd.org/amldwusb">amldwusb(4)</a>.
+	<li>Added support for the SD card detect pins on the Turris Mox.
+	<li>Added support for the Marvell Xenon SDHC, used as storage on the Armada 3700 and 8040 SoCs.
+	<li>Opened up a 4GB memory bus window for <a href="https://man.openbsd.org/mvneta">mvneta(4)</a> on the Marvell Armada 3700, making the second Ethernet controller/port work on the Turris Mox.
+	<li>Added <a href="https://man.openbsd.org/mvkpcie">mkvpcie(4)</a>, a driver for the Aardvark PCIe controller found on the Armada 3700 SoC.
+	<li>Adjusted <a href="https://man.openbsd.org/dwpcie">dwpcie(4)</a> timing to improve likelihood of a successful PCIe link on the i.MX8MM. Avoids a failure to detect <a href="https://man.openbsd.org/em">em(4)</a> on the HummingBoard Pulse.
+	<li>Added <a href="https://man.openbsd.org/cwfg">cwfg(4)</a>, a driver for the Cellwise CW201x fuel gauge on the Pinebook Pro.
+	<li>Populated a list of 256 brightness levels as a fallback when the device tree does not specify a list, making the Pinebook Pro display work with the dtb from Linux 5.7.
+	<li>Added <a href="https://man.openbsd.org/escodec">escodec(4)</a>, a driver for the Everest ES8316 audio codec used on the Pinebook Pro.
+	<li>Added <a href="https://man.openbsd.org/rkiis">rkiis(4)</a>, a driver for the I2S controller found on the Rockchip RK3399.
+	<li>Added <a href="https://man.openbsd.org/bcmtmon">bcmtmon(4)</a>, a driver for the temperature sensor on the Raspberry Pi 4.
+	<li>Introduced <a href="https://man.openbsd.org/mvpp">mvpp(4)</a>, a driver for the Marvell Packet Processor v2 as used on the Armada 7K and 8K SoCs.
+	<li>Improved PLL1(CPU_PLL) stability for the Allwinner H3/H2+.
+	<li>Ported NetBSD's arm64 disassembler for <a href="https://man.openbsd.org/ddb">ddb(4)</a>.
+	<li>Enabled spleen16x32 and spleen32x64 fonts on armv7 for GENERIC kernels.
+	<li>Enabled building <a href="https://man.openbsd.org/wsmoused">wsmoused(8)</a> and <a href="https://man.openbsd.org/wsfontload">wsfontload(8)</a> on arm64 and armv7.
+  </ul>
+
+<li>IEEE 802.11 wireless stack improvements and bugfixes:
+  <ul>
+	<li>Fixed CCMP replay checks with 11n Rx aggregation and CCMP hardware offloading.
+	<li>In hostap mode, complete WPA group key renewals immediately if no station is associated.
+	<li>Improved processing of lost frames during 802.11 Rx aggregation.
+	<li>Allowed passage of unencrypted 802.11 frames during hardware decryption post-processing, fixing failure of some <a href="https://man.openbsd.org/ral">ral(4)</a> devices to receive packets on encrypted networks.
+	<li>Prevented a use-after-free when a wireless device is detached.
+  </ul>
+
+<li>Generic network stack improvements and bugfixes:
+  <ul>
+	<!-- carp and pf -->
+	<li>Implemented a <a href="https://man.openbsd.org/carp">carp(4)</a> transmit bypassing the ifq on output, enqueuing the packet directly on the parent interface.
+	<li>Fixed <a href="https://man.openbsd.org/pf.conf">pf.conf(5)</a> "route-to TABLE least-states" in an anchor.
+	<li>Allowed <a href="https://man.openbsd.org/pf">pf(4)</a> to divert packets from <a href="https://man.openbsd.org/bridge">bridge(4)</a> to local socket.
+	<li>Rehashed main <a href="https://man.openbsd.org/pf">pf(4)</a> rulesets after rule expiration.
+	<li>Added a check for <a href="https://man.openbsd.org/pfctl">pfctl(8)</a> that an rtable exists when parsing the config.
+	<li>Corrected ruleset checksum calculation to allow <a href="https://man.openbsd.org/pfsync">pfsync(4)</a> to verify rulesets are identical on all nodes.
+	<!-- wg -->
+	<li>Added <a href="https://man.openbsd.org/wg">wg(4)</a>, an in-kernel driver for WireGuard VPN communication.
+	<!-- network pseudo drivers and other kernel network internals -->
+	<li>Protected the whole <a href="https://man.openbsd.org/pipex">pipex(4)</a> layer by NET_LOCK().
+	<li>Stopped creation of non-existent <a href="https://man.openbsd.org/bridge">bridge(4)</a> interfaces.
+	<li>Added a symmetric toeplitz implementation with integration for nics, usable through the <a href="https://man.openbsd.org/stoeplitz_to_key">stoeplitz_to_key(9)</a> hash algorithm API.
+	<li>Changed <a href="https://man.openbsd.org/tpmr">tpmr(4)</a> from ifconfig [-]trunkport to add|del synopsis.
+	<li>Filtered vlan and svlan packets by default for <a href="https://man.openbsd.org/tpmr">tpmr(4)</a>.
+	<li>Implemented IPv6 source address selection as outlined in RFC 6724 section 5.
+	<li>Set IPv6 source address selection to prefer the address with the highest preferred lifetime in case of a tie.
+	<li>Stopped preventing TCP connections to IPv6 anycast addresses.
+	<li>Added the <a href="https://man.openbsd.org/pcap-filter">pcap-filter(5)</a> "sample NUM" primitive to allow capture of 1/NUM packets.
+	<li>Added a <a href="https://man.openbsd.org/man4/route.4">ROUTE_FLAGFILTER</a> socket option for routing sockets, allowing routing daemons to opt out of receiving messages for L2 and broadcast route entries.
+	<li>Allowed SIOCSWGDPID and SIOCSWGMAXFLOW ioctls for non-root, preventing <a href="https://man.openbsd.org/switch">switch(4)</a> interfaces from appearing partially as <a href="https://man.openbsd.org/bridge">bridge(4)</a> devices for unprivileged users running <a href="https://man.openbsd.org/ifconfig">ifconfig(8)</a>.
+	<li>Modified <a href="https://man.openbsd.org/trunk">trunk(4)</a> to keep port interfaces UP on removal, matching <a href="https://man.openbsd.org/aggr">aggr(4)</a> behavior.
+	<li>Fixed <a href="https://man.openbsd.org/rdomain">rdomain(4)</a> handling for IPv6.
+	<li>Fixed <a href="https://man.openbsd.org/rtable">rtable(4)</a> separation of raw sockets for IPv6.
+	<li>Documented <a href="https://man.openbsd.org/rtable">rtable(4)</a> removal semantics.
+  </ul>
+
+<li>Installer improvements:
+  <ul>
+	<li>On systems with multiple root disks, the installer will upgrade the disk with auto_upgrade.conf present when the upgrade was initiated by <a href="https://man.openbsd.org/sysupgrade">sysupgrade(8)</a>.
+	<li>Changed install images called *.fs to *.img to accommodate some UEFI bootloaders.
+	<li>Forced long-names on msdos filenames for installboot on most 32-bit architectures.
+	<li>Converted macppc, octeon and loongson to use machine-independent installboot.
+      </ul>
+
+<li>Improvements in the FFS2 filesystem:
+  <ul>
+	<li>Made FFS2 the default for <a href="https://man.openbsd.org/newfs">newfs(8)</a>, except for mfs.
+  	<li>Improved reliability of very large FFS2 filesystems.
+        <li>Improved speed of checking FFS2 filesystems.
+	<li>Enabled the FFS2 option on the luna88k ramdisk.
+	<li>Made FFS2 the default non-root filesystems on landisk, sgi and luna88k.
+  </ul>
+
+<li>Security improvements:
+  <ul>
+    <li>Added RB_GOODRANDOM passed from bootloader to kernel in boothowto, indicating confidence a "great seed" was loaded.
+    <li>Passed boothowto from the sparc64 bootloader to the kernel using .openbsd.bootdata.
+    <li>Introduced detection of /etc/random.seed reuse.
+    <li>Rewrote the entropy enqueue ring to collect damage asynchronously and adapted the dequeue to mix a selection of "best" ring entries, exponentially backing off the dequeue timeout, to compensate rapidly for weak seeding in unidentifiable conditions and ensure quality to arc4random() calls early in boot.
+    <li>Enabled PAN (Privileged Access Never) on arm64 CPUs supporting it.
+    <li>Skipped scanning file systems which are both nodev and nosuid for SUID, SGID and device files with <a href="https://man.openbsd.org/security">security(8)</a>.
+    <li>Fixed two out-of-bounds array accesses in ioctl code pathways in
+	<a href="https://man.openbsd.org/wscons">wscons(4)</a>.
+    <li>Fixed information leak in semctl SEM_GET.
+    <li>Prevented root from freezing the UTC clock with <a href="https://man.openbsd.org/settimeofday">settimeofday(2)</a> at securelevel 2.
+    <li>Fixed performance problems relating to tty subsystem abuse.<!-- tty.c,v 1.158 2020/07/14 14:33:03 deraadt -->
+    <li>Fixed heap corruption in the X input method client in libX11.
+    <li>Fixed potential information leak via X server pixel data uninitialized memory.
+    <li>Fixed a race condition for isoc devices during device close.
+    <li>Fixed an integer overflow in libX11 which could lead to a double free.
+    <li>Corrected multiple input validation deficits in X server extensions.
+  </ul>
+
+<li>Routing daemons and other userland network improvements:
+  <ul>
+      <!-- bgpd -->
+	<li>In <a href="https://man.openbsd.org/bgpctl">bgpctl(8)</a>, the
+	    "reload" command now takes a 'reason' argument to use as
+	    Administrative Shutdown Communication to its neighbors.
+	<li>Added <a href="https://man.openbsd.org/bgpctl">bgpctl(8)</a>
+	    support for VPNv6 in the family option of the "show rib" command.
+	<li>Added <a href="https://man.openbsd.org/bgpctl">bgpctl(8)</a>
+	    support for JSON formatted output in various "show" commands.
+      <!-- OSPF -->
+	<li>Improve performance of <a href="https://man.openbsd.org/ospfd">ospfd(8)</a>, <a href="https://man.openbsd.org/ospf6d">ospf6d(8)</a> by using the ROUTE_FLAGFILTER setsockopt to filter out routing socket messages
+	    for L2 and broadcast routes.
+      <!-- ldap -->
+	<li>Modified <a href="https://man.openbsd.org/ldapd">ldapd(8)</a> use of "ldaps" and "tls" keywords to enable only the libtls defaults for protocols and ciphers. The new "legacy" keyword can be used before these keywords in <a href="https://man.openbsd.org/ldapd.conf">ldapd.conf(5)</a> to enable them all.
+	<li>Added a bsd.schema to <a href="https://man.openbsd.org/ldapd">ldapd(8)</a> including a shadowPassword and an sshPublicKey attribute which can be used to extend existing LDAP users with the additional bsdAccount objectclass.
+      <!-- snmpd -->
+	<li>Removed support for the socket keyword in <a href="https://man.openbsd.org/snmpd.conf">snmpd.conf(5)</a>.
+	<li>Allowed <a href="https://man.openbsd.org/snmpd">snmpd(8)</a> to define the port we listen on.
+	<li>Allowed <a href="https://man.openbsd.org/snmp">snmp(1)</a> mibtree to take one or more arguments to be converted to a chosen output format.
+	<li>Replaced <a href="https://man.openbsd.org/relayd">relayd(8)</a>'s agentx backend and reworked the object structure to be in line with what is defined in the MIB.
+      <!-- httpd and relayd -->
+	<li>Introduced a "dark mode" for directory listings and error pages in <a href="https://man.openbsd.org/httpd">httpd(8)</a>.
+	<li>Allowed specifying -d multiple times in <a href="https://man.openbsd.org/slowcgi">slowcgi(8)</a>.
+	<li>Added <a href="https://man.openbsd.org/unveil">unveil(2)</a> to the main process of <a href="https://man.openbsd.org/relayd">relayd(8)</a>.
+	<li>Added support for non-localhost fastcgi sockets to <a href="https://man.openbsd.org/httpd.conf">httpd.conf(5)</a>.
+      <!-- rpki-client -->
+	<li>Fixed a hang in <a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> by properly waiting for exiting <a href="https://man.openbsd.org/openrsync">openrsync(1)</a> processes.
+	<li>Removed the -f (force) option in <a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a>.
+	<li><a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> no longer uses <a href="https://man.openbsd.org/openrsync">openrsync(1)</a>'s "--delete" to clean up stale files, but instead relies on cryptographically signed RPKI manifest listings.
+	<li>Fixed <a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> return value check for OpenSSL API used during pubkey validation.
+	<li>Released <a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> 6.7p1 including OpenBSD 6.7 Errata 015.
+	<li>Changed <a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> -n behavior to automatically validate the repo.
+	<li>Added a "-s timeout" feature to <a href="https://man.openbsd.org/rpki-client">rpki-client(8)</a> with a one hour default, allowing fresh attempts with <a href="https://man.openbsd.org/cron">cron(8)</a> if rpki-client gets stuck.
+      <!-- other userland -->
+	<li>Added an optional "domain name" <a href="https://man.openbsd.org/acme-client.conf">acme-client.conf(5)</a> option allowing use of multiple domain sections with the same name and creation of an rsa and an ecdsa key for the same domain name.
+	<li>Added an optional "contact" <a href="https://man.openbsd.org/acme-client.conf">acme-client.conf(5)</a> option to the account section allowing issuance of certificates from authorities that require a contact email address.
+	<li>Added <a href="https://man.openbsd.org/netstat">netstat(1)</a> -R to show a summary of rdomains with associated interfaces and tables.
+	<li>Defaulted to showing full IPv6 address entries in the routing tables displayed by <a href="https://man.openbsd.org/route">route(8)</a> show and <a href="https://man.openbsd.org/netstat">netstat(1)</a> -r.
+	<li>Fixed <a href="https://man.openbsd.org/pcap-filters">pcap-filters(5)</a> on DLT_LOOP links, e.g. <a href="https://man.openbsd.org/lo">lo(4)</a>, <a href="https://man.openbsd.org/gre">gre(4)</a>, <a href="https://man.openbsd.org/wg">wg(4)</a>, etc.
+	<li>Fixed <a href="https://man.openbsd.org/dhclient">dhclient(8)</a> domain-search option processing.
+	<li>Corrected <a href="https://man.openbsd.org/dhclient">dhclient(8)</a> DECLINE message generation to always include the OFFER'd address.
+	<li>Enabled append/prepend for the domain-search option in <a href="https://man.openbsd.org/dhclient.conf">dhclient.conf(5)</a>.
+	<li>Removed 128-byte limit on <a href="https://man.openbsd.org/dhclient">dhclient(8)</a> search domains and static routes.
+	<li>Corrected <a href="https://man.openbsd.org/route">route(8)</a> handling of ::/0 and "route add -inet 0.0.0.0 -prefixlen 0 (gateway)".
+	<li>Fixed integer underflow in <a href="https://man.openbsd.org/tcpdump">tcpdump(8)</a> due to tiny snaplen causing bogus hexdumps.
+	<li>Added initial <a href="https://man.openbsd.org/tcpdump">tcpdump(8)</a> support for handling geneve packets.
+	<li>Added <a href="https://man.openbsd.org/top">top(1)</a> "t" to toggle the display of routing tables.
+	<li>Added filtering by routing table to <a href="https://man.openbsd.org/top">top(1)</a>.
+	<li>Moved <a href="https://man.openbsd.org/ntpd">ntpd(8)</a> to unsynced mode if no replies are received for awhile due to connectivity issues.
+	<li>Made <a href="https://man.openbsd.org/slaacd">slaacd(8)</a> handle IPv6 address configuration in all rdomains in a single daemon, instead of running one daemon per rdomain.
+  </ul>
+
+<li><a href="https://man.openbsd.org/ipsec">ipsec(4)</a> (and related userland programs) improvements and
+    bugfixes:
+  <ul>
+	<li>Added AES-GCM mode ciphers for IKEv2, configurable in <a href="https://man.openbsd.org/iked.conf">iked.conf(5)</a> with the new "ikesa enc" options aes-128-gcm, aes-256-gcm, aes-128-gcm-12 and aes-256-gcm-12.
+	<li>Enabled AES-GCM ciphers by default for IKE and Child SAs resulting in considerable performance improvements with hardware acceleration support.
+	<li>Enabled SHA2_384 and SHA2_512 by default for improved compatibilty.
+	<li>Added the new <a href="https://man.openbsd.org/iked">iked(8)</a> configuration option "set enforcesingleikesa" to limit the number of connections for each peer.
+	<li>Added optional <a href="https://man.openbsd.org/iked">iked(8)</a> time-stamp validation for OCSP.
+	<li>Added a 30 second timeout for OCSP requests in <a href="https://man.openbsd.org/iked">iked(8)</a>.
+	<li>Added a new "set cert_partial_chain" config option to <a href="https://man.openbsd.org/iked.conf">iked.conf(5)</a> to allow verification of partial certificate chains if a trusted intermediate CA is found in /etc/iked/ca.
+	<li>Added a dpd_check_interval configuration option to <a href="https://man.openbsd.org/iked.conf">iked.conf(5)</a>.
+	<li>Allowed disabling of <a href="https://man.openbsd.org/iked">iked(8)</a> DPD liveness checks by setting dpd_check_interval to 0 in <a href="https://man.openbsd.org/iked.conf">iked.conf(5)</a>.
+	<li>Made <a href="https://man.openbsd.org/iked">iked(8)</a> use the CA certificate for the OCSP issuer and respect the OCSP url from the issuer certificate.
+	<li>Fixed <a href="https://man.openbsd.org/iked">iked(8)</a> public key authentication interoperability with *swan and other IKEv2 implementations by making CERT and CERTREQ payloads optional.
+	<li>Fixed an <a href="https://man.openbsd.org/iked">iked(8)</a> policy lookup edge case for simultaneous transport and tunnel mode SAs.
+	<li>Fixed a dst/src <a href="https://man.openbsd.org/iked">iked(8)</a> port configuration bug with multiple flows.
+	<li>Prioritized incoming certificate requests by the order of CERTEQ payloads in the received message in <a href="https://man.openbsd.org/iked">iked(8)</a>.
+	<li>Prevented concurrent CREATE_CHILD_SA and INFORMATION exchanges in <a href="https://man.openbsd.org/iked">iked(8)</a>.
+	<li>Handled <a href="https://man.openbsd.org/iked">iked(8)</a> TEMPORARY_FAILURE notification on IKESA rekeying.
+	<li>Fixed multiple bugs with pfkey acquire messages.
+  </ul>
+
+<li><a href="https://man.openbsd.org/tmux">tmux(1)</a> improvements and bug fixes:
+  <ul>
+        <li>How data is sent to control mode clients has been completely revamped to both be more fair with multiple panes and to prevent huge amounts of data being backed up.
+        <li>Configuration file parsing has changed slightly: the contents of the {} syntax must now be valid <a href="https://man.openbsd.org/tmux">tmux(1)</a> command syntax; and to allow formats to be annotated, strings given with quotes may now contain newlines (leading spaces and comments are stripped).
+        <li>A new customize mode available with C-b C (C-b S-c) which allows options and key bindings to be browsed and changed interactively.
+        <li>Support for extended keys offered by some terminals (xterm, mintty, iTerm2).
+        <li>A pane-border-lines option to change the characters used to draw the pane border separators.
+        <li>How UTF-8 data is stored has been rewritten to reduce memory use for characters in the BMP.
+        <li>The message log (C-b ~) has been changed to be per server instead of per client and to have some useful content.
+        <li>A new active-pane client flag that if given allows a client to have its own active pane for each window rather than being tied to the server's active pane.
+        <li>Improved command-prompt completion including showing a menu of completions.
+        <li>All style options can now be formats, for example the default pane-active-border-style now changes colour depending on pane_in_mode and synchronize-panes.
+        <li>Performance improvements in copy mode and additional styles for marking of search terms.
+        <li>Window and pane hooks such as window-layout-changed and pane-exited are now window or pane options instead of session options.
+	<li>Added the 'e' key in buffer mode to open the buffer in an editor.
+	<li>Added M-+ and M-- to expand and collapse all items in tree mode.
+	<li>Added a -D flag to run in non-daemonized mode.
+	<li>Added <a href="https://man.openbsd.org/tmux">tmux(1)</a> -b flags to insert a window before (like the existing -a for after) to break-pane, move-window and new-window.
+	<li>Changed <a href="https://man.openbsd.org/tmux">tmux(1)</a> searching to behave more like emacs and prevented regex searching from overlapping when searching forward.
+	<li>Allowed a-z keys for <a href="https://man.openbsd.org/tmux">tmux(1)</a> display-panes to jump to higher-numbered panes.
+	<li>Allowed use of -N without a command to change or add a note to an existing key in <a href="https://man.openbsd.org/tmux">tmux(1)</a>.
+  </ul>
+
+<li>VMM/VMD and ldom/sparc64 virtualization improvements
+  <ul>
+	<li>Fixed <a href="https://man.openbsd.org/ldomctl">ldomctl(8)</a> "init-system" with multiple PCIe root complexes (Oracle SPARC T4-2 machines).
+	<li>Made <a href="https://man.openbsd.org/ldomctl">ldomctl(8)</a> reject vdisk, vnet and iodevice parameters for primary domain.
+	<li>Made <a href="https://man.openbsd.org/ldomctl">ldomctl(8)</a> "init-system -n" check vcpu and memory constraints.
+	<li>Increased the default number of ldom and ttyV devices for sparc64 from eight to sixteen.
+	<li>Fixed <a href="https://man.openbsd.org/vmd">vmd(8)</a> ns8250 lockup due to a race condition, helping to prevent linux vm crashes when the return key is held on boot.
+	<li>Prevented possible libevent state corruption in <a href="https://man.openbsd.org/vmd">vmd(8)</a>.
+  </ul>
+
+<li>OpenSMTPD 6.8.0
+  <ul>
+	<li>Fixed an uninitialized variable and potential stack overflow with IPv6 connections in <a href="https://man.openbsd.org/smtpd">smtpd(8)</a>.
+	<li>Fixed <a href="https://man.openbsd.org/smtpd">smtpd(8)</a> handling of user names containing "@" symbols.
+	<li>Allowed handling of long lines in an <a href="https://man.openbsd.org/smtpd">smtpd(8)</a> aliases table.
+	<li>Removed <a href="https://man.openbsd.org/mail.local">mail.local(8)</a> support for world-writable mail spools.
+  </ul>
+
+<li>LibreSSL 3.2.2
+  <ul>
+    <li>New Features
+    <ul>
+	<li>This is the first stable release with the new TLSv1.3
+	    implementation enabled by default for both client and server. The
+ 	    OpenSSL 1.1 TLSv1.3 API is not yet available and will be provided
+	    in an upcoming release.
+
+	<li>New X509 certificate chain validator that correctly handles
+	    multiple paths through intermediate certificates. Loosely based on
+	    Go's X509 validator.
+
+	<li>New name constraints verification implementation which passes the
+	    <a href="https://nameconstraints.bettertls.com/">BetterTLS</a>
+	    certificate validation check suite.
+    </ul>
+
+    <li>API and Documentation Enhancements
+    <ul>
+        <li>New <a href="https://man.openbsd.org/CMAC_Init">CMAC_Init(3)</a> and <a href="https://man.openbsd.org/ChaCha">ChaCha(3)</a> manual pages.
+	<li>Document <a href="https://man.openbsd.org/SSL_set1_host">SSL_set1_host(3)</a>, <a href="https://man.openbsd.org/SSL_set_SSL_CTX">SSL_set_SSL_CTX(3)</a>.
+	<li>Document PKCS7 attribute functions.
+	<li>Document <a href="https://man.openbsd.org/PKCS7_final">PKCS7_final(3)</a>, <a href="https://man.openbsd.org/PKCS7_add_attribute">PKCS7_add_attribute(3)</a>.
+	<li>Document <a href="https://man.openbsd.org/PKCS7_get_signer_info">PKCS7_get_signer_info(3)</a>.
+	<li>Document <a href="https://man.openbsd.org/PEM_ASN1_read">PEM_ASN1_read(3)</a> and <a href="https://man.openbsd.org/PEM_ASN1_read_bio">PEM_ASN1_read_bio(3)</a>.
+	<li>Document <a href="https://man.openbsd.org/PEM_X509_INFO_read">PEM_X509_INFO_read(3)</a> and <a href="https://man.openbsd.org/PEM_X509_INFO_read_bio">PEM_X509_INFO_read_bio(3)</a>.
+	<li>Document <a href="https://man.openbsd.org/PEM_def_callback">PEM_def_callback(3)</a>.
+	<li>Document <a href="https://man.openbsd.org/EVP_read_pw_string_min">EVP_read_pw_string_min(3)</a>.
+	<li>Merge documentation of <a href="https://man.openbsd.org/X509_get0_serialNumber">X509_get0_serialNumber(3)</a> from OpenSSL 1.1.1.
+	<li>Document error handling of <a href="https://man.openbsd.org/X509_PUBKEY_get0">X509_PUBKEY_get0(3)</a> and <a href="https://man.openbsd.org/X509_PUBKEY_get">X509_PUBKEY_get(3)</a>.
+	<li>Document <a href="https://man.openbsd.org/X509_get0_pubkey_bitstr">X509_get0_pubkey_bitstr(3)</a>
+	<li>Document <a href="https://man.openbsd.org/openssl">openssl(1)</a> certhash.
+    </ul>
+
+    <li>Compatibility Changes
+    <ul>
+	<li>Modify I/O behavior so that <a href="https://man.openbsd.org/SSL_CTX_set_mode#SSL_MODE_AUTO_RETRY">SSL_MODE_AUTO_RETRY</a> is the default similar to new OpenSSL releases.
+	<li>Add the P-521 curve to the list of curves supported by default in the client.
+	<li>Define OPENSSL_NO_SSL_TRACE in opensslfeatures.h.
+	<li>Make SSL_CTX_get_ciphers(NULL) return NULL rather than crash.
+	<li>Improve TLSv1.3 client certificate selection to allow EC certificates instead of only RSA certificates.
+	<li>Add minimal info callback support for TLSv1.3.
+	<li>Support TLSv1.3 options in the <a href="https://man.openbsd.org/openssl">openssl(1)</a> command.
+	<li>Add support for additional GOST curves from RFC 7836 and draft-deremin-rfc4491-bis.
+	<li>Add OIDs for HMAC using the Streebog hash function.
+	<li>Allow GOST R 34.11-2012 in PBE/PBKDF2/PKCS#5.
+	<li>Enable GOST_SIG_FORMAT_RS_LE when verifying certificate signatures.
+	<li>Handle GOST in ssl_cert_dup().
+	<li>Stop sending GOST R 34.10-94 as a CertificateType.
+	<li>Use IANA allocated GOST ClientCertificateTypes.
+    </ul>
+
+    <li>Testing and Proactive Security
+    <ul>
+	<li>Greatly expanded test coverage via the tlsfuzzer test scripts.
+	<li>Expanded test coverage via the <a href="https://nameconstraints.bettertls.com/">BetterTLS</a> certificate test suite.
+	<li>Test interoperability with the Botan TLS client.
+    </ul>
+
+    <li>Internal Improvements
+      <ul>
+	<li>Collapse x509v3 directory into x509.
+	<li>Add initial support for openbsd/powerpc64.
+	<li>Improve length checks in the TLSv1.3 record layer and provide appropriate alerts for violations of record layer limits.
+	<li>Enforce that SNI hostnames received by the TLS server are correctly formed as per RFC 5890 and RFC 6066, responding with illegal parameter for a nonconformant host name.
+	<li>Support <a href="https://man.openbsd.org/SSL_CTX_set_mode#SSL_MODE_AUTO_RETRY">SSL_MODE_AUTO_RETRY</a> in TLSv1.3 to allow the automatic retry of handshake messages.
+	<li>Improve the handling of <a href="https://man.openbsd.org/BIO_read">BIO_read(3)</a>/<a href="https://man.openbsd.org/BIO_write">BIO_write(3)</a> failures in the TLSv1.3 stack.
+	<li>Start replacing the existing TLSv1.2 record layer.
+	<li>Simplify SSL method lookups.
+	<li>Clean up and simplify <a href="https://man.openbsd.org/SSL_get_ciphers">SSL_get_ciphers(3)</a>, <a href="https://man.openbsd.org/SSL_set_session">SSL_set_session(3)</a>, <a href="https://man.openbsd.org/SSL_set_ssl_method">SSL_set_ssl_method(3)</a> and several internal functions.
+	<li>Refactor dtls1_new(), dtls1_hm_fragment_new(), dtls1_drain_fragments(), dtls1_clear_queues().
+	<li>Make the message type available in the internal TLS extensions API functions.
+	<li>Numerous <a href="https://man.openbsd.org/openssl">openssl(1)</a> subcommands were converted to the new option handling.
+	<li>Copy the session ID directly in ssl_get_prev_session() instead of handing it through several functions for copying.
+	<li>Clean up and refactor ssl_get_prev_session(); simplify tls_decrypt_ticket() and tls1_process_ticket() exit paths.
+      </ul>
+
+    <li>Portable Improvements
+    <ul>
+	<li>Make pthread_mutex static initialisation work on Windows.
+	<li>Get __STRICT_ALIGNMENT from machine/endian.h with portable build.
+    </ul>
+
+    <li>Bug Fixes
+    <ul>
+	<li>Fix an off-by-one in the CBC padding removal.
+	<li>Enforce in the TLSv1.3 server that that ClientHello messages after a HelloRetryRequest match the original ClientHello as per RFC 8446 section 4.1.2
+	<li>Avoid calling freezero with a negative size if a server sends a malformed plaintext of all zeroes.
+	<li>Correct use of sockaddr_storage instead of sockaddr in openssl(1) s_client, which could lead to using 14 bytes of stack garbage instead of an IPv6 address in DTLS mode.
+	<li>Fix a longstanding bug in <a href="https://man.openbsd.org/PEM_X509_INFO_read_bio">PEM_X509_INFO_read_bio(3)</a> that could cause use-after-free and double-free issues in calling programs.
+	<li>Zero out variable on the stack to avoid leaving garbage in the tail of short session IDs.
+	<li>Ensure that appropriate alerts are sent on various error conditions.
+	<li>Move state initialization from <a href="https://man.openbsd.org/SSL_clear">SSL_clear(3)</a> to ssl3_clear() to ensure that it gets correctly reinitialized across a <a href="https://man.openbsd.org/SSL_set_ssl_method">SSL_set_ssl_method(3)</a> call.
+	<li>Add a custom copy handler for AES keywrap to fix a use-after-free.
+	<li>Avoid an out-of-bounds write in <a href="https://man.openbsd.org/BN_rand">BN_rand(3)</a>.
+	<li>Fix numerous leaks in the <a href="https://man.openbsd.org/UI_new">UI_dup_*(3)</a> functions. Simplify and tidy up the code in ui_lib.c.
+	<li>Correctly track selected ALPN length to avoid a potential segmentation fault with <a href="https://man.openbsd.org/SSL_get0_alpn_selected">SSL_get0_alpn_selected(3)</a> when alpn_selected is NULL.
+	<li>Include machine/endian.h gost2814789.c in order to pick up the __STRICT_ALIGNMENT define.
+	<li>Correctly handle ssl_cert_dup() failure in <a href="https://man.openbsd.org/SSL_set_SSL_CTX">SSL_set_SSL_CTX(3)</a>.
+	<li>Fail on receiving an invalid NID in <a href="https://man.openbsd.org/X509_ATTRIBUTE_create">X509_ATTRIBUTE_create(3)</a> instead of constructing a broken objects that may cause NULL pointer accesses.
+	<li>Fix <a href="https://man.openbsd.org/SSL_shutdown">SSL_shutdown(3)</a> behavior in TLSv1.3 to match the legacy stack.  The previous behavior could cause a hang.
+	<li>Modify "openssl x509" to display invalid certificate times as invalid, and correctly deal with the failing return case from <a href="https://man.openbsd.org/X509_cmp_time">X509_cmp_time(3)</a> so that a certificate with an invalid NotAfter does not appear valid.
+    </ul>
+  </ul>
+
+<li>OpenSSH 8.4
+  <ul>
+    <li>Potentially incompatible changes.
+    <ul>
+ 	<li>For FIDO/U2F support, OpenSSH recommends the use of libfido2
+1.5.0 or greater. Older libraries have limited support at the expense
+of disabling particular features. These include resident keys, PIN-
+required keys and multiple attached tokens.
+ 	<li><a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+the format of the attestation information optionally recorded when a
+FIDO key is generated has changed. It now includes the authenticator
+data needed to validate attestation signatures. 
+ 	<li>The API between OpenSSH and the FIDO token middleware has
+changed and the SSH_SK_VERSION_MAJOR version has been incremented as a
+result. Third-party middleware libraries must support the current API
+version (7) to work with OpenSSH 8.4.
+ 	<li>The portable OpenSSH distribution now requires automake to
+rebuild the configure script and supporting files. This is not
+required when simply building portable OpenSSH from a release tar
+file.
+    </ul>
+    <li>New Features
+    <ul>
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>,
+<a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+support for FIDO keys that require a PIN for each use. These keys may
+be generated using ssh-keygen using a new "verify-required" option.
+When a PIN-required key is used, the user will be prompted for a PIN
+to complete the signature operation.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>:
+authorized_keys now supports a new "verify-required" option to require
+FIDO signatures assert that the token verified that the user was
+present before making the signature. The FIDO protocol supports
+multiple methods for user-verification, but currently OpenSSH only
+supports PIN verification.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>, <a
+href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>: add
+support for verifying FIDO webauthn signatures. Webauthn is a standard
+for using FIDO keys in web browsers. These signatures are a slightly
+different format to plain FIDO signatures and thus require explicit
+support.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: allow some
+keywords to expand shell-style ${ENV} environment variables. The
+supported keywords are CertificateFile, ControlPath, IdentityAgent and
+IdentityFile, plus LocalForward and RemoteForward when used for Unix
+domain socket paths.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>, <a
+href="https://man.openbsd.org/ssh-agent">ssh-agent(1)</a>: allow some
+additional control over the use of ssh-askpass via a new
+$SSH_ASKPASS_REQUIRE environment variable, including forcibly enabling
+and disabling its use.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: allow <a
+href="https://man.openbsd.org/ssh_config">ssh_config(5)</a>'s
+AddKeysToAgent keyword accept a time limit for keys in addition to its
+current flag options. Time- limited keys will automatically be removed
+from ssh-agent after their expiry time has passed.
+ 	<li><a href="https://man.openbsd.org/scp">scp(1)</a>, <a
+href="https://man.openbsd.org/sftp">sftp(1)</a>: allow the -A flag to
+explicitly enable agent forwarding in scp and sftp. The default
+remains to not forward an agent, even when ssh_config enables it.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: add a '%k'
+TOKEN that expands to the effective HostKey of the destination. This
+allows, e.g., keeping host keys in individual files using
+"UserKnownHostsFile ~/.ssh/known_hosts.d/%k".
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: add %-TOKEN,
+environment variable and tilde expansion to the UserKnownHostsFile
+directive, allowing the path to be completed by the configuration.
+ 	<li><a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+allow "ssh-add -d -" to read keys to be deleted from stdin.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: improve
+logging for MaxStartups connection throttling.  sshd will now log when
+it starts and stops throttling and periodically while in this state.
+    </ul>
+    <li>Bugfixes
+    <ul>
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>, <a
+href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>: better
+support for multiple attached FIDO tokens. In cases where OpenSSH
+cannot unambiguously determine which token to direct a request to, the
+user is now required to select a token by touching it. In cases of
+operations that require a PIN to be verified, this avoids sending the
+wrong PIN to the wrong token and incrementing the token's PIN failure
+counter (tokens effectively erase their keys after too many PIN
+failures).
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: fix Include
+before Match in <a
+href="https://man.openbsd.org/sshd_config">sshd_config(5)</a>.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: close
+stdin/out/error when forking after authentication completes ("ssh -f
+...").
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>, <a
+href="https://man.openbsd.org/sshd">sshd(8)</a>: limit the amount of
+channel input data buffered, avoiding peers that advertise large
+windows but are slow to read from causing high memory consumption.
+ 	<li><a href="https://man.openbsd.org/ssh-agent">ssh-agent(1)</a>:
+handle multiple requests sent in a single write() to the agent.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: allow <a
+href="https://man.openbsd.org/sshd_config">sshd_config(5)</a> longer than 256k
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: avoid
+spurious "Unable to load host key" message when sshd load a private
+key but no public counterpart
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: prefer the
+default hostkey algorithm list whenever we have a hostkey that matches
+its best-preference algorithm.
+ 	<li><a href="https://man.openbsd.org/sshd">ssh(1)</a>: when
+ordering the hostkey algorithms to request from a server, prefer
+certificate types if the known_hosts files contain a key marked as a
+@cert-authority;
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: perform host
+key fingerprint comparisons for the "Are you sure you want to continue
+connecting (yes/no/[fingerprint])?" prompt with case sensitivity.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: ensure that
+address/masklen mismatches in sshd_config yield fatal errors at daemon
+start time rather than later when they are evaluated.
+ 	<li><a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+ensure that certificate extensions are lexically sorted. Previously if
+the user specified a custom extension then the everything would be in
+order except the custom ones.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: also compare
+username when checking for JumpHost loops.
+ 	<li><a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+preserve group/world read permission on known_hosts files across runs
+of "ssh-keygen -Rf /path". The old behaviour was to remove all rights
+for group/other.
+	<li><a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+Mention the [-a rounds] flag in the ssh-keygen manual page and
+usage().
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: explicitly construct path to ~/.ssh/rc rather than
+relying on it being relative to the current directory, so that it
+can still be found if the shell startup changes its directory.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: when
+redirecting sshd's log output to a file, undo this redirection after
+the session child process is forked(). Fixes missing log messages when
+using this feature under some circumstances.
+ 	<li><a href="https://man.openbsd.org/sshd">sshd(8)</a>: start
+ClientAliveInterval bookkeeping before first pass through select()
+loop; fixed theoretical case where busy sshd may ignore timeouts from
+client.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>: only reset the
+ServerAliveInterval check when we receive traffic from the server and
+ignore traffic from a port forwarding client, preventing a client from
+keeping a connection alive when it should be terminated.
+ 	<li><a href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>:
+avoid spurious error message when ssh-keygen creates files outside
+~/.ssh
+ 	<li><a
+href="https://man.openbsd.org/sftp.1">sftp(1)</a>: fix
+off-by-one error that caused sftp downloads to make one more
+concurrent request than desired. This prevented using <a
+href="https://man.openbsd.org/sftp">sftp(1)</a> in unpipelined
+request/response mode, which is useful when debugging.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>, <a
+href="https://man.openbsd.org/sshd">sshd(8)</a>: handle EINTR in
+waitfd() and timeout_connect() helpers.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>, <a
+href="https://man.openbsd.org/ssh-keygen">ssh-keygen(1)</a>: defer
+creation of ~/.ssh until we attempt to write to it so we don't leave
+an empty .ssh directory when it's not needed.
+ 	<li><a href="https://man.openbsd.org/ssh">ssh(1)</a>, <a
+href="https://man.openbsd.org/sshd">sshd(8)</a>: fix multiplier when
+parsing time specifications when handling seconds after other units.
+    </ul>
+  </ul>
+
+<li>Ports and packages:
+  <p>Many pre-built packages for each architecture:
+  <!-- number of FTP packages minus SHA256, SHA256.sig, index.txt -->
+  <ul style="column-count: 3">
+    <li>aarch64:     10768
+    <li>amd64:       11234
+    <li>arm:         8705
+    <li>i386:        10548
+    <li>mips64:      8540
+    <li>mips64el:    7870
+    <li>powerpc:     9783
+    <li>powerpc64:   6221
+    <li>sparc64:     9688
+  </ul>
+
+<li>As usual, steady improvements in manual pages and other documentation.
+
+<li>The system includes the following major components from outside suppliers:
+  <ul>
+    <li>Xenocara (based on X.Org 7.7 with xserver 1.20.8 + patches,
+        freetype 2.10.2, fontconfig 2.12.4, Mesa 20.0.8, xterm 351,
+        xkeyboard-config 2.20 and more)
+    <li>LLVM/Clang 10.0.1 (+ patches)
+    <li>GCC 4.2.1 (+ patches) and 3.3.6 (+ patches)
+    <li>Perl 5.30.3 (+ patches)
+    <li>NSD 4.3.2
+    <li>Unbound 1.11.0
+    <li>Ncurses 5.7
+    <li>Binutils 2.17 (+ patches)
+    <li>Gdb 6.3 (+ patches)
+    <li>Awk August 7, 2020 version
+    <li>Expat 2.2.8
+  </ul>
+
+</ul>
+</section>
+
+<hr>
+
+<section id=install>
+<h3>How to install</h3>
+<p>
+Please refer to the following files on the mirror site for
+extensive details on how to install OpenBSD 6.8 on your machine:
+
+<ul>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/alpha/INSTALL.alpha">
+	.../OpenBSD/6.8/alpha/INSTALL.alpha</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/amd64/INSTALL.amd64">
+	.../OpenBSD/6.8/amd64/INSTALL.amd64</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/arm64/INSTALL.arm64">
+	.../OpenBSD/6.8/arm64/INSTALL.arm64</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/armv7/INSTALL.armv7">
+	.../OpenBSD/6.8/armv7/INSTALL.armv7</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/hppa/INSTALL.hppa">
+	.../OpenBSD/6.8/hppa/INSTALL.hppa</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/i386/INSTALL.i386">
+	.../OpenBSD/6.8/i386/INSTALL.i386</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/landisk/INSTALL.landisk">
+	.../OpenBSD/6.8/landisk/INSTALL.landisk</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/loongson/INSTALL.loongson">
+	.../OpenBSD/6.8/loongson/INSTALL.loongson</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/luna88k/INSTALL.luna88k">
+	.../OpenBSD/6.8/luna88k/INSTALL.luna88k</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/macppc/INSTALL.macppc">
+	.../OpenBSD/6.8/macppc/INSTALL.macppc</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/octeon/INSTALL.octeon">
+	.../OpenBSD/6.8/octeon/INSTALL.octeon</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/powerpc64/INSTALL.powerpc64">
+	.../OpenBSD/6.8/octeon/INSTALL.powerpc64</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/sgi/INSTALL.sgi">
+	.../OpenBSD/6.8/sgi/INSTALL.sgi</a>
+<li><a href="https://ftp.openbsd.org/pub/OpenBSD/6.8/sparc64/INSTALL.sparc64">
+	.../OpenBSD/6.8/sparc64/INSTALL.sparc64</a>
+</ul>
+</section>
+
+<hr>
+
+<section id=quickinstall>
+<p>
+Quick installer information for people familiar with OpenBSD, and the use of
+the "<a href="https://man.openbsd.org/disklabel.8">disklabel</a> -E" command.
+If you are at all confused when installing OpenBSD, read the relevant
+INSTALL.* file as listed above!
+
+<h3>OpenBSD/alpha:</h3>
+
+<p>
+If your machine can boot from CD, you can write <i>install68.iso</i> or
+<i>cd68.iso</i> to a CD and boot from it.
+Refer to INSTALL.alpha for more details.
+
+<h3>OpenBSD/amd64:</h3>
+
+<p>
+If your machine can boot from CD, you can write <i>install68.iso</i> or
+<i>cd68.iso</i> to a CD and boot from it.
+You may need to adjust your BIOS options first.
+
+<p>
+If your machine can boot from USB, you can write <i>install68.img</i> or
+<i>miniroot68.img</i> to a USB stick and boot from it.
+
+<p>
+If you can't boot from a CD, floppy disk, or USB,
+you can install across the network using PXE as described in the included
+INSTALL.amd64 document.
+
+<p>
+If you are planning to dual boot OpenBSD with another OS, you will need to
+read INSTALL.amd64.
+
+<h3>OpenBSD/arm64:</h3>
+
+<p>
+Write <i>miniroot68.img</i> to a disk and boot from it after connecting
+to the serial console.  Refer to INSTALL.arm64 for more details.
+
+<h3>OpenBSD/armv7:</h3>
+
+<p>
+Write a system specific miniroot to an SD card and boot from it after connecting
+to the serial console.  Refer to INSTALL.armv7 for more details.
+
+<h3>OpenBSD/hppa:</h3>
+
+<p>
+Boot over the network by following the instructions in INSTALL.hppa or the
+<a href="hppa.html#install">hppa platform page</a>.
+
+<h3>OpenBSD/i386:</h3>
+
+<p>
+If your machine can boot from CD, you can write <i>install68.iso</i> or
+<i>cd68.iso</i> to a CD and boot from it.
+You may need to adjust your BIOS options first.
+
+<p>
+If your machine can boot from USB, you can write <i>install68.img</i> or
+<i>miniroot68.img</i> to a USB stick and boot from it.
+
+<p>
+If you can't boot from a CD, floppy disk, or USB,
+you can install across the network using PXE as described in
+the included INSTALL.i386 document.
+
+<p>
+If you are planning on dual booting OpenBSD with another OS, you will need to
+read INSTALL.i386.
+
+<h3>OpenBSD/landisk:</h3>
+
+<p>
+Write <i>miniroot68.img</i> to the start of the CF
+or disk, and boot normally.
+
+<h3>OpenBSD/loongson:</h3>
+
+<p>
+Write <i>miniroot68.img</i> to a USB stick and boot bsd.rd from it
+or boot bsd.rd via tftp.
+Refer to the instructions in INSTALL.loongson for more details.
+
+<h3>OpenBSD/luna88k:</h3>
+
+<p>
+Copy 'boot' and 'bsd.rd' to a Mach or UniOS partition, and boot the bootloader
+from the PROM, and then bsd.rd from the bootloader.
+Refer to the instructions in INSTALL.luna88k for more details.
+
+<h3>OpenBSD/macppc:</h3>
+
+<p>
+Burn the image from a mirror site to a CDROM, and power on your machine
+while holding down the <i>C</i> key until the display turns on and
+shows <i>OpenBSD/macppc boot</i>.
+
+<p>
+Alternatively, at the Open Firmware prompt, enter <i>boot cd:,ofwboot
+/6.8/macppc/bsd.rd</i>
+
+<h3>OpenBSD/octeon:</h3>
+
+<p>
+After connecting a serial port, boot bsd.rd over the network via DHCP/tftp.
+Refer to the instructions in INSTALL.octeon for more details.
+
+<h3>OpenBSD/powerpc64:</h3>
+
+<p>
+To install, write <i>install68.img</i> or <i>miniroot68.img</i> to a
+USB stick, plug it into the machine and coose the <i>OpenBSD
+install</i> menu item in Petitboot.
+Refer to the instructions in INSTALL.powerpc64 for more details.
+
+<h3>OpenBSD/sgi:</h3>
+
+<p>
+To install, burn cd68.iso on a CD-R, put it in the CD drive of your
+machine and select <i>Install System Software</i> from the System Maintenance
+menu. Indigo/Indy/Indigo2 (R4000) systems will not boot automatically from
+CD-ROM, and need a proper invocation from the PROM prompt.
+Refer to the instructions in INSTALL.sgi for more details.
+
+<p>
+If your machine doesn't have a CD drive, you can setup a DHCP/tftp network
+server, and boot using "bootp()/bsd.rd.IP##" using the kernel matching your
+system type. Refer to the instructions in INSTALL.sgi for more details.
+
+<h3>OpenBSD/sparc64:</h3>
+
+<p>
+Burn the image from a mirror site to a CDROM, boot from it, and type
+<i>boot cdrom</i>.
+
+<p>
+If this doesn't work, or if you don't have a CDROM drive, you can write
+<i>floppy68.img</i> or <i>floppyB68.img</i>
+(depending on your machine) to a floppy and boot it with <i>boot
+floppy</i>. Refer to INSTALL.sparc64 for details.
+
+<p>
+Make sure you use a properly formatted floppy with NO BAD BLOCKS or your install
+will most likely fail.
+
+<p>
+You can also write <i>miniroot68.img</i> to the swap partition on
+the disk and boot with <i>boot disk:b</i>.
+
+<p>
+If nothing works, you can boot over the network as described in INSTALL.sparc64.
+</section>
+
+<hr>
+
+<section id=upgrade>
+<h3>How to upgrade</h3>
+<p>
+If you already have an OpenBSD 6.7 system, and do not want to reinstall,
+upgrade instructions and advice can be found in the
+<a href="faq/upgrade68.html">Upgrade Guide</a>.
+</section>
+
+<hr>
+
+<section id=sourcecode>
+<h3>Notes about the source code</h3>
+<p>
+<code>src.tar.gz</code> contains a source archive starting at <code>/usr/src</code>.
+This file contains everything you need except for the kernel sources,
+which are in a separate archive.
+To extract:
+<blockquote><pre>
+# <kbd>mkdir -p /usr/src</kbd>
+# <kbd>cd /usr/src</kbd>
+# <kbd>tar xvfz /tmp/src.tar.gz</kbd>
+</pre></blockquote>
+<p>
+<code>sys.tar.gz</code> contains a source archive starting at <code>/usr/src/sys</code>.
+This file contains all the kernel sources you need to rebuild kernels.
+To extract:
+<blockquote><pre>
+# <kbd>mkdir -p /usr/src/sys</kbd>
+# <kbd>cd /usr/src</kbd>
+# <kbd>tar xvfz /tmp/sys.tar.gz</kbd>
+</pre></blockquote>
+<p>
+Both of these trees are a regular CVS checkout.  Using these trees it
+is possible to get a head-start on using the anoncvs servers as
+described <a href="anoncvs.html">here</a>.
+Using these files
+results in a much faster initial CVS update than you could expect from
+a fresh checkout of the full OpenBSD source tree.
+</section>
+
+<hr>
+
+<section id=ports>
+<h3>Ports Tree</h3>
+<p>
+A ports tree archive is also provided.  To extract:
+<blockquote><pre>
+# <kbd>cd /usr</kbd>
+# <kbd>tar xvfz /tmp/ports.tar.gz</kbd>
+</pre></blockquote>
+<p>
+Go read the <a href="faq/ports/index.html">ports</a> page
+if you know nothing about ports
+at this point.  This text is not a manual of how to use ports.
+Rather, it is a set of notes meant to kickstart the user on the
+OpenBSD ports system.
+<p>
+The <i>ports/</i> directory represents a CVS checkout of our ports.
+As with our complete source tree, our ports tree is available via
+<a href="anoncvs.html">AnonCVS</a>.
+So, in order to keep up to date with the -stable branch, you must make
+the <i>ports/</i> tree available on a read-write medium and update the tree
+with a command like:
+<blockquote><pre>
+# <kbd>cd /usr/ports</kbd>
+# <kbd>cvs -d anoncvs@server.openbsd.org:/cvs update -Pd -rOPENBSD_6_8</kbd>
+</pre></blockquote>
+<p>
+[Of course, you must replace the server name here with a nearby anoncvs
+server.]
+<p>
+Note that most ports are available as packages on our mirrors. Updated
+ports for the 6.8 release will be made available if problems arise.
+<p>
+If you're interested in seeing a port added, would like to help out, or just
+would like to know more, the mailing list
+<a href="mail.html">ports@openbsd.org</a> is a good place to know.
+</section>
